@@ -1,5 +1,11 @@
 [
  {
+  "version": "1.0.110",
+  "publishedAt": "2026-10-07T19:10:54.349Z",
+  "fileName": "GuiaRenova-1.0.110.apk",
+  "size": 1618175
+ },
+ {
   "version": "1.0.107",
   "publishedAt": "2026-10-07T18:24:44.416Z",
   "fileName": "GuiaRenova-1.0.107.apk",
@@ -10,11 +16,5 @@
   "publishedAt": "2026-10-07T16:26:31.819Z",
   "fileName": "GuiaRenova-1.0.105.apk",
   "size": 1601791
- },
- {
-  "version": "1.0.13",
-  "publishedAt": "2026-10-07T02:15:56Z",
-  "fileName": "GuiaRenova-1.0.13.apk",
-  "size": 1601787
  }
 ]
