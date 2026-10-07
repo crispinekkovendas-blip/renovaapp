@@ -54,6 +54,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -117,7 +120,16 @@ fun ListenScreen(content: GuideContent, onOpen: (String) -> Unit, onAsk: (String
             onGiveUp = { dictation = true },
         )
     }
-    DisposableEffect(Unit) { onDispose { listener.stop() } }
+    // Saiu da tela ou o app foi para o fundo: para de ouvir (o reconhecedor não pode ficar ligado sem a tela).
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    DisposableEffect(lifecycle) {
+        val observer = LifecycleEventObserver { _, event -> if (event == Lifecycle.Event.ON_STOP) listener.stop() }
+        lifecycle.addObserver(observer)
+        onDispose {
+            lifecycle.removeObserver(observer)
+            listener.stop()
+        }
+    }
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         if (granted) listener.start() else problem = "Sem o microfone o app não ouve — dá para digitar a queixa."
     }
@@ -141,7 +153,8 @@ fun ListenScreen(content: GuideContent, onOpen: (String) -> Unit, onAsk: (String
             return@produceState
         }
         delay(250)
-        value = withContext(Dispatchers.Default) { content.listener.rank(heard) }
+        // Nunca derruba o app: se a busca falhar com algum texto, a lista só não muda.
+        value = withContext(Dispatchers.Default) { runCatching { content.listener.rank(heard) }.getOrDefault(value) }
     }
 
     ScreenScaffold(

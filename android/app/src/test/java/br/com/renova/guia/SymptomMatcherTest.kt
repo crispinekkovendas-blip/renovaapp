@@ -64,4 +64,28 @@ class SymptomMatcherTest {
         assertTrue(matcher.rank("").isEmpty())
         assertTrue(matcher.rank("bom dia doutor, tudo bem com o senhor?").isEmpty())
     }
+
+    @Test
+    fun `fala qualquer nunca derruba a escuta e responde rapido`() {
+        // A escuta chama rank() a cada pausa da fala: um erro aqui fecharia o app.
+        val phrases = Fixtures.bundle.conditions.flatMap { it.symptoms + it.names }
+        val noise = listOf("", " ", "...", "?!", "123", "3,5", "39.8°", "sem", "não tem", "nega", "nao", "a", "é", "ã", "ç", "
+", "doutora", "uhum", "tá", "né")
+        val random = java.util.Random(7)
+        var slowest = 0L
+        repeat(2000) {
+            val parts = (0 until 1 + random.nextInt(40)).map {
+                if (random.nextInt(4) == 0) noise[random.nextInt(noise.size)] else phrases[random.nextInt(phrases.size)]
+            }
+            val text = parts.joinToString(if (random.nextBoolean()) " " else ", ")
+            val start = System.nanoTime()
+            val result = matcher.rank(text)
+            slowest = maxOf(slowest, (System.nanoTime() - start) / 1_000_000)
+            assertTrue(result.size <= 8)
+        }
+        // Uma consulta inteira (texto bem longo) também.
+        val long = (0 until 400).joinToString(". ") { phrases[random.nextInt(phrases.size)] }
+        matcher.rank(long)
+        assertTrue("rank() lento demais: ${slowest} ms", slowest < 2000)
+    }
 }

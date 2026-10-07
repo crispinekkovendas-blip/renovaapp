@@ -37,6 +37,7 @@ import br.com.renova.guia.ask.AskViewModel
 import br.com.renova.guia.data.GuideState
 import br.com.renova.guia.data.ItemRef
 import br.com.renova.guia.data.Routes
+import br.com.renova.guia.ui.components.CrashNotice
 
 private data class Tab(val route: String, val label: String, val icon: ImageVector, val tag: String)
 
@@ -59,6 +60,7 @@ fun AppRoot(container: AppContainer) {
         is GuideState.DownloadFailed -> DownloadFailedScreen(s.message, onRetry = { container.guide.syncInBackground() }, onLogout = { container.guide.logout() })
         is GuideState.Ready -> MainScaffold(container, s)
     }
+    CrashNotice()
 }
 
 @Composable

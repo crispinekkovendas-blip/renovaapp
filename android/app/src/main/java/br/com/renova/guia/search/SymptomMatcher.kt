@@ -17,7 +17,17 @@ import kotlin.math.ln
  * Apoio à decisão: diz onde olhar no guia, não dá diagnóstico.
  */
 class SymptomMatcher(conditions: List<GuideCondition>) {
-    private class Phrase(val text: String, val toks: List<String>, val isName: Boolean)
+    /** Uma palavra da frase com as variantes já calculadas (calcular a cada busca deixava a escuta lenta). */
+    private class Tok(val t: String) {
+        val stemKey: String? = if (t.length >= 5) stem(t) else null
+        val soundK: String? = if (t.length >= 4) soundKey(t) else null
+        val rootKey: String? = if (t.length >= 5) root(t) else null
+    }
+
+    private class Phrase(val text: String, words: List<String>, val isName: Boolean) {
+        val toks: List<String> = words
+        val keys: List<Tok> = words.map { Tok(it) }
+    }
 
     private class Cond(val condition: GuideCondition, val phrases: List<Phrase>)
 
@@ -46,17 +56,14 @@ class SymptomMatcher(conditions: List<GuideCondition>) {
         val sounds: Set<String> = words.filter { it.length >= 4 }.mapTo(HashSet()) { soundKey(it) }
         val roots: Set<String> = words.mapTo(HashSet()) { root(it) }
 
-        fun has(t: String): Boolean {
-            if (t in words) return true
-            if (t.length >= 5 && stem(t) in stems) return true
-            if (t.length >= 4 && soundKey(t) in sounds) return true
-            if (t.length >= 5 && root(t) in roots) return true
-            return false
-        }
+        fun has(k: Tok): Boolean =
+            k.t in words || (k.stemKey != null && k.stemKey in stems) || (k.soundK != null && k.soundK in sounds) || (k.rootKey != null && k.rootKey in roots)
     }
 
     fun rank(transcript: String, limit: Int = 8): List<Match> {
-        val heard = Heard(positiveWords(transcript))
+        // Consulta longa: as últimas ~2.000 letras bastam e mantêm a escuta rápida.
+        val text = if (transcript.length > MAX_CHARS) transcript.substring(transcript.length - MAX_CHARS) else transcript
+        val heard = Heard(positiveWords(text))
         if (heard.words.isEmpty()) return emptyList()
         val out = ArrayList<Match>()
         for (c in conds) {
@@ -64,10 +71,10 @@ class SymptomMatcher(conditions: List<GuideCondition>) {
             for (p in c.phrases) {
                 var total = 0.0
                 var got = 0.0
-                for (t in p.toks) {
-                    val w = weight[t] ?: 1.0
+                for (k in p.keys) {
+                    val w = weight[k.t] ?: 1.0
                     total += w
-                    if (heard.has(t)) got += w
+                    if (heard.has(k)) got += w
                 }
                 if (got == 0.0 || total == 0.0) continue
                 val coverage = got / total
@@ -96,6 +103,7 @@ class SymptomMatcher(conditions: List<GuideCondition>) {
         private const val DECAY = 0.75
         private const val MAX_PHRASES = 12
         private const val MIN_SCORE = 1.5
+        private const val MAX_CHARS = 2000
 
         /** Palavras do dia a dia que valem pela mesma ideia ("xixi ardendo" ~ "ardência para urinar"). */
         private val CANON: Map<String, String> = buildMap {
