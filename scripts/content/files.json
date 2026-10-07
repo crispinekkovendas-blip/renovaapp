@@ -1,0 +1,17 @@
+[
+  "src/lib/emergency-guide/data.ts",
+  "src/lib/emergency-guide/vectors.json",
+  "src/lib/prescription-drive/data.ts",
+  "src/lib/prescription-drive/originals.json",
+  "src/lib/prescription-drive/originals-map.json",
+  "src/lib/rx-library/protocols.ts",
+  "src/lib/rx-library/doses.ts",
+  "src/lib/rx-library/history.json",
+  "src/lib/rx-library/review.ts",
+  "src/lib/clinical-terms-extra.json",
+  "scripts/prescription-drive/drive-revisado.md",
+  "scripts/emergency-guide/errata.py",
+  "scripts/emergency-guide/errata_revisao2.py",
+  "scripts/emergency-guide/errata_revisao3.py",
+  "scripts/emergency-guide/errata_revisao4.py"
+]

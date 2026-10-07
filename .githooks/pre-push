@@ -1,0 +1,33 @@
+#!/bin/sh
+# Refuse direct pushes to master.
+#
+# Production is gated in vercel.json (git.deploymentEnabled master:false), so a
+# direct master push deploys nothing -- it just skips the preview you were meant
+# to verify. Release flow: feature branch -> preview deploy -> `vercel promote`
+# -> merge the PR on GitHub.
+#
+# Deliberate override:  ALLOW_MASTER_PUSH=1 git push origin master
+# Remove entirely:      git config --unset core.hooksPath
+
+while read -r _local_ref _local_sha remote_ref _remote_sha; do
+	case "$remote_ref" in
+	refs/heads/master)
+		if [ "$ALLOW_MASTER_PUSH" = "1" ]; then
+			echo "pre-push: ALLOW_MASTER_PUSH=1 set -- allowing direct push to master." >&2
+		else
+			echo "" >&2
+			echo "  BLOCKED: direct push to master." >&2
+			echo "" >&2
+			echo "  Push a feature branch instead, verify its preview deploy, then:" >&2
+			echo "    vercel promote <preview-url>     # ship it" >&2
+			echo "    gh pr create --base master       # then merge on GitHub" >&2
+			echo "" >&2
+			echo "  Override once:  ALLOW_MASTER_PUSH=1 git push origin master" >&2
+			echo "" >&2
+			exit 1
+		fi
+		;;
+	esac
+done
+
+exit 0

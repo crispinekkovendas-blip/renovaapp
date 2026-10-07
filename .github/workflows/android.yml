@@ -1,0 +1,216 @@
+name: Android — Guia Renova
+
+# O app Android do Guia clínico: testes, APK assinado e o app rodando num
+# emulador (com fotos de cada tela). Nada aqui fala com a produção — o teste
+# no emulador usa um servidor falso.
+
+on:
+  push:
+    branches: [memed-fase-0, master]
+    paths:
+      - "android/**"
+      - "src/lib/**"
+      - "scripts/app/**"
+      - ".github/workflows/android.yml"
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publicar o APK assinado como release do GitHub"
+        type: boolean
+        default: false
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GRADLE_VERSION: "8.11.1"
+
+jobs:
+  build:
+    name: Testes e APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    outputs:
+      version: ${{ steps.version.outputs.name }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # O conteúdo do guia não fica no GitHub (público): vem do Supabase.
+      - name: Conteúdo privado do Supabase
+        env:
+          CONTENT_DATABASE_URL: ${{ secrets.CONTENT_DATABASE_URL }}
+        run: node scripts/content/sync.mjs pull
+      - name: Pacote do guia e respostas do motor do site (para os testes)
+        run: node scripts/app/export-fixtures.mjs
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: ${{ env.GRADLE_VERSION }}
+
+      - name: Chave de assinatura
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/renova-guia.jks"
+            echo "ANDROID_KEYSTORE_FILE=$RUNNER_TEMP/renova-guia.jks" >> "$GITHUB_ENV"
+          else
+            echo "::warning::Sem a chave nos segredos: o APK de release sai assinado com a chave de debug."
+          fi
+
+      - name: Testes de unidade e APKs
+        working-directory: android
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: gradle --no-daemon testDebugUnitTest assembleDebug assembleRelease
+
+      - id: version
+        name: Nome do APK
+        run: |
+          name="GuiaRenova-1.0.${GITHUB_RUN_NUMBER}"
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          mkdir -p dist
+          cp android/app/build/outputs/apk/release/app-release.apk "dist/$name.apk"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: guia-renova-apk
+          path: dist/*.apk
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: relatorio-testes-unidade
+          path: android/app/build/reports/tests/
+
+      - name: Wrapper do Gradle (para abrir o projeto no Android Studio)
+        working-directory: android
+        run: gradle --no-daemon wrapper --gradle-version "$GRADLE_VERSION" --distribution-type bin
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gradle-wrapper
+          path: |
+            android/gradlew
+            android/gradlew.bat
+            android/gradle/wrapper/
+
+  emulator:
+    name: App no emulador (Android 14)
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Conteúdo privado do Supabase
+        env:
+          CONTENT_DATABASE_URL: ${{ secrets.CONTENT_DATABASE_URL }}
+        run: node scripts/content/sync.mjs pull
+      - run: node scripts/app/export-fixtures.mjs
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: ${{ env.GRADLE_VERSION }}
+
+      - name: Libera espaço em disco (o emulador precisa de alguns GB)
+        run: |
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup /usr/local/share/powershell /usr/share/swift /usr/local/lib/android/sdk/ndk || true
+          df -h /
+
+      - name: Aceleração do emulador (KVM)
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Compila antes de ligar o emulador
+        working-directory: android
+        run: gradle --no-daemon assembleDebug assembleDebugAndroidTest assembleRelease
+
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disk-size: 3000M
+          ram-size: 3072M
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          working-directory: android
+          script: bash ci/emulator-tests.sh
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fotos-do-emulador
+          path: android/screenshots/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: relatorio-teste-emulador
+          path: android/app/build/reports/androidTests/
+
+  release:
+    name: Publicar o APK
+    needs: [build, emulator]
+    if: github.event_name == 'workflow_dispatch' && inputs.publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: guia-renova-apk
+          path: dist
+      - name: Release no GitHub
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NAME: ${{ needs.build.outputs.version }}
+        run: |
+          gh release create "android-$NAME" dist/*.apk \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Guia Renova (Android) — $NAME" \
+            --notes "APK assinado do app Guia clínico Renova. Instale no Android 8 ou mais novo (permita instalar de fontes desconhecidas). Entre com a conta do Renova."
+      # O site entrega o APK (Guia clínico › App Android) de android-releases/:
+      # commit no branch publicado; chega à produção com o próximo deploy.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          path: repo
+      - name: APK no site (android-releases/)
+        env:
+          NAME: ${{ needs.build.outputs.version }}
+        working-directory: repo
+        run: |
+          apk=$(ls ../dist/*.apk | grep -v -- '-debug' | head -1)
+          node scripts/app/add-apk.mjs "$apk" "${NAME#GuiaRenova-}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add android-releases
+          git commit -m "chore(app): APK $NAME no site (Guia clínico › App Android)"
+          for attempt in 1 2 3; do
+            git pull --rebase origin "$GITHUB_REF_NAME" && git push origin "HEAD:$GITHUB_REF_NAME" && exit 0
+            sleep 5
+          done
+          exit 1

@@ -1,0 +1,547 @@
+@import "tailwindcss";
+
+/* Tela de computador com mouse: a barra lateral fica escondida e aparece ao
+   passar o mouse na borda esquerda. Tablet (toque) continua com o trilho fixo. */
+@custom-variant peek (@media (min-width: 48rem) and (hover: hover) and (pointer: fine));
+
+@theme {
+  --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
+  --font-sans: "Karla Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --color-paper: #f7f7f8;
+  --color-ink: #21302b;
+
+  --color-pine-50: #f1f7f4;
+  --color-pine-100: #dcebe3;
+  --color-pine-200: #bad7c9;
+  --color-pine-300: #8ebba8;
+  --color-pine-400: #609b84;
+  --color-pine-500: #417f69;
+  --color-pine-600: #2f6553;
+  --color-pine-700: #275145;
+  --color-pine-800: #204239;
+  --color-pine-900: #16332b;
+  --color-pine-950: #0c221c;
+
+  --color-clay-50: #fdf5ec;
+  --color-clay-100: #f8e6d0;
+  --color-clay-200: #f0cba1;
+  --color-clay-300: #e5aa6c;
+  --color-clay-400: #d98a41;
+  --color-clay-500: #c96f2e;
+  --color-clay-600: #ad5622;
+  --color-clay-700: #8a411e;
+  --color-clay-800: #70351e;
+  --color-clay-900: #5c2d1c;
+
+  /* Pastel de seção (o "rosa" da Mevo, na temperatura do Renova). */
+  --color-peach-50: #fff5ee;
+  --color-peach-100: #ffe4d6;
+  --color-peach-200: #ffcdb5;
+  --color-peach-300: #ffb08e;
+
+  /* Acento quente: o único preenchimento dentro dos ícones e o "+" dos números. */
+  --color-sun-300: #ffe08a;
+  --color-sun-400: #ffd166;
+  --color-sun-500: #f5b400;
+}
+
+html {
+  /* O iOS não aumenta a fonte sozinho ao girar o aparelho. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  @apply bg-paper text-ink font-sans antialiased;
+  /* Toque sem o atraso de zoom duplo e sem o flash cinza do WebKit. */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: clip;
+}
+
+@layer components {
+  /* ---------- Primitivos existentes (nomes preservados) ---------- */
+
+  .card {
+    @apply rounded-3xl border border-stone-200 bg-white shadow-[0_12px_32px_-16px_rgba(12,34,28,0.18),0_1px_2px_rgba(12,34,28,0.04)];
+  }
+
+  .btn {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-colors;
+  }
+  .btn-primary {
+    @apply bg-pine-950 text-white hover:bg-pine-900;
+  }
+  .btn-outline {
+    @apply border border-pine-900/15 bg-white text-pine-900 hover:border-pine-500 hover:text-pine-700;
+  }
+  .btn-ghost {
+    @apply text-pine-800 hover:bg-pine-100;
+  }
+
+  /* 16px no celular: abaixo disso o Safari dá zoom ao focar o campo. */
+  .input {
+    @apply w-full rounded-2xl border border-pine-900/15 bg-white px-3.5 py-2 text-base sm:text-sm text-ink outline-none transition-colors focus:border-pine-500 focus:ring-2 focus:ring-pine-500/20;
+  }
+
+  .label {
+    @apply mb-1 block text-[11px] font-bold uppercase tracking-[0.12em] text-pine-900/55;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-bold;
+  }
+
+  .table-base {
+    @apply w-full text-left text-sm;
+  }
+  .table-base thead th {
+    @apply border-b border-pine-900/10 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.12em] text-pine-900/50;
+  }
+  .table-base tbody td {
+    @apply border-b border-pine-900/5 px-4 py-3 align-middle;
+  }
+  .table-base tbody tr:last-child td {
+    @apply border-b-0;
+  }
+  .table-base tbody tr {
+    @apply transition-colors hover:bg-pine-50/60;
+  }
+
+  /* ---------- Blocos de seção (páginas públicas) ---------- */
+
+  .section-pastel {
+    @apply block w-full bg-peach-100 py-16 text-pine-950 sm:py-24;
+  }
+
+  .section-ink {
+    @apply block w-full bg-pine-950 py-16 text-paper sm:py-24;
+  }
+  .section-ink a {
+    color: inherit;
+    text-decoration-color: color-mix(in srgb, currentColor 50%, transparent);
+  }
+  .section-ink a:hover {
+    text-decoration-line: underline;
+  }
+
+  /* ---------- Botão-herói: pílula enorme, texto à esquerda, círculo-chevron à direita ---------- */
+
+  .btn-hero,
+  .btn-hero-secondary {
+    @apply inline-flex w-full min-h-16 cursor-pointer items-center justify-between gap-4 rounded-full px-7 py-5 text-left text-lg font-bold leading-snug transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sun-400 sm:w-auto;
+  }
+  .btn-hero {
+    @apply bg-pine-950 text-white hover:bg-pine-900;
+  }
+  .btn-hero-secondary {
+    @apply bg-peach-200 text-pine-950 hover:bg-peach-300;
+  }
+
+  /* O círculo: 40px, encostado à direita, sem empurrar a altura da pílula (margem vertical negativa). */
+  .btn-hero .chev,
+  .btn-hero-secondary .chev {
+    @apply -my-2 -mr-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-pine-950;
+  }
+  .btn-hero-secondary .chev {
+    @apply bg-pine-950 text-white;
+  }
+  /* O chevron em CSS puro: um quadrado com duas bordas, girado 45°. Herda a cor do círculo. */
+  .btn-hero .chev::before,
+  .btn-hero-secondary .chev::before {
+    content: "";
+    display: block;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-top: 2.5px solid currentColor;
+    border-right: 2.5px solid currentColor;
+    transform: translateX(-2px) rotate(45deg);
+  }
+
+  /* ---------- Números gigantes com "+" ---------- */
+
+  .bignum {
+    @apply font-display text-[4rem] font-semibold leading-none tracking-tight text-pine-950 sm:text-[6rem];
+  }
+  .bignum-plus {
+    @apply text-sun-500;
+  }
+
+  /* ---------- Ícones duotone: linha grossa + UMA forma preenchida em sun ---------- */
+
+  .icon-duo {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .icon-duo .fill {
+    fill: var(--color-sun-400);
+    stroke: none;
+  }
+
+  /* ---------- Foto com véu de cor ---------- */
+
+  .photo-veil {
+    @apply relative overflow-hidden rounded-[2.5rem];
+  }
+  .photo-veil > img,
+  .photo-veil > video {
+    @apply block h-full w-full object-cover;
+  }
+  .photo-veil::after {
+    content: "";
+    @apply pointer-events-none absolute inset-0 bg-pine-950/35 mix-blend-multiply;
+  }
+
+  /* ---------- Selo "Assinada digitalmente" ---------- */
+
+  .badge-signed {
+    @apply inline-flex items-center gap-2 rounded-2xl bg-peach-100 px-4 py-2 text-sm font-bold text-pine-900;
+  }
+
+  /* ---------- Acordeão (<details class="accordion">) ---------- */
+
+  .accordion {
+    @apply rounded-3xl border border-pine-900/10 bg-white px-6 shadow-[0_12px_32px_-16px_rgba(12,34,28,0.14)];
+  }
+  .accordion[open] {
+    @apply pb-6;
+  }
+  .accordion > summary {
+    @apply flex cursor-pointer list-none items-center justify-between gap-4 py-5 font-display text-xl font-semibold tracking-tight text-pine-950 select-none;
+  }
+  .accordion > summary::-webkit-details-marker {
+    display: none;
+  }
+  /* Chevron à direita, em CSS puro; aponta para baixo fechado, para cima aberto. */
+  .accordion > summary::after {
+    content: "";
+    flex-shrink: 0;
+    width: 0.65rem;
+    height: 0.65rem;
+    border-right: 2.5px solid currentColor;
+    border-bottom: 2.5px solid currentColor;
+    transform: translateY(-3px) rotate(45deg);
+    transition: transform 180ms ease;
+  }
+  .accordion[open] > summary::after {
+    transform: translateY(3px) rotate(-135deg);
+  }
+  .accordion[open] > summary {
+    @apply mb-5 border-b border-pine-900/10;
+  }
+  .accordion > :not(summary) {
+    @apply text-base leading-relaxed text-pine-900/80;
+  }
+
+  /* ---------- Revelação ao rolar ----------
+     Só quando o JS chegou (<html class="js">, posto pelo <Reveal> ao montar):
+     sem JS, e para quem pediu menos movimento, tudo já nasce visível. */
+
+  html.js .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 500ms ease-out,
+      transform 500ms ease-out;
+  }
+  html.js .reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html.js .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+}
+
+/* ---------- Tema do app do médico: "à moda Mevo" (roxo e rosa, uma geométrica só) ----------
+   Escopo: o layout de (app) e a página de login. A landing, o agendamento público
+   e o portal do paciente continuam em pinho e pêssego. As utilities do Tailwind v4
+   leem variáveis, então basta redefinir os tokens aqui: `bg-pine-950` vira o roxo,
+   `bg-peach-100` vira o rosa, `font-display` vira a Plus Jakarta Sans. */
+.theme-app {
+  --font-display: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --color-paper: #fff8f9;
+  --color-ink: #2b2633;
+
+  /* pine-950 = primário (botões, títulos); pine-900 = neutro escuro (texto secundário via /60);
+     pine-600/700 = roxo dos links; pine-100/50 = lilás dos chips e hovers. */
+  --color-pine-50: #f7f3fc;
+  --color-pine-100: #f2eefb;
+  --color-pine-200: #e3daf3;
+  --color-pine-300: #cbbfe6;
+  --color-pine-400: #a98fd4;
+  --color-pine-500: #8a63c4;
+  --color-pine-600: #6c3db5;
+  --color-pine-700: #56289a;
+  --color-pine-800: #4a1c85;
+  --color-pine-900: #3a3342;
+  --color-pine-950: #3d0e6b;
+
+  --color-peach-50: #fff1f3;
+  --color-peach-100: #ffd6dc;
+  --color-peach-200: #ffb6bf;
+  --color-peach-300: #ff97a4;
+
+  --color-sun-300: #e9d8ff;
+  --color-sun-400: #d9beff;
+  --color-sun-500: #b58cf0;
+
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* A folha A4 dos documentos é impressa: fica neutra mesmo dentro do app. */
+.theme-paper {
+  --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
+  --font-sans: "Karla Variable", ui-sans-serif, system-ui, sans-serif;
+  --color-ink: #21302b;
+  --color-pine-50: #f1f7f4;
+  --color-pine-100: #dcebe3;
+  --color-pine-200: #bad7c9;
+  --color-pine-600: #2f6553;
+  --color-pine-700: #275145;
+  --color-pine-900: #16332b;
+  --color-pine-950: #0c221c;
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+}
+
+@layer components {
+  .theme-app .card {
+    @apply rounded-[18px] border-[#e8e1f0] shadow-[0_10px_30px_-22px_rgba(61,14,107,0.25)];
+  }
+  .theme-app .input {
+    @apply rounded-xl border-[#e2dcec];
+  }
+  .theme-app .label {
+    @apply mb-1.5 text-[12.5px] font-bold normal-case tracking-normal text-ink;
+  }
+  .theme-app .table-base thead th {
+    @apply text-[12px] normal-case tracking-normal text-pine-900/60;
+  }
+  .theme-app .bignum {
+    @apply text-[2rem] font-extrabold sm:text-[2.25rem];
+  }
+  .theme-app .btn-outline {
+    @apply border-[#e2dcec];
+  }
+  .theme-app .btn-ghost {
+    @apply text-pine-700 hover:bg-pine-100;
+  }
+  /* Pílula de navegação (barra lateral e abas de seção). */
+  .nav-pill {
+    @apply flex items-center gap-3 rounded-full px-3.5 py-2.5 text-sm font-bold text-ink transition-colors hover:bg-pine-50;
+  }
+  .nav-pill.active {
+    @apply bg-peach-100 text-pine-950;
+  }
+  .nav-pill svg {
+    @apply h-[18px] w-[18px] shrink-0 text-pine-600;
+  }
+  .nav-pill.active svg {
+    @apply text-pine-950;
+  }
+  /* Aba de documento estilo Mevo: pílula com ícone, cheia quando ativa. */
+  .doc-tab {
+    @apply inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-[#e2dcec] bg-white px-4 py-2.5 text-sm font-bold text-ink transition-colors hover:border-pine-400;
+  }
+  .doc-tab svg {
+    @apply h-4 w-4 text-pine-600;
+  }
+  .doc-tab.active {
+    @apply border-pine-950 bg-pine-950 text-white;
+  }
+  .doc-tab.active svg {
+    @apply text-white;
+  }
+  .doc-subtab {
+    @apply rounded-full border border-[#e2dcec] bg-white px-3 py-1.5 text-xs font-bold text-pine-900/70 transition-colors hover:border-pine-400;
+  }
+  .doc-subtab.active {
+    @apply border-transparent bg-peach-100 text-pine-950;
+  }
+}
+
+/* ---------- Celular: toque, rolagem lateral, tabelas, folhas ----------
+   Base comum para todas as telas. Regra da casa: alvo de toque >= 44px em
+   ponteiro grosso (dedo), sem mexer no tamanho para quem usa mouse. */
+@layer components {
+  @media (pointer: coarse) {
+    .btn {
+      @apply min-h-11;
+    }
+    input.input,
+    select.input {
+      @apply min-h-11;
+    }
+    .doc-subtab {
+      @apply min-h-9 px-3.5 text-[13px];
+    }
+    .doc-tab {
+      @apply min-h-11;
+    }
+  }
+
+  /* Linha que rola de lado (abas, chips, filtros) sem barra de rolagem. */
+  .scroll-x {
+    @apply flex-nowrap overflow-x-auto overscroll-x-contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .scroll-x::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Tabela larga dentro de card: rola de lado no celular em vez de estourar a página. */
+  .table-wrap {
+    @apply overflow-x-auto overscroll-x-contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Tabela que vira lista de cartões abaixo de sm. Cada <td> leva
+     data-label="Rótulo"; a célula .td-primary vira o título do cartão e a
+     .td-actions fica embaixo, alinhada à direita. */
+  @media (max-width: 639.98px) {
+    .table-stack thead {
+      @apply sr-only;
+    }
+    .table-stack,
+    .table-stack tbody,
+    .table-stack tr,
+    .table-stack td {
+      display: block;
+      width: 100%;
+    }
+    .table-stack.table-base tbody tr {
+      @apply border-b border-pine-900/10 px-4 py-3;
+    }
+    .table-stack.table-base tbody tr:last-child {
+      @apply border-b-0;
+    }
+    .table-stack.table-base tbody td {
+      @apply flex items-baseline justify-between gap-3 border-0 px-0 py-1 text-right;
+    }
+    .table-stack.table-base tbody td::before {
+      content: attr(data-label);
+      @apply shrink-0 text-left text-[12px] font-bold text-pine-900/55;
+    }
+    .table-stack.table-base tbody td.td-primary {
+      @apply block pb-1.5 text-left text-base font-bold;
+    }
+    .table-stack.table-base tbody td.td-primary::before,
+    .table-stack.table-base tbody td:not([data-label])::before {
+      content: none;
+    }
+    .table-stack.table-base tbody td.td-actions {
+      @apply justify-end pt-2;
+    }
+  }
+
+  /* Abas do rodapé do celular. */
+  .tabbar-item {
+    @apply flex h-16 flex-col items-center justify-center gap-1 px-1 text-[11px] font-bold text-pine-900/60 transition-colors;
+  }
+  .tabbar-icon {
+    @apply flex h-8 w-14 items-center justify-center rounded-full transition-colors;
+  }
+  .tabbar-icon svg {
+    @apply h-[22px] w-[22px];
+  }
+  .tabbar-item.active {
+    @apply text-pine-950;
+  }
+  .tabbar-item.active .tabbar-icon {
+    @apply bg-peach-100;
+  }
+
+  /* Folha que sobe de baixo (menu "Mais", modais no celular). */
+  .sheet-panel {
+    animation: sheet-up 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .sheet-backdrop {
+    animation: fade-in 180ms ease-out;
+  }
+  @media (min-width: 640px) {
+    .sheet-panel.sheet-center {
+      animation: fade-in 160ms ease-out;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sheet-panel,
+    .sheet-backdrop {
+      animation: none;
+    }
+  }
+
+  /* Barra de ações colada embaixo no celular (Salvar, Emitir), logo acima das
+     abas do rodapé. Do sm em diante volta a ser um bloco comum. */
+  .mobile-action-bar {
+    @apply sticky z-20 -mx-4 border-t border-[#eee7f4] bg-white/95 px-4 py-3 backdrop-blur-md sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none;
+    bottom: calc(4rem + env(safe-area-inset-bottom));
+  }
+
+  /* Revisões no próprio texto do guia: o trecho que mudou leva marca-texto
+     amarelo (matiz 52°) e, logo abaixo, o carrossel do histórico vem na cor
+     complementar — o mesmo matiz girado 180° (232°, azul-violeta). */
+  .rev-mark {
+    color: inherit;
+    background-color: hsl(52 100% 72% / 0.7);
+    border-radius: 0.2em;
+    padding: 0 0.12em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+  .rev-carousel {
+    background-color: hsl(232 100% 97.5%);
+    border: 1px solid hsl(232 80% 87%);
+    color: hsl(232 30% 22%);
+  }
+  .rev-carousel-accent {
+    color: hsl(232 62% 44%);
+  }
+  .rev-carousel-dot {
+    background-color: hsl(232 70% 82%);
+  }
+  .rev-carousel-dot[data-current="true"] {
+    background-color: hsl(232 62% 48%);
+  }
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* Lista que abre de um botão (a posologia do receituário): desce 4px e aparece. */
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

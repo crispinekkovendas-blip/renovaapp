@@ -1,0 +1,10 @@
+.gradle/
+build/
+local.properties
+.idea/
+*.iml
+.kotlin/
+# Gerados por scripts/app/export-fixtures.mjs (o pacote do guia e as respostas do motor do site)
+app/src/test/resources/guia.json
+app/src/test/resources/search-golden.json
+app/src/androidTest/assets/guia.json

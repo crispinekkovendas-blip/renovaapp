@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Uma cruz arredondada, branca, no centro do ícone (área segura de 66dp). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M46,36 A4,4 0 0 1 50,32 L58,32 A4,4 0 0 1 62,36 L62,46 L72,46 A4,4 0 0 1 76,50 L76,58 A4,4 0 0 1 72,62 L62,62 L62,72 A4,4 0 0 1 58,76 L50,76 A4,4 0 0 1 46,72 L46,62 L36,62 A4,4 0 0 1 32,58 L32,50 A4,4 0 0 1 36,46 L46,46 Z" />
+    <path
+        android:fillColor="#FF97A4"
+        android:pathData="M70,30 m-5,0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0" />
+</vector>
