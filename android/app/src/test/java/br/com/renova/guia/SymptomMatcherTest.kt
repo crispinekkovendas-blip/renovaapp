@@ -69,8 +69,7 @@ class SymptomMatcherTest {
     fun `fala qualquer nunca derruba a escuta e responde rapido`() {
         // A escuta chama rank() a cada pausa da fala: um erro aqui fecharia o app.
         val phrases = Fixtures.bundle.conditions.flatMap { it.symptoms + it.names }
-        val noise = listOf("", " ", "...", "?!", "123", "3,5", "39.8°", "sem", "não tem", "nega", "nao", "a", "é", "ã", "ç", "
-", "doutora", "uhum", "tá", "né")
+        val noise = listOf("", " ", "...", "?!", "123", "3,5", "39.8°", "sem", "não tem", "nega", "nao", "a", "é", "ã", "ç", "linha\nnova", "doutora", "uhum", "tá", "né")
         val random = java.util.Random(7)
         var slowest = 0L
         repeat(2000) {
