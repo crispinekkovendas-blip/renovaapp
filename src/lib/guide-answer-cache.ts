@@ -57,10 +57,13 @@ let version: string | null = null;
  * nomes e sintomas (clinical-terms.ts), que muda o que a busca acha: uma
  * resposta guardada como "o guia não traz" pode passar a ter resposta.
  */
+const PROMPT_REVISION = 2;
+
 export function guideVersion(): string {
   if (!version) {
     const chunks = guideChunks().map((c) => `${c.id}:${c.text}`).join("\n");
-    version = textHash(`${chunks}\n${JSON.stringify(CONDITION_TERMS.map(allTermsOf))}`);
+    // PROMPT_REVISION: subir quando o SYSTEM do guide-ask mudar o formato da resposta (2: hipóteses antes da conduta).
+    version = textHash(`prompt:${PROMPT_REVISION}\n${chunks}\n${JSON.stringify(CONDITION_TERMS.map(allTermsOf))}`);
   }
   return version;
 }

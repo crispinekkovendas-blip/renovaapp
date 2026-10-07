@@ -1,5 +1,6 @@
 import { searchKey } from "./normalize.ts";
 import EXTRA from "./clinical-terms-extra.json" with { type: "json" };
+import CLAUDE from "./clinical-terms-claude.json" with { type: "json" };
 
 /**
  * O vocabulário do Guia clínico: para cada condição, os outros nomes que o
@@ -847,7 +848,35 @@ export function conditionsFor(title: string): ConditionTerms[] {
  * scripts/guide/expand-terms.mjs): dezenas de queixas por condição do jeito
  * que o paciente conta. Chave: o primeiro `match` da condição.
  */
-const EXTRA_TERMS = (EXTRA as { conditions: Record<string, { names: string[]; symptoms: string[] }> }).conditions;
+const GEMINI_TERMS = (EXTRA as { conditions: Record<string, { names: string[]; symptoms: string[] }> }).conditions;
+
+type ClaudeTerms = { symptoms?: string[]; remove?: string[]; confirm?: string[]; alarm?: string[] };
+const CLAUDE_TERMS = (CLAUDE as { conditions: Record<string, ClaudeTerms> }).conditions;
+
+/**
+ * O vocabulário ampliado de uma condição: as queixas escritas pelo Claude e as
+ * geradas pelo Gemini, sem as do Gemini que o Claude marcou como erradas
+ * (de outra condição, genéricas demais).
+ */
+const EXTRA_TERMS: Record<string, { names: string[]; symptoms: string[] }> = Object.fromEntries(
+  [...new Set([...Object.keys(GEMINI_TERMS), ...Object.keys(CLAUDE_TERMS)])].map((key) => {
+    const gemini = GEMINI_TERMS[key] ?? { names: [], symptoms: [] };
+    const claude = CLAUDE_TERMS[key] ?? {};
+    const wrong = new Set((claude.remove ?? []).map((s) => searchKey(s)));
+    const keep = (list: readonly string[]) => list.filter((s) => !wrong.has(searchKey(s)));
+    return [key, { names: keep(gemini.names), symptoms: [...(claude.symptoms ?? []), ...keep(gemini.symptoms)] }];
+  })
+);
+
+/**
+ * O que perguntar ou examinar para confirmar a hipótese e os sinais de alarme
+ * (escritos pelo Claude por condição): o "Escutar o paciente" mostra depois do
+ * porquê, antes da receita.
+ */
+export function guidanceOf(c: ConditionTerms): { confirm: string[]; alarm: string[] } {
+  const claude = CLAUDE_TERMS[c.match[0]] ?? {};
+  return { confirm: claude.confirm ?? [], alarm: claude.alarm ?? [] };
+}
 
 /** Todos os nomes e queixas de uma condição: os escritos à mão primeiro, depois os ampliados. */
 export function allTermsOf(c: ConditionTerms): { names: string[]; symptoms: string[] } {

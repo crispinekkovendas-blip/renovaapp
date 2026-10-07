@@ -34,6 +34,10 @@ data class GuideCondition(
     val names: List<String> = emptyList(),
     val symptoms: List<String> = emptyList(),
     val items: List<String> = emptyList(),
+    /** O que perguntar ou examinar para confirmar a hipótese. */
+    val confirm: List<String> = emptyList(),
+    /** Sinais de alarme que mudam a conduta. */
+    val alarm: List<String> = emptyList(),
 )
 
 @Serializable

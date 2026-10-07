@@ -50,6 +50,8 @@ const NEWS: readonly { date: string; items: readonly string[] }[] = [
   {
     date: "7 de outubro de 2026",
     items: [
+      "Super Inteligência: quando a pergunta descreve queixas sem dizer a condição, a resposta começa pelas hipóteses — até três condições do guia, cada uma com o porquê (quais queixas a sustentam), o que perguntar ou examinar para confirmar e os sinais de alarme — e só depois a conduta, a receita e os medicamentos, com as fontes.",
+      "App Android, “Escutar o paciente”: cada hipótese mostra primeiro o porquê (as queixas que o paciente relatou), o que perguntar para confirmar e os sinais de alarme; a receita com os medicamentos vem depois, no mesmo cartão. A escuta funciona sem o pacote de voz offline e, se o celular não colaborar, oferece o ditado do Google. Vocabulário de queixas revisto e ampliado pelo Claude, condição por condição.",
       "O app Android fica sempre no site: Guia clínico › App Android tem o botão para baixar a versão mais nova, as duas anteriores, o passo a passo de instalação e, no computador, um QR para abrir a página no celular.",
     ],
   },

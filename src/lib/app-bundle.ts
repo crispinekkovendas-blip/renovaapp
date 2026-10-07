@@ -19,7 +19,7 @@ import type { DriveBlock } from "./prescription-drive/index.ts";
 import { guideItems, guideSearchDocs, itemLines } from "./guide-search.ts";
 import type { GuideSource } from "./guide-search.ts";
 import { SYNONYM_TABLE } from "./search-synonyms.ts";
-import { CONDITION_TERMS, allTermsOf, conditionsFor } from "./clinical-terms.ts";
+import { CONDITION_TERMS, allTermsOf, conditionsFor, guidanceOf } from "./clinical-terms.ts";
 import { CURRENT_REVISION, GUIDE_REVISIONS } from "./guide-revisions.ts";
 import { TARJA_LABEL } from "./medications.ts";
 import { searchKey } from "./normalize.ts";
@@ -123,6 +123,10 @@ export interface AppCondition {
   symptoms: string[];
   /** Ids dos itens (busca) — receitas, plantão e Drive. */
   items: string[];
+  /** O que perguntar ou examinar para confirmar a hipótese. */
+  confirm: string[];
+  /** Sinais de alarme que mudam a conduta. */
+  alarm: string[];
 }
 
 export interface AppBundle {
@@ -256,7 +260,7 @@ function buildBundle(): Omit<AppBundle, "version"> {
     if (found.length === 0) return [];
     const { names, symptoms } = allTermsOf(c);
     const label = [...found].sort((a, b) => a.title.length - b.title.length)[0].title;
-    return [{ key: c.match[0], label, names, symptoms, items: found.map((i) => i.id) }];
+    return [{ key: c.match[0], label, names, symptoms, items: found.map((i) => i.id), ...guidanceOf(c) }];
   });
 
   const recipeNames = new Set(entries.map((e) => e.name));

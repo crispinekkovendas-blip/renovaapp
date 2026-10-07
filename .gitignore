@@ -28,6 +28,7 @@ __pycache__/
 /src/lib/rx-library/history.json
 /src/lib/rx-library/review.ts
 /src/lib/clinical-terms-extra.json
+/src/lib/clinical-terms-claude.json
 /scripts/prescription-drive/drive-revisado.md
 /scripts/emergency-guide/errata.py
 /scripts/emergency-guide/errata_revisao2.py

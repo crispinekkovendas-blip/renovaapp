@@ -22,6 +22,8 @@ class GuideContent(val bundle: GuideBundle) {
     val listener: SymptomMatcher by lazy { SymptomMatcher(bundle.conditions) }
 
     fun recipe(slug: String): Recipe? = recipeBySlug[slug]
+    /** A receita pelo id da busca ("receitas:Crise de enxaqueca"). */
+    fun recipeById(id: String): Recipe? = recipeById[id]
     fun topic(slug: String): Pair<Chapter, Topic>? = topicBySlug[slug]
     fun driveEntry(slug: String): Pair<DriveSection, DriveEntry>? = driveBySlug[slug]
 

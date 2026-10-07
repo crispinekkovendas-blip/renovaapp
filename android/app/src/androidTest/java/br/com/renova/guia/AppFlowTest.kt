@@ -222,9 +222,14 @@ class AppFlowTest {
             compose.onNodeWithTag("listen-text").performTextInput(
                 "doutora, tô com uma dor de cabeça latejante só do lado direito, a luz incomoda muito e tô enjoada desde ontem",
             )
-            waitForText("CONDIÇÕES A CONSIDERAR", 90_000)
+            waitForText("HIPÓTESES A CONSIDERAR", 90_000)
             waitForText("Enxaqueca", 30_000)
             shot("19-escutar-enxaqueca")
+            // Hipótese e porquê primeiro; a receita com os medicamentos vem depois, no mesmo cartão.
+            compose.onNodeWithTag("listen").performScrollToNode(hasText("RECEITA E MEDICAMENTOS"))
+            Thread.sleep(800)
+            shot("19b-escutar-receita")
+            compose.onNodeWithTag("listen").performScrollToNode(hasText("Começar a ouvir"))
             compose.onNodeWithTag("listen-text").performTextClearance()
             compose.onNodeWithTag("listen-text").performTextInput(
                 "meu filho tá com febre desde ontem, chorando muito e puxando a orelha, não dorme de noite",
