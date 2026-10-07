@@ -6,7 +6,9 @@ plugins {
 }
 
 // Cada build do GitHub Actions ganha um número maior: o APK novo instala por cima do antigo.
-val runNumber = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 1
+// +100: o repositório público (2026-10-07) recomeçou a contagem de runs; as versões do
+// repositório antigo foram até 1.0.13 e o Android não instala versão menor por cima.
+val runNumber = (System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 1) + 100
 // A chave de assinatura vem dos segredos do repositório (nunca do código).
 val keystoreFile: String? = System.getenv("ANDROID_KEYSTORE_FILE")?.takeIf { it.isNotBlank() }
 

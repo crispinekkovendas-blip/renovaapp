@@ -79,7 +79,7 @@ jobs:
       - id: version
         name: Nome do APK
         run: |
-          name="GuiaRenova-1.0.${GITHUB_RUN_NUMBER}"
+          name="GuiaRenova-1.0.$((GITHUB_RUN_NUMBER + 100))"  # mesmo +100 do build.gradle.kts
           echo "name=$name" >> "$GITHUB_OUTPUT"
           mkdir -p dist
           cp android/app/build/outputs/apk/release/app-release.apk "dist/$name.apk"
