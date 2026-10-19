@@ -8,6 +8,7 @@ import {
   allergyHits,
 } from "./medications.ts";
 import { isDosageForm, type DosageForm } from "./dosage-form.ts";
+import { cleanFormula, formulaLines, formulaSubstances, type Formula } from "./formulas.ts";
 
 /**
  * O receituário: a lista de medicamentos de uma prescrição, e as regras para
@@ -55,6 +56,8 @@ export interface PrescriptionItem {
   continuous: boolean;
   /** Forma farmacêutica da apresentação escolhida na busca (frases e quantidade na unidade certa). */
   form?: DosageForm | null;
+  /** Fórmula manipulada: a composição que sai abaixo do nome (formulas.ts). */
+  formula?: Formula | null;
 }
 
 export const MAX_PRESCRIPTION_ITEMS = 30;
@@ -115,6 +118,7 @@ export function parseItems(raw: string | null | undefined): PrescriptionItem[] {
         route: ROUTE_SET.has(route) ? (route as Route) : "",
         continuous: r.continuous === true || r.continuous === "1",
         ...(isDosageForm(r.form) ? { form: r.form } : {}),
+        ...(cleanFormula(r.formula) ? { formula: cleanFormula(r.formula) } : {}),
       },
     ];
   });
@@ -148,7 +152,8 @@ export function renderItem(item: PrescriptionItem, index: number): string {
   const details = [item.posology.trim(), item.route, item.continuous ? "Uso contínuo" : ""]
     .filter(Boolean)
     .join(". ");
-  return `${index + 1}) ${head}\n   ${details}${details.endsWith(".") ? "" : "."}`;
+  const composition = formulaLines(item.formula).map((line) => `   ${line}\n`).join("");
+  return `${index + 1}) ${head}\n${composition}   ${details}${details.endsWith(".") ? "" : "."}`;
 }
 
 /** O corpo de um receituário. Sem itens, string vazia — quem chama decide. */
@@ -227,7 +232,8 @@ export function prescriptionWarnings(
   const warnings: PrescriptionWarning[] = [];
 
   for (const item of usable) {
-    const hits = allergyHits(item.name, allergies);
+    // Fórmula: o alerta olha cada componente, não só o nome que o médico deu.
+    const hits = [...new Set([item.name, ...formulaSubstances(item.formula)].flatMap((name) => allergyHits(name, allergies)))];
     if (hits.length > 0) {
       warnings.push({
         item: item.name,

@@ -188,6 +188,20 @@ export function effectiveTarja(
   return strictestTarja(groupTarjas);
 }
 
+/**
+ * Agonistas de GLP-1 (as "canetas" de semaglutida, liraglutida, tirzepatida…):
+ * desde 2025 a Anvisa exige a retenção da receita na farmácia, mas a CMED
+ * ainda traz parte das apresentações como tarja vermelha comum ou sem tarja.
+ * Sem esta regra, a mesma tirzepatida sairia em uma via ou em duas conforme a
+ * concentração escolhida.
+ */
+const RETENTION_SUBSTANCES = /\b(SEMAGLUTIDA|LIRAGLUTIDA|TIRZEPATIDA|DULAGLUTIDA|EXENATIDA|LIXISENATIDA)\b/;
+
+export function withRetentionRules(substance: string, tarja: Tarja): Tarja {
+  if (tarja === "preta") return tarja;
+  return RETENTION_SUBSTANCES.test(substance.toUpperCase()) ? "vermelha_retida" : tarja;
+}
+
 export function concentrationFrom(presentation: string): string | null {
   const match = presentation.match(CONCENTRATION);
   return match ? normalizeConcentration(match[1]) : null;
@@ -276,7 +290,7 @@ export function collapseMedicationRows(rows: readonly MedicationRow[], limit = 2
         substance: row.substance,
         concentration: row.concentration,
         form,
-        tarja: row.tarja,
+        tarja: withRetentionRules(row.substance, row.tarja),
         product: row.product,
         presentation: row.presentation,
         therapeutic_class: row.therapeutic_class,

@@ -169,3 +169,17 @@ test("sem alergias cadastradas não há alerta", () => {
   assert.deepEqual(allergyHits("DIPIRONA", null), []);
   assert.deepEqual(allergyHits("DIPIRONA", ""), []);
 });
+
+test("GLP-1 (canetas): receita sempre retida, em qualquer concentração", async () => {
+  const { withRetentionRules, collapseMedicationRows } = await import("./medications.ts");
+  assert.equal(withRetentionRules("TIRZEPATIDA", "vermelha"), "vermelha_retida");
+  assert.equal(withRetentionRules("SEMAGLUTIDA", "desconhecida"), "vermelha_retida");
+  assert.equal(withRetentionRules("LIRAGLUTIDA;INSULINA DEGLUDECA", "vermelha"), "vermelha_retida");
+  assert.equal(withRetentionRules("DIPIRONA", "livre"), "livre");
+  const [hit] = collapseMedicationRows([
+    { substance: "TIRZEPATIDA", concentration: "5 MG/ML", tarja: "vermelha", product: "MOUNJARO", presentation: "5 MG/ML SOL INJ CT 4 CAN APLIC", therapeutic_class: null, marketed: true, rank: 0 },
+  ]);
+  assert.equal(hit.tarja, "vermelha_retida");
+  assert.equal(hit.form, "injetavel");
+});
+

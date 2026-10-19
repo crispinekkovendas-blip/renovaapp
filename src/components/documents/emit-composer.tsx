@@ -334,6 +334,8 @@ export function EmitComposer({
     [professionalId]
   );
   const sheetStyleJson = isDefaultStyle(sheet.style) ? "" : JSON.stringify(sheet.style);
+  // Receituário bilíngue (português/espanhol), para o paciente comprar fora do país.
+  const [bilingual, setBilingual] = useState(false);
   const logoSrc = sheet.style.logo ? sheetLogos[sheet.style.logo] ?? null : null;
   const ctx: RenderContext = useMemo(
     () => ({
@@ -513,6 +515,7 @@ export function EmitComposer({
         professionalId,
         medicamentos: serializePrescription(doc.items),
         style: sheet.style,
+        bilingual,
       });
       return;
     }
@@ -534,6 +537,7 @@ export function EmitComposer({
     professional,
     sheetStyle: sheet.style,
     logoSrc,
+    bilingual: tab === "receituario" && bilingual,
   };
   const pages: PreviewPage[] =
     tab === "receituario"
@@ -714,6 +718,7 @@ export function EmitComposer({
       {encounterId ? <input type="hidden" name="encounter_id" value={encounterId} /> : null}
       <input type="hidden" name="items" value={itemsJson} />
       {sheetStyleJson ? <input type="hidden" name="sheet_style" value={sheetStyleJson} /> : null}
+      {bilingual ? <input type="hidden" name="bilingual" value="1" /> : null}
       {draft.draftId && !draft.draftId.startsWith("local-") ? (
         <input type="hidden" name="draft_id" value={draft.draftId} />
       ) : null}
@@ -767,6 +772,26 @@ export function EmitComposer({
           items={items}
           countLabel={countLabel}
           sheetPanel={
+            <>
+            {items.some((item) => item.kind === "receituario") ? (
+              <section className="card p-4 sm:p-5" aria-label="Receita para comprar fora do país">
+                <label className="flex min-h-11 items-start gap-2 text-sm sm:min-h-0">
+                  <input
+                    type="checkbox"
+                    checked={bilingual}
+                    onChange={(e) => setBilingual(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 accent-pine-700"
+                  />
+                  <span>
+                    <span className="font-bold text-pine-950">Receita bilíngue (português e espanhol)</span>
+                    <span className="mt-0.5 block text-xs text-pine-900/60">
+                      Para o paciente comprar fora do país (ex.: Paraguai) e trazer o medicamento: rótulos e posologia também em
+                      espanhol e a declaração de uso pessoal na quantidade do tratamento.
+                    </span>
+                  </span>
+                </label>
+              </section>
+            ) : null}
             <SheetStylePanel
               style={sheet.style}
               choice={sheet.choice}
@@ -790,6 +815,7 @@ export function EmitComposer({
               }}
               sampleItems={rx}
             />
+            </>
           }
         />
       )}

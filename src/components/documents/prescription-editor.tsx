@@ -10,6 +10,10 @@ import type { Tarja } from "@/lib/medications";
 import { hasPhrase, phraseGroupsFor, togglePhrase } from "@/lib/posology";
 import { FORM_INFO, formOfItem, quantitySuggestions } from "@/lib/dosage-form";
 import type { DosageForm } from "@/lib/dosage-form";
+import { FORMULA_BASES, MAX_COMPONENTS } from "@/lib/formulas";
+import type { Formula } from "@/lib/formulas";
+import { FORMULA_LIBRARY } from "@/lib/rx-library/formulas";
+import type { ReadyFormula } from "@/lib/rx-library/formulas";
 import {
   RX_PROTOCOL_GROUPS,
   applyDose,
@@ -330,6 +334,18 @@ export function PrescriptionEditor({
         </div>
       ) : null}
 
+      {/* ── Fórmula manipulada: em branco ou da biblioteca ─────── */}
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={() => open1(newFormulaItem())}
+          className="flex min-h-11 items-center rounded-full border border-dashed border-pine-300 px-3 text-[12px] font-bold text-pine-700 hover:border-pine-500 hover:bg-pine-50 sm:min-h-8"
+        >
+          + Fórmula manipulada
+        </button>
+        <ReadyFormulas onPick={(ready) => open1(itemFromFormula(ready))} />
+      </div>
+
       {/* ── O medicamento em edição (um por vez) ─────────────── */}
       {current ? (
         <div
@@ -369,6 +385,10 @@ export function PrescriptionEditor({
               </button>
             </div>
           </div>
+
+          {current.item.formula ? (
+            <FormulaFields item={current.item} index={current.index} onChange={(patch) => update(current.index, patch)} />
+          ) : null}
 
           <PosologyField
             item={current.item}
@@ -1069,3 +1089,198 @@ function QuantityChips({ item, onPick }: { item: PrescriptionItem; onPick: (quan
     </div>
   );
 }
+
+/* ---------- Fórmulas manipuladas ---------- */
+
+/** Fórmula em branco: um componente, base de cápsula, receituário simples. */
+function newFormulaItem(): PrescriptionItem {
+  return {
+    ...emptyItem(),
+    name: "Fórmula manipulada",
+    tarja: "vermelha",
+    quantity: "30 cápsulas",
+    form: "capsula",
+    formula: { components: [{ name: "", dose: "" }], base: FORMULA_BASES[0], amount: "Manipular 30 cápsulas" },
+  };
+}
+
+function itemFromFormula(ready: ReadyFormula): PrescriptionItem {
+  return {
+    ...emptyItem(),
+    name: ready.name,
+    tarja: ready.tarja,
+    quantity: ready.quantity,
+    posology: ready.posology,
+    route: ready.route,
+    continuous: ready.continuous,
+    formula: { ...ready.formula, components: ready.formula.components.map((c) => ({ ...c })) },
+  };
+}
+
+/** "Fórmulas prontas": a biblioteca por grupo; cada uma entra no cartão para conferir. */
+function ReadyFormulas({ onPick }: { onPick: (formula: ReadyFormula) => void }) {
+  return (
+    <Popover
+      className="group relative"
+      summary="Fórmulas prontas"
+      summaryClassName="inline-flex min-h-11 cursor-pointer items-center rounded-full px-2 text-[12px] font-bold text-pine-600 hover:underline sm:min-h-8"
+    >
+      <div className="mt-1 max-h-80 overflow-y-auto overscroll-contain rounded-2xl border border-[#e2dcec] bg-white p-2 shadow-lg sm:absolute sm:left-0 sm:z-20 sm:w-96">
+        <div className="sticky -top-2 z-10 -mx-2 -mt-2 mb-1 flex items-center justify-between rounded-t-2xl bg-white/95 py-0.5 pr-1 pl-4 backdrop-blur">
+          <p className="text-[11px] font-bold text-pine-900/60">Fórmulas prontas</p>
+          <PopoverClose />
+        </div>
+        <p className="px-2 pb-1 text-[11px] text-amber-800">Ponto de partida, ainda sem revisão médica: confira dose e base antes de emitir.</p>
+        {FORMULA_LIBRARY.map((group) => (
+          <div key={group.group} className="mb-2 last:mb-0">
+            <p className="px-2 py-1 text-[11px] font-bold text-pine-900/50">{group.group}</p>
+            {group.items.map((ready) => (
+              <button
+                key={ready.name}
+                type="button"
+                onClick={(event) => {
+                  onPick(ready);
+                  const details = event.currentTarget.closest("details");
+                  if (details) details.open = false;
+                }}
+                className="block min-h-11 w-full rounded-lg px-2 py-2 text-left hover:bg-pine-50 sm:min-h-0 sm:py-1.5"
+              >
+                <span className="block text-[12.5px] font-bold text-pine-950">{ready.name}</span>
+                <span className="block text-[11px] text-pine-900/55">{ready.posology}</span>
+              </button>
+            ))}
+          </div>
+        ))}
+      </div>
+    </Popover>
+  );
+}
+
+/**
+ * A composição da fórmula no cartão: nome que sai na receita, componentes com
+ * dose, base (q.s.p.), quanto manipular e o tipo de receituário — o que é da
+ * Portaria 344 vai no de controle especial, em duas vias.
+ */
+function FormulaFields({
+  item,
+  index,
+  onChange,
+}: {
+  item: PrescriptionItem;
+  index: number;
+  onChange: (patch: Partial<PrescriptionItem>) => void;
+}) {
+  const formula = item.formula as Formula;
+  const setFormula = (patch: Partial<Formula>) => onChange({ formula: { ...formula, ...patch } });
+  const setComponent = (i: number, patch: Partial<Formula["components"][number]>) =>
+    setFormula({ components: formula.components.map((c, j) => (j === i ? { ...c, ...patch } : c)) });
+  const basesId = `rx-bases-${index}`;
+
+  return (
+    <div className="mt-3 space-y-3 rounded-2xl border border-pine-900/10 bg-pine-50/40 p-3">
+      <div>
+        <label className="label" htmlFor={`rx-formula-nome-${index}`}>
+          Nome na receita
+        </label>
+        <input
+          className="input"
+          id={`rx-formula-nome-${index}`}
+          value={item.name}
+          placeholder="Ex.: Minoxidil oral"
+          onChange={(e) => onChange({ name: e.target.value })}
+        />
+      </div>
+
+      <fieldset>
+        <legend className="label">Componentes</legend>
+        <div className="space-y-2">
+          {formula.components.map((component, i) => (
+            <div key={i} className="grid grid-cols-[minmax(0,1fr)_7rem_auto] items-center gap-2">
+              <input
+                className="input"
+                aria-label={`Componente ${i + 1}`}
+                placeholder="Substância"
+                value={component.name}
+                onChange={(e) => setComponent(i, { name: e.target.value })}
+              />
+              <input
+                className="input"
+                aria-label={`Dose do componente ${i + 1}`}
+                placeholder="2,5 mg"
+                value={component.dose}
+                onChange={(e) => setComponent(i, { dose: e.target.value })}
+              />
+              <button
+                type="button"
+                aria-label={`Tirar componente ${i + 1}`}
+                disabled={formula.components.length === 1}
+                onClick={() => setFormula({ components: formula.components.filter((_, j) => j !== i) })}
+                className="flex h-11 w-11 items-center justify-center rounded-lg text-rose-600 hover:bg-rose-50 disabled:opacity-30 sm:h-9 sm:w-9"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+        </div>
+        {formula.components.length < MAX_COMPONENTS ? (
+          <button
+            type="button"
+            onClick={() => setFormula({ components: [...formula.components, { name: "", dose: "" }] })}
+            className="mt-2 min-h-11 rounded-full px-2 text-[12px] font-bold text-pine-600 hover:underline sm:min-h-0"
+          >
+            + Componente
+          </button>
+        ) : null}
+      </fieldset>
+
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label className="label" htmlFor={`rx-formula-base-${index}`}>
+            Base
+          </label>
+          <input
+            className="input"
+            id={`rx-formula-base-${index}`}
+            list={basesId}
+            value={formula.base}
+            placeholder="Excipiente q.s.p. 1 cápsula"
+            onChange={(e) => setFormula({ base: e.target.value })}
+          />
+          <datalist id={basesId}>
+            {FORMULA_BASES.map((b) => (
+              <option key={b} value={b} />
+            ))}
+          </datalist>
+        </div>
+        <div>
+          <label className="label" htmlFor={`rx-formula-qtd-${index}`}>
+            Manipular
+          </label>
+          <input
+            className="input"
+            id={`rx-formula-qtd-${index}`}
+            value={formula.amount}
+            placeholder="Manipular 30 cápsulas"
+            onChange={(e) => setFormula({ amount: e.target.value })}
+          />
+        </div>
+      </div>
+
+      <div>
+        <label className="label" htmlFor={`rx-formula-receita-${index}`}>
+          Receituário
+        </label>
+        <select
+          className="input"
+          id={`rx-formula-receita-${index}`}
+          value={item.tarja === "vermelha_retida" ? "controle" : "simples"}
+          onChange={(e) => onChange({ tarja: e.target.value === "controle" ? "vermelha_retida" : "vermelha" })}
+        >
+          <option value="simples">Simples</option>
+          <option value="controle">Controle especial, 2 vias (substância da Portaria 344)</option>
+        </select>
+      </div>
+    </div>
+  );
+}
+

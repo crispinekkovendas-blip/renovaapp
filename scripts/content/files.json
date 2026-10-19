@@ -14,5 +14,6 @@
   "scripts/emergency-guide/errata_revisao2.py",
   "scripts/emergency-guide/errata_revisao3.py",
   "scripts/emergency-guide/errata_revisao4.py",
-  "src/lib/clinical-terms-claude.json"
+  "src/lib/clinical-terms-claude.json",
+  "src/lib/rx-library/formulas.ts"
 ]

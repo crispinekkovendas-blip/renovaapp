@@ -5,6 +5,7 @@ import type { CSSProperties, ReactNode } from "react";
 import type { PrescriptionItem } from "@/lib/prescription";
 import { DEFAULT_SHEET_STYLE, RULE_HEIGHT, SCALE_FACTOR, tint } from "@/lib/sheet-style";
 import type { SheetStyle } from "@/lib/sheet-style";
+import { BILINGUAL, formulaLines, toSpanish } from "@/lib/formulas";
 
 /**
  * A prévia da folha, ao lado do editor.
@@ -54,6 +55,8 @@ export interface DocumentPreviewProps {
   sheetStyle?: SheetStyle;
   /** O logotipo do modelo, como data URL. */
   logoSrc?: string | null;
+  /** Receita bilíngue (português/espanhol), como no PDF. */
+  bilingual?: boolean;
 }
 
 /** As cores do modelo — as mesmas contas de `lookFor` no PDF. */
@@ -90,7 +93,7 @@ export function DocumentPreview(props: DocumentPreviewProps) {
     title, body, medications, date, code,
     clinicName, clinicLine, clinicCnes,
     patientName, patientCpf, professional, viaLabel, canvas,
-    sheetStyle = DEFAULT_SHEET_STYLE, logoSrc,
+    sheetStyle = DEFAULT_SHEET_STYLE, logoSrc, bilingual = false,
   } = props;
   const look = sheetColors(sheetStyle);
   const k = SCALE_FACTOR[sheetStyle.scale];
@@ -154,7 +157,10 @@ export function DocumentPreview(props: DocumentPreviewProps) {
 
       {/* ── Título + selo da via ──────────────────── */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginTop: 24 }}>
-        <p style={{ fontSize: 16, fontWeight: 800 }}>{title || "Documento"}</p>
+        <div style={{ minWidth: 0 }}>
+          <p style={{ fontSize: 16, fontWeight: 800 }}>{title || "Documento"}</p>
+          {bilingual ? <p style={{ fontSize: 10, color: "#736d7d", marginTop: 2 }}>{BILINGUAL.titleSuffix}</p> : null}
+        </div>
         {viaLabel ? (
           <span
             style={{
@@ -180,7 +186,7 @@ export function DocumentPreview(props: DocumentPreviewProps) {
         {campos.map(([rot, val]) => (
           <div key={rot} style={{ minWidth: 0 }}>
             <p style={{ fontSize: 6.5, fontWeight: 800, letterSpacing: ".07em", color: "#736d7d", textTransform: "uppercase" }}>
-              {rot}
+              {bilingual ? BILINGUAL.labels[rot as keyof typeof BILINGUAL.labels] ?? rot : rot}
             </p>
             <p
               style={{ fontSize: 10, fontWeight: 800, marginTop: 3, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
@@ -209,9 +215,19 @@ export function DocumentPreview(props: DocumentPreviewProps) {
                     <span style={{ fontSize: 11 * k, fontWeight: 800 }}>{item.name}</span>
                     {item.quantity ? <span style={{ fontSize: 9 * k, color: "#736d7d", whiteSpace: "nowrap" }}>{item.quantity}</span> : null}
                   </div>
+                  {formulaLines(item.formula).map((line) => (
+                    <p key={line} style={{ fontSize: 9.5 * k, marginTop: 3 * k, lineHeight: 1.35 }}>
+                      {line}
+                    </p>
+                  ))}
                   <p style={{ fontSize: 9.5 * k, marginTop: 5 * k, lineHeight: 1.45 }}>
                     {[item.posology.trim(), item.route, item.continuous ? "Uso contínuo" : ""].filter(Boolean).join(". ")}.
                   </p>
+                  {bilingual ? (
+                    <p style={{ fontSize: 9.5 * k, marginTop: 2, lineHeight: 1.45, color: "#736d7d" }}>
+                      {toSpanish(`${[item.posology.trim(), item.route, item.continuous ? "Uso contínuo" : ""].filter(Boolean).join(". ")}.`)}
+                    </p>
+                  ) : null}
                 </>
               );
               const frame = list
@@ -249,9 +265,11 @@ export function DocumentPreview(props: DocumentPreviewProps) {
 
       {/* ── Rodapé: colado embaixo, como no PDF ───── */}
       <div style={{ marginTop: 20, flex: "none" }}>
-        {sheetStyle.footerNote ? (
-          <p style={{ fontSize: 8, color: "#736d7d", marginBottom: 6, textAlign: centered ? "center" : "left" }}>{sheetStyle.footerNote}</p>
-        ) : null}
+        {[...(bilingual ? BILINGUAL.declaration : []), sheetStyle.footerNote].filter(Boolean).map((note) => (
+          <p key={note} style={{ fontSize: 8, color: "#736d7d", marginBottom: 3, textAlign: centered ? "center" : "left" }}>
+            {note}
+          </p>
+        ))}
         <div style={{ height: 0.8, background: "#e0dbe8" }} />
         <div style={{ display: "flex", justifyContent: "space-between", gap: 20, marginTop: 20 }}>
           <div style={{ display: "flex", gap: 13, alignItems: "flex-start" }}>

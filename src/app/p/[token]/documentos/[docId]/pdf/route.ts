@@ -8,6 +8,8 @@ import { getDocument, getClinicHeader } from "@/lib/documents-db";
 import { canPatientSeeDocument, patientDisplayName } from "@/lib/documents";
 import { buildDocumentPdf } from "@/lib/pdf/document-pdf";
 import { styleFromDocumentFields } from "@/lib/sheet-style";
+import { formulaLines } from "@/lib/formulas";
+import { isBilingualDocument } from "@/lib/documents";
 import { logoFor } from "@/lib/sheet-templates-db";
 import { parseItems } from "@/lib/prescription";
 import type { PdfMedication } from "@/lib/pdf/document-pdf";
@@ -61,6 +63,7 @@ export async function GET(
         posology: item.posology,
         route: item.route || null,
         continuous: item.continuous,
+        formula: formulaLines(item.formula),
       }));
     }
   }
@@ -70,6 +73,7 @@ export async function GET(
   const logoImage = await logoFor(style);
 
   const bytes = await buildDocumentPdf({
+    bilingual: document.kind === "receituario" && isBilingualDocument(document.fields),
     style,
     logoImage,
     title: document.title,

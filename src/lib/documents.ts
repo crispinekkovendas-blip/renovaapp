@@ -448,6 +448,8 @@ export interface DocumentFieldsJson {
   fields: DocumentFieldValues;
   /** Cópia do modelo da folha usado na emissão (sheet-style.ts); ausente = padrão. */
   folha?: unknown;
+  /** Receituário bilíngue (português/espanhol), para comprar fora do país. */
+  bilingue?: boolean;
 }
 
 /** Exportado só para o teste garantir que nenhuma chave nova fique de fora. */
@@ -492,6 +494,7 @@ export function serializeDocumentFields(data: DocumentFieldsJson): string {
     template_id: data.template_id ?? null,
     fields: normalizeFieldValues(data.fields),
     ...(data.folha ? { folha: data.folha } : {}),
+    ...(data.bilingue ? { bilingue: true } : {}),
   });
 }
 
@@ -696,3 +699,13 @@ export function protocolSummary(items: ReadonlyArray<Pick<ProtocolItem, "kind" |
   if (items.length === 0) return "Protocolo vazio";
   return items.map((item) => item.title?.trim() || documentTitle(item.kind, item.subkind)).join(" + ");
 }
+
+/** O receituário saiu bilíngue (`fields.bilingue`)? */
+export function isBilingualDocument(json: string | null | undefined): boolean {
+  try {
+    return (JSON.parse(json ?? "{}") as { bilingue?: unknown })?.bilingue === true;
+  } catch {
+    return false;
+  }
+}
+

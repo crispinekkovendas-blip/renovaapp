@@ -334,6 +334,8 @@ export async function emitDocumentsAction(formData: FormData): Promise<void> {
     folha = null;
   }
   if (folha && isDefaultStyle(folha)) folha = null;
+  // Receita bilíngue (comprar fora do país): só no receituário.
+  const bilingual = str(formData, "bilingual") === "1";
 
   const docs: NewDocument[] = [];
   for (const item of items) {
@@ -358,7 +360,12 @@ export async function emitDocumentsAction(formData: FormData): Promise<void> {
       subkind: item.subkind,
       title: item.title.slice(0, 120) || template.title || documentTitle(item.kind, item.subkind),
       body,
-      fields: serializeDocumentFields({ template_id: templateId, fields: item.fields, folha }),
+      fields: serializeDocumentFields({
+        template_id: templateId,
+        fields: item.fields,
+        folha,
+        bilingue: bilingual && item.kind === "receituario",
+      }),
       issuedAt,
       shared,
       code: item.code,

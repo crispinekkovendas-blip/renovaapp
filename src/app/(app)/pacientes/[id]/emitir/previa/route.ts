@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { getClinicHeader } from "@/lib/documents-db";
 import { buildDocumentPdf } from "@/lib/pdf/document-pdf";
 import { normalizeSheetStyle } from "@/lib/sheet-style";
+import { formulaLines } from "@/lib/formulas";
 import { logoFor } from "@/lib/sheet-templates-db";
 import type { PdfMedication } from "@/lib/pdf/document-pdf";
 import { parseItems } from "@/lib/prescription";
@@ -41,6 +42,8 @@ export async function POST(
     medicamentos?: string;
     /** Modelo da folha escolhido na revisão. */
     style?: unknown;
+    /** Receituário bilíngue (português/espanhol). */
+    bilingual?: boolean;
   };
   try {
     draft = await request.json();
@@ -74,6 +77,7 @@ export async function POST(
         posology: item.posology,
         route: item.route || null,
         continuous: item.continuous,
+        formula: formulaLines(item.formula),
       }));
     }
   }
@@ -82,6 +86,7 @@ export async function POST(
   const logoImage = await logoFor(style);
 
   const bytes = await buildDocumentPdf({
+    bilingual: draft.kind === "receituario" && draft.bilingual === true,
     style,
     logoImage,
     title: (draft.title ?? "").trim() || "Documento",

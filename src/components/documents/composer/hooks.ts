@@ -105,6 +105,8 @@ export interface PdfDraft {
   medicamentos?: string;
   /** Modelo da folha escolhido na revisão. */
   style?: unknown;
+  /** Receituário bilíngue (português/espanhol). */
+  bilingual?: boolean;
 }
 
 /** "Ver o PDF real": o PDF de verdade do rascunho, numa aba nova, sem gravar nada. */

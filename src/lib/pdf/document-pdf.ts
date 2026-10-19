@@ -7,6 +7,7 @@ import { SUBFILTER_ETSI_CADES_DETACHED } from "@signpdf/utils";
 import { SIGNATURE_LENGTH } from "./sign.ts";
 import { REGULAR_TTF_BASE64 } from "./fonts/regular.ts";
 import { BOLD_TTF_BASE64 } from "./fonts/bold.ts";
+import { BILINGUAL, toSpanish } from "../formulas.ts";
 import { DEFAULT_SHEET_STYLE, RULE_HEIGHT, SCALE_FACTOR, hexToRgb01, tint, type SheetStyle } from "../sheet-style.ts";
 
 /**
@@ -101,6 +102,8 @@ export interface PdfMedication {
   posology: string;
   route?: string | null;
   continuous?: boolean;
+  /** Fórmula manipulada: as linhas da composição (`formulaLines`). */
+  formula?: readonly string[];
 }
 
 export interface PdfDocumentInput {
@@ -122,6 +125,11 @@ export interface PdfDocumentInput {
    */
   vias?: number;
   viaLabels?: readonly string[];
+  /**
+   * Receita bilíngue (para comprar fora do país): rótulos em português e
+   * espanhol, a posologia também em espanhol e a declaração de uso pessoal.
+   */
+  bilingual?: boolean;
   /** Modelo da folha (aparência); sem ele, o padrão Renova. */
   style?: SheetStyle | null;
   /** Logotipo do modelo (data URL PNG/JPEG), já lido de `settings`. */
@@ -276,6 +284,12 @@ function header(page: PDFPage, fonts: Fonts, input: PdfDocumentInput, viaLabel: 
     page.drawText(text, { x: A4.width - M - w + 9, y: y + 1, size: 8, font: fonts.bold, color: look.accent });
   }
 
+  // Receita bilíngue: o título em espanhol logo abaixo, menor (ao lado, bateria no selo da via).
+  if (input.bilingual) {
+    y -= 14;
+    page.drawText(safe(BILINGUAL.titleSuffix), { x: M, y, size: 10, font: fonts.reg, color: CINZA });
+  }
+
   // Painel do paciente: rótulo pequeno em cima, valor com peso embaixo.
   y -= 22;
   const h = 50;
@@ -294,7 +308,7 @@ function header(page: PDFPage, fonts: Fonts, input: PdfDocumentInput, viaLabel: 
     ["Documento", input.code],
   ];
   campos.forEach(([rot, val], i) => {
-    label(page, fonts, rot, cols[i], y - 19);
+    label(page, fonts, input.bilingual ? BILINGUAL.labels[rot as keyof typeof BILINGUAL.labels] ?? rot : rot, cols[i], y - 19);
     const max = (cols[i + 1] ?? A4.width - M - 8) - cols[i] - 10;
     let text = safe(val);
     while (text.length > 4 && fonts.bold.widthOfTextAtSize(text, 10) > max) text = `${text.slice(0, -2)}…`;
@@ -313,11 +327,14 @@ async function footer(
   total: number,
   look: Look
 ): Promise<void> {
-  if (look.style.footerNote) {
-    const t = safe(look.style.footerNote);
+  // Linhas acima do rodapé, de baixo para cima: nota do modelo e, na receita
+  // bilíngue, a declaração de uso pessoal nas duas línguas.
+  const notes = [...(input.bilingual ? BILINGUAL.declaration : []), look.style.footerNote].filter(Boolean).reverse();
+  notes.forEach((note, i) => {
+    const t = safe(note);
     const x = look.style.align === "center" ? (A4.width - fonts.reg.widthOfTextAtSize(t, 8)) / 2 : M;
-    page.drawText(t, { x, y: M + 106, size: 8, font: fonts.reg, color: CINZA });
-  }
+    page.drawText(t, { x, y: M + 106 + i * 11, size: 8, font: fonts.reg, color: CINZA });
+  });
   page.drawRectangle({ x: M, y: M + 100, width: W, height: 0.8, color: LINHA });
 
   // ── Autenticidade, à esquerda
@@ -378,14 +395,30 @@ async function footer(
 }
 
 /** Altura do bloco de um medicamento — precisa ser sabida antes de desenhar. */
-function medicationHeight(fonts: Fonts, item: PdfMedication, look: Look): { height: number; lines: string[] } {
+/** Uma linha do bloco: composição da fórmula, posologia, ou a tradução (mais clara). */
+interface MedLine {
+  text: string;
+  muted: boolean;
+}
+
+function medicationHeight(
+  fonts: Fonts,
+  item: PdfMedication,
+  look: Look,
+  bilingual = false
+): { height: number; lines: MedLine[] } {
   const detail = [item.posology.trim(), item.route || "", item.continuous ? "Uso contínuo" : ""]
     .filter(Boolean)
     .join(". ");
+  const sentence = detail.endsWith(".") ? detail : `${detail}.`;
   const size = 9.5 * look.k;
-  const lines = wrapText(detail.endsWith(".") ? detail : `${detail}.`, W - 62, (t) =>
-    fonts.reg.widthOfTextAtSize(safe(t), size)
-  );
+  const wrap = (text: string, muted: boolean) =>
+    wrapText(text, W - 62, (t) => fonts.reg.widthOfTextAtSize(safe(t), size)).map((t) => ({ text: t, muted }));
+  const lines = [
+    ...(item.formula ?? []).flatMap((line) => wrap(line, false)),
+    ...wrap(sentence, false),
+    ...(bilingual ? wrap(toSpanish(sentence), true) : []),
+  ];
   const lead = 13 * look.k;
   // Em lista não há caixa: menos respiro em volta.
   return { height: (look.style.meds === "lista" ? 20 : 32) * look.k + lines.length * lead, lines };
@@ -404,7 +437,7 @@ function drawMedication(
   index: number,
   y: number,
   h: number,
-  lines: string[],
+  lines: MedLine[],
   look: Look
 ) {
   const k = look.k;
@@ -441,7 +474,7 @@ function drawMedication(
 
   let ly = top - 16 * k;
   for (const line of lines) {
-    page.drawText(safe(line), { x: left + 19 * k, y: ly, size: 9.5 * k, font: fonts.reg, color: TINTA });
+    page.drawText(safe(line.text), { x: left + 19 * k, y: ly, size: 9.5 * k, font: fonts.reg, color: line.muted ? CINZA : TINTA });
     ly -= 13 * k;
   }
 }
@@ -475,10 +508,12 @@ export async function buildDocumentPdf(input: PdfDocumentInput): Promise<Uint8Ar
   const bodyLead = 17 * look.k;
   const vias = Math.max(1, input.vias ?? 1);
   const labels = input.viaLabels ?? (vias === 2 ? ["1ª via — Farmácia (retenção)", "2ª via — Paciente"] : []);
-  const bodyBottom = M + 118;
+  // Cada linha a mais acima do rodapé (declaração bilíngue, nota do modelo) sobe o fim do corpo.
+  const noteLines = (input.bilingual ? BILINGUAL.declaration.length : 0) + (look.style.footerNote ? 1 : 0);
+  const bodyBottom = M + 118 + Math.max(0, noteLines - 1) * 11;
 
   const meds = input.medications?.length
-    ? input.medications.map((m) => ({ item: m, ...medicationHeight(fonts, m, look) }))
+    ? input.medications.map((m) => ({ item: m, ...medicationHeight(fonts, m, look, input.bilingual) }))
     : null;
   const textLines = meds ? [] : wrapText(input.body, W, (t) => fonts.reg.widthOfTextAtSize(safe(t), bodySize));
 
