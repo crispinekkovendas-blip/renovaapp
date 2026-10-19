@@ -48,6 +48,16 @@ const STEPS: readonly Step[] = [
 
 const NEWS: readonly { date: string; items: readonly string[] }[] = [
   {
+    date: "19 de outubro de 2026",
+    items: [
+      "Receituário: as frases prontas falam a forma do medicamento — escolheu cápsula, a frase diz “1 cápsula”; gotas, injetável, pomada e colírio têm frases próprias — e agora se somam: cada toque acrescenta a frase depois da anterior, e tocar de novo tira. A busca separa as formas (dipirona em comprimido, em gotas ou injetável) e a Quantidade sugere o total do tratamento na unidade certa (“21 cápsulas”) ou completa o número digitado (“30” → “30 comprimidos”).",
+      "Modelo da folha: na revisão da emissão, escolha um modelo pronto ou personalize a folha — cor, logotipo, cabeçalho centralizado, tamanho da letra, medicamentos em blocos ou em lista, linhas extras no cabeçalho e no rodapé — vendo a folha mudar ao lado. Salve como modelo seu (ou da clínica, no administrador). O documento guarda o modelo com que saiu.",
+      "Busca da tela inicial: ao digitar o nome (com ou sem acento), o CPF ou o celular, a lista de pacientes aparece na hora; escolher um abre o prontuário.",
+      "Prontuário mais completo: seção Antecedentes (patológicos pessoais, cirurgias e internações, familiares, hábitos, gineco-obstétricos e vacinas) com atalhos para o mais comum; as doenças crônicas aparecem numa faixa no alto da ficha. O atendimento ganhou sinais vitais (PA, FC, FR, temperatura, saturação, peso, altura, glicemia) com IMC e alertas calculados na hora, e o CID-10 com busca no catálogo.",
+      "Conectar ao Claude (MCP): com uma chave de Configurações › API pública, o Claude busca pacientes, lê o prontuário e a agenda e, quando você pede, cria e atualiza cadastros e registra atendimentos — cada alteração volta com o antes e o depois, e antes de criar ele procura CPF e celular iguais para não duplicar.",
+    ],
+  },
+  {
     date: "7 de outubro de 2026",
     items: [
       "App Android: a escuta do paciente ficou estável em conversas longas (não fecha mais o app no meio da consulta) e para sozinha quando o app vai para o fundo. Se o app fechar sozinho, na próxima abertura ele oferece mandar o relatório do erro para o suporte.",

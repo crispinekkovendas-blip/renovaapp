@@ -94,6 +94,8 @@ export interface Patient {
   medications?: string | null;
   /** Nome social (migração 2026-09-16): aparece primeiro no prontuário e nos documentos. */
   social_name?: string | null;
+  /** História clínica em JSON (migração 2026-10-19-prontuario-completo; ver clinical-history.ts). */
+  clinical_history?: string | null;
   created_at: string;
   last_visit?: string | null;
 }
@@ -166,6 +168,9 @@ export interface Encounter {
   return_days?: number | null;
   return_due?: string | null;
   return_reminded_at?: string | null;
+  /** Sinais vitais em JSON e CID-10 (migração 2026-10-19-prontuario-completo). */
+  vitals?: string | null;
+  cid?: string | null;
   created_at: string;
   professional_name?: string;
   patient_name?: string;

@@ -25,6 +25,8 @@ import { parseDraft } from "@/lib/drafts";
 import { patientPortalLink } from "@/lib/actions-confirm";
 import { memedConfig } from "@/lib/memed/client";
 import { EmitComposer } from "@/components/documents/emit-composer";
+import { loadLogos, loadSheetTemplates } from "@/lib/sheet-templates-db";
+import { templatesFor } from "@/lib/sheet-style";
 
 /**
  * "Emitir documentos": o compositor de atestado, encaminhamento, laudo e
@@ -96,6 +98,10 @@ export async function EmitScreen({
     templateUsage(session.professionalId),
   ]);
   const draftState = savedDraft ? parseDraft(savedDraft.state) : null;
+  // Modelos da folha: o admin vê todos; o profissional, os da clínica e os dele.
+  const allSheetTemplates = await loadSheetTemplates();
+  const sheetTemplates = session.role === "admin" ? allSheetTemplates : templatesFor(allSheetTemplates, session.professionalId);
+  const sheetLogos = await loadLogos(sheetTemplates.map((t) => t.style));
   const draftId = savedDraft ? String(savedDraft.id) : query.rascunho?.startsWith("local-") ? query.rascunho : null;
   const patient = patientRows[0];
   if (!patient) notFound();
@@ -195,6 +201,10 @@ export async function EmitScreen({
           portalUrl={portalUrl}
           error={query.erro}
           ok={query.ok}
+          sheetTemplates={sheetTemplates}
+          sheetLogos={sheetLogos}
+          canEditSheet={session.role !== "recepcao"}
+          canSaveSheetForClinic={session.role === "admin"}
         />
       ) : (
         <div className="card p-6">

@@ -61,6 +61,10 @@ import type { FrequentItem } from "@/lib/rx-suggestions";
 import { PrescriptionCard } from "./composer/prescription-card";
 import { ReceitaCard } from "./composer/receita-card";
 import { ReviewStep } from "./composer/review-step";
+import { SheetStylePanel } from "./composer/sheet-style-panel";
+import type { SheetChoice } from "./composer/sheet-style-panel";
+import { DEFAULT_SHEET_STYLE, SHEET_PRESETS, isDefaultStyle } from "@/lib/sheet-style";
+import type { SheetStyle, SheetTemplate } from "@/lib/sheet-style";
 import { TextEditorCard } from "./composer/text-editor";
 import { TypePicker } from "./composer/type-picker";
 import { TypeRail } from "./composer/type-rail";
@@ -143,7 +147,16 @@ export interface EmitComposerProps {
   error?: string;
   /** `?ok=perfil`: o Perfil acabou de salvar o cadastro. */
   ok?: string;
+  /** Modelos da folha que esta sessão enxerga, e os logotipos deles (hash → data URL). */
+  sheetTemplates?: SheetTemplate[];
+  sheetLogos?: Record<string, string>;
+  /** Recepção não personaliza a folha; o administrador salva modelos da clínica. */
+  canEditSheet?: boolean;
+  canSaveSheetForClinic?: boolean;
 }
+
+/** Último modelo da folha usado por profissional, neste navegador (comodidade; pode faltar). */
+const SHEET_CHOICE_KEY = (professionalId: number) => `renova:folha:${professionalId}`;
 
 /** A folha só muda quando muda o que ela desenha — não com a pilha, a revisão ou o rail. */
 const PreviewSheet = memo(DocumentPreview);
@@ -187,6 +200,10 @@ export function EmitComposer({
   portalUrl,
   error,
   ok,
+  sheetTemplates: initialSheetTemplates = [],
+  sheetLogos: initialSheetLogos = {},
+  canEditSheet = false,
+  canSaveSheetForClinic = false,
 }: EmitComposerProps) {
   const [step, setStep] = useState<ComposerStep>("compose");
   const [{ tab, editor }, dispatch] = useReducer(composerReducer, undefined, () =>
@@ -284,6 +301,40 @@ export function EmitComposer({
   const [send, setSend] = useState(() => initialSendOptions(patient.phone));
 
   const professional = professionals.find((p) => p.id === professionalId) ?? null;
+
+  // Modelo da folha: o último que este profissional usou neste navegador, senão o padrão.
+  const [sheetTemplates, setSheetTemplates] = useState(initialSheetTemplates);
+  const [sheetLogos, setSheetLogos] = useState(initialSheetLogos);
+  const [sheet, setSheet] = useState<{ style: SheetStyle; choice: SheetChoice }>({
+    style: DEFAULT_SHEET_STYLE,
+    choice: "preset:renova",
+  });
+  useEffect(() => {
+    let saved: string | null = null;
+    try {
+      saved = localStorage.getItem(SHEET_CHOICE_KEY(professionalId));
+    } catch {
+      saved = null;
+    }
+    const preset = saved?.startsWith("preset:") ? SHEET_PRESETS.find((p) => `preset:${p.id}` === saved) : undefined;
+    const template = saved?.startsWith("tpl:") ? initialSheetTemplates.find((t) => `tpl:${t.id}` === saved) : undefined;
+    const found = preset?.style ?? template?.style;
+    setSheet(found ? { style: found, choice: saved as SheetChoice } : { style: DEFAULT_SHEET_STYLE, choice: "preset:renova" });
+  }, [professionalId, initialSheetTemplates]);
+  const chooseSheet = useCallback(
+    (style: SheetStyle, choice: SheetChoice) => {
+      setSheet({ style, choice });
+      if (choice === "custom") return;
+      try {
+        localStorage.setItem(SHEET_CHOICE_KEY(professionalId), choice);
+      } catch {
+        // Sem armazenamento: só não lembra da próxima vez.
+      }
+    },
+    [professionalId]
+  );
+  const sheetStyleJson = isDefaultStyle(sheet.style) ? "" : JSON.stringify(sheet.style);
+  const logoSrc = sheet.style.logo ? sheetLogos[sheet.style.logo] ?? null : null;
   const ctx: RenderContext = useMemo(
     () => ({
       patient: { name: patient.name, cpf: patient.cpf, social_name: patient.social_name },
@@ -461,10 +512,11 @@ export function EmitComposer({
         kind: "receituario",
         professionalId,
         medicamentos: serializePrescription(doc.items),
+        style: sheet.style,
       });
       return;
     }
-    void pdf.open({ title, body, code: editor.code, kind: editor.kind, professionalId });
+    void pdf.open({ title, body, code: editor.code, kind: editor.kind, professionalId, style: sheet.style });
   }
 
   /* ---------- montagem ---------- */
@@ -480,6 +532,8 @@ export function EmitComposer({
     patientName: displayName,
     patientCpf: patient.cpf,
     professional,
+    sheetStyle: sheet.style,
+    logoSrc,
   };
   const pages: PreviewPage[] =
     tab === "receituario"
@@ -659,6 +713,7 @@ export function EmitComposer({
       <input type="hidden" name="patient_id" value={patientId} />
       {encounterId ? <input type="hidden" name="encounter_id" value={encounterId} /> : null}
       <input type="hidden" name="items" value={itemsJson} />
+      {sheetStyleJson ? <input type="hidden" name="sheet_style" value={sheetStyleJson} /> : null}
       {draft.draftId && !draft.draftId.startsWith("local-") ? (
         <input type="hidden" name="draft_id" value={draft.draftId} />
       ) : null}
@@ -711,6 +766,31 @@ export function EmitComposer({
           onSendChange={setSend}
           items={items}
           countLabel={countLabel}
+          sheetPanel={
+            <SheetStylePanel
+              style={sheet.style}
+              choice={sheet.choice}
+              onChange={chooseSheet}
+              templates={sheetTemplates}
+              onTemplatesChange={setSheetTemplates}
+              logos={sheetLogos}
+              onLogo={(hash, dataUrl) => setSheetLogos((all) => ({ ...all, [hash]: dataUrl }))}
+              canEdit={canEditSheet}
+              canSaveForClinic={canSaveSheetForClinic}
+              professionalId={professionalId}
+              sheet={{
+                date: fmtDate(date),
+                code: editor.code,
+                clinicName,
+                clinicLine,
+                clinicCnes,
+                patientName: displayName,
+                patientCpf: patient.cpf,
+                professional,
+              }}
+              sampleItems={rx}
+            />
+          }
         />
       )}
 

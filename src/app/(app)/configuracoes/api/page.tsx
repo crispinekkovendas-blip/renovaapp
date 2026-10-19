@@ -150,6 +150,20 @@ export default async function ApiSettingsPage({
               </table>
             </div>
           </div>
+
+          <SectionTitle>Conectar ao Claude (MCP)</SectionTitle>
+          <div className="card p-4 sm:p-5">
+            <p className="text-sm text-pine-900/70">
+              Com uma chave, o Claude busca pacientes, lê o prontuário, vê a agenda e — quando você pede — cria e
+              atualiza cadastros e registra atendimentos. Cada alteração volta com o antes e o depois.
+            </p>
+            <pre className="mt-3 overflow-x-auto rounded-xl bg-pine-950 p-4 font-mono text-xs text-pine-100">
+              {`claude mcp add --transport http renova \\\n  https://renovaapp.vercel.app/api/mcp \\\n  --header "Authorization: Bearer rnv_SUA_CHAVE"`}
+            </pre>
+            <p className="mt-3 text-xs text-pine-900/55">
+              A chave dá acesso aos prontuários: crie uma só para o Claude e revogue aqui quando não precisar mais.
+            </p>
+          </div>
         </section>
       </div>
     </>

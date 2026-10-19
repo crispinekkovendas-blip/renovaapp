@@ -26,6 +26,8 @@ import { DraftsPanel, DraftsSummaryRow } from "@/components/pacientes/chart/draf
 import { SummaryList, SummaryRow } from "@/components/pacientes/chart/summary-list";
 import { listDraftsForPatient } from "@/lib/drafts-db";
 import { NewEncounterForm } from "@/components/pacientes/chart/new-encounter-form";
+import { HistoryCard } from "@/components/pacientes/chart/history-card";
+import { conditionsOf, parseHistory } from "@/lib/clinical-history";
 import { EncounterTimeline } from "@/components/pacientes/chart/encounter-timeline";
 import { PatientDataCard } from "@/components/pacientes/chart/patient-data-card";
 import { PatientAppointments, PatientPayments } from "@/components/pacientes/chart/recent-lists";
@@ -120,6 +122,9 @@ export default async function PatientPage({
   if (!patient) notFound();
 
   const latestEncounter = encounters[0] ?? null;
+  // História clínica (migração 2026-10-19; antes dela a coluna não vem e fica vazia).
+  const history = parseHistory(patient.clinical_history);
+  const showGyn = !/^m/i.test(patient.sex ?? "");
   const latestWithRx = encounters.find((e) => e.prescription) ?? null;
 
   // Nome social primeiro (migração 2026-09-16; antes dela a coluna não vem e vale o civil).
@@ -167,7 +172,11 @@ export default async function PatientPage({
       />
 
       {/* Sem a migração 2026-09-09 as colunas não vêm e nada aparece. */}
-      <ClinicalAlerts allergies={splitLines(patient.allergies)} medications={splitLines(patient.medications)} />
+      <ClinicalAlerts
+        allergies={splitLines(patient.allergies)}
+        medications={splitLines(patient.medications)}
+        conditions={conditionsOf(history)}
+      />
 
       <PatientTabs
         patientId={patient.id}
@@ -220,6 +229,8 @@ export default async function PatientPage({
             />
           </SummaryList>
 
+          <HistoryCard patientId={patient.id} history={history} showGyn={showGyn} />
+
           <HubSubmissions
             patientId={patient.id}
             submissions={hubSubmissions}
@@ -234,7 +245,12 @@ export default async function PatientPage({
             <SectionTitle>Prontuário</SectionTitle>
             <span className="text-xs font-bold text-pine-900/45">{encounterCountLabel(encounters.length)}</span>
           </div>
-          <NewEncounterForm patientId={patient.id} professionals={professionals} open={atender === "1"} />
+          <NewEncounterForm
+            patientId={patient.id}
+            patientSex={patient.sex}
+            professionals={professionals}
+            open={atender === "1"}
+          />
           <EncounterTimeline patientId={patient.id} encounters={encounters} />
         </section>
       ) : null}

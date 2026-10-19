@@ -32,6 +32,8 @@ import { searchCid } from "./cid-db";
 import { parseItems as parsePrescriptionItems, serializeItems as serializePrescriptionItems } from "./prescription";
 import { receiptKindFor, receiptWarning } from "./medications";
 import type { Tarja, ReceiptKind } from "./medications";
+import type { DosageForm } from "./dosage-form";
+import { isDefaultStyle, normalizeSheetStyle } from "./sheet-style";
 import { getClinicHeader, getDocument, getTemplate, getTemplatesByIds } from "./documents-db";
 import { deleteDraft } from "./drafts-db";
 import type { ClinicHeader } from "./documents-db";
@@ -323,6 +325,16 @@ export async function emitDocumentsAction(formData: FormData): Promise<void> {
     social_name: patientRow.social_name ?? null,
   };
 
+  // Modelo da folha escolhido na revisão: vai copiado em cada documento.
+  let folha: ReturnType<typeof normalizeSheetStyle> | null = null;
+  try {
+    const raw = str(formData, "sheet_style");
+    if (raw) folha = normalizeSheetStyle(JSON.parse(raw));
+  } catch {
+    folha = null;
+  }
+  if (folha && isDefaultStyle(folha)) folha = null;
+
   const docs: NewDocument[] = [];
   for (const item of items) {
     const saved = item.template_id ? savedTemplates.get(item.template_id) : null;
@@ -346,7 +358,7 @@ export async function emitDocumentsAction(formData: FormData): Promise<void> {
       subkind: item.subkind,
       title: item.title.slice(0, 120) || template.title || documentTitle(item.kind, item.subkind),
       body,
-      fields: serializeDocumentFields({ template_id: templateId, fields: item.fields }),
+      fields: serializeDocumentFields({ template_id: templateId, fields: item.fields, folha }),
       issuedAt,
       shared,
       code: item.code,
@@ -566,13 +578,14 @@ export async function installLibraryAction(): Promise<void> {
  */
 export async function searchMedicationsAction(
   query: string
-): Promise<{ label: string; substance: string; concentration: string | null; tarja: Tarja; receipt: ReceiptKind; warning: string | null; brands: number }[]> {
+): Promise<{ label: string; substance: string; concentration: string | null; form: DosageForm | null; tarja: Tarja; receipt: ReceiptKind; warning: string | null; brands: number }[]> {
   await requireSession();
   const hits = await searchMedications(query);
   return hits.map((hit) => ({
     label: [hit.substance, hit.concentration].filter(Boolean).join(" "),
     substance: hit.substance,
     concentration: hit.concentration,
+    form: hit.form,
     tarja: hit.tarja,
     receipt: receiptKindFor(hit.tarja),
     warning: receiptWarning(hit.tarja),

@@ -4,6 +4,8 @@ import type { Patient } from "@/lib/db";
 import { requireSession } from "@/lib/auth";
 import { getClinicHeader } from "@/lib/documents-db";
 import { buildDocumentPdf } from "@/lib/pdf/document-pdf";
+import { normalizeSheetStyle } from "@/lib/sheet-style";
+import { logoFor } from "@/lib/sheet-templates-db";
 import type { PdfMedication } from "@/lib/pdf/document-pdf";
 import { parseItems } from "@/lib/prescription";
 import { receiptKindFor, viasFor } from "@/lib/medications";
@@ -37,6 +39,8 @@ export async function POST(
     kind?: string;
     professionalId?: number;
     medicamentos?: string;
+    /** Modelo da folha escolhido na revisão. */
+    style?: unknown;
   };
   try {
     draft = await request.json();
@@ -74,7 +78,12 @@ export async function POST(
     }
   }
 
+  const style = draft.style ? normalizeSheetStyle(draft.style) : null;
+  const logoImage = await logoFor(style);
+
   const bytes = await buildDocumentPdf({
+    style,
+    logoImage,
     title: (draft.title ?? "").trim() || "Documento",
     body: draft.body ?? "",
     medications,

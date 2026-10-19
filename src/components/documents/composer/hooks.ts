@@ -103,6 +103,8 @@ export interface PdfDraft {
   professionalId: number;
   /** Só no receituário: a lista serializada. */
   medicamentos?: string;
+  /** Modelo da folha escolhido na revisão. */
+  style?: unknown;
 }
 
 /** "Ver o PDF real": o PDF de verdade do rascunho, numa aba nova, sem gravar nada. */

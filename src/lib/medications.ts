@@ -1,4 +1,5 @@
 import { searchKey } from "./normalize.ts";
+import { formFromPresentation, type DosageForm } from "./dosage-form.ts";
 
 /**
  * Catálogo de medicamentos e as regras de receituário que dependem dele.
@@ -225,3 +226,76 @@ export function allergyHits(substance: string, allergies: string | null | undefi
   }
   return hits;
 }
+
+/* ---------- Busca no catálogo ---------- */
+
+export interface MedicationHit {
+  substance: string;
+  concentration: string | null;
+  /** Forma farmacêutica (da apresentação); null quando a CMED não deixa claro. */
+  form: DosageForm | null;
+  tarja: Tarja;
+  /** Uma marca conhecida daquela substância, só para o médico reconhecer. */
+  product: string | null;
+  presentation: string | null;
+  therapeutic_class: string | null;
+  /** Quantas apresentações existem — sinal de que é comum, não um item raro. */
+  brands: number;
+}
+
+/** Uma linha da CMED como a busca traz, já na ordem de relevância. */
+export interface MedicationRow {
+  substance: string;
+  concentration: string | null;
+  tarja: Tarja;
+  product: string | null;
+  presentation: string | null;
+  therapeutic_class: string | null;
+  marketed: boolean | number;
+  rank: number;
+}
+
+/**
+ * Um resultado por substância + concentração + forma. As linhas chegam na
+ * ordem de relevância (e comercializadas primeiro): a primeira de cada grupo o
+ * representa e dá a posição; entre grupos de mesma relevância, o mais comum
+ * (mais apresentações) vem antes.
+ */
+export function collapseMedicationRows(rows: readonly MedicationRow[], limit = 20): MedicationHit[] {
+  const groups = new Map<string, { hit: MedicationHit; rank: number; marketed: boolean; order: number }>();
+  rows.forEach((row, order) => {
+    const form = formFromPresentation(row.presentation);
+    const key = `${row.substance}|${row.concentration ?? ""}|${form ?? ""}`;
+    const group = groups.get(key);
+    if (group) {
+      group.hit.brands++;
+      return;
+    }
+    groups.set(key, {
+      hit: {
+        substance: row.substance,
+        concentration: row.concentration,
+        form,
+        tarja: row.tarja,
+        product: row.product,
+        presentation: row.presentation,
+        therapeutic_class: row.therapeutic_class,
+        brands: 1,
+      },
+      rank: row.rank,
+      marketed: Boolean(row.marketed),
+      order,
+    });
+  });
+  return [...groups.values()]
+    .sort(
+      (a, b) =>
+        a.rank - b.rank ||
+        Number(b.marketed) - Number(a.marketed) ||
+        b.hit.brands - a.hit.brands ||
+        a.order - b.order,
+    )
+    .slice(0, limit)
+    .map((g) => g.hit);
+}
+

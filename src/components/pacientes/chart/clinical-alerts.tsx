@@ -2,7 +2,16 @@
  * Alergias e medicamentos em uso ("uma por linha" no cadastro) viram faixas no
  * alto do prontuário — a de alergias em vermelho, impossível de não ver.
  */
-export function ClinicalAlerts({ allergies, medications }: { allergies: string[]; medications: string[] }) {
+export function ClinicalAlerts({
+  allergies,
+  medications,
+  conditions = [],
+}: {
+  allergies: string[];
+  medications: string[];
+  /** Antecedentes pessoais (doenças crônicas), da história clínica. */
+  conditions?: string[];
+}) {
   return (
     <>
       {allergies.length > 0 ? (
@@ -19,6 +28,18 @@ export function ClinicalAlerts({ allergies, medications }: { allergies: string[]
           </span>
           {allergies.map((item) => (
             <span key={item} className="chip bg-rose-600 text-white">
+              {item}
+            </span>
+          ))}
+        </div>
+      ) : null}
+      {conditions.length > 0 ? (
+        <div className="mb-4 flex flex-wrap items-center gap-2 rounded-2xl border border-amber-300/70 bg-amber-50 px-4 py-3">
+          <a href="#antecedentes" className="text-xs font-bold text-amber-900/80 hover:underline">
+            Antecedentes
+          </a>
+          {conditions.map((item) => (
+            <span key={item} className="chip bg-white text-amber-950 ring-1 ring-amber-300">
               {item}
             </span>
           ))}

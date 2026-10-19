@@ -7,6 +7,7 @@ import {
   RECEIPT_KIND_LABEL,
   allergyHits,
 } from "./medications.ts";
+import { isDosageForm, type DosageForm } from "./dosage-form.ts";
 
 /**
  * O receituário: a lista de medicamentos de uma prescrição, e as regras para
@@ -52,6 +53,8 @@ export interface PrescriptionItem {
   route: Route | "";
   /** Uso contínuo: a receita não "vence" para o paciente que depende dela. */
   continuous: boolean;
+  /** Forma farmacêutica da apresentação escolhida na busca (frases e quantidade na unidade certa). */
+  form?: DosageForm | null;
 }
 
 export const MAX_PRESCRIPTION_ITEMS = 30;
@@ -111,6 +114,7 @@ export function parseItems(raw: string | null | undefined): PrescriptionItem[] {
         posology: text(r.posology),
         route: ROUTE_SET.has(route) ? (route as Route) : "",
         continuous: r.continuous === true || r.continuous === "1",
+        ...(isDosageForm(r.form) ? { form: r.form } : {}),
       },
     ];
   });

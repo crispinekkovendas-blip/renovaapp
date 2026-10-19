@@ -1,8 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { PrescriptionItem } from "@/lib/prescription";
+import { DEFAULT_SHEET_STYLE, RULE_HEIGHT, SCALE_FACTOR, tint } from "@/lib/sheet-style";
+import type { SheetStyle } from "@/lib/sheet-style";
 
 /**
  * A prévia da folha, ao lado do editor.
@@ -48,6 +50,21 @@ export interface DocumentPreviewProps {
   viaLabel?: string | null;
   /** Receituário na página grande da prévia: os medicamentos da folha respondem ao mouse. */
   canvas?: SheetCanvas;
+  /** Modelo da folha (mesmo do PDF); sem ele, o padrão Renova. */
+  sheetStyle?: SheetStyle;
+  /** O logotipo do modelo, como data URL. */
+  logoSrc?: string | null;
+}
+
+/** As cores do modelo — as mesmas contas de `lookFor` no PDF. */
+function sheetColors(style: SheetStyle) {
+  const renova = style.accent === DEFAULT_SHEET_STYLE.accent;
+  return {
+    accent: style.accent,
+    soft: renova ? "#6c3db5" : tint(style.accent, 0.22),
+    panel: renova ? "#f8f4fb" : tint(style.accent, 0.955),
+    seal: renova ? "#ffd6dc" : tint(style.accent, 0.84),
+  };
 }
 
 /**
@@ -73,7 +90,13 @@ export function DocumentPreview(props: DocumentPreviewProps) {
     title, body, medications, date, code,
     clinicName, clinicLine, clinicCnes,
     patientName, patientCpf, professional, viaLabel, canvas,
+    sheetStyle = DEFAULT_SHEET_STYLE, logoSrc,
   } = props;
+  const look = sheetColors(sheetStyle);
+  const k = SCALE_FACTOR[sheetStyle.scale];
+  const list = sheetStyle.meds === "lista";
+  const centered = sheetStyle.align === "center";
+  const logo = sheetStyle.logo && logoSrc ? logoSrc : null;
 
   const items = useMemo(
     () => (medications ?? []).filter((m) => m.name.trim() && m.posology.trim()),
@@ -105,10 +128,29 @@ export function DocumentPreview(props: DocumentPreviewProps) {
       aria-label="Prévia da folha"
     >
       {/* ── Cabeçalho ─────────────────────────────── */}
-      <p style={{ fontSize: 17, fontWeight: 800, color: "#3d0e6b", lineHeight: 1.2 }}>{clinicName}</p>
-      {clinicLine ? <p style={{ fontSize: 8, color: "#736d7d", marginTop: 5 }}>{clinicLine}</p> : null}
-      {clinicCnes ? <p style={{ fontSize: 8, color: "#736d7d", marginTop: 3 }}>CNES {clinicCnes}</p> : null}
-      <div style={{ height: 2.5, background: "#3d0e6b", marginTop: 13 }} />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: centered ? "column" : "row",
+          alignItems: centered ? "center" : "flex-start",
+          gap: centered ? 8 : 12,
+          textAlign: centered ? "center" : "left",
+        }}
+      >
+        {logo ? (
+          // eslint-disable-next-line @next/next/no-img-element -- data URL do modelo, igual ao do PDF
+          <img src={logo} alt="" style={{ maxWidth: 120, maxHeight: 40, objectFit: "contain", flex: "none" }} />
+        ) : null}
+        <div style={{ minWidth: 0 }}>
+          <p style={{ fontSize: 17, fontWeight: 800, color: look.accent, lineHeight: 1.2 }}>{clinicName}</p>
+          {sheetStyle.headerNote ? <p style={{ fontSize: 8, color: "#736d7d", marginTop: 5 }}>{sheetStyle.headerNote}</p> : null}
+          {sheetStyle.showClinicLine && clinicLine ? (
+            <p style={{ fontSize: 8, color: "#736d7d", marginTop: sheetStyle.headerNote ? 3 : 5 }}>{clinicLine}</p>
+          ) : null}
+          {sheetStyle.showCnes && clinicCnes ? <p style={{ fontSize: 8, color: "#736d7d", marginTop: 3 }}>CNES {clinicCnes}</p> : null}
+        </div>
+      </div>
+      <div style={{ height: RULE_HEIGHT[sheetStyle.rule], background: look.accent, marginTop: 13 }} />
 
       {/* ── Título + selo da via ──────────────────── */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginTop: 24 }}>
@@ -116,7 +158,7 @@ export function DocumentPreview(props: DocumentPreviewProps) {
         {viaLabel ? (
           <span
             style={{
-              fontSize: 8, fontWeight: 800, color: "#3d0e6b", background: "#ffd6dc",
+              fontSize: 8, fontWeight: 800, color: look.accent, background: look.seal,
               borderRadius: 9, padding: "4px 9px", whiteSpace: "nowrap",
             }}
           >
@@ -129,8 +171,10 @@ export function DocumentPreview(props: DocumentPreviewProps) {
       <div
         style={{
           display: "grid", gridTemplateColumns: "1.9fr 1.1fr 0.9fr 1.1fr", gap: 8,
-          background: "#f8f4fb", borderRadius: 8, padding: "12px 16px", marginTop: 18, height: 50,
-          alignContent: "center",
+          marginTop: 18, height: 50, alignContent: "center",
+          ...(sheetStyle.patientPanel === "faixa"
+            ? { background: look.panel, borderRadius: 8, padding: "12px 16px" }
+            : { borderTop: "0.8px solid #e0dbe8", borderBottom: "0.8px solid #e0dbe8", padding: "12px 0" }),
         }}
       >
         {campos.map(([rot, val]) => (
@@ -151,25 +195,32 @@ export function DocumentPreview(props: DocumentPreviewProps) {
       {/* ── Corpo ─────────────────────────────────── */}
       <div style={{ marginTop: 26, flex: 1 }}>
         {items.length > 0 ? (
-          <div style={{ display: "grid", gap: 10 }}>
+          <div style={{ display: "grid", gap: list ? 8 : 10 }}>
             {items.map((item, i) => {
               const block = (
                 <>
-                  <span style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: "#6c3db5", borderRadius: "6px 0 0 6px" }} />
-                  <span style={{ position: "absolute", left: 15, top: 10, fontSize: 12, fontWeight: 800, color: "#6c3db5" }}>{i + 1}</span>
+                  {list ? null : (
+                    <span style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: look.soft, borderRadius: "6px 0 0 6px" }} />
+                  )}
+                  <span style={{ position: "absolute", left: list ? 0 : 15, top: list ? 0 : 10, fontSize: 12 * k, fontWeight: 800, color: look.soft }}>
+                    {list ? `${i + 1})` : i + 1}
+                  </span>
                   <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 10 }}>
-                    <span style={{ fontSize: 11, fontWeight: 800 }}>{item.name}</span>
-                    {item.quantity ? <span style={{ fontSize: 9, color: "#736d7d", whiteSpace: "nowrap" }}>{item.quantity}</span> : null}
+                    <span style={{ fontSize: 11 * k, fontWeight: 800 }}>{item.name}</span>
+                    {item.quantity ? <span style={{ fontSize: 9 * k, color: "#736d7d", whiteSpace: "nowrap" }}>{item.quantity}</span> : null}
                   </div>
-                  <p style={{ fontSize: 9.5, marginTop: 5, lineHeight: 1.45 }}>
+                  <p style={{ fontSize: 9.5 * k, marginTop: 5 * k, lineHeight: 1.45 }}>
                     {[item.posology.trim(), item.route, item.continuous ? "Uso contínuo" : ""].filter(Boolean).join(". ")}.
                   </p>
                 </>
               );
+              const frame = list
+                ? { position: "relative" as const, padding: `0 0 2px ${19 * k}px`, borderTop: i > 0 ? "0.6px solid #e0dbe8" : undefined, paddingTop: i > 0 ? 8 : 0 }
+                : { border: "0.8px solid #e0dbe8", borderRadius: 6, position: "relative" as const, padding: `${11 * k}px 15px ${11 * k}px ${15 + 19 * k}px` };
               const index = canvas?.indexes[i];
               if (!canvas || index === undefined || index < 0) {
                 return (
-                  <div key={i} style={{ border: "0.8px solid #e0dbe8", borderRadius: 6, position: "relative", padding: "11px 15px 11px 34px" }}>
+                  <div key={i} style={frame}>
                     {block}
                   </div>
                 );
@@ -182,6 +233,7 @@ export function DocumentPreview(props: DocumentPreviewProps) {
                   name={item.name}
                   previous={canvas.indexes[i - 1]}
                   next={canvas.indexes[i + 1]}
+                  frame={frame}
                 >
                   {block}
                 </CanvasBlock>
@@ -189,7 +241,7 @@ export function DocumentPreview(props: DocumentPreviewProps) {
             })}
           </div>
         ) : (
-          <p style={{ fontSize: 10.5, lineHeight: "17px", whiteSpace: "pre-wrap" }}>
+          <p style={{ fontSize: 10.5 * k, lineHeight: `${17 * k}px`, whiteSpace: "pre-wrap" }}>
             {body.trim() || "O texto do documento aparece aqui."}
           </p>
         )}
@@ -197,6 +249,9 @@ export function DocumentPreview(props: DocumentPreviewProps) {
 
       {/* ── Rodapé: colado embaixo, como no PDF ───── */}
       <div style={{ marginTop: 20, flex: "none" }}>
+        {sheetStyle.footerNote ? (
+          <p style={{ fontSize: 8, color: "#736d7d", marginBottom: 6, textAlign: centered ? "center" : "left" }}>{sheetStyle.footerNote}</p>
+        ) : null}
         <div style={{ height: 0.8, background: "#e0dbe8" }} />
         <div style={{ display: "flex", justifyContent: "space-between", gap: 20, marginTop: 20 }}>
           <div style={{ display: "flex", gap: 13, alignItems: "flex-start" }}>
@@ -211,7 +266,7 @@ export function DocumentPreview(props: DocumentPreviewProps) {
               <p style={{ fontSize: 6.5, fontWeight: 800, letterSpacing: ".07em", color: "#736d7d", textTransform: "uppercase" }}>
                 Confira a autenticidade
               </p>
-              <p style={{ fontSize: 14, fontWeight: 800, color: "#3d0e6b", marginTop: 6 }}>{code || "RNV-————-————"}</p>
+              <p style={{ fontSize: 14, fontWeight: 800, color: look.accent, marginTop: 6 }}>{code || "RNV-————-————"}</p>
               <p style={{ fontSize: 7.5, color: "#736d7d", marginTop: 3 }}>renovaapp.vercel.app/validar/{code}</p>
             </div>
           </div>
@@ -245,11 +300,14 @@ function CanvasBlock({
   name,
   previous,
   next,
+  frame,
   children,
 }: {
   canvas: SheetCanvas;
   index: number;
   name: string;
+  /** Moldura do item conforme o modelo (bloco ou lista). */
+  frame: CSSProperties;
   /** Vizinhos neste papel (posições na lista do editor). */
   previous: number | undefined;
   next: number | undefined;
@@ -293,10 +351,7 @@ function CanvasBlock({
       }}
       className="group/med cursor-pointer outline-none transition-[box-shadow,background-color] duration-500 hover:shadow-[0_0_0_1.5px_#9b6ad6] focus-visible:shadow-[0_0_0_1.5px_#6c3db5]"
       style={{
-        border: "0.8px solid #e0dbe8",
-        borderRadius: 6,
-        position: "relative",
-        padding: "11px 15px 11px 34px",
+        ...frame,
         background: lit ? "#f6effd" : over ? "#faf7fd" : undefined,
         boxShadow: lit ? "0 0 0 2px #6c3db5" : over ? "0 -2px 0 0 #6c3db5" : undefined,
       }}

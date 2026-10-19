@@ -4,6 +4,7 @@ import { fmtDate } from "@/lib/format";
 import { EmptyState } from "@/components/ui";
 import { IconFileText } from "@/components/icons";
 import { IconPrinter } from "./icon-printer";
+import { formatVitals, parseVitals, vitalAlerts } from "@/lib/clinical-history";
 
 type ClinicalField = "complaint" | "anamnesis" | "exam" | "diagnosis" | "plan" | "prescription";
 
@@ -54,11 +55,20 @@ export function EncounterTimeline({ patientId, encounters }: { patientId: number
               <p className="min-w-0 truncate text-xs font-bold text-pine-900/45">{encounter.professional_name}</p>
             </header>
             <dl className="space-y-2 break-words px-4 py-4 text-sm sm:px-5">
+              <VitalsRow raw={encounter.vitals} />
               {FIELDS.map(({ key, label, ddClass }) =>
                 encounter[key] ? (
                   <div key={key}>
                     <dt className="label mb-0.5">{label}</dt>
-                    <dd className={ddClass}>{encounter[key]}</dd>
+                    <dd className={ddClass}>
+                      {encounter[key]}
+                      {key === "diagnosis" && encounter.cid ? <span className="chip ml-2 bg-pine-100 font-mono text-pine-800">{encounter.cid}</span> : null}
+                    </dd>
+                  </div>
+                ) : key === "diagnosis" && encounter.cid ? (
+                  <div key={key}>
+                    <dt className="label mb-0.5">CID-10</dt>
+                    <dd className="font-mono font-semibold">{encounter.cid}</dd>
                   </div>
                 ) : null
               )}
@@ -88,5 +98,30 @@ export function EncounterTimeline({ patientId, encounters }: { patientId: number
         </li>
       ))}
     </ol>
+  );
+}
+
+/** Sinais vitais do atendimento numa linha, com os alertas em destaque. */
+function VitalsRow({ raw }: { raw?: string | null }) {
+  const vitals = parseVitals(raw);
+  const text = formatVitals(vitals);
+  if (!text) return null;
+  const alerts = vitalAlerts(vitals);
+  return (
+    <div>
+      <dt className="label mb-0.5">Sinais vitais</dt>
+      <dd>
+        {text}
+        {alerts.length ? (
+          <span className="mt-1 flex flex-wrap gap-1.5">
+            {alerts.map((a) => (
+              <span key={a} className="chip bg-amber-100 text-amber-900">
+                {a}
+              </span>
+            ))}
+          </span>
+        ) : null}
+      </dd>
+    </div>
   );
 }

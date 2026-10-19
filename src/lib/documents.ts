@@ -446,6 +446,8 @@ export interface DocumentFieldsJson {
   /** Modelo salvo usado na emissão; null = modelo padrão. */
   template_id: number | null;
   fields: DocumentFieldValues;
+  /** Cópia do modelo da folha usado na emissão (sheet-style.ts); ausente = padrão. */
+  folha?: unknown;
 }
 
 /** Exportado só para o teste garantir que nenhuma chave nova fique de fora. */
@@ -486,7 +488,11 @@ export function normalizeFieldValues(raw: Record<string, unknown> | null | undef
 }
 
 export function serializeDocumentFields(data: DocumentFieldsJson): string {
-  return JSON.stringify({ template_id: data.template_id ?? null, fields: normalizeFieldValues(data.fields) });
+  return JSON.stringify({
+    template_id: data.template_id ?? null,
+    fields: normalizeFieldValues(data.fields),
+    ...(data.folha ? { folha: data.folha } : {}),
+  });
 }
 
 /** Lê o JSON gravado em `documents.fields`; tolerante a lixo e a chaves faltando. */

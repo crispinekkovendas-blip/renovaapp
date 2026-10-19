@@ -7,6 +7,7 @@ import { SUBFILTER_ETSI_CADES_DETACHED } from "@signpdf/utils";
 import { SIGNATURE_LENGTH } from "./sign.ts";
 import { REGULAR_TTF_BASE64 } from "./fonts/regular.ts";
 import { BOLD_TTF_BASE64 } from "./fonts/bold.ts";
+import { DEFAULT_SHEET_STYLE, RULE_HEIGHT, SCALE_FACTOR, hexToRgb01, tint, type SheetStyle } from "../sheet-style.ts";
 
 /**
  * A folha dos documentos em PDF.
@@ -20,6 +21,10 @@ import { BOLD_TTF_BASE64 } from "./fonts/bold.ts";
  *    medicamento em bloco próprio existe para dois remédios não se
  *    confundirem numa lista corrida.
  *
+ * A aparência segue o modelo da folha (`SheetStyle`, sheet-style.ts): cor,
+ * logotipo, alinhamento, letra, blocos ou lista. O conteúdo exigido não muda
+ * com o modelo.
+ *
  * A fonte é a **Plus Jakarta Sans**, a mesma da tela, embutida (ver `fonts/`).
  * Com fonte própria o PDF deixa de depender do WinAnsi do Helvetica, e acento,
  * travessão e "·" saem como foram escritos.
@@ -29,14 +34,44 @@ const A4 = { width: 595.28, height: 841.89 };
 const M = 48;
 const W = A4.width - M * 2;
 
-const ROXO = rgb(0.24, 0.05, 0.42);
-const ROXO_MED = rgb(0.42, 0.24, 0.71);
 const TINTA = rgb(0.17, 0.15, 0.2);
 const CINZA = rgb(0.45, 0.42, 0.5);
 const LINHA = rgb(0.88, 0.86, 0.92);
-const LAVANDA = rgb(0.972, 0.957, 0.985);
-const ROSA = rgb(1, 0.84, 0.86);
 const BRANCO = rgb(1, 1, 1);
+
+type Color = ReturnType<typeof rgb>;
+
+/** As cores e medidas que dependem do modelo da folha. */
+interface Look {
+  style: SheetStyle;
+  /** Nome da clínica, régua, texto do selo. */
+  accent: Color;
+  /** Número e barra dos medicamentos. */
+  accentSoft: Color;
+  /** Fundo do painel do paciente. */
+  panel: Color;
+  /** Fundo do selo da via. */
+  seal: Color;
+  /** Multiplicador da letra do corpo e dos medicamentos. */
+  k: number;
+  logo: PDFImage | null;
+}
+
+function lookFor(style: SheetStyle, logo: PDFImage | null): Look {
+  const c = (hex: string) => rgb(...hexToRgb01(hex));
+  // O roxo da Renova tem os tons de sempre (lilás, lavanda, selo rosa); outra
+  // cor ganha tons derivados dela.
+  const renova = style.accent === DEFAULT_SHEET_STYLE.accent;
+  return {
+    style,
+    accent: c(style.accent),
+    accentSoft: renova ? rgb(0.42, 0.24, 0.71) : c(tint(style.accent, 0.22)),
+    panel: renova ? rgb(0.972, 0.957, 0.985) : c(tint(style.accent, 0.955)),
+    seal: renova ? rgb(1, 0.84, 0.86) : c(tint(style.accent, 0.84)),
+    k: SCALE_FACTOR[style.scale],
+    logo,
+  };
+}
 
 export interface PdfClinic {
   name: string;
@@ -87,6 +122,10 @@ export interface PdfDocumentInput {
    */
   vias?: number;
   viaLabels?: readonly string[];
+  /** Modelo da folha (aparência); sem ele, o padrão Renova. */
+  style?: SheetStyle | null;
+  /** Logotipo do modelo (data URL PNG/JPEG), já lido de `settings`. */
+  logoImage?: string | null;
   /**
    * Reserva o espaço da assinatura ICP-Brasil (PAdES). Só no documento que vai
    * ser assinado: num PDF de imprimir, o campo vazio aparece como "assinatura
@@ -121,7 +160,7 @@ function roundedRect(
   w: number,
   h: number,
   r: number,
-  color: ReturnType<typeof rgb>
+  color: Color
 ) {
   const top = A4.height - (y + h);
   const path =
@@ -172,24 +211,60 @@ function label(page: PDFPage, fonts: Fonts, text: string, x: number, y: number) 
   page.pushOperators(setCharacterSpacing(0));
 }
 
-function header(page: PDFPage, fonts: Fonts, input: PdfDocumentInput, viaLabel: string | null): number {
+function header(page: PDFPage, fonts: Fonts, input: PdfDocumentInput, viaLabel: string | null, look: Look): number {
+  const { style } = look;
+  const centered = style.align === "center";
+  /** x de um texto alinhado conforme o modelo. */
+  const at = (text: string, size: number, font: PDFFont) =>
+    centered ? (A4.width - font.widthOfTextAtSize(text, size)) / 2 : M;
   let y = A4.height - M;
 
-  page.drawText(safe(input.clinic.name), { x: M, y: y - 17, size: 17, font: fonts.bold, color: ROXO });
+  // Logotipo: até 120 × 40, ao lado do nome (à esquerda) ou acima dele (centralizado).
+  let nameX: number | null = null;
+  if (look.logo) {
+    const scale = Math.min(120 / look.logo.width, 40 / look.logo.height, 1);
+    const w = look.logo.width * scale;
+    const h = look.logo.height * scale;
+    if (centered) {
+      page.drawImage(look.logo, { x: (A4.width - w) / 2, y: y - h, width: w, height: h });
+      y -= h + 8;
+    } else {
+      page.drawImage(look.logo, { x: M, y: y - h, width: w, height: h });
+      nameX = M + w + 12;
+      y -= Math.max(0, (h - 17) / 2);
+    }
+  }
+
+  const name = safe(input.clinic.name);
+  page.drawText(name, { x: nameX ?? at(name, 17, fonts.bold), y: y - 17, size: 17, font: fonts.bold, color: look.accent });
   y -= 17;
 
-  if (input.clinic.line) {
+  const small = (text: string) => {
+    const t = safe(text);
+    page.drawText(t, { x: nameX ?? at(t, 8, fonts.reg), y, size: 8, font: fonts.reg, color: CINZA });
+  };
+  if (style.headerNote) {
     y -= 13;
-    page.drawText(safe(input.clinic.line), { x: M, y, size: 8, font: fonts.reg, color: CINZA });
+    small(style.headerNote);
   }
-  if (input.clinic.cnes) {
+  if (style.showClinicLine && input.clinic.line) {
+    y -= style.headerNote ? 11 : 13;
+    small(input.clinic.line);
+  }
+  if (style.showCnes && input.clinic.cnes) {
     y -= 11;
-    page.drawText(`CNES ${safe(input.clinic.cnes)}`, { x: M, y, size: 8, font: fonts.reg, color: CINZA });
+    small(`CNES ${input.clinic.cnes}`);
+  }
+  if (look.logo && !centered) {
+    // O texto ao lado do logotipo não pode subir para dentro da régua.
+    const logoBottom = A4.height - M - Math.min(40, look.logo.height * Math.min(120 / look.logo.width, 40 / look.logo.height, 1));
+    y = Math.min(y, logoBottom);
   }
 
-  // Régua roxa: dá peso ao cabeçalho sem o traço preto de formulário.
+  // Régua: dá peso ao cabeçalho sem o traço preto de formulário.
   y -= 13;
-  page.drawRectangle({ x: M, y, width: W, height: 2.5, color: ROXO });
+  const rule = RULE_HEIGHT[style.rule];
+  if (rule > 0) page.drawRectangle({ x: M, y, width: W, height: rule, color: look.accent });
 
   // Título à esquerda e a via como selo, onde o balconista procura.
   y -= 31;
@@ -197,15 +272,21 @@ function header(page: PDFPage, fonts: Fonts, input: PdfDocumentInput, viaLabel: 
   if (viaLabel) {
     const text = safe(viaLabel);
     const w = fonts.bold.widthOfTextAtSize(text, 8) + 18;
-    roundedRect(page, A4.width - M - w, y - 4, w, 18, 9, ROSA);
-    page.drawText(text, { x: A4.width - M - w + 9, y: y + 1, size: 8, font: fonts.bold, color: ROXO });
+    roundedRect(page, A4.width - M - w, y - 4, w, 18, 9, look.seal);
+    page.drawText(text, { x: A4.width - M - w + 9, y: y + 1, size: 8, font: fonts.bold, color: look.accent });
   }
 
   // Painel do paciente: rótulo pequeno em cima, valor com peso embaixo.
   y -= 22;
   const h = 50;
-  roundedRect(page, M, y - h, W, h, 8, LAVANDA);
-  const cols = [M + 16, M + 232, M + 352, M + 446];
+  if (style.patientPanel === "faixa") {
+    roundedRect(page, M, y - h, W, h, 8, look.panel);
+  } else {
+    page.drawRectangle({ x: M, y, width: W, height: 0.8, color: LINHA });
+    page.drawRectangle({ x: M, y: y - h, width: W, height: 0.8, color: LINHA });
+  }
+  const pad = style.patientPanel === "faixa" ? 16 : 0;
+  const cols = [M + pad, M + 232, M + 352, M + 446];
   const campos: [string, string][] = [
     ["Paciente", input.patient.name],
     ["CPF", input.patient.cpf || "—"],
@@ -229,8 +310,14 @@ async function footer(
   input: PdfDocumentInput,
   signature: PDFImage | null,
   pagina: number,
-  total: number
+  total: number,
+  look: Look
 ): Promise<void> {
+  if (look.style.footerNote) {
+    const t = safe(look.style.footerNote);
+    const x = look.style.align === "center" ? (A4.width - fonts.reg.widthOfTextAtSize(t, 8)) / 2 : M;
+    page.drawText(t, { x, y: M + 106, size: 8, font: fonts.reg, color: CINZA });
+  }
   page.drawRectangle({ x: M, y: M + 100, width: W, height: 0.8, color: LINHA });
 
   // ── Autenticidade, à esquerda
@@ -238,7 +325,7 @@ async function footer(
   await drawQr(page, input.validateUrl, M, M + 24, qr);
   const x = M + qr + 13;
   label(page, fonts, "Confira a autenticidade", x, M + 24 + qr - 9);
-  page.drawText(safe(input.code), { x, y: M + 24 + qr - 30, size: 14, font: fonts.bold, color: ROXO });
+  page.drawText(safe(input.code), { x, y: M + 24 + qr - 30, size: 14, font: fonts.bold, color: look.accent });
   page.drawText(safe(input.validateUrl.replace(/^https?:\/\//, "")), {
     x,
     y: M + 24 + qr - 42,
@@ -291,20 +378,24 @@ async function footer(
 }
 
 /** Altura do bloco de um medicamento — precisa ser sabida antes de desenhar. */
-function medicationHeight(fonts: Fonts, item: PdfMedication): { height: number; lines: string[] } {
+function medicationHeight(fonts: Fonts, item: PdfMedication, look: Look): { height: number; lines: string[] } {
   const detail = [item.posology.trim(), item.route || "", item.continuous ? "Uso contínuo" : ""]
     .filter(Boolean)
     .join(". ");
+  const size = 9.5 * look.k;
   const lines = wrapText(detail.endsWith(".") ? detail : `${detail}.`, W - 62, (t) =>
-    fonts.reg.widthOfTextAtSize(safe(t), 9.5)
+    fonts.reg.widthOfTextAtSize(safe(t), size)
   );
-  return { height: 32 + lines.length * 13, lines };
+  const lead = 13 * look.k;
+  // Em lista não há caixa: menos respiro em volta.
+  return { height: (look.style.meds === "lista" ? 20 : 32) * look.k + lines.length * lead, lines };
 }
 
 /**
  * Um medicamento por bloco: número, nome com peso, quantidade à direita e
  * posologia abaixo, com uma barra na lateral. Numa lista corrida dois
- * medicamentos se confundem — e quem lê com pressa é uma farmácia.
+ * medicamentos se confundem — e quem lê com pressa é uma farmácia. No modelo
+ * "lista", o mesmo desenho sem a caixa, com um fio separando os itens.
  */
 function drawMedication(
   page: PDFPage,
@@ -313,30 +404,45 @@ function drawMedication(
   index: number,
   y: number,
   h: number,
-  lines: string[]
+  lines: string[],
+  look: Look
 ) {
-  roundedRect(page, M, y - h, W, h, 6, BRANCO);
-  page.drawRectangle({ x: M, y: y - h, width: W, height: h, borderColor: LINHA, borderWidth: 0.8 });
-  page.drawRectangle({ x: M + 0.4, y: y - h + 0.4, width: 3, height: h - 0.8, color: ROXO_MED });
+  const k = look.k;
+  const list = look.style.meds === "lista";
+  if (!list) {
+    roundedRect(page, M, y - h, W, h, 6, BRANCO);
+    page.drawRectangle({ x: M, y: y - h, width: W, height: h, borderColor: LINHA, borderWidth: 0.8 });
+    page.drawRectangle({ x: M + 0.4, y: y - h + 0.4, width: 3, height: h - 0.8, color: look.accentSoft });
+  } else if (index > 0) {
+    page.drawRectangle({ x: M, y: y + 4, width: W, height: 0.6, color: LINHA });
+  }
 
-  page.drawText(String(index + 1), { x: M + 15, y: y - 21, size: 12, font: fonts.bold, color: ROXO_MED });
-  page.drawText(safe(item.name), { x: M + 34, y: y - 21, size: 11, font: fonts.bold, color: TINTA });
+  const left = list ? M : M + 15;
+  const top = list ? y - 12 * k : y - 21 * k;
+  page.drawText(list ? `${index + 1})` : String(index + 1), {
+    x: left,
+    y: top,
+    size: 12 * k,
+    font: fonts.bold,
+    color: look.accentSoft,
+  });
+  page.drawText(safe(item.name), { x: left + 19 * k, y: top, size: 11 * k, font: fonts.bold, color: TINTA });
 
   if (item.quantity) {
     const q = safe(item.quantity);
     page.drawText(q, {
-      x: A4.width - M - 15 - fonts.reg.widthOfTextAtSize(q, 9),
-      y: y - 21,
-      size: 9,
+      x: A4.width - M - (list ? 0 : 15) - fonts.reg.widthOfTextAtSize(q, 9 * k),
+      y: top,
+      size: 9 * k,
       font: fonts.reg,
       color: CINZA,
     });
   }
 
-  let ly = y - 37;
+  let ly = top - 16 * k;
   for (const line of lines) {
-    page.drawText(safe(line), { x: M + 34, y: ly, size: 9.5, font: fonts.reg, color: TINTA });
-    ly -= 13;
+    page.drawText(safe(line), { x: left + 19 * k, y: ly, size: 9.5 * k, font: fonts.reg, color: TINTA });
+    ly -= 13 * k;
   }
 }
 
@@ -364,14 +470,17 @@ export async function buildDocumentPdf(input: PdfDocumentInput): Promise<Uint8Ar
   };
 
   const signature = await embedSignature(pdf, input.professional.signatureImage);
+  const look = lookFor(input.style ?? DEFAULT_SHEET_STYLE, await embedSignature(pdf, input.logoImage));
+  const bodySize = 10.5 * look.k;
+  const bodyLead = 17 * look.k;
   const vias = Math.max(1, input.vias ?? 1);
   const labels = input.viaLabels ?? (vias === 2 ? ["1ª via — Farmácia (retenção)", "2ª via — Paciente"] : []);
   const bodyBottom = M + 118;
 
   const meds = input.medications?.length
-    ? input.medications.map((m) => ({ item: m, ...medicationHeight(fonts, m) }))
+    ? input.medications.map((m) => ({ item: m, ...medicationHeight(fonts, m, look) }))
     : null;
-  const textLines = meds ? [] : wrapText(input.body, W, (t) => fonts.reg.widthOfTextAtSize(safe(t), 10.5));
+  const textLines = meds ? [] : wrapText(input.body, W, (t) => fonts.reg.widthOfTextAtSize(safe(t), bodySize));
 
   for (let via = 0; via < vias; via += 1) {
     const viaLabel = labels[via] ?? null;
@@ -380,7 +489,7 @@ export async function buildDocumentPdf(input: PdfDocumentInput): Promise<Uint8Ar
 
     let page = pdf.addPage([A4.width, A4.height]);
     pages.push(page);
-    let y = header(page, fonts, input, viaLabel);
+    let y = header(page, fonts, input, viaLabel, look);
 
     if (meds) {
       for (let i = 0; i < meds.length; i += 1) {
@@ -388,28 +497,28 @@ export async function buildDocumentPdf(input: PdfDocumentInput): Promise<Uint8Ar
         if (y - height < bodyBottom) {
           page = pdf.addPage([A4.width, A4.height]);
           pages.push(page);
-          y = header(page, fonts, input, viaLabel);
+          y = header(page, fonts, input, viaLabel, look);
         }
-        drawMedication(page, fonts, item, i, y, height, lines);
-        y -= height + 10;
+        drawMedication(page, fonts, item, i, y, height, lines, look);
+        y -= height + (look.style.meds === "lista" ? 8 : 10);
       }
     } else {
-      let remaining = linesThatFit(y - bodyBottom, 17);
+      let remaining = linesThatFit(y - bodyBottom, bodyLead);
       for (const line of textLines) {
         if (remaining <= 0) {
           page = pdf.addPage([A4.width, A4.height]);
           pages.push(page);
-          y = header(page, fonts, input, viaLabel);
-          remaining = linesThatFit(y - bodyBottom, 17);
+          y = header(page, fonts, input, viaLabel, look);
+          remaining = linesThatFit(y - bodyBottom, bodyLead);
         }
-        if (line !== "") page.drawText(safe(line), { x: M, y, size: 10.5, font: fonts.reg, color: TINTA });
-        y -= 17;
+        if (line !== "") page.drawText(safe(line), { x: M, y, size: bodySize, font: fonts.reg, color: TINTA });
+        y -= bodyLead;
         remaining -= 1;
       }
     }
 
     for (let i = 0; i < pages.length; i += 1) {
-      await footer(pages[i], fonts, input, signature, i + 1, pages.length);
+      await footer(pages[i], fonts, input, signature, i + 1, pages.length, look);
     }
   }
 

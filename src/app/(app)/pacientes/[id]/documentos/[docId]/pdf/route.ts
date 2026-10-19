@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { requireSession } from "@/lib/auth";
 import { getDocument, getClinicHeader } from "@/lib/documents-db";
 import { buildDocumentPdf } from "@/lib/pdf/document-pdf";
+import { styleFromDocumentFields } from "@/lib/sheet-style";
+import { logoFor } from "@/lib/sheet-templates-db";
 import { fmtDate } from "@/lib/format";
 import { patientDisplayName } from "@/lib/documents";
 import { parseItems } from "@/lib/prescription";
@@ -54,7 +56,13 @@ export async function GET(
     }
   }
 
+  // A folha sai com o modelo da emissão (cópia guardada no documento).
+  const style = styleFromDocumentFields(document.fields);
+  const logoImage = await logoFor(style);
+
   const bytes = await buildDocumentPdf({
+    style,
+    logoImage,
     title: document.title,
     body: document.body,
     date: fmtDate(document.issued_at),

@@ -1,6 +1,6 @@
 "use client";
 
-import type { Dispatch, SetStateAction } from "react";
+import type { Dispatch, ReactNode, SetStateAction } from "react";
 import type { ComposerItem } from "@/lib/composer";
 import { avatarInitials, phoneForSend, withPatientPhone } from "@/lib/composer-editor";
 import type { SendOptions } from "@/lib/composer-editor";
@@ -23,6 +23,8 @@ export interface ReviewStepProps {
   onSendChange: Dispatch<SetStateAction<SendOptions>>;
   items: ReadonlyArray<ComposerItem>;
   countLabel: string;
+  /** "Modelo da folha" (escolher e personalizar a aparência). */
+  sheetPanel?: ReactNode;
 }
 
 /**
@@ -44,6 +46,7 @@ export function ReviewStep({
   onSendChange,
   items,
   countLabel,
+  sheetPanel,
 }: ReviewStepProps) {
   const missingCpf = !patient.cpf?.trim();
   const missingPhone = !patient.phone?.trim();
@@ -196,6 +199,7 @@ export function ReviewStep({
       </section>
 
       <div className="space-y-5">
+        {sheetPanel}
         <section className="card p-4 sm:p-5" aria-label="Assinatura">
           <p className="text-xs font-bold text-pine-900/55">Assinatura</p>
           {professional?.hasSignature ? (

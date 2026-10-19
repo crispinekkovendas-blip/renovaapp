@@ -34,3 +34,8 @@ __pycache__/
 /scripts/emergency-guide/errata_revisao2.py
 /scripts/emergency-guide/errata_revisao3.py
 /scripts/emergency-guide/errata_revisao4.py
+
+# Importação em lote: dados de pacientes nunca vão para o GitHub (repo público)
+import-data/
+*.relatorio.json
+*.aplicado.json

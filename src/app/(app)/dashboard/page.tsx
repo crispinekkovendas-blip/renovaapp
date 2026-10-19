@@ -4,10 +4,11 @@ import type { Patient } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { fmtDate, fmtDateLong, moneyBR, monthISO, todayISO } from "@/lib/format";
 import { EmptyState, SectionTitle } from "@/components/ui";
-import { IconCalendar, IconClock, IconFileText, IconSearch, IconStethoscope, IconUsers } from "@/components/icons";
+import { IconCalendar, IconClock, IconFileText, IconStethoscope, IconUsers } from "@/components/icons";
 import { FeatureCard, StatRow, Tile } from "@/components/dashboard/home-cards";
 import { IconIdCard, IconPhone, IconPlusCircle } from "@/components/dashboard/icons";
 import { PortalInbox } from "@/components/dashboard/portal-inbox";
+import { PatientQuickSearch } from "@/components/dashboard/patient-quick-search";
 import { TodayAppointments } from "@/components/dashboard/today-appointments";
 import type { TodayAppointment } from "@/components/dashboard/today-appointments";
 import { isMuted } from "@/components/agenda/status";
@@ -98,22 +99,7 @@ export default async function DashboardPage() {
           Busque um paciente pelo nome, CPF ou telefone — ou cadastre o primeiro e comece o atendimento.
         </p>
         <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <form action="/pacientes" method="get" role="search" className="flex min-w-0 flex-1 items-center gap-2 rounded-full bg-white py-1.5 pl-4 pr-1.5 shadow-sm">
-            <IconSearch className="h-4 w-4 shrink-0 text-pine-900/50" />
-            {/* 16px no celular: abaixo disso o iOS dá zoom ao focar. */}
-            <input
-              className="min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-pine-900/45 sm:text-sm"
-              type="search"
-              name="q"
-              placeholder="Buscar paciente…"
-              aria-label="Buscar paciente"
-              autoComplete="off"
-              enterKeyHint="search"
-            />
-            <button type="submit" className="btn btn-primary px-4 py-1.5 text-xs">
-              Buscar
-            </button>
-          </form>
+          <PatientQuickSearch />
           <Link href="/pacientes/novo" className="btn btn-primary justify-center px-5 py-3">
             <IconPlusCircle className="h-4 w-4" />
             Cadastrar paciente

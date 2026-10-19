@@ -7,7 +7,9 @@ import { ROUTES, emptyItem, itemComplete, prescriptionWarnings, splitIntoDocumen
 import type { PrescriptionItem } from "@/lib/prescription";
 import { RECEIPT_KIND_LABEL, receiptKindFor } from "@/lib/medications";
 import type { Tarja } from "@/lib/medications";
-import { POSOLOGY_GROUPS, applyPhrase } from "@/lib/posology";
+import { hasPhrase, phraseGroupsFor, togglePhrase } from "@/lib/posology";
+import { FORM_INFO, formOfItem, quantitySuggestions } from "@/lib/dosage-form";
+import type { DosageForm } from "@/lib/dosage-form";
 import {
   RX_PROTOCOL_GROUPS,
   applyDose,
@@ -30,7 +32,9 @@ import type { DragEvent } from "react";
  *   e, nas apresentações comuns, a posologia da bula a um clique;
  * - "Seus mais receitados" (medicamento + posologia que o médico já usou) e
  *   "Receitas prontas" por condição, que entram na lista inteiras;
- * - quantidade, posologia, via e uso contínuo por item;
+ * - quantidade, posologia, via e uso contínuo por item — as frases prontas e a
+ *   quantidade falam a unidade do medicamento (cápsula, comprimido, gotas…) e
+ *   as frases se acumulam;
  * - avisos de alergia (cruzando com o cadastro), medicamento repetido e tarja
  *   preta (que não pode sair neste papel);
  * - **em quantos documentos a receita vai sair**, porque dipirona e
@@ -83,6 +87,7 @@ interface Hit {
   label: string;
   substance: string;
   concentration: string | null;
+  form: DosageForm | null;
   tarja: Tarja;
   warning: string | null;
   brands: number;
@@ -265,7 +270,7 @@ export function PrescriptionEditor({
             <ul className="max-h-[min(18rem,45dvh)] overflow-y-auto overscroll-contain">
               {hits.map((hit) => (
                 <li
-                  key={`${hit.substance}-${hit.concentration ?? ""}`}
+                  key={`${hit.substance}-${hit.concentration ?? ""}-${hit.form ?? ""}`}
                   className="border-b border-[#f4f0f8] last:border-b-0"
                 >
                   <button
@@ -277,6 +282,7 @@ export function PrescriptionEditor({
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-[13.5px] font-bold text-pine-950">{hit.label}</span>
                       <span className="block text-[11.5px] text-pine-900/55">
+                        {hit.form ? `${FORM_INFO[hit.form].label} · ` : ""}
                         {RECEIPT_KIND_LABEL[receiptKindFor(hit.tarja)]}
                         {hit.brands > 1 ? ` · ${hit.brands} apresentações` : ""}
                       </span>
@@ -383,6 +389,7 @@ export function PrescriptionEditor({
                 placeholder="1 caixa, 30 comprimidos, 1 frasco"
                 onChange={(e) => update(current.index, { quantity: e.target.value })}
               />
+              <QuantityChips item={current.item} onPick={(quantity) => update(current.index, { quantity })} />
             </div>
             <div>
               <label className="label" htmlFor={`rx-via-${current.index}`}>
@@ -512,7 +519,7 @@ export function PrescriptionEditor({
 
 /** O item que a busca inclui: já com a posologia da bula quando há (`dose` escolhe outra). */
 function itemFromHit(hit: Hit, dose?: DoseOption): PrescriptionItem {
-  const item = { ...emptyItem(), name: hit.label, concentration: hit.concentration, tarja: hit.tarja };
+  const item = { ...emptyItem(), name: hit.label, concentration: hit.concentration, tarja: hit.tarja, form: hit.form };
   // Sem escolha explícita, entra com a primeira posologia pronta: quase sempre é a que se usa.
   const chosen = dose ?? doseEntryFor(hit.substance, hit.concentration)?.options[0];
   return chosen ? applyDose(item, chosen) : item;
@@ -808,7 +815,11 @@ function PosologyField({
             placeholder="Tomar 1 comprimido de 8 em 8 horas por 7 dias"
             onChange={(e) => onChange({ posology: e.target.value })}
           />
-          <PhrasePicker onPick={(phrase) => onChange({ posology: applyPhrase(phrase) })} />
+          <PhrasePicker
+            posology={item.posology}
+            form={formOfItem(item)}
+            onToggle={(phrase) => onChange({ posology: togglePhrase(item.posology, phrase) })}
+          />
         </div>
       ) : (
         <div className="relative mt-1.5">
@@ -972,8 +983,21 @@ function choiceMeta(choice: PosologyChoice, quantity?: string): string {
   return parts.filter(Boolean).join(", ");
 }
 
-/** Frases prontas (só redação, nunca dose), para quem escreve a posologia à mão. */
-function PhrasePicker({ onPick }: { onPick: (phrase: string) => void }) {
+/**
+ * Frases prontas (só redação, nunca dose), para quem escreve a posologia à
+ * mão. Já vêm na unidade do medicamento (cápsula, drágea…) e se acumulam: cada
+ * toque acrescenta a frase depois do que já está escrito, e tocar de novo numa
+ * frase marcada a tira. O balão fica aberto para escolher várias.
+ */
+function PhrasePicker({
+  posology,
+  form,
+  onToggle,
+}: {
+  posology: string;
+  form: DosageForm | null;
+  onToggle: (phrase: string) => void;
+}) {
   return (
     <Popover
       className="group relative mt-1"
@@ -982,30 +1006,66 @@ function PhrasePicker({ onPick }: { onPick: (phrase: string) => void }) {
     >
       <div className="mt-1 max-h-72 overflow-y-auto overscroll-contain rounded-2xl border border-[#e2dcec] bg-white p-2 shadow-lg sm:absolute sm:left-0 sm:z-20 sm:w-80">
         <div className="sticky -top-2 z-10 -mx-2 -mt-2 mb-1 flex items-center justify-between rounded-t-2xl bg-white/95 py-0.5 pr-1 pl-4 backdrop-blur">
-          <p className="text-[11px] font-bold text-pine-900/60">Frases prontas</p>
+          <p className="text-[11px] font-bold text-pine-900/60">
+            Frases prontas{form ? ` · ${FORM_INFO[form].label.toLowerCase()}` : ""}
+          </p>
           <PopoverClose />
         </div>
-        {POSOLOGY_GROUPS.map((group) => (
+        <p className="px-2 pb-1 text-[11px] text-pine-900/50">Toque em várias: elas se somam. Tocar de novo tira.</p>
+        {phraseGroupsFor(form).map((group) => (
           <div key={group.label} className="mb-2 last:mb-0">
             <p className="px-2 py-1 text-[11px] font-bold text-pine-900/50">{group.label}</p>
-            {group.phrases.map((phrase) => (
-              <button
-                key={phrase}
-                type="button"
-                onClick={(event) => {
-                  onPick(phrase);
-                  // Escolheu a frase: o balão sai da frente do campo.
-                  const details = event.currentTarget.closest("details");
-                  if (details) details.open = false;
-                }}
-                className="block min-h-11 w-full rounded-lg px-2 py-2.5 text-left text-[12.5px] text-pine-900/80 hover:bg-pine-50 sm:min-h-0 sm:py-1.5"
-              >
-                {phrase}
-              </button>
-            ))}
+            {group.phrases.map((phrase) => {
+              const on = hasPhrase(posology, phrase);
+              return (
+                <button
+                  key={phrase}
+                  type="button"
+                  aria-pressed={on}
+                  onClick={() => onToggle(phrase)}
+                  className={`flex min-h-11 w-full items-start gap-2 rounded-lg px-2 py-2.5 text-left text-[12.5px] hover:bg-pine-50 sm:min-h-0 sm:py-1.5 ${
+                    on ? "font-semibold text-pine-950" : "text-pine-900/80"
+                  }`}
+                >
+                  <span
+                    aria-hidden
+                    className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded ${
+                      on ? "bg-pine-600 text-white" : "border-2 border-pine-200"
+                    }`}
+                  >
+                    {on ? <IconCheck /> : null}
+                  </span>
+                  <span className="min-w-0">{phrase}</span>
+                </button>
+              );
+            })}
           </div>
         ))}
       </div>
     </Popover>
+  );
+}
+
+/**
+ * Sugestões da Quantidade, na unidade do medicamento: o total do tratamento
+ * pela posologia ("21 cápsulas"), o número digitado já com a unidade ("30" →
+ * "30 comprimidos") e as embalagens da forma ("1 caixa", "1 frasco").
+ */
+function QuantityChips({ item, onPick }: { item: PrescriptionItem; onPick: (quantity: string) => void }) {
+  const options = quantitySuggestions(item);
+  if (options.length === 0) return null;
+  return (
+    <div className="mt-1.5 flex flex-wrap gap-1.5" role="group" aria-label="Sugestões de quantidade">
+      {options.map((option) => (
+        <button
+          key={option}
+          type="button"
+          onClick={() => onPick(option)}
+          className="flex min-h-11 items-center rounded-full border border-pine-200 bg-white px-2.5 text-[11.5px] font-semibold text-pine-700 hover:border-pine-400 hover:bg-pine-50 sm:min-h-7"
+        >
+          {option}
+        </button>
+      ))}
+    </div>
   );
 }

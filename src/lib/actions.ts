@@ -14,6 +14,8 @@ import { parseReturnDays, returnDueFor } from "./recall.ts";
 import { lines, optional, safeBack, str, withQuery } from "./form-fields.ts";
 import { readPatientForm, socialNameFrom } from "./patient-form.ts";
 import { firstWithColumns, isMissingColumn } from "./pg-errors.ts";
+import { HISTORY_SECTIONS, VITALS, readVitals, serializeHistory, serializeVitals } from "./clinical-history.ts";
+import type { ClinicalHistory, VitalKey } from "./clinical-history.ts";
 
 /*
  * Colunas novas (42703 = coluna ausente): a migração 2026-09-09-documentos
@@ -290,22 +292,54 @@ export async function createEncounterAction(formData: FormData): Promise<void> {
   // "Retorno em N dias" → data do retorno, que alimenta /agenda/retornos, o portal e o push.
   const returnDays = parseReturnDays(str(formData, "return_days"));
   const returnDue = returnDueFor(date, returnDays);
+  // Sinais vitais e CID (migração 2026-10-19): valor impossível é descartado e avisado.
+  const { vitals, rejected } = readVitals(
+    Object.fromEntries(VITALS.map((v) => [v.key, str(formData, `vital_${v.key}`)])) as Partial<Record<VitalKey, string>>,
+  );
+  const vitalsJson = serializeVitals(vitals);
+  const cid = optional(formData, "cid")?.toUpperCase().slice(0, 12) ?? null;
 
-  try {
-    await sql`
+  await firstWithColumns([
+    () => sql`
+      INSERT INTO encounters (patient_id, professional_id, date, complaint, anamnesis, exam, diagnosis, plan, prescription,
+        return_days, return_due, vitals, cid)
+      VALUES (${patientId}, ${professionalId}, ${date}, ${complaint}, ${anamnesis}, ${exam}, ${diagnosis}, ${plan},
+        ${prescription}, ${returnDays}, ${returnDue}, ${vitalsJson}, ${cid})`,
+    // Sem a 2026-10-19: sem sinais vitais nem CID.
+    () => sql`
       INSERT INTO encounters (patient_id, professional_id, date, complaint, anamnesis, exam, diagnosis, plan, prescription,
         return_days, return_due)
       VALUES (${patientId}, ${professionalId}, ${date}, ${complaint}, ${anamnesis}, ${exam}, ${diagnosis}, ${plan},
-        ${prescription}, ${returnDays}, ${returnDue})`;
-  } catch (error) {
-    if (!isMissingColumn(error)) throw error;
-    await sql`
+        ${prescription}, ${returnDays}, ${returnDue})`,
+    // Sem a 2026-09-09 também: sem retorno.
+    () => sql`
       INSERT INTO encounters (patient_id, professional_id, date, complaint, anamnesis, exam, diagnosis, plan, prescription)
       VALUES (${patientId}, ${professionalId}, ${date}, ${complaint}, ${anamnesis}, ${exam}, ${diagnosis}, ${plan},
-        ${prescription})`;
+        ${prescription})`,
+  ]);
+  revalidatePath("/", "layout");
+  redirect(`/pacientes/${patientId}?aba=atendimentos${rejected.length ? "&erro=vitais" : ""}`);
+}
+
+/**
+ * Antecedentes (história clínica) do paciente: as seis seções do
+ * formulário viram um JSON só em `clinical_history`.
+ */
+export async function saveClinicalHistoryAction(formData: FormData): Promise<void> {
+  await requireSession();
+  const id = Number(str(formData, "patient_id"));
+  if (!id) redirect("/pacientes");
+  const history: ClinicalHistory = Object.fromEntries(
+    HISTORY_SECTIONS.map((section) => [section.key, str(formData, `hist_${section.key}`)]),
+  );
+  try {
+    await sql`UPDATE patients SET clinical_history = ${serializeHistory(history)} WHERE id = ${id}`;
+  } catch (error) {
+    if (isMissingColumn(error)) redirect(`/pacientes/${id}?erro=migracao_historia`);
+    throw error;
   }
   revalidatePath("/", "layout");
-  redirect(`/pacientes/${patientId}`);
+  redirect(`/pacientes/${id}?ok=historia`);
 }
 
 /**

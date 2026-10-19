@@ -123,11 +123,20 @@ export const CHART_FLASH = {
   ok: {
     cadastro: { tone: "ok", text: "Alergias e medicamentos da pré-consulta copiados para o cadastro." },
     rascunho_excluido: { tone: "ok", text: "Rascunho excluído." },
+    historia: { tone: "ok", text: "Antecedentes salvos." },
   },
   erro: {
     migracao: {
       tone: "erro",
       text: "Este recurso depende da migração 2026-09-09 (alergias e medicamentos no cadastro). Rode a migração no Supabase e tente de novo.",
+    },
+    migracao_historia: {
+      tone: "erro",
+      text: "Antecedentes dependem da migração 2026-10-19-prontuario-completo. Rode a migração no Supabase e tente de novo.",
+    },
+    vitais: {
+      tone: "aviso",
+      text: "Atendimento salvo. Algum sinal vital estava fora do possível (erro de digitação?) e ficou de fora — confira e registre de novo se precisar.",
     },
     nada: { tone: "aviso", text: "Essa pré-consulta não trouxe alergias nem medicamentos para copiar." },
     permissao: {

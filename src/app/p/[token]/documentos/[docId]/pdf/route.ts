@@ -7,6 +7,8 @@ import { portalLocked } from "@/lib/hub";
 import { getDocument, getClinicHeader } from "@/lib/documents-db";
 import { canPatientSeeDocument, patientDisplayName } from "@/lib/documents";
 import { buildDocumentPdf } from "@/lib/pdf/document-pdf";
+import { styleFromDocumentFields } from "@/lib/sheet-style";
+import { logoFor } from "@/lib/sheet-templates-db";
 import { parseItems } from "@/lib/prescription";
 import type { PdfMedication } from "@/lib/pdf/document-pdf";
 import { receiptKindFor, viasFor } from "@/lib/medications";
@@ -63,7 +65,13 @@ export async function GET(
     }
   }
 
+  // A folha sai com o modelo da emissão (cópia guardada no documento).
+  const style = styleFromDocumentFields(document.fields);
+  const logoImage = await logoFor(style);
+
   const bytes = await buildDocumentPdf({
+    style,
+    logoImage,
     title: document.title,
     body: document.body,
     date: fmtDate(document.issued_at),

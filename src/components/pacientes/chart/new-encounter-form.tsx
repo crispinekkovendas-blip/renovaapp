@@ -2,6 +2,7 @@ import { createEncounterAction } from "@/lib/actions";
 import { todayISO } from "@/lib/format";
 import { RETURN_OPTIONS } from "@/lib/recall";
 import { IconStethoscope } from "@/components/icons";
+import { EncounterCid, VitalsFields } from "./vitals-fields";
 
 /**
  * "Registrar novo atendimento": um <details> que abre sozinho quando a URL
@@ -9,10 +10,12 @@ import { IconStethoscope } from "@/components/icons";
  */
 export function NewEncounterForm({
   patientId,
+  patientSex,
   professionals,
   open,
 }: {
   patientId: number;
+  patientSex: string | null;
   professionals: { id: number; name: string }[];
   open: boolean;
 }) {
@@ -26,7 +29,7 @@ export function NewEncounterForm({
         </span>
         <span className="min-w-0">
           <span className="block text-sm font-bold text-pine-950">Registrar novo atendimento</span>
-          <span className="block text-xs text-pine-900/55">Queixa, anamnese, exame, diagnóstico, conduta e receita</span>
+          <span className="block text-xs text-pine-900/55">Queixa, anamnese, sinais vitais, exame, diagnóstico com CID, conduta e receita</span>
         </span>
         <span aria-hidden className="ml-auto shrink-0 text-xs font-bold text-pine-600 group-open:hidden">
           abrir ▾
@@ -69,17 +72,23 @@ export function NewEncounterForm({
           </label>
           <textarea className="input" id="anamnesis" name="anamnesis" rows={3} />
         </div>
+        <VitalsFields />
         <div>
           <label className="label" htmlFor="exam">
             Exame físico
           </label>
           <textarea className="input" id="exam" name="exam" rows={2} />
         </div>
-        <div>
-          <label className="label" htmlFor="diagnosis">
-            Hipótese diagnóstica (CID)
-          </label>
-          <input className="input" id="diagnosis" name="diagnosis" enterKeyHint="next" />
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-[2fr_1fr]">
+          <div>
+            <label className="label" htmlFor="diagnosis">
+              Hipótese diagnóstica
+            </label>
+            <input className="input" id="diagnosis" name="diagnosis" enterKeyHint="next" />
+          </div>
+          <div className="relative">
+            <EncounterCid patientSex={patientSex} />
+          </div>
         </div>
         <div>
           <label className="label" htmlFor="plan">
