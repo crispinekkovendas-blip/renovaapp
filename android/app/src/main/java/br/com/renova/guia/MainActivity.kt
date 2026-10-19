@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import br.com.renova.guia.ui.AppRoot
 import br.com.renova.guia.ui.theme.RenovaTheme
 
@@ -15,7 +17,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         container.guide.start()
         setContent {
-            RenovaTheme {
+            val dark by container.prefs.darkTheme.collectAsState()
+            RenovaTheme(dark = dark) {
                 AppRoot(container)
             }
         }

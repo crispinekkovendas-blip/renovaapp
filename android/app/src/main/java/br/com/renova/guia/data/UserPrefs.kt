@@ -31,6 +31,16 @@ class UserPrefs(context: Context) {
 
     private var picks: Map<String, Map<String, Int>> = readPicks()
 
+    private val _darkTheme = MutableStateFlow(prefs.getBoolean(KEY_DARK, false))
+    /** Tema escuro: só liga pelo menu, e fica lembrado neste aparelho. */
+    val darkTheme: StateFlow<Boolean> = _darkTheme.asStateFlow()
+
+    fun toggleDarkTheme() {
+        val next = !_darkTheme.value
+        _darkTheme.value = next
+        prefs.edit().putBoolean(KEY_DARK, next).apply()
+    }
+
     var lastSeenRevision: Int
         get() = prefs.getInt(KEY_LAST_REVISION, 0)
         set(value) = prefs.edit().putInt(KEY_LAST_REVISION, value).apply()
@@ -106,6 +116,7 @@ class UserPrefs(context: Context) {
         const val KEY_SEARCHES = "searches"
         const val KEY_PICKS = "picks"
         const val KEY_LAST_REVISION = "last_revision"
+        const val KEY_DARK = "dark_theme"
         const val MAX_RECENTS = 12
         const val MAX_SEARCHES = 8
         const val MAX_PICK_KEYS = 300

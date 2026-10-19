@@ -1,6 +1,5 @@
 package br.com.renova.guia.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -11,64 +10,65 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 /*
- * As cores do Renova (o tema "à moda Mevo" do site: roxo e rosa, papel
- * claro), com o modo escuro do aparelho para o plantão de madrugada.
+ * As cores do Renova no tema "Tevet & Iyar" do site: azul-marinho de Tevet na
+ * estrutura, oliva e bronze de Iyar no destaque. O escuro é escolha do médico
+ * (menu ⋮ › Tema escuro), não do aparelho — igual ao botão do site.
  */
 
 private val Light = lightColorScheme(
-    primary = Color(0xFF3D0E6B),
+    primary = Color(0xFF2C4A6E),
     onPrimary = Color.White,
-    primaryContainer = Color(0xFFE3DAF3),
-    onPrimaryContainer = Color(0xFF3D0E6B),
-    secondary = Color(0xFF6C3DB5),
+    primaryContainer = Color(0xFFE3EAF3),
+    onPrimaryContainer = Color(0xFF121A26),
+    secondary = Color(0xFF36557A),
     onSecondary = Color.White,
-    secondaryContainer = Color(0xFFF2EEFB),
-    onSecondaryContainer = Color(0xFF3D0E6B),
-    tertiary = Color(0xFFC2185B),
+    secondaryContainer = Color(0xFFF3F6FA),
+    onSecondaryContainer = Color(0xFF121A26),
+    tertiary = Color(0xFF6F7A3A),
     onTertiary = Color.White,
-    tertiaryContainer = Color(0xFFFFD6DC),
-    onTertiaryContainer = Color(0xFF5C0A2C),
-    background = Color(0xFFFFF8F9),
-    onBackground = Color(0xFF2B2633),
-    surface = Color(0xFFFFF8F9),
-    onSurface = Color(0xFF2B2633),
-    surfaceVariant = Color(0xFFF7F3FC),
-    onSurfaceVariant = Color(0xFF5E5868),
+    tertiaryContainer = Color(0xFFEBEED3),
+    onTertiaryContainer = Color(0xFF383E21),
+    background = Color(0xFFF5F6F8),
+    onBackground = Color(0xFF1A2230),
+    surface = Color(0xFFF5F6F8),
+    onSurface = Color(0xFF1A2230),
+    surfaceVariant = Color(0xFFF3F6FA),
+    onSurfaceVariant = Color(0xFF5A6575),
     surfaceContainerLowest = Color.White,
-    surfaceContainerLow = Color(0xFFFFFCFD),
-    surfaceContainer = Color(0xFFF9F5FC),
-    surfaceContainerHigh = Color(0xFFF4EFFA),
-    surfaceContainerHighest = Color(0xFFEFE9F7),
-    outline = Color(0xFFCBBFE6),
-    outlineVariant = Color(0xFFE3DAF3),
+    surfaceContainerLow = Color(0xFFFBFCFD),
+    surfaceContainer = Color(0xFFF3F6FA),
+    surfaceContainerHigh = Color(0xFFEBEFF5),
+    surfaceContainerHighest = Color(0xFFE3EAF3),
+    outline = Color(0xFFC7D4E6),
+    outlineVariant = Color(0xFFDFE4EC),
 )
 
 private val Dark = darkColorScheme(
-    primary = Color(0xFFD9BEFF),
-    onPrimary = Color(0xFF2A0850),
-    primaryContainer = Color(0xFF4A1C85),
-    onPrimaryContainer = Color(0xFFF2EEFB),
-    secondary = Color(0xFFCBBFE6),
-    onSecondary = Color(0xFF2A0850),
-    secondaryContainer = Color(0xFF34284A),
-    onSecondaryContainer = Color(0xFFF2EEFB),
-    tertiary = Color(0xFFFFB1C1),
-    onTertiary = Color(0xFF5C0A2C),
-    tertiaryContainer = Color(0xFF7A1D44),
-    onTertiaryContainer = Color(0xFFFFD6DC),
-    background = Color(0xFF16121C),
-    onBackground = Color(0xFFECE6F3),
-    surface = Color(0xFF16121C),
-    onSurface = Color(0xFFECE6F3),
-    surfaceVariant = Color(0xFF2A2433),
-    onSurfaceVariant = Color(0xFFCBC3D6),
-    surfaceContainerLowest = Color(0xFF110D16),
-    surfaceContainerLow = Color(0xFF1C1723),
-    surfaceContainer = Color(0xFF211B29),
-    surfaceContainerHigh = Color(0xFF2A2433),
-    surfaceContainerHighest = Color(0xFF332C3D),
-    outline = Color(0xFF6E6680),
-    outlineVariant = Color(0xFF433B50),
+    primary = Color(0xFF8FB1D9),
+    onPrimary = Color(0xFF0F1A2A),
+    primaryContainer = Color(0xFF27364D),
+    onPrimaryContainer = Color(0xFFDDE6F2),
+    secondary = Color(0xFFA9C4E4),
+    onSecondary = Color(0xFF0F1A2A),
+    secondaryContainer = Color(0xFF1C283A),
+    onSecondaryContainer = Color(0xFFDDE6F2),
+    tertiary = Color(0xFFB5C06F),
+    onTertiary = Color(0xFF262B18),
+    tertiaryContainer = Color(0xFF363D1F),
+    onTertiaryContainer = Color(0xFFEBEFCF),
+    background = Color(0xFF0F141B),
+    onBackground = Color(0xFFE6EAF0),
+    surface = Color(0xFF0F141B),
+    onSurface = Color(0xFFE6EAF0),
+    surfaceVariant = Color(0xFF1C283A),
+    onSurfaceVariant = Color(0xFF96A2B3),
+    surfaceContainerLowest = Color(0xFF0A0F16),
+    surfaceContainerLow = Color(0xFF141B25),
+    surfaceContainer = Color(0xFF18202A),
+    surfaceContainerHigh = Color(0xFF1F2834),
+    surfaceContainerHighest = Color(0xFF27313F),
+    outline = Color(0xFF56739A),
+    outlineVariant = Color(0xFF2A3546),
 )
 
 /** As cores do guia que o Material não tem: marca-texto, histórico, fontes, diferenças. */
@@ -159,9 +159,9 @@ private val DarkGuide = GuideColors(
 
 val LocalGuideColors = staticCompositionLocalOf { LightGuide }
 
+/** `dark` vem da escolha guardada no aparelho (UserPrefs.darkTheme). */
 @Composable
-fun RenovaTheme(content: @Composable () -> Unit) {
-    val dark = isSystemInDarkTheme()
+fun RenovaTheme(dark: Boolean = false, content: @Composable () -> Unit) {
     CompositionLocalProvider(LocalGuideColors provides if (dark) DarkGuide else LightGuide) {
         MaterialTheme(colorScheme = if (dark) Dark else Light, content = content)
     }

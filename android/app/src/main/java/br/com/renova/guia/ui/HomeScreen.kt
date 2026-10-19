@@ -23,6 +23,8 @@ import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.CloudOff
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.MoreVert
@@ -52,7 +54,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.AnnotatedString
@@ -129,6 +130,12 @@ fun HomeScreen(
                     text = { Text("Sincronizar agora") },
                     leadingIcon = { Icon(Icons.Filled.Sync, null) },
                     onClick = { menu = false; onSync() },
+                )
+                val dark by prefs.darkTheme.collectAsState()
+                DropdownMenuItem(
+                    text = { Text(if (dark) "Tema claro" else "Tema escuro") },
+                    leadingIcon = { Icon(if (dark) Icons.Filled.LightMode else Icons.Filled.DarkMode, null) },
+                    onClick = { menu = false; prefs.toggleDarkTheme() },
                 )
                 DropdownMenuItem(
                     text = { Text("Sobre e conta") },
@@ -231,7 +238,7 @@ private fun Results(
                     MetaRow {
                         SourcePill(item.source)
                         MutedText(item.where)
-                        if (!row.complete) Text("casa com parte da busca", style = MaterialTheme.typography.labelSmall, color = Color(0xFFB45309))
+                        if (!row.complete) Text("casa com parte da busca", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.tertiary)
                     }
                 },
                 support = row.line?.let { searchHighlighted(it, row.marks) },
