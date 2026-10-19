@@ -23,7 +23,7 @@ export function Hero({ clinicName }: { clinicName: string }) {
       className="relative overflow-hidden bg-peach-100"
       style={{
         backgroundImage:
-          "radial-gradient(60rem 30rem at 85% -10%, rgba(255,255,255,0.7), transparent 60%), radial-gradient(40rem 24rem at -10% 110%, rgba(255,205,181,0.8), transparent 60%)",
+          "radial-gradient(60rem 30rem at 85% -10%, rgba(255,255,255,0.7), transparent 60%), radial-gradient(40rem 24rem at -10% 110%, rgba(185,197,213,0.8), transparent 60%)",
       }}
     >
       <div className="mx-auto grid max-w-6xl gap-12 px-4 pb-16 pt-10 sm:px-6 sm:pb-24 sm:pt-16 lg:grid-cols-[1.15fr_1fr] lg:items-center lg:gap-16">
@@ -43,7 +43,7 @@ export function Hero({ clinicName }: { clinicName: string }) {
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-pine-900/75">
             Escolha o profissional, o dia e um horário livre. Depois, a clínica confirma tudo pelo seu WhatsApp.
           </p>
-          <p className="mt-4 font-display text-2xl italic text-pine-800">{REFRAIN}</p>
+          <p className="mt-4 font-display tracking-tight text-2xl text-pine-800">{REFRAIN}</p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link href="/agendar" className="btn-hero">
@@ -95,9 +95,9 @@ const DEMO_TIMES = ["08:30", "09:00", "10:30", "14:00", "15:30", "16:00"];
 function BookingIllustration() {
   return (
     <div aria-hidden="true" className="relative mx-auto hidden w-full max-w-md select-none lg:block">
-      <div className="rounded-[2.5rem] border border-pine-900/10 bg-white p-6 shadow-[0_40px_80px_-32px_rgba(12,34,28,0.35)]">
+      <div className="rounded-[2.5rem] border border-pine-900/10 bg-white p-6 shadow-[0_40px_80px_-32px_rgba(18,26,38,0.35)]">
         <div className="flex items-center justify-between">
-          <p className="font-display text-lg font-semibold text-pine-950">Escolha o horário</p>
+          <p className="font-display tracking-tight text-lg font-semibold text-pine-950">Escolha o horário</p>
           <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-pine-900/45">Passo 2 de 3</p>
         </div>
         <div className="mt-3 flex gap-1.5">
@@ -117,7 +117,7 @@ function BookingIllustration() {
               <p className={`text-[10px] font-bold uppercase ${d.selected ? "text-white/70" : "text-pine-900/50"}`}>
                 {d.weekday}
               </p>
-              <p className="font-display text-lg font-semibold">{d.day}</p>
+              <p className="font-display tracking-tight text-lg font-semibold">{d.day}</p>
             </div>
           ))}
         </div>
@@ -139,7 +139,7 @@ function BookingIllustration() {
         <div className="mt-5 rounded-full bg-pine-950 py-3 text-center text-sm font-bold text-white">Continuar</div>
       </div>
 
-      <div className="absolute -bottom-[4.5rem] -left-8 flex max-w-[16rem] items-start gap-3 rounded-3xl rounded-bl-md bg-white p-4 shadow-[0_20px_48px_-16px_rgba(12,34,28,0.4)]">
+      <div className="absolute -bottom-[4.5rem] -left-8 flex max-w-[16rem] items-start gap-3 rounded-3xl rounded-bl-md bg-white p-4 shadow-[0_20px_48px_-16px_rgba(18,26,38,0.4)]">
         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
           <Tick />
         </span>

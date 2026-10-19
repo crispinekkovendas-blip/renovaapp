@@ -111,7 +111,7 @@ export function PatientQuickSearch() {
       </button>
 
       {showList ? (
-        <div className="absolute inset-x-0 top-full z-30 mt-2 overflow-hidden rounded-2xl border border-[#e2dcec] bg-white shadow-[0_18px_40px_-16px_rgba(61,14,107,0.35)]">
+        <div className="absolute inset-x-0 top-full z-30 mt-2 overflow-hidden rounded-2xl border border-[var(--color-line)] bg-white shadow-[0_18px_40px_-16px_rgba(18,26,38,0.35)]">
           <ul id={listId} role="listbox" aria-label="Pacientes encontrados" className="max-h-[min(22rem,55dvh)] overflow-y-auto overscroll-contain">
             {results.map((patient, i) => (
               <li
@@ -121,7 +121,7 @@ export function PatientQuickSearch() {
                 aria-selected={i === active}
                 onPointerEnter={() => setActive(i)}
                 onClick={() => go(patient)}
-                className={`flex min-h-11 cursor-pointer flex-col justify-center border-b border-[#f4f0f8] px-4 py-2.5 last:border-b-0 ${
+                className={`flex min-h-11 cursor-pointer flex-col justify-center border-b border-[var(--color-line)] px-4 py-2.5 last:border-b-0 ${
                   i === active ? "bg-pine-50" : ""
                 }`}
               >
@@ -146,7 +146,7 @@ export function PatientQuickSearch() {
           ) : null}
           <a
             href={`/pacientes/novo`}
-            className="flex min-h-11 items-center border-t border-[#eee7f4] px-4 py-2.5 text-[12.5px] font-bold text-pine-600 hover:bg-pine-50"
+            className="flex min-h-11 items-center border-t border-[var(--color-line)] px-4 py-2.5 text-[12.5px] font-bold text-pine-600 hover:bg-pine-50"
           >
             + Cadastrar novo paciente
           </a>

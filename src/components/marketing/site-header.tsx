@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export interface SiteNavLink {
   href: string;
@@ -45,7 +46,7 @@ export function SiteHeader({
       <div className={`mx-auto flex h-16 items-center justify-between gap-4 px-4 sm:px-6 ${width}`}>
         <Link
           href="/"
-          className={`min-w-0 truncate font-display text-xl font-semibold italic text-pine-950 sm:text-2xl ${FOCUS_RING}`}
+          className={`min-w-0 truncate font-display tracking-tight text-xl font-semibold text-pine-950 sm:text-2xl ${FOCUS_RING}`}
         >
           {clinicName}
         </Link>
@@ -68,6 +69,7 @@ export function SiteHeader({
             </nav>
           ) : null}
           {aside}
+          <ThemeToggle compact className="px-2.5" />
           {cta ? (
             <Link
               href="/agendar"

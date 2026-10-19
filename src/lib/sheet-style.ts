@@ -36,8 +36,9 @@ export interface SheetStyle {
   footerNote: string;
 }
 
+/** O padrão desde o redesign "Tevet & Iyar" (out/2026): azul-marinho. */
 export const DEFAULT_SHEET_STYLE: SheetStyle = {
-  accent: "#3d0e6b",
+  accent: "#2c4a6e",
   align: "left",
   logo: null,
   showClinicLine: true,
@@ -50,6 +51,12 @@ export const DEFAULT_SHEET_STYLE: SheetStyle = {
   footerNote: "",
 };
 
+/**
+ * A folha de antes do redesign (roxo). Documento emitido sem cópia do estilo
+ * (`fields.folha`) saiu assim — e continua saindo assim, mesmo depois.
+ */
+export const LEGACY_SHEET_STYLE: SheetStyle = { ...DEFAULT_SHEET_STYLE, accent: "#3d0e6b" };
+
 export interface SheetPreset {
   id: string;
   name: string;
@@ -58,14 +65,16 @@ export interface SheetPreset {
 
 /** Modelos prontos, para escolher sem personalizar nada. */
 export const SHEET_PRESETS: readonly SheetPreset[] = [
-  { id: "renova", name: "Renova (padrão)", style: DEFAULT_SHEET_STYLE },
+  { id: "renova", name: "Tevet & Iyar (padrão)", style: DEFAULT_SHEET_STYLE },
+  { id: "roxo", name: "Renova roxo (anterior)", style: LEGACY_SHEET_STYLE },
   {
     id: "sobrio",
     name: "Sóbrio, preto e branco",
     style: { ...DEFAULT_SHEET_STYLE, accent: "#222222", rule: "fina", meds: "lista", patientPanel: "linhas" },
   },
+  { id: "oliva", name: "Oliva de Iyar", style: { ...DEFAULT_SHEET_STYLE, accent: "#565f2c" } },
   { id: "verde", name: "Verde clínica", style: { ...DEFAULT_SHEET_STYLE, accent: "#2f6553" } },
-  { id: "azul", name: "Azul hospitalar", style: { ...DEFAULT_SHEET_STYLE, accent: "#1d4e89", align: "center" } },
+  { id: "azul", name: "Azul hospitalar, centralizado", style: { ...DEFAULT_SHEET_STYLE, accent: "#1d4e89", align: "center" } },
   {
     id: "compacto",
     name: "Compacto (cabe mais)",
@@ -75,7 +84,7 @@ export const SHEET_PRESETS: readonly SheetPreset[] = [
 ];
 
 /** Cores sugeridas no editor (qualquer #rrggbb vale). */
-export const ACCENT_SWATCHES = ["#3d0e6b", "#2f6553", "#1d4e89", "#8a1538", "#b45309", "#0f766e", "#222222"] as const;
+export const ACCENT_SWATCHES = ["#2c4a6e", "#121a26", "#565f2c", "#8a6f3f", "#2f6553", "#1d4e89", "#8a1538", "#3d0e6b", "#222222"] as const;
 
 export const SCALE_FACTOR: Record<SheetStyle["scale"], number> = { compacta: 0.9, normal: 1, grande: 1.15 };
 export const RULE_HEIGHT: Record<SheetStyle["rule"], number> = { grossa: 2.5, fina: 0.8, nenhuma: 0 };
@@ -184,13 +193,15 @@ export function checkLogo(dataUrl: string): { ok: true; mime: "image/png" | "ima
   return { ok: true, mime: m[1] as "image/png" | "image/jpeg" };
 }
 
-/** O estilo guardado no documento emitido (`fields.folha`); sem ele, null (= padrão). */
-export function styleFromDocumentFields(json: string | null | undefined): SheetStyle | null {
-  if (!json) return null;
+/**
+ * O estilo guardado no documento emitido (`fields.folha`). Sem ele, o
+ * documento é de antes do redesign e sai como saiu: a folha roxa.
+ */
+export function styleFromDocumentFields(json: string | null | undefined): SheetStyle {
   try {
-    const folha = (JSON.parse(json) as { folha?: unknown })?.folha;
-    return folha && typeof folha === "object" ? normalizeSheetStyle(folha) : null;
+    const folha = (JSON.parse(json ?? "{}") as { folha?: unknown })?.folha;
+    return folha && typeof folha === "object" ? normalizeSheetStyle(folha) : LEGACY_SHEET_STYLE;
   } catch {
-    return null;
+    return LEGACY_SHEET_STYLE;
   }
 }

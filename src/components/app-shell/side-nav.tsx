@@ -6,6 +6,7 @@ import { logoutAction } from "@/lib/actions";
 import { IconLogout } from "@/components/icons";
 import type { Role } from "@/lib/db";
 import { activeNavItem, navItemsFor } from "./nav-config";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 /**
  * Barra lateral clara com rótulos (o "tablet da Mevo"): marca no alto, uma
@@ -31,12 +32,12 @@ export function SideNav({ name, role }: { name: string; role: Role }) {
   const initial = name.trim().charAt(0).toUpperCase() || "?";
 
   return (
-    <aside className="group/side sticky top-0 hidden h-dvh w-16 shrink-0 flex-col border-r border-[#eee7f4] bg-white px-2 py-4 md:flex lg:w-56 lg:px-3 print:hidden peek:fixed peek:left-0 peek:z-40 peek:w-60 peek:-translate-x-[calc(100%-14px)] peek:px-3 peek:transition-[translate,box-shadow] peek:delay-200 peek:duration-200 peek:ease-out peek:hover:translate-x-0 peek:hover:shadow-[8px_0_32px_-12px_rgba(40,20,70,0.25)] peek:hover:delay-75 peek:has-[:focus-visible]:translate-x-0 peek:has-[:focus-visible]:delay-0">
+    <aside className="group/side sticky top-0 hidden h-dvh w-16 shrink-0 flex-col border-r border-[var(--color-line)] bg-white px-2 py-4 md:flex lg:w-56 lg:px-3 print:hidden peek:fixed peek:left-0 peek:z-40 peek:w-60 peek:-translate-x-[calc(100%-14px)] peek:px-3 peek:transition-[translate,box-shadow] peek:delay-200 peek:duration-200 peek:ease-out peek:hover:translate-x-0 peek:hover:shadow-[8px_0_32px_-12px_rgba(18,26,38,0.25)] peek:hover:delay-75 peek:has-[:focus-visible]:translate-x-0 peek:has-[:focus-visible]:delay-0">
       {/* A lingueta: sai da borda da barra escondida com o ícone de menu, para
           dizer que há navegação ali. Passar o mouse nela abre (é filha da barra). */}
       <span
         aria-hidden
-        className="absolute top-5 left-full hidden h-12 items-center gap-0.5 rounded-r-2xl bg-pine-950 pr-1.5 pl-1 text-white shadow-[4px_4px_16px_-6px_rgba(40,20,70,0.45)] transition-opacity peek:flex group-hover/side:pointer-events-none group-hover/side:opacity-0 group-has-[:focus-visible]/side:opacity-0"
+        className="absolute top-5 left-full hidden h-12 items-center gap-0.5 rounded-r-2xl bg-pine-950 pr-1.5 pl-1 text-white shadow-[4px_4px_16px_-6px_rgba(18,26,38,0.45)] transition-opacity peek:flex group-hover/side:pointer-events-none group-hover/side:opacity-0 group-has-[:focus-visible]/side:opacity-0"
       >
         <svg
           viewBox="0 0 24 24"
@@ -92,7 +93,7 @@ export function SideNav({ name, role }: { name: string; role: Role }) {
         <div className="mb-3 hidden flex-col gap-2 lg:flex peek:flex">
           <Link
             href="/ajuda#novidades"
-            className="flex items-center gap-2.5 rounded-full border border-[#e2dcec] bg-white px-3.5 py-2 text-[12.5px] font-bold text-pine-900/75 transition-colors hover:border-pine-400"
+            className="flex items-center gap-2.5 rounded-full border border-[var(--color-line)] bg-white px-3.5 py-2 text-[12.5px] font-bold text-pine-900/75 transition-colors hover:border-pine-400"
           >
             <svg
               viewBox="0 0 24 24"
@@ -111,7 +112,7 @@ export function SideNav({ name, role }: { name: string; role: Role }) {
           </Link>
           <Link
             href="/ajuda"
-            className="flex items-center gap-2.5 rounded-full border border-[#e2dcec] bg-white px-3.5 py-2 text-[12.5px] font-bold text-pine-900/75 transition-colors hover:border-pine-400"
+            className="flex items-center gap-2.5 rounded-full border border-[var(--color-line)] bg-white px-3.5 py-2 text-[12.5px] font-bold text-pine-900/75 transition-colors hover:border-pine-400"
           >
             <svg
               viewBox="0 0 24 24"
@@ -130,7 +131,7 @@ export function SideNav({ name, role }: { name: string; role: Role }) {
           </Link>
         </div>
 
-        <div className="mt-1 flex flex-col gap-1 border-t border-[#eee7f4] pt-3">
+        <div className="mt-1 flex flex-col gap-1 border-t border-[var(--color-line)] pt-3">
           <Link
             href="/conta"
             title={`${name} · ${ROLE_LABEL[role]} — minha conta`}
@@ -146,6 +147,8 @@ export function SideNav({ name, role }: { name: string; role: Role }) {
               <span className="block text-[11.5px] text-pine-900/60">{ROLE_LABEL[role]}</span>
             </span>
           </Link>
+          <ThemeToggle compact className="nav-pill w-full justify-center lg:hidden peek:hidden" />
+          <ThemeToggle className="nav-pill hidden w-full justify-start lg:inline-flex peek:inline-flex" />
           <form action={logoutAction}>
             <button
               type="submit"

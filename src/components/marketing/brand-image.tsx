@@ -2,14 +2,16 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 /**
- * A marca em imagem (favicon, ícone de tela inicial, prévia de link): um "R"
- * em Fraunces itálica sobre o pêssego da página. O Satori (por trás do
- * `ImageResponse`) não enxerga fontes do sistema, então as duas fontes da
- * marca vão junto, em TTF (OFL): Fraunces itálica 600 e Karla 700.
+ * A marca em imagem (favicon, ícone de tela inicial, prévia de link), no tema
+ * "Tevet & Iyar": um "R" reto em Karla 700 sobre o azul-marinho de Tevet, com o
+ * fio de bronze de Iyar embaixo. O Satori (por trás do `ImageResponse`) não
+ * enxerga fontes do sistema, então a fonte vai junto, em TTF (OFL).
  */
 
-export const BRAND_PEACH = "#ffe4d6";
-export const BRAND_PINE = "#0c221c";
+/** Fundo claro das imagens (a névoa do site) e o azul-marinho da marca. */
+export const BRAND_PEACH = "#e6ebf2";
+export const BRAND_PINE = "#121a26";
+export const BRAND_BRONZE = "#b8955a";
 
 export type BrandFont = {
   name: string;
@@ -19,19 +21,13 @@ export type BrandFont = {
 };
 
 export async function brandFonts(): Promise<BrandFont[]> {
-  const [fraunces, karla] = await Promise.all([
-    readFile(join(process.cwd(), "src/components/marketing/fonts/fraunces-semibold-italic.ttf")),
-    readFile(join(process.cwd(), "src/components/marketing/fonts/karla-bold.ttf")),
-  ]);
-  return [
-    { name: "Fraunces", data: fraunces, weight: 600, style: "italic" },
-    { name: "Karla", data: karla, weight: 700, style: "normal" },
-  ];
+  const karla = await readFile(join(process.cwd(), "src/components/marketing/fonts/karla-bold.ttf"));
+  return [{ name: "Karla", data: karla, weight: 700, style: "normal" }];
 }
 
 /**
  * O quadrado com o "R". `radius` em fração do lado (0 para o ícone da Apple,
- * que o iOS arredonda sozinho); `inverted` troca para pinho com R pêssego.
+ * que o iOS arredonda sozinho); `inverted` troca para névoa com R marinho.
  */
 export function BrandMark({
   size,
@@ -42,25 +38,35 @@ export function BrandMark({
   radius?: number;
   inverted?: boolean;
 }) {
+  const ink = inverted ? BRAND_PINE : "#ffffff";
   return (
     <div
       style={{
         width: size,
         height: size,
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        background: inverted ? BRAND_PINE : BRAND_PEACH,
+        background: inverted ? BRAND_PEACH : BRAND_PINE,
         borderRadius: Math.round(size * radius),
-        color: inverted ? BRAND_PEACH : BRAND_PINE,
-        fontFamily: "Fraunces",
-        fontStyle: "italic",
-        fontWeight: 600,
-        fontSize: Math.round(size * 0.78),
+        color: ink,
+        fontFamily: "Karla",
+        fontWeight: 700,
+        fontSize: Math.round(size * 0.6),
         lineHeight: 1,
       }}
     >
-      <span style={{ marginTop: Math.round(-size * 0.04), marginLeft: Math.round(-size * 0.06) }}>R</span>
+      <span style={{ marginTop: Math.round(size * 0.04) }}>R</span>
+      <span
+        style={{
+          width: Math.round(size * 0.34),
+          height: Math.max(2, Math.round(size * 0.05)),
+          marginTop: Math.round(size * 0.05),
+          background: BRAND_BRONZE,
+          borderRadius: 999,
+        }}
+      />
     </div>
   );
 }

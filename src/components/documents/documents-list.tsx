@@ -39,7 +39,7 @@ const ROW_ACTION =
 const FILTER_PILL =
   "inline-flex shrink-0 items-center gap-1 rounded-full border px-3 py-1 text-[12px] font-bold transition-colors pointer-coarse:py-2";
 const FILTER_ON = "border-pine-950 bg-pine-950 text-white";
-const FILTER_OFF = "border-[#e2dcec] bg-white text-pine-900/70 hover:border-pine-400";
+const FILTER_OFF = "border-[var(--color-line)] bg-white text-pine-900/70 hover:border-pine-400";
 
 const KIND_CHIP: Record<DocumentKind, string> = {
   atestado: "bg-pine-100 text-pine-800",

@@ -15,12 +15,12 @@ export const KIND_BAR: Record<DocumentKind, string> = {
 
 /** 44px no celular (dedo), os 32px de sempre no desktop. */
 export const ROUND_BTN =
-  "flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#e2dcec] bg-white transition-colors disabled:opacity-30 lg:h-8 lg:w-8";
+  "flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--color-line)] bg-white transition-colors disabled:opacity-30 lg:h-8 lg:w-8";
 /** Fileira que rola de lado abaixo do lg e volta a quebrar linha no desktop. */
 export const CHIP_ROW = "scroll-x flex gap-2 lg:flex-wrap lg:overflow-visible";
 /** Botão-pílula pequeno dos painéis de exames e dos protocolos de receituário. */
 export const QUICK_CHIP =
-  "rounded-xl border border-[#e2dcec] px-2.5 py-1 text-[12px] font-bold text-pine-900/75 transition-colors hover:border-pine-400 hover:bg-pine-50 pointer-coarse:min-h-11 pointer-coarse:px-3";
+  "rounded-xl border border-[var(--color-line)] px-2.5 py-1 text-[12px] font-bold text-pine-900/75 transition-colors hover:border-pine-400 hover:bg-pine-50 pointer-coarse:min-h-11 pointer-coarse:px-3";
 
 export type BannerTone = "ok" | "erro" | "aviso";
 

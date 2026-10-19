@@ -80,7 +80,7 @@ export default async function PrintDocumentPage({
 
       {/* A4 não refaz linhas: no celular a folha encolhe para caber; a impressão sai do tamanho real. */}
       <FitWidth width={SHEET_PX}>
-        <article className="print-area mx-auto flex min-h-[280mm] w-full max-w-[210mm] flex-col bg-white p-[18mm] text-ink shadow-[0_2px_16px_rgba(22,51,43,0.12)]">
+        <article className="print-area mx-auto flex min-h-[280mm] w-full max-w-[210mm] flex-col bg-white p-[18mm] text-ink shadow-[0_2px_16px_rgba(18,26,38,0.12)]">
           <header className="border-b-2 border-pine-900 pb-4">
             <p className="font-display text-2xl font-semibold text-pine-950">{clinicName}</p>
             {clinicLine ? <p className="mt-1 text-xs text-pine-900/60">{clinicLine}</p> : null}

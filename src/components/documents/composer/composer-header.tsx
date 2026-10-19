@@ -4,7 +4,7 @@ import type { ComposerStep } from "@/lib/composer-editor";
 import type { DocumentKind } from "@/lib/documents";
 
 const STEP_PILL = "rounded-full bg-peach-100 px-3 py-1 text-pine-950";
-const BADGE = "ml-auto rounded-2xl border border-[#e2dcec] bg-white px-3 py-1.5 sm:ml-0 sm:px-4 sm:py-2";
+const BADGE = "ml-auto rounded-2xl border border-[var(--color-line)] bg-white px-3 py-1.5 sm:ml-0 sm:px-4 sm:py-2";
 
 /**
  * Cabeçalho: avatar, "Paciente · atendimento de…", nome; à direita o link da

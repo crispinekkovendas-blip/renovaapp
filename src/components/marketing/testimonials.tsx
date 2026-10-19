@@ -26,7 +26,7 @@ export function Testimonials({ items }: { items: PublicTestimonial[] }) {
           {items.map((item, i) => (
             <Reveal as="li" key={`${item.created_at}-${i}`} delay={i * 60} className="card flex flex-col gap-4 p-6 text-pine-950">
               <Stars rating={item.rating} />
-              <blockquote className="font-display text-xl italic leading-snug">“{item.message.trim()}”</blockquote>
+              <blockquote className="font-display tracking-tight text-xl leading-snug">“{item.message.trim()}”</blockquote>
               <p className="mt-auto text-sm text-pine-900/60">
                 <span className="font-bold text-pine-900">{firstNameOf(item.patient_name)}</span>
                 {monthYearPT(item.created_at) ? ` · ${monthYearPT(item.created_at)}` : ""}

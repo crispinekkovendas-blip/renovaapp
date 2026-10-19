@@ -53,7 +53,7 @@ export function ComposerActionBar({
     : "sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] z-20 -mx-4 px-4 -mb-8 sm:-mx-6 sm:px-6 md:bottom-0 md:-mx-8 md:-mb-6 md:px-8";
   return (
     <div
-      className={`${place} flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-[#e8e1f0] bg-paper/90 pt-3 backdrop-blur ${inSheet ? "" : "pb-3"}`}
+      className={`${place} flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-[var(--color-line)] bg-paper/90 pt-3 backdrop-blur ${inSheet ? "" : "pb-3"}`}
     >
       {/* No celular: na montagem, contagem + Continuar numa linha só (o "← Ficha" do
           cabeçalho faz o Cancelar); na revisão, Voltar e Emitir dividem a largura. */}

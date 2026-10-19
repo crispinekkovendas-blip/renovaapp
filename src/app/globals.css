@@ -1,49 +1,60 @@
 @import "tailwindcss";
+@import "./theme-dark.css";
 
 /* Tela de computador com mouse: a barra lateral fica escondida e aparece ao
    passar o mouse na borda esquerda. Tablet (toque) continua com o trilho fixo. */
 @custom-variant peek (@media (min-width: 48rem) and (hover: hover) and (pointer: fine));
 
 @theme {
-  --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
-  --font-sans: "Karla Variable", ui-sans-serif, system-ui, sans-serif;
+  /* "Tevet & Iyar": corporativo. Tevet (♑, Saturno) dá a estrutura em azul-marinho
+     e grafite; Iyar (♉, terra; o mês de "Ani Hashem Rofecha") dá o verde-oliva da
+     terra nas ações de destaque e o bronze nos detalhes. Uma fonte só, a Inter.
+     O tema escuro é gerado em theme-dark.css (scripts/theme/build-dark.mjs) —
+     mudou um valor aqui, mude lá também e rode o script. */
+  --font-display: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
 
-  --color-paper: #f7f7f8;
-  --color-ink: #21302b;
+  --color-paper: #f5f6f8;
+  --color-ink: #1a2230;
+  /* Bordas e texto secundário neutros (antes eram lilases escritos à mão). */
+  --color-line: #dfe4ec;
+  --color-muted: #5a6575;
 
-  --color-pine-50: #f1f7f4;
-  --color-pine-100: #dcebe3;
-  --color-pine-200: #bad7c9;
-  --color-pine-300: #8ebba8;
-  --color-pine-400: #609b84;
-  --color-pine-500: #417f69;
-  --color-pine-600: #2f6553;
-  --color-pine-700: #275145;
-  --color-pine-800: #204239;
-  --color-pine-900: #16332b;
-  --color-pine-950: #0c221c;
+  /* pine = azul-marinho de Tevet: 950 nos botões principais, 600/700 nos links. */
+  --color-pine-50: #f3f6fa;
+  --color-pine-100: #e3eaf3;
+  --color-pine-200: #c7d4e6;
+  --color-pine-300: #9fb5d1;
+  --color-pine-400: #6f8db4;
+  --color-pine-500: #4a6b94;
+  --color-pine-600: #36557a;
+  --color-pine-700: #2c4a6e;
+  --color-pine-800: #233b58;
+  --color-pine-900: #1a2230;
+  --color-pine-950: #121a26;
 
-  --color-clay-50: #fdf5ec;
-  --color-clay-100: #f8e6d0;
-  --color-clay-200: #f0cba1;
-  --color-clay-300: #e5aa6c;
-  --color-clay-400: #d98a41;
-  --color-clay-500: #c96f2e;
-  --color-clay-600: #ad5622;
-  --color-clay-700: #8a411e;
-  --color-clay-800: #70351e;
-  --color-clay-900: #5c2d1c;
+  /* clay = terra/oliva de Iyar: destaque quente. */
+  --color-clay-50: #f6f7ec;
+  --color-clay-100: #ebeed3;
+  --color-clay-200: #d8dea8;
+  --color-clay-300: #bec777;
+  --color-clay-400: #a3ad4f;
+  --color-clay-500: #858f37;
+  --color-clay-600: #6f7a3a;
+  --color-clay-700: #565f2c;
+  --color-clay-800: #454c25;
+  --color-clay-900: #383e21;
 
-  /* Pastel de seção (o "rosa" da Mevo, na temperatura do Renova). */
-  --color-peach-50: #fff5ee;
-  --color-peach-100: #ffe4d6;
-  --color-peach-200: #ffcdb5;
-  --color-peach-300: #ffb08e;
+  /* peach = névoa fria das seções (fundo de faixas e cartões de destaque). */
+  --color-peach-50: #f4f6f9;
+  --color-peach-100: #e6ebf2;
+  --color-peach-200: #d3dbe6;
+  --color-peach-300: #b9c5d5;
 
-  /* Acento quente: o único preenchimento dentro dos ícones e o "+" dos números. */
-  --color-sun-300: #ffe08a;
-  --color-sun-400: #ffd166;
-  --color-sun-500: #f5b400;
+  /* sun = bronze: o único preenchimento dentro dos ícones e o "+" dos números. */
+  --color-sun-300: #e9d9b8;
+  --color-sun-400: #d9bf8a;
+  --color-sun-500: #b8955a;
 }
 
 html {
@@ -64,7 +75,7 @@ body {
   /* ---------- Primitivos existentes (nomes preservados) ---------- */
 
   .card {
-    @apply rounded-3xl border border-stone-200 bg-white shadow-[0_12px_32px_-16px_rgba(12,34,28,0.18),0_1px_2px_rgba(12,34,28,0.04)];
+    @apply rounded-3xl border border-stone-200 bg-white shadow-[0_12px_32px_-16px_rgba(18,26,38,0.18),0_1px_2px_rgba(18,26,38,0.04)];
   }
 
   .btn {
@@ -205,7 +216,7 @@ body {
   /* ---------- Acordeão (<details class="accordion">) ---------- */
 
   .accordion {
-    @apply rounded-3xl border border-pine-900/10 bg-white px-6 shadow-[0_12px_32px_-16px_rgba(12,34,28,0.14)];
+    @apply rounded-3xl border border-pine-900/10 bg-white px-6 shadow-[0_12px_32px_-16px_rgba(18,26,38,0.14)];
   }
   .accordion[open] {
     @apply pb-6;
@@ -261,41 +272,11 @@ body {
   }
 }
 
-/* ---------- Tema do app do médico: "à moda Mevo" (roxo e rosa, uma geométrica só) ----------
-   Escopo: o layout de (app) e a página de login. A landing, o agendamento público
-   e o portal do paciente continuam em pinho e pêssego. As utilities do Tailwind v4
-   leem variáveis, então basta redefinir os tokens aqui: `bg-pine-950` vira o roxo,
-   `bg-peach-100` vira o rosa, `font-display` vira a Plus Jakarta Sans. */
+/* ---------- App do médico e login ----------
+   Antes tinha paleta própria (roxo e rosa); agora todo o produto veste o mesmo
+   "Tevet & Iyar" do @theme. O escopo segue existindo pelo fundo, pela tinta e
+   pelos ajustes de componente logo abaixo. */
 .theme-app {
-  --font-display: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
-
-  --color-paper: #fff8f9;
-  --color-ink: #2b2633;
-
-  /* pine-950 = primário (botões, títulos); pine-900 = neutro escuro (texto secundário via /60);
-     pine-600/700 = roxo dos links; pine-100/50 = lilás dos chips e hovers. */
-  --color-pine-50: #f7f3fc;
-  --color-pine-100: #f2eefb;
-  --color-pine-200: #e3daf3;
-  --color-pine-300: #cbbfe6;
-  --color-pine-400: #a98fd4;
-  --color-pine-500: #8a63c4;
-  --color-pine-600: #6c3db5;
-  --color-pine-700: #56289a;
-  --color-pine-800: #4a1c85;
-  --color-pine-900: #3a3342;
-  --color-pine-950: #3d0e6b;
-
-  --color-peach-50: #fff1f3;
-  --color-peach-100: #ffd6dc;
-  --color-peach-200: #ffb6bf;
-  --color-peach-300: #ff97a4;
-
-  --color-sun-300: #e9d8ff;
-  --color-sun-400: #d9beff;
-  --color-sun-500: #b58cf0;
-
   background-color: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
@@ -303,26 +284,17 @@ body {
 
 /* A folha A4 dos documentos é impressa: fica neutra mesmo dentro do app. */
 .theme-paper {
-  --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
-  --font-sans: "Karla Variable", ui-sans-serif, system-ui, sans-serif;
-  --color-ink: #21302b;
-  --color-pine-50: #f1f7f4;
-  --color-pine-100: #dcebe3;
-  --color-pine-200: #bad7c9;
-  --color-pine-600: #2f6553;
-  --color-pine-700: #275145;
-  --color-pine-900: #16332b;
-  --color-pine-950: #0c221c;
+  --color-ink: #1a2230;
   font-family: var(--font-sans);
   color: var(--color-ink);
 }
 
 @layer components {
   .theme-app .card {
-    @apply rounded-[18px] border-[#e8e1f0] shadow-[0_10px_30px_-22px_rgba(61,14,107,0.25)];
+    @apply rounded-[18px] border-[var(--color-line)] shadow-[0_10px_30px_-22px_rgba(18,26,38,0.22)];
   }
   .theme-app .input {
-    @apply rounded-xl border-[#e2dcec];
+    @apply rounded-xl border-[var(--color-line)];
   }
   .theme-app .label {
     @apply mb-1.5 text-[12.5px] font-bold normal-case tracking-normal text-ink;
@@ -334,7 +306,7 @@ body {
     @apply text-[2rem] font-extrabold sm:text-[2.25rem];
   }
   .theme-app .btn-outline {
-    @apply border-[#e2dcec];
+    @apply border-[var(--color-line)];
   }
   .theme-app .btn-ghost {
     @apply text-pine-700 hover:bg-pine-100;
@@ -354,7 +326,7 @@ body {
   }
   /* Aba de documento estilo Mevo: pílula com ícone, cheia quando ativa. */
   .doc-tab {
-    @apply inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-[#e2dcec] bg-white px-4 py-2.5 text-sm font-bold text-ink transition-colors hover:border-pine-400;
+    @apply inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-[var(--color-line)] bg-white px-4 py-2.5 text-sm font-bold text-ink transition-colors hover:border-pine-400;
   }
   .doc-tab svg {
     @apply h-4 w-4 text-pine-600;
@@ -366,7 +338,7 @@ body {
     @apply text-white;
   }
   .doc-subtab {
-    @apply rounded-full border border-[#e2dcec] bg-white px-3 py-1.5 text-xs font-bold text-pine-900/70 transition-colors hover:border-pine-400;
+    @apply rounded-full border border-[var(--color-line)] bg-white px-3 py-1.5 text-xs font-bold text-pine-900/70 transition-colors hover:border-pine-400;
   }
   .doc-subtab.active {
     @apply border-transparent bg-peach-100 text-pine-950;
@@ -487,7 +459,7 @@ body {
   /* Barra de ações colada embaixo no celular (Salvar, Emitir), logo acima das
      abas do rodapé. Do sm em diante volta a ser um bloco comum. */
   .mobile-action-bar {
-    @apply sticky z-20 -mx-4 border-t border-[#eee7f4] bg-white/95 px-4 py-3 backdrop-blur-md sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none;
+    @apply sticky z-20 -mx-4 border-t border-[var(--color-line)] bg-white/95 px-4 py-3 backdrop-blur-md sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none;
     bottom: calc(4rem + env(safe-area-inset-bottom));
   }
 

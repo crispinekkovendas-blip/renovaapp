@@ -61,7 +61,7 @@ export function ComposerSheet({
         aria-label={label}
         tabIndex={-1}
         data-composer-sheet
-        className="sheet-panel absolute inset-x-0 top-2 bottom-0 overflow-y-auto overscroll-contain rounded-t-[22px] bg-paper px-4 pt-4 shadow-[0_-12px_48px_-12px_rgba(40,20,70,0.35)] outline-none sm:inset-x-3 sm:top-3 sm:bottom-3 sm:rounded-[22px] sm:px-6 lg:inset-x-6 lg:top-4 lg:bottom-4 lg:px-8"
+        className="sheet-panel absolute inset-x-0 top-2 bottom-0 overflow-y-auto overscroll-contain rounded-t-[22px] bg-paper px-4 pt-4 shadow-[0_-12px_48px_-12px_rgba(18,26,38,0.35)] outline-none sm:inset-x-3 sm:top-3 sm:bottom-3 sm:rounded-[22px] sm:px-6 lg:inset-x-6 lg:top-4 lg:bottom-4 lg:px-8"
       >
         {children}
       </div>

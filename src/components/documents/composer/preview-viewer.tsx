@@ -202,8 +202,8 @@ function Thumbnails({
             <span
               className={`block overflow-hidden rounded-md bg-white ring-offset-2 transition-shadow ${
                 active
-                  ? `ring-2 ring-pine-600 ${dark ? "ring-offset-[#241a31]" : ""}`
-                  : `ring-1 ${dark ? "ring-white/20 ring-offset-[#241a31]" : "ring-[#e2dcec]"} group-hover/thumb:ring-pine-400`
+                  ? `ring-2 ring-pine-600 ${dark ? "ring-offset-[#121a26]" : ""}`
+                  : `ring-1 ${dark ? "ring-white/20 ring-offset-[#121a26]" : "ring-[var(--color-line)]"} group-hover/thumb:ring-pine-400`
               }`}
               style={{ width: A4_W * THUMB, height: A4_H * THUMB }}
               aria-hidden
@@ -290,7 +290,7 @@ export function PreviewViewer({ pages, notice, pdfBusy, onOpenPdf, onHide, goTo,
       onKeyDown={onKeyDown}
     >
       {/* ── Barra de cima: título, zoom, tela cheia, PDF, ocultar ── */}
-      <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 border-b border-[#e8e1f0] px-2.5 py-1.5">
+      <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 border-b border-[var(--color-line)] px-2.5 py-1.5">
         <span className="pl-1 text-[12px] font-bold text-pine-900/60">Prévia da folha</span>
         <div className="flex items-center gap-0.5">
           <div className="flex items-center rounded-lg bg-pine-50/70" role="group" aria-label="Zoom">
@@ -342,7 +342,7 @@ export function PreviewViewer({ pages, notice, pdfBusy, onOpenPdf, onHide, goTo,
       </div>
 
       {/* ── A página (e, no receituário, onde se solta o que vem do editor) ── */}
-      {fill && notice ? <div className="shrink-0 border-b border-[#e8e1f0] p-3">{notice}</div> : null}
+      {fill && notice ? <div className="shrink-0 border-b border-[var(--color-line)] p-3">{notice}</div> : null}
       <div
         className={`relative ${fill ? "min-h-0 flex-1" : ""}`}
         onDragEnter={(event) => {
@@ -385,7 +385,7 @@ export function PreviewViewer({ pages, notice, pdfBusy, onOpenPdf, onHide, goTo,
       </div>
 
       {/* ── Embaixo: páginas ── */}
-      <div className="shrink-0 border-t border-[#e8e1f0] bg-white px-2.5 pt-2 pb-1.5">
+      <div className="shrink-0 border-t border-[var(--color-line)] bg-white px-2.5 pt-2 pb-1.5">
         <div className="flex items-center justify-between gap-2">
           <p className="min-w-0 truncate pl-1 text-[11.5px] text-pine-900/60">{page?.label}</p>
           <Pager index={current} count={count} onGo={go} />
@@ -456,7 +456,7 @@ function FullScreen({
     <div
       // O portal sai de dentro do `.theme-app`: a classe volta aqui para as cores e a fonte do app.
       // O fundo vai inline: o `.theme-app` pinta o fundo claro do app e ganharia de uma classe.
-      style={{ background: "rgba(36, 26, 49, 0.96)" }}
+      style={{ background: "rgba(18, 26, 38, 0.96)" }}
       className="theme-app fixed inset-0 z-[70] flex flex-col backdrop-blur-sm animate-[fade-in_120ms_ease-out] motion-reduce:animate-none"
       role="dialog"
       aria-modal="true"
@@ -517,7 +517,7 @@ function FullScreen({
                 className="flex flex-col items-center gap-2 text-white/80 hover:text-white"
                 aria-label={`Abrir página ${i + 1}: ${p.label}`}
               >
-                <span className="block rounded-md ring-2 ring-transparent ring-offset-4 ring-offset-[#241a31] hover:ring-pine-400">
+                <span className="block rounded-md ring-2 ring-transparent ring-offset-4 ring-offset-[#121a26] hover:ring-pine-400">
                   <span className="pointer-events-none block">
                     <ScaledPage scale={gridScale}>{p.node}</ScaledPage>
                   </span>

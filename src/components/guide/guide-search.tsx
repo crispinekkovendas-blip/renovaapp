@@ -108,7 +108,7 @@ export function GuideSearch({
     <>
       <div className={tab ? "mx-auto max-w-5xl" : "hidden"}>
         {tab ? (
-          <div className="sticky top-0 z-10 -mx-4 bg-[#faf8fc]/95 px-4 pt-1 pb-3 backdrop-blur-sm sm:mx-0 sm:px-0">
+          <div className="sticky top-0 z-10 -mx-4 bg-paper/95 px-4 pt-1 pb-3 backdrop-blur-sm sm:mx-0 sm:px-0">
             <SmartSearchInput
               label="Buscar no Guia clínico: receitas prontas, plantão e Drive"
               placeholder="Busca em tudo: condição, remédio, sintoma ou CID"

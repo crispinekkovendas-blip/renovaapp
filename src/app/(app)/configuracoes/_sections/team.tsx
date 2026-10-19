@@ -52,7 +52,7 @@ export function ProfessionalsSection({
             <label className="label" htmlFor="prof-color">
               Cor na agenda
             </label>
-            <input className="input h-10 p-1" type="color" id="prof-color" name="color" defaultValue="#2f6553" />
+            <input className="input h-10 p-1" type="color" id="prof-color" name="color" defaultValue="#2c4a6e" />
           </div>
           <div className="flex items-end">
             <button type="submit" className="btn btn-primary w-full">

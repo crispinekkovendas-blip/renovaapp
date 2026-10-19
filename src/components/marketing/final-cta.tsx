@@ -16,7 +16,7 @@ export function FinalCta() {
           >
             Pronto para marcar sua consulta?
           </h2>
-          <p className="mt-4 font-display text-2xl italic text-pine-800">{REFRAIN}</p>
+          <p className="mt-4 font-display tracking-tight text-2xl text-pine-800">{REFRAIN}</p>
           <div className="mt-8 flex justify-center">
             <Link href="/agendar" className="btn-hero">
               Agendar consulta

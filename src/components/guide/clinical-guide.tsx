@@ -88,7 +88,7 @@ export function GuideRow({
       onMouseEnter={onHover}
       className={`min-w-0 rounded-2xl border bg-white transition-colors ${
         open
-          ? "border-pine-300 shadow-[0_10px_28px_-20px_rgba(61,14,107,0.4)]"
+          ? "border-pine-300 shadow-[0_10px_28px_-20px_rgba(18,26,38,0.4)]"
           : active
             ? "border-pine-400 bg-pine-50/40"
             : "border-pine-900/10 hover:border-pine-400"

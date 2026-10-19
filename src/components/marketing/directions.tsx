@@ -29,7 +29,7 @@ export function Directions({ address }: { address: string | null }) {
 
         <Reveal
           delay={100}
-          className="overflow-hidden rounded-[2.5rem] border border-pine-900/10 bg-peach-50 shadow-[0_12px_32px_-16px_rgba(12,34,28,0.18)]"
+          className="overflow-hidden rounded-[2.5rem] border border-pine-900/10 bg-peach-50 shadow-[0_12px_32px_-16px_rgba(18,26,38,0.18)]"
         >
           <iframe
             src={mapsEmbedUrl(address)}

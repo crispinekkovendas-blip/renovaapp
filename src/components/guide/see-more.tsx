@@ -117,7 +117,7 @@ function SeeMoreDialog({
         tabIndex={-1}
         className="card sheet-panel sheet-center flex max-h-[88dvh] w-full max-w-xl flex-col overflow-hidden rounded-b-none outline-none sm:max-h-[calc(100dvh-5rem)] sm:rounded-b-[18px]"
       >
-        <div className="mx-auto mt-2.5 h-1.5 w-10 shrink-0 rounded-full bg-[#e2dcec] sm:hidden" aria-hidden />
+        <div className="mx-auto mt-2.5 h-1.5 w-10 shrink-0 rounded-full bg-[var(--color-line)] sm:hidden" aria-hidden />
         <div className="flex shrink-0 items-start gap-2 border-b border-pine-900/8 px-4 pt-2 pb-3 sm:px-6 sm:pt-5">
           <div className="min-w-0 flex-1 pt-1.5 sm:pt-0">
             <h2 id={titleId} className="text-[17px] leading-snug font-extrabold break-words text-pine-950">

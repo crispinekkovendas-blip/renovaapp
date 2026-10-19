@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import type { PrescriptionItem } from "@/lib/prescription";
-import { DEFAULT_SHEET_STYLE, RULE_HEIGHT, SCALE_FACTOR, tint } from "@/lib/sheet-style";
+import { DEFAULT_SHEET_STYLE, LEGACY_SHEET_STYLE, RULE_HEIGHT, SCALE_FACTOR, tint } from "@/lib/sheet-style";
 import type { SheetStyle } from "@/lib/sheet-style";
 import { BILINGUAL, formulaLines, toSpanish } from "@/lib/formulas";
 
@@ -61,7 +61,7 @@ export interface DocumentPreviewProps {
 
 /** As cores do modelo — as mesmas contas de `lookFor` no PDF. */
 function sheetColors(style: SheetStyle) {
-  const renova = style.accent === DEFAULT_SHEET_STYLE.accent;
+  const renova = style.accent === LEGACY_SHEET_STYLE.accent;
   return {
     accent: style.accent,
     soft: renova ? "#6c3db5" : tint(style.accent, 0.22),
@@ -115,7 +115,7 @@ export function DocumentPreview(props: DocumentPreviewProps) {
 
   return (
     <div
-      className="origin-top-left bg-white shadow-[0_2px_16px_rgba(22,51,43,0.12)]"
+      className="theme-light origin-top-left bg-white shadow-[0_2px_16px_rgba(18,26,38,0.12)]"
       style={{
         width: A4_W,
         // Mínimo de uma folha: o que não cabe continua embaixo (o PDF abre outra página)

@@ -3,7 +3,7 @@ import { BrandMark, BRAND_PEACH, brandFonts } from "@/components/marketing/brand
 
 /**
  * Ícone do portal instalável: a mesma marca do favicon e da prévia de link
- * (`BrandMark`, Fraunces itálica). `?size=192|512`; `?maskable=1` entrega a
+ * (`BrandMark`, Karla 700 sobre o marinho). `?size=192|512`; `?maskable=1` entrega a
  * versão sem cantos arredondados e com a marca 20% menor, dentro da zona
  * segura que o Android recorta.
  */

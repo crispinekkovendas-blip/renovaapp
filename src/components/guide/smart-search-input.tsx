@@ -104,7 +104,7 @@ export function SmartSearchInput({
       ) : null}
 
       {showRecent ? (
-        <div className="absolute inset-x-0 top-full z-20 mt-1.5 rounded-2xl border border-pine-900/10 bg-white p-2 shadow-[0_12px_32px_-12px_rgba(40,20,70,0.25)]">
+        <div className="absolute inset-x-0 top-full z-20 mt-1.5 rounded-2xl border border-pine-900/10 bg-white p-2 shadow-[0_12px_32px_-12px_rgba(18,26,38,0.25)]">
           <div className="flex items-center justify-between px-2 pb-1">
             <span className="text-[11px] font-bold tracking-[0.1em] text-pine-900/45 uppercase">Buscas recentes</span>
             <button

@@ -114,7 +114,7 @@ const DRAWER_GROUP: Record<RailDrawer, "paciente" | "voce"> = {
 const RAIL_BTN =
   "flex h-14 w-full flex-col items-center justify-center gap-1 rounded-2xl border text-[11px] font-bold transition-colors lg:h-9 lg:w-auto lg:flex-row lg:gap-1.5 lg:rounded-full lg:px-3.5 lg:text-[12.5px]";
 const RAIL_BTN_IDLE =
-  "border-[#e2dcec] bg-white text-ink hover:border-pine-400 lg:border-transparent lg:bg-transparent lg:text-pine-900/70 lg:hover:border-transparent lg:hover:bg-pine-50 lg:hover:text-pine-950";
+  "border-[var(--color-line)] bg-white text-ink hover:border-pine-400 lg:border-transparent lg:bg-transparent lg:text-pine-900/70 lg:hover:border-transparent lg:hover:bg-pine-50 lg:hover:text-pine-950";
 const RAIL_BTN_ACTIVE = "border-transparent bg-peach-100 text-pine-950";
 const RAIL_ICON = "h-5 w-5 lg:h-4 lg:w-4";
 
@@ -134,7 +134,7 @@ function isSheetViewport(): boolean {
 
 /** O puxador da folha e o fundo escurecido: só existem abaixo do lg. */
 function SheetGrip() {
-  return <div className="mx-auto mt-2 h-1.5 w-10 shrink-0 rounded-full bg-[#e2dcec] lg:hidden" aria-hidden />;
+  return <div className="mx-auto mt-2 h-1.5 w-10 shrink-0 rounded-full bg-[var(--color-line)] lg:hidden" aria-hidden />;
 }
 
 
@@ -294,7 +294,7 @@ export const ComposerRail = memo(function ComposerRail({
       <nav aria-label="Atalhos do compositor" className="grid grid-cols-4 gap-2 lg:flex lg:items-center lg:gap-0.5">
         {paciente.map((d) => railButton(d.id))}
         {/* Paciente | você: um fio separa os dois grupos, sem legenda. */}
-        <span className="mx-1.5 hidden h-5 w-px bg-[#e2dcec] lg:block" aria-hidden />
+        <span className="mx-1.5 hidden h-5 w-px bg-[var(--color-line)] lg:block" aria-hidden />
         {voce.map((d) => railButton(d.id))}
         <button
           type="button"
@@ -573,7 +573,7 @@ function PerfilDrawer({ patient, backUrl }: { patient: RailPatient; backUrl: str
         {medications.length > 0 ? (
           <div className="mt-1 flex flex-wrap gap-1.5">
             {medications.map((item) => (
-              <span key={item} className="chip bg-white text-pine-900 ring-1 ring-[#e2dcec]">
+              <span key={item} className="chip bg-white text-pine-900 ring-1 ring-[var(--color-line)]">
                 {item}
               </span>
             ))}

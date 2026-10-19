@@ -93,7 +93,7 @@ export function ModelTiles({
               className={`relative flex min-h-[5.25rem] cursor-grab flex-col rounded-xl border p-2 text-left transition-colors active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-40 ${
                 on
                   ? "border-pine-950 bg-pine-950 text-white"
-                  : "border-[#e2dcec] bg-white text-pine-950 hover:border-pine-400 hover:bg-pine-50/40"
+                  : "border-[var(--color-line)] bg-white text-pine-950 hover:border-pine-400 hover:bg-pine-50/40"
               }`}
             >
               <span

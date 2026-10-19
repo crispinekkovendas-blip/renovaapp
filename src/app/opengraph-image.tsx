@@ -8,8 +8,8 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 /**
- * A prévia do link no WhatsApp: pêssego, o nome da clínica, o refrão em
- * itálico e a chamada. O nome vem de `settings` (com o genérico de reserva).
+ * A prévia do link no WhatsApp: névoa clara, o nome da clínica, o refrão e a
+ * chamada, no tema "Tevet & Iyar". O nome vem de `settings` (com o genérico de reserva).
  */
 export default async function OpenGraphImage() {
   // getPublicClinic nunca lança: sem banco, vem o nome genérico.
@@ -27,18 +27,18 @@ export default async function OpenGraphImage() {
           padding: 72,
           background: BRAND_PEACH,
           color: BRAND_PINE,
-          fontFamily: "Fraunces",
+          fontFamily: "Karla",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-          <BrandMark size={88} inverted />
-          <div style={{ fontSize: 44, fontStyle: "italic", fontWeight: 600 }}>{clinicName}</div>
+          <BrandMark size={88} />
+          <div style={{ fontSize: 44, fontWeight: 700 }}>{clinicName}</div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
-          <div style={{ fontSize: 96, fontStyle: "italic", fontWeight: 600, lineHeight: 1.05, letterSpacing: -2 }}>
+          <div style={{ fontSize: 92, fontWeight: 700, lineHeight: 1.05, letterSpacing: -2 }}>
             {REFRAIN}
           </div>
-          <div style={{ fontSize: 30, fontFamily: "Karla", fontWeight: 700, color: "#204239" }}>
+          <div style={{ fontSize: 30, fontFamily: "Karla", fontWeight: 700, color: "#6f7a3a" }}>
             Agende sua consulta online →
           </div>
         </div>

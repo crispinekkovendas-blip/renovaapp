@@ -127,7 +127,7 @@ export function WeekGrid({
                                   muted ? "opacity-50" : ""
                                 }`}
                                 style={{
-                                  borderLeftColor: a.professional_color ?? "#3f6b58",
+                                  borderLeftColor: a.professional_color ?? "#2c4a6e",
                                 }}
                                 title={[a.patient_name, a.professional_name, a.procedure].filter(Boolean).join(" · ")}
                               >

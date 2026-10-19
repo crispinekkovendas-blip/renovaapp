@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 /**
  * O cabeçalho de toda seção da página pública: sobretítulo pequeno em
- * versalete, título em Fraunces e, se houver, um parágrafo de apoio. `dark`
+ * versalete, título na fonte do site e, se houver, um parágrafo de apoio. `dark`
  * para as seções em fundo pinho.
  */
 export function SectionHeading({

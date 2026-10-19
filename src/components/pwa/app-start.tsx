@@ -43,7 +43,7 @@ export function AppStart() {
       <header className="section-ink px-4 pb-7 pt-[calc(1.5rem+env(safe-area-inset-top))] sm:px-6 sm:pb-8">
         <div className="mx-auto max-w-md">
           <p className="text-xs uppercase tracking-[0.2em] opacity-70">Meu portal</p>
-          <p className="mt-3 font-display text-3xl font-semibold italic">Renova</p>
+          <p className="mt-3 font-display tracking-tight text-3xl font-semibold">Renova</p>
         </div>
       </header>
 

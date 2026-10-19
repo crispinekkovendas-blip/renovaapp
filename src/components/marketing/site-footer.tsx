@@ -43,8 +43,8 @@ export function SiteFooter({
     >
       <div className={`mx-auto grid max-w-6xl px-4 sm:px-6 lg:grid-cols-[1.4fr_1fr] ${compact ? "gap-5 lg:items-end" : "gap-10"}`}>
         <div>
-          <p className={`font-display font-semibold italic ${compact ? "text-2xl" : "text-3xl"}`}>{clinicName}</p>
-          <p className="mt-2 font-display text-lg italic opacity-80 sm:text-xl">{REFRAIN}</p>
+          <p className={`font-display tracking-tight font-semibold ${compact ? "text-2xl" : "text-3xl"}`}>{clinicName}</p>
+          <p className="mt-2 font-display tracking-tight text-lg opacity-80 sm:text-xl">{REFRAIN}</p>
           {!compact && hasContact ? (
             <address className="mt-6 space-y-1 text-sm not-italic opacity-80">
               {tel && clinicPhone ? (
@@ -110,7 +110,7 @@ export function SiteFooter({
 
       <div className={`mx-auto max-w-6xl px-4 sm:px-6 ${compact ? "mt-6" : "mt-10"}`}>
         <p className="border-t border-current/15 pt-6 text-xs opacity-60">
-          Feito com <span className="font-display font-semibold italic">Renova</span>
+          Feito com <span className="font-display tracking-tight font-semibold">Renova</span>
         </p>
       </div>
     </footer>

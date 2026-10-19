@@ -270,12 +270,12 @@ export function PrescriptionEditor({
         </p>
 
         {open && (hits.length > 0 || query.trim().length >= 3) ? (
-          <div className="absolute z-30 mt-1 w-full overflow-hidden rounded-2xl border border-[#e2dcec] bg-white shadow-lg">
+          <div className="absolute z-30 mt-1 w-full overflow-hidden rounded-2xl border border-[var(--color-line)] bg-white shadow-lg">
             <ul className="max-h-[min(18rem,45dvh)] overflow-y-auto overscroll-contain">
               {hits.map((hit) => (
                 <li
                   key={`${hit.substance}-${hit.concentration ?? ""}-${hit.form ?? ""}`}
-                  className="border-b border-[#f4f0f8] last:border-b-0"
+                  className="border-b border-[var(--color-line)] last:border-b-0"
                 >
                   <button
                     type="button"
@@ -304,7 +304,7 @@ export function PrescriptionEditor({
             <button
               type="button"
               onClick={addFreeText}
-              className="min-h-11 w-full truncate border-t border-[#eee7f4] px-4 py-2.5 text-left text-[12.5px] font-bold text-pine-600 hover:bg-pine-50"
+              className="min-h-11 w-full truncate border-t border-[var(--color-line)] px-4 py-2.5 text-left text-[12.5px] font-bold text-pine-600 hover:bg-pine-50"
             >
               Usar assim: “{query.trim()}”
             </button>
@@ -324,7 +324,7 @@ export function PrescriptionEditor({
                 onClick={() => addItems([item])}
                 {...dragItems(() => [{ ...item }])}
                 title={`${item.name} — ${item.posology} (${count}×)`}
-                className="max-w-[16rem] shrink-0 rounded-xl border border-[#e2dcec] bg-white px-2.5 py-1 text-left transition-colors hover:border-pine-400 hover:bg-pine-50 pointer-coarse:min-h-11"
+                className="max-w-[16rem] shrink-0 rounded-xl border border-[var(--color-line)] bg-white px-2.5 py-1 text-left transition-colors hover:border-pine-400 hover:bg-pine-50 pointer-coarse:min-h-11"
               >
                 <span className="block truncate text-[12px] font-bold text-pine-950">{item.name}</span>
                 <span className="block truncate text-[11px] text-pine-900/55">{item.posology}</span>
@@ -352,7 +352,7 @@ export function PrescriptionEditor({
           key={current.index}
           ref={cardRef}
           className={`rounded-2xl border bg-white p-3 transition-[border-color,box-shadow] duration-500 sm:p-4 ${
-            lit ? "border-pine-500 shadow-[0_0_0_3px_rgba(108,61,181,0.18)]" : "border-[#e8e1f0]"
+            lit ? "border-pine-500 shadow-[0_0_0_3px_rgba(44,74,110,0.18)]" : "border-[var(--color-line)]"
           }`}
         >
           <div className="flex items-start justify-between gap-2">
@@ -453,11 +453,11 @@ export function PrescriptionEditor({
           </div>
         </div>
       ) : items.length === 0 ? (
-        <p className="rounded-2xl border border-dashed border-[#e2dcec] px-5 py-6 text-center text-sm text-pine-900/55">
+        <p className="rounded-2xl border border-dashed border-[var(--color-line)] px-5 py-6 text-center text-sm text-pine-900/55">
           Nenhum medicamento ainda. Busque acima para começar a receita.
         </p>
       ) : (
-        <p className="rounded-2xl border border-dashed border-[#e2dcec] px-5 py-4 text-center text-[13px] text-pine-900/55">
+        <p className="rounded-2xl border border-dashed border-[var(--color-line)] px-5 py-4 text-center text-[13px] text-pine-900/55">
           Busque o próximo medicamento acima — ou clique num medicamento da folha para editá-lo.
         </p>
       )}
@@ -476,7 +476,7 @@ export function PrescriptionEditor({
                   title={itemComplete(item) ? `Editar ${item.name}` : "Sem posologia: não sai na receita. Clique para completar."}
                   className={`max-w-full truncate rounded-xl border px-2.5 py-1 text-left text-[12px] font-bold transition-colors pointer-coarse:min-h-11 ${
                     itemComplete(item)
-                      ? "border-[#e2dcec] bg-white text-pine-950 hover:border-pine-400 hover:bg-pine-50"
+                      ? "border-[var(--color-line)] bg-white text-pine-950 hover:border-pine-400 hover:bg-pine-50"
                       : "border-amber-300 bg-amber-50 text-amber-900 hover:border-amber-400"
                   }`}
                 >
@@ -620,7 +620,7 @@ function ReadyPrescriptions({
       summary="Receitas prontas"
       summaryClassName="-my-2 flex min-h-11 cursor-pointer items-center justify-end text-[11px] font-bold text-pine-600 hover:underline sm:my-0 sm:min-h-0"
     >
-      <div className="mb-2 mt-1 max-h-[min(26rem,60dvh)] overflow-y-auto overscroll-contain rounded-2xl border border-[#e2dcec] bg-white p-2 shadow-lg sm:absolute sm:right-0 sm:z-40 sm:mb-0 sm:w-96">
+      <div className="mb-2 mt-1 max-h-[min(26rem,60dvh)] overflow-y-auto overscroll-contain rounded-2xl border border-[var(--color-line)] bg-white p-2 shadow-lg sm:absolute sm:right-0 sm:z-40 sm:mb-0 sm:w-96">
         <div className="sticky -top-2 z-10 -mx-2 -mt-2 mb-1 space-y-1.5 rounded-t-2xl bg-white/95 px-2 pt-2 pb-1.5 backdrop-blur">
           <div className="flex items-center justify-between pl-2">
             <p className="text-[11px] font-bold text-pine-900/60">Receitas prontas por condição</p>
@@ -904,7 +904,7 @@ function PosologyField({
               aria-labelledby={`rx-pos-rotulo-${index}`}
               aria-activedescendant={`${listId}-${active}`}
               onKeyDown={onListKey}
-              className="absolute inset-x-0 top-full z-30 mt-1.5 max-h-[min(22rem,55dvh)] animate-[menu-in_140ms_ease-out] overflow-y-auto overscroll-contain rounded-2xl border border-[#e2dcec] bg-white p-1.5 shadow-[0_18px_40px_-16px_rgba(61,14,107,0.35)] outline-none motion-reduce:animate-none"
+              className="absolute inset-x-0 top-full z-30 mt-1.5 max-h-[min(22rem,55dvh)] animate-[menu-in_140ms_ease-out] overflow-y-auto overscroll-contain rounded-2xl border border-[var(--color-line)] bg-white p-1.5 shadow-[0_18px_40px_-16px_rgba(18,26,38,0.35)] outline-none motion-reduce:animate-none"
             >
               {choices.map((choice, i) => {
                 const selected = choice === current;
@@ -948,7 +948,7 @@ function PosologyField({
                   </li>
                 );
               })}
-              <li role="presentation" className="mt-1 border-t border-[#f1ecf6] pt-1">
+              <li role="presentation" className="mt-1 border-t border-[var(--color-line)] pt-1">
                 <button
                   type="button"
                   onClick={() => {
@@ -1024,7 +1024,7 @@ function PhrasePicker({
       summary="Frases prontas"
       summaryClassName="-my-1 inline-flex min-h-11 cursor-pointer items-center text-[11.5px] font-bold text-pine-600 hover:underline sm:my-0 sm:min-h-0"
     >
-      <div className="mt-1 max-h-72 overflow-y-auto overscroll-contain rounded-2xl border border-[#e2dcec] bg-white p-2 shadow-lg sm:absolute sm:left-0 sm:z-20 sm:w-80">
+      <div className="mt-1 max-h-72 overflow-y-auto overscroll-contain rounded-2xl border border-[var(--color-line)] bg-white p-2 shadow-lg sm:absolute sm:left-0 sm:z-20 sm:w-80">
         <div className="sticky -top-2 z-10 -mx-2 -mt-2 mb-1 flex items-center justify-between rounded-t-2xl bg-white/95 py-0.5 pr-1 pl-4 backdrop-blur">
           <p className="text-[11px] font-bold text-pine-900/60">
             Frases prontas{form ? ` · ${FORM_INFO[form].label.toLowerCase()}` : ""}
@@ -1125,7 +1125,7 @@ function ReadyFormulas({ onPick }: { onPick: (formula: ReadyFormula) => void }) 
       summary="Fórmulas prontas"
       summaryClassName="inline-flex min-h-11 cursor-pointer items-center rounded-full px-2 text-[12px] font-bold text-pine-600 hover:underline sm:min-h-8"
     >
-      <div className="mt-1 max-h-80 overflow-y-auto overscroll-contain rounded-2xl border border-[#e2dcec] bg-white p-2 shadow-lg sm:absolute sm:left-0 sm:z-20 sm:w-96">
+      <div className="mt-1 max-h-80 overflow-y-auto overscroll-contain rounded-2xl border border-[var(--color-line)] bg-white p-2 shadow-lg sm:absolute sm:left-0 sm:z-20 sm:w-96">
         <div className="sticky -top-2 z-10 -mx-2 -mt-2 mb-1 flex items-center justify-between rounded-t-2xl bg-white/95 py-0.5 pr-1 pl-4 backdrop-blur">
           <p className="text-[11px] font-bold text-pine-900/60">Fórmulas prontas</p>
           <PopoverClose />

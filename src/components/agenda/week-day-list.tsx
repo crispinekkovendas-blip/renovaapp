@@ -113,7 +113,7 @@ export function WeekDayList({
                   </span>
                   <span
                     className="h-9 w-1 shrink-0 rounded-full"
-                    style={{ backgroundColor: a.professional_color ?? "#3f6b58" }}
+                    style={{ backgroundColor: a.professional_color ?? "#2c4a6e" }}
                     aria-hidden
                   />
                   <span className="min-w-0 flex-1">

@@ -100,7 +100,7 @@ export function PrescriptionCard({
       />
 
       {rx.length > 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#e2dcec] p-3">
+        <div className="rounded-2xl border border-dashed border-[var(--color-line)] p-3">
           <div className="flex flex-wrap items-end gap-2">
             <div className="min-w-0 basis-full sm:flex-1 sm:basis-auto">
               <label className="label" htmlFor="rx-protocolo">

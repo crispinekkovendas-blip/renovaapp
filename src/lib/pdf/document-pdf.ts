@@ -8,7 +8,7 @@ import { SIGNATURE_LENGTH } from "./sign.ts";
 import { REGULAR_TTF_BASE64 } from "./fonts/regular.ts";
 import { BOLD_TTF_BASE64 } from "./fonts/bold.ts";
 import { BILINGUAL, toSpanish } from "../formulas.ts";
-import { DEFAULT_SHEET_STYLE, RULE_HEIGHT, SCALE_FACTOR, hexToRgb01, tint, type SheetStyle } from "../sheet-style.ts";
+import { DEFAULT_SHEET_STYLE, LEGACY_SHEET_STYLE, RULE_HEIGHT, SCALE_FACTOR, hexToRgb01, tint, type SheetStyle } from "../sheet-style.ts";
 
 /**
  * A folha dos documentos em PDF.
@@ -60,9 +60,9 @@ interface Look {
 
 function lookFor(style: SheetStyle, logo: PDFImage | null): Look {
   const c = (hex: string) => rgb(...hexToRgb01(hex));
-  // O roxo da Renova tem os tons de sempre (lilás, lavanda, selo rosa); outra
-  // cor ganha tons derivados dela.
-  const renova = style.accent === DEFAULT_SHEET_STYLE.accent;
+  // O roxo de antes do redesign tem os tons de sempre (lilás, lavanda, selo
+  // rosa): documentos antigos saem idênticos. Outra cor ganha tons derivados dela.
+  const renova = style.accent === LEGACY_SHEET_STYLE.accent;
   return {
     style,
     accent: c(style.accent),

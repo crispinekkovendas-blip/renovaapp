@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { logoutAction } from "@/lib/actions";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { IconLogout } from "@/components/icons";
 import { CloseButton } from "@/components/close-button";
 import type { Role } from "@/lib/db";
@@ -32,7 +33,7 @@ export function MobileTopBar({ name }: { name: string }) {
   const initial = name.trim().charAt(0).toUpperCase() || "?";
 
   return (
-    <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-[#eee7f4] bg-white/90 px-4 pt-[env(safe-area-inset-top)] backdrop-blur-md md:hidden print:hidden">
+    <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-[var(--color-line)] bg-white/90 px-4 pt-[env(safe-area-inset-top)] backdrop-blur-md md:hidden print:hidden">
       <div className="flex h-14 min-w-0 flex-1 items-center gap-3">
         <Link
           href="/dashboard"
@@ -86,7 +87,7 @@ export function MobileTabBar({ name, role }: { name: string; role: Role }) {
     <>
       <nav
         aria-label="Navegação principal"
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-[#eee7f4] bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden print:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-[var(--color-line)] bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden print:hidden"
       >
         <ul className="mx-auto flex max-w-lg">
           {tabs.map((item) => {
@@ -139,10 +140,10 @@ export function MobileTabBar({ name, role }: { name: string; role: Role }) {
             role="dialog"
             aria-modal="true"
             aria-label="Mais opções"
-            className="sheet-panel absolute inset-x-0 bottom-0 max-h-[85dvh] overflow-y-auto rounded-t-[28px] bg-white px-4 pt-2 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-[0_-12px_40px_-12px_rgba(61,14,107,0.35)]"
+            className="sheet-panel absolute inset-x-0 bottom-0 max-h-[85dvh] overflow-y-auto rounded-t-[28px] bg-white px-4 pt-2 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-[0_-12px_40px_-12px_rgba(18,26,38,0.35)]"
           >
             <div className="relative mb-1">
-              <div className="mx-auto mb-2 h-1.5 w-10 rounded-full bg-[#e2dcec]" aria-hidden />
+              <div className="mx-auto mb-2 h-1.5 w-10 rounded-full bg-[var(--color-line)]" aria-hidden />
               <CloseButton onClick={() => setOpen(false)} className="absolute -top-1 right-0" />
             </div>
             <Link href="/conta" className="mb-3 flex items-center gap-3 rounded-2xl bg-pine-50 p-3">
@@ -200,7 +201,10 @@ export function MobileTabBar({ name, role }: { name: string; role: Role }) {
                   Precisando de ajuda?
                 </Link>
               </li>
-              <li className="mt-2 border-t border-[#eee7f4] pt-2">
+              <li>
+                <ThemeToggle className="nav-pill min-h-12 w-full justify-start" />
+              </li>
+              <li className="mt-2 border-t border-[var(--color-line)] pt-2">
                 <form action={logoutAction}>
                   <button type="submit" className="nav-pill min-h-12 w-full cursor-pointer text-pine-900/70">
                     <IconLogout />

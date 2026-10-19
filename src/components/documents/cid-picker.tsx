@@ -123,7 +123,7 @@ export function CidPicker({
       ) : null}
 
       {open && hits.length > 0 ? (
-        <div className="absolute z-30 mt-1 w-full overflow-hidden rounded-2xl border border-[#e2dcec] bg-white shadow-lg">
+        <div className="absolute z-30 mt-1 w-full overflow-hidden rounded-2xl border border-[var(--color-line)] bg-white shadow-lg">
           {/* No celular o teclado come metade da tela: a lista não passa de 45% da altura visível. */}
           <ul className="max-h-[min(16rem,45dvh)] overflow-y-auto overscroll-contain">
             {hits.map((hit) => (

@@ -67,7 +67,7 @@ export function ComposerStack({
         <div className="space-y-3 border-t border-pine-900/5 bg-pine-50/40 px-4 py-2 sm:px-5 sm:py-3">
           {protocol.message ? <Banner tone={protocol.message.tone}>{protocol.message.text}</Banner> : null}
           {protocol.open ? (
-            <div className="rounded-xl border border-[#e2dcec] bg-white p-3">
+            <div className="rounded-xl border border-[var(--color-line)] bg-white p-3">
               <p className="text-xs text-pine-900/60">
                 Um protocolo guarda os tipos, modelos e campos desta pilha para emitir tudo de novo com um clique — o
                 texto é refeito para cada paciente.

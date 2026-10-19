@@ -89,7 +89,7 @@ export function Modal({ children }: { children: ReactNode }) {
         tabIndex={-1}
         className="card sheet-panel sheet-center relative max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-b-none px-4 pt-3 pb-[calc(1.25rem+env(safe-area-inset-bottom))] outline-none sm:max-h-none sm:overflow-visible sm:rounded-b-[18px] sm:p-6"
       >
-        <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-[#e2dcec] sm:hidden" aria-hidden />
+        <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-[var(--color-line)] sm:hidden" aria-hidden />
         {children}
         {/* Depois do conteúdo no DOM: o foco abre no primeiro campo, e o "×" é o último do Tab. */}
         <CloseButton onClick={() => router.back()} className="absolute top-2 right-2 z-10 sm:top-3 sm:right-3" />

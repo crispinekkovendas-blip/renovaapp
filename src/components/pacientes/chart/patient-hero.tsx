@@ -139,7 +139,7 @@ function MoreMenu({ children }: { children: ReactNode }) {
       }
       summaryClassName="cursor-pointer rounded-full"
     >
-      <div className="absolute right-0 z-30 mt-2 w-64 overflow-hidden rounded-2xl border border-[#e2dcec] bg-white p-1.5 shadow-lg">
+      <div className="absolute right-0 z-30 mt-2 w-64 overflow-hidden rounded-2xl border border-[var(--color-line)] bg-white p-1.5 shadow-lg">
         <div className="flex justify-end">
           <PopoverClose />
         </div>

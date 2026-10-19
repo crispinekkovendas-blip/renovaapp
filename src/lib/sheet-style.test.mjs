@@ -66,3 +66,10 @@ test("logotipo: só PNG/JPEG e até 300 KB", () => {
   assert.equal(checkLogo("data:image/svg+xml;base64,PHN2Zz4=").ok, false);
   assert.equal(checkLogo(`data:image/jpeg;base64,${"A".repeat(500_000)}`).ok, false);
 });
+
+test("documento sem cópia do estilo é de antes do redesign: sai roxo, como saiu", async () => {
+  const { styleFromDocumentFields, LEGACY_SHEET_STYLE } = await import("./sheet-style.ts");
+  assert.deepEqual(styleFromDocumentFields('{"template_id":null,"fields":{}}'), LEGACY_SHEET_STYLE);
+  assert.deepEqual(styleFromDocumentFields(null), LEGACY_SHEET_STYLE);
+  assert.equal(styleFromDocumentFields('{"folha":{"accent":"#2c4a6e"}}').accent, "#2c4a6e");
+});

@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { REFRAIN } from "@/components/marketing/refrain";
 import { Feedback } from "@/components/feedback";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 /**
  * A moldura do portal do paciente: cabeçalho escuro com o nome da clínica e
@@ -44,7 +45,7 @@ export function HubShell({
               <p className="mt-2 text-base opacity-80">Aqui está tudo o que você precisa da sua consulta.</p>
             </>
           ) : (
-            <p className="mt-3 font-display text-3xl font-semibold italic">Renova</p>
+            <p className="mt-3 font-display tracking-tight text-3xl font-semibold">Renova</p>
           )}
         </div>
       </header>
@@ -53,13 +54,16 @@ export function HubShell({
 
       <footer className="section-ink mt-8 px-4 pb-[calc(2.5rem+env(safe-area-inset-bottom))] pt-10 text-center sm:px-6">
         <div className={column}>
-          <p className="font-display text-2xl font-semibold italic">{REFRAIN}</p>
+          <p className="font-display tracking-tight text-2xl font-semibold">{REFRAIN}</p>
           <p className="mt-6 text-xs opacity-70">
             <Link href="/privacidade" className="inline-flex min-h-11 items-center underline underline-offset-2 sm:min-h-0">
               Privacidade
             </Link>
             <span className="mx-2">·</span>
             Feito com Renova
+          </p>
+          <p className="mt-3">
+            <ThemeToggle className="text-current opacity-80 hover:bg-white/10" />
           </p>
         </div>
       </footer>

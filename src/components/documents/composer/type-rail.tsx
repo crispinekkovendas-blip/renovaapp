@@ -94,7 +94,7 @@ function RailColumn({ tabs, tab, onSelect, className }: RailProps) {
           if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false);
         }}
         className={`flex shrink-0 flex-col gap-1 overflow-hidden rounded-2xl transition-[width,background-color,box-shadow] duration-200 ease-out ${
-          open ? "w-72 bg-white shadow-[0_12px_40px_-8px_rgba(40,20,70,0.28)] ring-1 ring-[#e8e1f0]" : "w-20"
+          open ? "w-72 bg-white shadow-[0_12px_40px_-8px_rgba(18,26,38,0.28)] ring-1 ring-[var(--color-line)]" : "w-20"
         }`}
       >
         {tabs.map((item) => {

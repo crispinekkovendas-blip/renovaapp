@@ -33,7 +33,7 @@ import { parseItems as parsePrescriptionItems, serializeItems as serializePrescr
 import { receiptKindFor, receiptWarning } from "./medications";
 import type { Tarja, ReceiptKind } from "./medications";
 import type { DosageForm } from "./dosage-form";
-import { isDefaultStyle, normalizeSheetStyle } from "./sheet-style";
+import { DEFAULT_SHEET_STYLE, normalizeSheetStyle } from "./sheet-style";
 import { getClinicHeader, getDocument, getTemplate, getTemplatesByIds } from "./documents-db";
 import { deleteDraft } from "./drafts-db";
 import type { ClinicHeader } from "./documents-db";
@@ -325,15 +325,15 @@ export async function emitDocumentsAction(formData: FormData): Promise<void> {
     social_name: patientRow.social_name ?? null,
   };
 
-  // Modelo da folha escolhido na revisão: vai copiado em cada documento.
-  let folha: ReturnType<typeof normalizeSheetStyle> | null = null;
+  // Modelo da folha escolhido na revisão: vai copiado em cada documento, sempre
+  // (mesmo o padrão) — se o padrão mudar, o documento continua como saiu.
+  let folha = DEFAULT_SHEET_STYLE;
   try {
     const raw = str(formData, "sheet_style");
     if (raw) folha = normalizeSheetStyle(JSON.parse(raw));
   } catch {
-    folha = null;
+    folha = DEFAULT_SHEET_STYLE;
   }
-  if (folha && isDefaultStyle(folha)) folha = null;
   // Receita bilíngue (comprar fora do país): só no receituário.
   const bilingual = str(formData, "bilingual") === "1";
 
