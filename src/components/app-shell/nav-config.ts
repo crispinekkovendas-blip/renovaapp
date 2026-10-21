@@ -80,6 +80,7 @@ export const NAV_ITEMS: NavItem[] = [
       { href: "/guia", label: "Receitas prontas" },
       { href: "/guia/plantao", label: "Plantão e emergência" },
       { href: "/guia/drive", label: "Drive de prescrições" },
+      { href: "/guia/ortopedia", label: "Ortopedia" },
       { href: "/guia/app", label: "App Android" },
     ],
   },

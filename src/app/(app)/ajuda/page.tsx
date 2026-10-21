@@ -48,6 +48,12 @@ const STEPS: readonly Step[] = [
 
 const NEWS: readonly { date: string; items: readonly string[] }[] = [
   {
+    date: "21 de outubro de 2026",
+    items: [
+      "Guia clínico › Ortopedia: um guia de ortopedia ambulatorial para o clínico que assume a vaga de ortopedia — 36 condições em 8 capítulos (coluna, ombro, cotovelo-punho-mão, quadril, joelho, tornozelo-pé, articulação aguda), cada uma na ordem da consulta: o que perguntar, as manobras do exame e o que significa cada uma, os sinais de alarme, como escrever o pedido de raio-X, a conduta, a receita, a imobilização, quando encaminhar e quantos dias de atestado. Cinco páginas de base para o primeiro dia: o que não espera (vai ao pronto-socorro), como pedir o raio-X, analgesia em escada, imobilizações e atestado. Busca própria por como o paciente fala (“torceu o pé”), manobra (“Lachman”), remédio ou CID. Texto da Renova, revisão 1, ainda sem revisão por ortopedista — está escrito na página.",
+    ],
+  },
+  {
     date: "19 de outubro de 2026",
     items: [
       "Fórmulas manipuladas no receituário: “+ Fórmula manipulada” monta a composição (componentes com dose, base q.s.p., quanto manipular) e escolhe receituário simples ou de controle especial; “Fórmulas prontas” traz um ponto de partida (vitamina D, B12, melatonina, minoxidil, finasterida, ureia…) que ainda precisa de revisão médica. Salve as suas como receita pronta. O alerta de alergia confere cada componente.",
