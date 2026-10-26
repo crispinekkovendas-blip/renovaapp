@@ -51,6 +51,15 @@ export default async function OrtopediaTopicPage({ params }: { params: Promise<{
           ))}
         </nav>
 
+        {topic.cid !== "—" ? (
+          <Link
+            href={`/guia/ortopedia/consulta?t=${topic.slug}`}
+            className="mt-3 inline-flex items-center gap-2 rounded-full bg-pine-950 px-4 py-2 text-[13.5px] font-bold text-white hover:bg-pine-900 pointer-coarse:min-h-11"
+          >
+            🩺 Atender com este roteiro →
+          </Link>
+        ) : null}
+
         <div className="card mt-4 p-4 sm:p-6">
           <OrthoTopicBody topic={topic} />
         </div>

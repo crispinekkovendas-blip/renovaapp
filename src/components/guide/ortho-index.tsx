@@ -103,6 +103,19 @@ export function OrthoIndex({ docs }: { docs: readonly OrthoDoc[] }) {
         </div>
       ) : (
         <>
+          <Link
+            href="/guia/ortopedia/consulta"
+            className="mb-4 flex items-center gap-3 rounded-2xl bg-pine-950 px-4 py-3.5 text-white transition-colors hover:bg-pine-900 sm:px-5"
+          >
+            <span aria-hidden className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/15 text-xl">🩺</span>
+            <span className="min-w-0">
+              <span className="block text-[16px] leading-tight font-extrabold">Atender agora — consulta guiada</span>
+              <span className="block text-[12.5px] text-white/70">
+                Onde dói › alarme › condição › perguntas e manobras › conduta e receita › nota pronta para o prontuário
+              </span>
+            </span>
+            <span aria-hidden className="ml-auto text-lg font-extrabold">→</span>
+          </Link>
           <FirstDay bySlug={bySlug} />
           <FilterChips
             label="Capítulos"

@@ -48,6 +48,12 @@ const STEPS: readonly Step[] = [
 
 const NEWS: readonly { date: string; items: readonly string[] }[] = [
   {
+    date: "25 de outubro de 2026",
+    items: [
+      "Ortopedia › Atender agora (consulta guiada): para quem nunca atendeu ortopedia, a consulta em cinco passos — onde dói (nove regiões), o alarme da região em 30 segundos (com trauma ou sem), a condição que combina (resumo e como o paciente fala), o roteiro com as perguntas e as manobras para marcar positivo ou negativo, a conduta e a receita para escolher, e no fim a nota SOAP pronta para copiar e colar no atendimento. Sinal de alarme marcado acende o aviso de encaminhar no mesmo dia. Cada tópico do guia tem o botão “Atender com este roteiro”. O que foi marcado fica na aba até “Nova consulta”.",
+    ],
+  },
+  {
     date: "21 de outubro de 2026",
     items: [
       "Guia clínico › Ortopedia: um guia de ortopedia ambulatorial para o clínico que assume a vaga de ortopedia — 36 condições em 8 capítulos (coluna, ombro, cotovelo-punho-mão, quadril, joelho, tornozelo-pé, articulação aguda), cada uma na ordem da consulta: o que perguntar, as manobras do exame e o que significa cada uma, os sinais de alarme, como escrever o pedido de raio-X, a conduta, a receita, a imobilização, quando encaminhar e quantos dias de atestado. Cinco páginas de base para o primeiro dia: o que não espera (vai ao pronto-socorro), como pedir o raio-X, analgesia em escada, imobilizações e atestado. Busca própria por como o paciente fala (“torceu o pé”), manobra (“Lachman”), remédio ou CID. Texto da Renova, revisão 1, ainda sem revisão por ortopedista — está escrito na página.",
