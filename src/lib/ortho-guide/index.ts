@@ -12,8 +12,9 @@ export { ORTHO_GUIDE };
  */
 export const ORTHO_CREDIT = {
   title: "Guia de ortopedia ambulatorial",
-  revision: 1,
+  revision: 2,
   writtenAt: "21 de outubro de 2026",
+  revisedAt: "27 de outubro de 2026",
   reviewedBy: null as string | null,
 } as const;
 

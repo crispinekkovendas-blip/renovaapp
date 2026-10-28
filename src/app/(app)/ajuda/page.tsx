@@ -48,6 +48,12 @@ const STEPS: readonly Step[] = [
 
 const NEWS: readonly { date: string; items: readonly string[] }[] = [
   {
+    date: "27 de outubro de 2026",
+    items: [
+      "Ortopedia › 2ª revisão: o guia inteiro foi relido e 8 trechos mudaram — a receita do tramadol (sai em receita de controle especial em duas vias, não na notificação A), o cuidado do anti-inflamatório na gestação (evitar a partir de 20 semanas), o corticoide na ciática e no ombro congelado (agora com os esquemas dos ensaios citados), o ibuprofeno da criança em gotas por kg e o CID da fratura vertebral. Cada mudança está em Ortopedia › Revisões com o texto de antes, o de agora e o motivo, para marcar Concordo ou Discordo; o tópico avisa quando foi tocado. O resto do guia foi conferido e ficou como estava.",
+    ],
+  },
+  {
     date: "25 de outubro de 2026",
     items: [
       "Ortopedia › Atender agora (consulta guiada): para quem nunca atendeu ortopedia, a consulta em cinco passos — onde dói (nove regiões), o alarme da região em 30 segundos (com trauma ou sem), a condição que combina (resumo e como o paciente fala), o roteiro com as perguntas e as manobras para marcar positivo ou negativo, a conduta e a receita para escolher, e no fim a nota SOAP pronta para copiar e colar no atendimento. Sinal de alarme marcado acende o aviso de encaminhar no mesmo dia. Cada tópico do guia tem o botão “Atender com este roteiro”. O que foi marcado fica na aba até “Nova consulta”.",

@@ -6,12 +6,13 @@ import type { OrthoChapter } from "./types.ts";
  * livro): doses de adulto sem comorbidade, conduta de primeira consulta e o
  * limite claro de quando mandar para o ortopedista ou para o pronto-socorro.
  *
- * Revisão 1 (21 de outubro de 2026). Ainda sem revisão por ortopedista —
+ * Publicado em 21 de outubro de 2026; mudanças de conteúdo ficam em
+ * revisions.ts (antes, agora, motivo). Ainda sem revisão por ortopedista —
  * confira com o protocolo do serviço.
  */
 
 const AINE_CUIDADO =
-  "AINE por até 5–7 dias, com alimento. Evitar ou reduzir em: > 65 anos, doença renal, úlcera ou sangramento digestivo, insuficiência cardíaca, anticoagulante, AAS, corticoide, gestação (3º trimestre: contraindicado). Se for usar nesses casos, associar omeprazol 20 mg/dia.";
+  "AINE por até 5–7 dias, com alimento. Evitar ou reduzir em: > 65 anos, doença renal, úlcera ou sangramento digestivo, insuficiência cardíaca, anticoagulante, AAS, corticoide, gestação (evitar a partir de 20 semanas; contraindicado no 3º trimestre — oligoâmnio e fechamento do canal arterial). Se for usar nesses casos, associar omeprazol 20 mg/dia.";
 
 const AINE_RX = [
   { name: "Naproxeno 500 mg", posology: "1 comprimido de 12/12 h, por 5 a 7 dias, após as refeições.", note: AINE_CUIDADO },
@@ -34,7 +35,7 @@ const CICLO = {
 const TRAMADOL = {
   name: "Tramadol 50 mg",
   posology: "1 comprimido de 8/8 h, por 3 a 5 dias, só se a dor não ceder com o resto.",
-  note: "Tarja preta — receita A. Náusea e tontura são comuns; cuidado em idoso, epilepsia e com antidepressivo (serotonina).",
+  note: "Lista A2 da Portaria 344 (tarja preta): até 100 mg por unidade sai em receita de controle especial em duas vias, não na notificação A. Náusea e tontura são comuns; cuidado em idoso, epilepsia e com antidepressivo (serotonina).",
 } as const;
 
 const INSS = "Mais de 15 dias de afastamento de empregado com carteira: o INSS assume a partir do 16º — oriente a agendar a perícia pelo Meu INSS.";
@@ -344,7 +345,7 @@ export const ORTHO_GUIDE: readonly OrthoChapter[] = [
         plan: [
           "Atividade conforme tolerado; evitar ficar muito tempo sentado e carregar peso; não repouso absoluto.",
           "Fisioterapia a partir da 2ª semana (McKenzie, mobilização neural).",
-          "Curso curto de corticoide (prednisona 20 mg/dia por 5 dias) pode reduzir a dor radicular intensa nas primeiras semanas — benefício modesto; não repetir.",
+          "Curso curto de corticoide pode melhorar a função na dor radicular intensa nas primeiras semanas — benefício modesto e sem efeito claro na dor. O único ensaio bom (Goldberg, JAMA 2015) usou prednisona 60 mg por 5 dias, 40 mg por 5 e 20 mg por 5; não repetir.",
           "Gabapentina ou pregabalina têm evidência fraca na ciática; se usar, dose baixa e reavaliar em 4 semanas.",
           "Explique a história natural: a hérnia reabsorve; a cirurgia (microdiscectomia) é para déficit, cauda equina ou dor que não cede em 6–12 semanas — e tem resultado igual ao conservador a longo prazo.",
         ],
@@ -352,7 +353,7 @@ export const ORTHO_GUIDE: readonly OrthoChapter[] = [
           ...ANALGESIA_BASE,
           ...AINE_RX,
           OMEPRAZOL,
-          { name: "Prednisona 20 mg", posology: "1 comprimido pela manhã, após o café, por 5 dias.", note: "Só na dor radicular intensa; evitar em diabético descompensado, úlcera, infecção." },
+          { name: "Prednisona 20 mg", posology: "3 comprimidos (60 mg) pela manhã, após o café, por 5 dias; depois 2 comprimidos (40 mg) por 5 dias e 1 comprimido (20 mg) por 5 dias, e parar.", note: "Só na dor radicular intensa; evitar em diabético descompensado, úlcera, infecção." },
           TRAMADOL,
         ],
         refer: ["Cirurgia de coluna (ortopedia ou neurocirurgia): déficit motor, cauda equina, ou dor radicular que não cede em 6–12 semanas com ressonância compatível."],
@@ -406,7 +407,7 @@ export const ORTHO_GUIDE: readonly OrthoChapter[] = [
         slug: "fratura-vertebral-osteoporotica",
         title: "Fratura vertebral por fragilidade",
         aliases: ["fratura de vértebra", "fratura na coluna do idoso", "osteoporose", "achatamento de vértebra", "fratura por compressão"],
-        cid: "M80.0 / S32.0",
+        cid: "M80.0 / S22.0 / S32.0",
         summary: "Dor dorsal ou lombar súbita no idoso, às vezes sem trauma: raio-X mostra o achatamento; tratar a dor e, principalmente, a osteoporose que vem atrás.",
         ask: [
           "Como começou (ao levantar peso, tossir, sentar com força, queda da própria altura)?",
@@ -521,7 +522,7 @@ export const ORTHO_GUIDE: readonly OrthoChapter[] = [
         imaging: ["RX de ombro AP, perfil e axilar: obrigatório, para excluir artrose e luxação posterior (clínica idêntica). Ressonância não é necessária."],
         plan: [
           "Explique a história natural: melhora sozinha, mas leva meses; tratamento encurta a dor, não a doença.",
-          "Fase dolorosa: infiltração intra-articular de corticoide (triancinolona 40 mg) tem o melhor efeito nas primeiras semanas; alternativa, prednisona 20 mg/dia por 2 semanas com redução gradual em mais 1 (cuidado em diabético).",
+          "Fase dolorosa: infiltração intra-articular de corticoide (triancinolona 40 mg) tem o melhor efeito nas primeiras semanas; alternativa, prednisona 30 mg/dia por 3 semanas e parar (Buchbinder, 2004: menos dor e mais movimento às 3 semanas, sem diferença às 12; cuidado em diabético).",
           "Fisioterapia com mobilização dentro da dor tolerável e exercícios em casa (pêndulo, bastão, dedos na parede) 2–3× ao dia; alongar forte em fase dolorosa piora.",
           "Controle glicêmico no diabético.",
           "Hidrodilatação (artrografia distensiva) guiada por imagem e, em casos refratários após 6–12 meses, manipulação sob anestesia ou liberação artroscópica.",
@@ -530,7 +531,7 @@ export const ORTHO_GUIDE: readonly OrthoChapter[] = [
           ...ANALGESIA_BASE,
           ...AINE_RX,
           OMEPRAZOL,
-          { name: "Prednisona 20 mg", posology: "1 comprimido pela manhã por 14 dias, depois 10 mg por 7 dias e parar.", note: "Só na fase dolorosa e quando não há infiltração disponível; em diabético, monitorar glicemia." },
+          { name: "Prednisona 20 mg", posology: "1 ½ comprimido (30 mg) pela manhã por 21 dias e parar.", note: "Só na fase dolorosa e quando não há infiltração disponível; em diabético, monitorar glicemia." },
         ],
         refer: ["Ortopedista para infiltração ou hidrodilatação na fase dolorosa; refratário após 6 meses de tratamento para manipulação/artroscopia."],
         leave: "0–7 dias na fase aguda; restrição de trabalho acima da cabeça.",
@@ -950,7 +951,7 @@ export const ORTHO_GUIDE: readonly OrthoChapter[] = [
           "Epifisiólise: fixação cirúrgica com parafuso in situ, com urgência.",
           "Artrite séptica: drenagem cirúrgica e antibiótico EV no hospital.",
         ],
-        rx: [{ name: "Ibuprofeno suspensão 50 mg/mL", posology: "10 mg/kg por dose (0,2 mL/kg), de 8/8 h, por 3 a 5 dias, com alimento.", note: "Só na sinovite transitória; nunca antes de excluir infecção." }],
+        rx: [{ name: "Ibuprofeno gotas 100 mg/mL", posology: "10 mg/kg por dose = 2 gotas/kg (20 gotas por mL); na apresentação de 50 mg/mL, 4 gotas/kg. De 8/8 h, por 3 a 5 dias, com alimento; máximo 400 mg por dose.", note: "Só na sinovite transitória; nunca antes de excluir infecção." }],
         refer: ["Séptica e epifisiólise: hoje. Perthes, claudicação > 2 semanas, exames alterados: ortopedia pediátrica em dias."],
         leave: "Escola: 3–5 dias na sinovite; dispensa de educação física por 2 semanas.",
         followup: "48 h e 7 dias na sinovite — se piorou ou febre, volta ao alarme.",

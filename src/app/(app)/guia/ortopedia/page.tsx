@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { requireRole } from "@/lib/auth";
 import { ORTHO_CREDIT, orthoDocs, orthoStats } from "@/lib/ortho-guide";
 import { GuideHeader } from "@/components/guide/guide-header";
@@ -15,9 +16,9 @@ export default async function OrtopediaPage() {
       <GuideHeader
         title="Ortopedia"
         action={
-          <span className="chip bg-amber-100 text-amber-900">
-            Revisão {ORTHO_CREDIT.revision} · {ORTHO_CREDIT.writtenAt}
-          </span>
+          <Link href="/guia/ortopedia/revisoes" className="chip bg-amber-100 text-amber-900 hover:bg-amber-200">
+            Revisão {ORTHO_CREDIT.revision} · {ORTHO_CREDIT.revisedAt} · ver mudanças →
+          </Link>
         }
       >
         Ambulatório de ortopedia para o clínico geral: {stats.topics} condições em {stats.chapters} capítulos, cada uma na ordem da

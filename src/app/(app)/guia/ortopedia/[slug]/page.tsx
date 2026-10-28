@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/auth";
 import { findOrthoTopic } from "@/lib/ortho-guide";
+import { CURRENT_ORTHO_REVISION, orthoRevisionLabel, orthoTopicRevised } from "@/lib/ortho-guide/revisions";
 import { ORTHO_SECTIONS, OrthoTopicBody } from "@/components/guide/ortho-topic";
 import { OrthoCredit } from "@/components/guide/ortho-credit";
 
@@ -16,6 +17,7 @@ export default async function OrtopediaTopicPage({ params }: { params: Promise<{
   const found = findOrthoTopic((await params).slug);
   if (!found) notFound();
   const { chapter, topic, prev, next } = found;
+  const revised = orthoTopicRevised(topic.slug);
   const present = new Set<string>([
     "perguntar",
     ...(topic.exam.length ? ["examinar"] : []),
@@ -42,6 +44,19 @@ export default async function OrtopediaTopicPage({ params }: { params: Promise<{
           {topic.cid !== "—" ? <span className="chip bg-pine-50 text-pine-800 tabular-nums">CID {topic.cid}</span> : null}
           <span>Também: {topic.aliases.join(" · ")}</span>
         </p>
+
+        {revised > 0 ? (
+          <p className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[12.5px] text-amber-950">
+            <b>
+              {revised} {revised === 1 ? "mudança" : "mudanças"} na {orthoRevisionLabel(CURRENT_ORTHO_REVISION)}
+            </b>{" "}
+            neste tópico ou numa receita de base que ele usa —{" "}
+            <Link href="/guia/ortopedia/revisoes" className="font-bold underline">
+              ver antes, agora e motivo
+            </Link>
+            .
+          </p>
+        ) : null}
 
         <nav aria-label="Seções" className="scroll-x mt-3 -mx-1 flex gap-1.5 px-1 pb-0.5 lg:hidden">
           {ORTHO_SECTIONS.filter(([id]) => present.has(id)).map(([id, label]) => (
