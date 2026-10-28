@@ -15,7 +15,7 @@ const IBUPROFENO_CRIANCA = {
 
 const DIPIRONA_CRIANCA = {
   name: "Dipirona gotas 500 mg/mL",
-  posology: "10–15 mg/kg por dose = 1 gota a cada 2 kg, até 1 gota/kg (25 gotas por mL), de 6/6 h se dor.",
+  posology: "10–20 mg/kg por dose = de 1 gota a cada 2 kg até 1 gota/kg (25 gotas por mL; 1 gota/kg é o teto da bula), de 6/6 h se dor.",
   note: "A partir de 3 meses; em dose certa é segura.",
 } as const;
 
@@ -57,7 +57,7 @@ export const CRIANCA: readonly OrthoChapter[] = [
           "Tórus (torus/buckle) do rádio distal: tala removível (órtese de punho ou tala gessada) por 3 semanas, sem raio-X de controle, alta com analgesia por kg e orientação; retorno em 3 semanas só para tirar — é a fratura mais comum e a mais simples.",
           "Galho verde de antebraço angulado além do aceitável (ver conduta): redução sob sedação (pediatra/anestesista) ou bloqueio de hematoma no maior, completando a fratura do córtex quando a angulação é grande (senão volta); gesso axilopalmar (acima do cotovelo) 4–6 semanas; raio-X em 7–10 dias.",
           "Rádio distal completo ou fise Salter-Harris I–II desviada: redução suave, uma tentativa boa (cada tentativa a mais lesa a fise), gesso antebraquiopalmar bem moldado (axilopalmar se instável), raio-X de controle em 7–10 dias; fise com mais de 5–7 dias de evolução: não reduza (lesa a fise) — aceite ou cirurgia.",
-          "Clavícula (galho verde ou completa no terço médio): tipoia 2–3 semanas, sem raio-X de controle, calo é normal. Fêmur: < 6 meses Pavlik ou tração; 6 meses–5 anos: gesso pelvipodálico (spica) precoce; > 5 anos: hastes flexíveis ou placa — ortopedia pediátrica em dias; tíbia do deambulador (espiral oblíqua sutil em 1–3 anos que mancou após torção): gesso ou bota por 3–4 semanas.",
+          "Clavícula (galho verde ou completa no terço médio): tipoia 2–3 semanas, sem raio-X de controle, calo é normal. Fêmur: < 6 meses Pavlik (ou spica); 6 meses–5 anos: gesso pelvipodálico (spica) precoce; > 5 anos: hastes flexíveis ou placa — ortopedia pediátrica em dias; tíbia do deambulador (espiral oblíqua sutil em 1–3 anos que mancou após torção): gesso ou bota por 3–4 semanas.",
           "Toda redução: analgesia por kg antes do raio-X; sedação é com pediatra ou anestesista; os pais ficam junto quando dá.",
         ],
         procedures: [

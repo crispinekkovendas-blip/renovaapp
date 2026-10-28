@@ -49,9 +49,9 @@ export const URGENCIAS: readonly OrthoChapter[] = [
             needs: "Vacina dT (ou dTpa) e imunoglobulina antitetânica humana (IGHAT 250 UI IM) ou, na falta, soro antitetânico 5.000 UI após teste.",
             steps: [
               "3 doses ou mais, última há < 5 anos: nada.",
-              "3 doses ou mais, última há 5–10 anos: reforço dT.",
-              "3 doses ou mais, última há > 10 anos: reforço dT.",
+              "3 doses ou mais, última há 5 anos ou mais: reforço dT.",
               "Menos de 3 doses, desconhecido ou nenhuma: dT agora (e completar o esquema) + IGHAT 250 UI IM em outro local.",
+              "IGHAT também, com qualquer história vacinal, no imunodeprimido, desnutrido grave, idoso ou quando a ferida não vai ter o cuidado adequado (Ministério da Saúde).",
             ],
             after: "Anote lote e data; complete o esquema na unidade básica.",
           },

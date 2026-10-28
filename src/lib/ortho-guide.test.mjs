@@ -86,4 +86,8 @@ test("a busca acha pelo nome popular, pela manobra e pelo remédio", () => {
   assert.equal(top("mão dormente à noite"), "sindrome-do-tunel-do-carpo");
   assert.equal(top("podagra"), "crise-de-gota");
   assert.ok(search(index, "colchicina").hits.some((h) => h.id === "crise-de-gota"));
+  // Os procedimentos entram na busca com o peso das manobras.
+  assert.equal(top("cunningham"), "luxacao-e-instabilidade-do-ombro");
+  assert.equal(top("manobra de jahss"), "fraturas-de-metacarpo-e-falanges");
+  assert.equal(top("cinta pelvica"), "fraturas-de-pelve-e-sacro-no-idoso");
 });

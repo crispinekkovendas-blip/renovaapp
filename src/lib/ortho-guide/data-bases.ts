@@ -102,7 +102,7 @@ export const BASES_DO_PLANTAO: readonly OrthoTopic[] = [
       "Redução de rádio distal, metacarpo e falange: bloqueio de hematoma ou digital, 10–15 minutos de espera, e reduza. Não precisa de sedação na maioria dos adultos.",
       "Luxação de ombro: lidocaína intra-articular 20 mL a 1% (tão eficaz quanto sedação, com alta mais rápida) ou sedação. Cotovelo, quadril, joelho e tornozelo: sedação (ou anestesista); uma tentativa boa vale mais que três ruins.",
       "Fratura de quadril ou de fêmur aguardando cirurgia: bloqueio da fáscia ilíaca ou do nervo femoral — é o padrão de analgesia (NICE), reduz opioide e delirium. Faça ao internar, com monitorização.",
-      "Criança: sedação é com pediatra ou anestesista, exceto pronação dolorosa (sem anestesia). Analgesia antes de qualquer manipulação: dipirona ou cetorolaco EV e, na fratura, morfina 0,05–0,1 mg/kg EV ou intranasal de fentanil 1,5 mcg/kg conforme o protocolo.",
+      "Criança: sedação é com pediatra ou anestesista, exceto pronação dolorosa (sem anestesia). Analgesia antes de qualquer manipulação: dipirona EV por kg (cetorolaco só a partir de 16 anos) e, na fratura, morfina 0,05–0,1 mg/kg EV ou fentanil intranasal 1,5 mcg/kg conforme o protocolo.",
     ],
     procedures: [
       {

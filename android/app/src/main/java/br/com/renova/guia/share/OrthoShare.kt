@@ -24,6 +24,10 @@ fun orthoShareText(topic: OrthoTopic): String = buildString {
         topic.rx.forEachIndexed { i, r -> append(i + 1).append(". ").append(r.name).append(" — ").append(r.posology).append("\n") }
     }
     topic.immobilize?.takeIf { it.isNotEmpty() }?.let { append("\n*Imobilizar*\n").append(it.joinToString("\n")).append("\n") }
+    if (topic.clinic.isNotEmpty()) {
+        append("\n*No retorno*\n")
+        for (c in topic.clinic) append("• ").append(c).append("\n")
+    }
     if (topic.refer.isNotEmpty()) {
         append("\n*Cirurgia e regulação*\n")
         for (r in topic.refer) append("• ").append(r).append("\n")

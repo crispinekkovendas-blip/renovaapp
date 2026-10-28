@@ -67,7 +67,7 @@ export function orthoDocs(): OrthoDoc[] {
     cid: topic.cid,
     aliases: topic.aliases,
     summary: topic.summary,
-    exams: topic.exam.map((e) => e.name),
+    exams: [...topic.exam.map((e) => e.name), ...(topic.procedures ?? []).map((p) => p.name)],
     drugs: [...new Set(topic.rx.map((r) => r.name.split(/\s\d/)[0]))],
   }));
 }
