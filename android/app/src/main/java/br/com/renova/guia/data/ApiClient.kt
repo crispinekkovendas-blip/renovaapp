@@ -40,7 +40,7 @@ private data class LoginUser(val name: String, val role: String)
 data class AskTurn(val role: String, val content: String)
 
 @Serializable
-private data class AskBody(val question: String, val history: List<AskTurn>, val fresh: Boolean)
+private data class AskBody(val question: String, val history: List<AskTurn>, val fresh: Boolean, val context: String? = null)
 
 @Serializable
 data class AskSource(
@@ -157,8 +157,8 @@ class ApiClient(
     }
 
     /** A pergunta à Super Inteligência; os eventos chegam enquanto a resposta é escrita. */
-    fun ask(token: String, question: String, history: List<AskTurn>, fresh: Boolean = false): Flow<AskEvent> = callbackFlow {
-        val body = GuideJson.encodeToString(AskBody(question, history, fresh)).toRequestBody(JSON_TYPE)
+    fun ask(token: String, question: String, history: List<AskTurn>, fresh: Boolean = false, context: String? = null): Flow<AskEvent> = callbackFlow {
+        val body = GuideJson.encodeToString(AskBody(question, history, fresh, context)).toRequestBody(JSON_TYPE)
         val request = Request.Builder()
             .url(url("/api/guia/perguntar"))
             .header("Authorization", "Bearer $token")

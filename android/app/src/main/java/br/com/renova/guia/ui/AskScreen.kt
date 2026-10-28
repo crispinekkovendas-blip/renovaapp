@@ -169,7 +169,7 @@ fun AskScreen(content: GuideContent, vm: AskViewModel, offline: Boolean, onOpenR
 }
 
 @Composable
-private fun ExchangeView(content: GuideContent, exchange: Exchange, onOpenRoute: (String) -> Unit, onRetry: () -> Unit) {
+fun ExchangeView(content: GuideContent, exchange: Exchange, onOpenRoute: (String) -> Unit, onRetry: () -> Unit) {
     Column(Modifier.fillMaxWidth()) {
         Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
             Text(
@@ -241,6 +241,7 @@ private fun ExchangeView(content: GuideContent, exchange: Exchange, onOpenRoute:
 private fun sourceOfCitation(id: String) = when {
     id.startsWith("drive-") -> "drive"
     id.startsWith("receita-") -> "receitas"
+    id.startsWith("orto-") -> "ortopedia"
     else -> "plantao"
 }
 

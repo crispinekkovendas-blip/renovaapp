@@ -56,12 +56,31 @@ test("pacote do app: as três abas, ids únicos e iguais aos da busca e das cita
   const recipeSlugs = new Set(bundle.receitas.items.map((r) => r.slug));
   const topicSlugs = new Set(topics.map((t) => t.slug));
   const driveSlugs = new Set(entries.map((e) => e.slug));
+  const orthoTopics = bundle.ortopedia.chapters.flatMap((c) => c.topics);
+  const orthoSlugs = new Set(orthoTopics.map((t) => t.slug));
   for (const chunk of guideChunks()) {
     const slug = chunk.id.split("#")[0];
     if (slug.startsWith("receita-")) assert.ok(recipeSlugs.has(slug.slice("receita-".length)), chunk.id);
     else if (slug.startsWith("drive-")) assert.ok(driveSlugs.has(slug.slice("drive-".length)), chunk.id);
+    else if (slug.startsWith("orto-")) assert.ok(orthoSlugs.has(slug.slice("orto-".length)), chunk.id);
     else assert.ok(topicSlugs.has(slug), chunk.id);
   }
+
+  // O Guia de ortopedia vai inteiro, com a busca própria e a consulta guiada apontando para tópicos reais.
+  const orto = bundle.ortopedia;
+  assert.equal(orthoTopics.length, 36);
+  assert.equal(orto.revision.current, 2);
+  assert.deepEqual(new Set(orto.search.docs.map((d) => d.id)), new Set(orthoTopics.map((t) => t.id)));
+  assert.deepEqual(new Set(orto.search.items.map((d) => d.id)), new Set(orthoTopics.map((t) => t.id)));
+  for (const t of orthoTopics) assert.equal(t.id, `ortopedia:${t.slug}`);
+  for (const r of orto.regions) for (const s of r.topics) assert.ok(orthoSlugs.has(s), `${r.key}: ${s}`);
+  for (const s of orto.firstDay) assert.ok(orthoSlugs.has(s.slug), s.slug);
+  for (const s of orto.traumaTopics) assert.ok(orthoSlugs.has(s), s);
+  for (const c of orto.changes) {
+    assert.ok(orthoSlugs.has(c.slug), c.slug);
+    assert.ok(c.concise[0].parts.some((p) => p.k !== "eq"), `${c.slug}: diff vazio`);
+  }
+  assert.ok(orthoTopics.find((t) => t.slug === "lombalgia-aguda").revised >= 2, "lombalgia herda as mudanças das receitas de base");
 
   // Os grupos do aviso de revisão apontam para itens que existem.
   const all = new Set(ids);

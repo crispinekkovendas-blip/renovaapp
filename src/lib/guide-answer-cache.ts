@@ -57,12 +57,12 @@ let version: string | null = null;
  * nomes e sintomas (clinical-terms.ts), que muda o que a busca acha: uma
  * resposta guardada como "o guia não traz" pode passar a ter resposta.
  */
-const PROMPT_REVISION = 2;
+const PROMPT_REVISION = 3;
 
 export function guideVersion(): string {
   if (!version) {
     const chunks = guideChunks().map((c) => `${c.id}:${c.text}`).join("\n");
-    // PROMPT_REVISION: subir quando o SYSTEM do guide-ask mudar o formato da resposta (2: hipóteses antes da conduta).
+    // PROMPT_REVISION: subir quando o SYSTEM do guide-ask mudar o formato da resposta (2: hipóteses antes da conduta; 3: fonte ortopedia e contexto).
     version = textHash(`prompt:${PROMPT_REVISION}\n${chunks}\n${JSON.stringify(CONDITION_TERMS.map(allTermsOf))}`);
   }
   return version;
@@ -70,7 +70,7 @@ export function guideVersion(): string {
 
 export interface CachedAnswer {
   answer: string;
-  sources: { id: string; slug: string; topic: string; section: string | null; source?: "plantao" | "receitas" | "drive"; href?: string }[];
+  sources: { id: string; slug: string; topic: string; section: string | null; source?: "plantao" | "receitas" | "drive" | "ortopedia"; href?: string }[];
   /** "2026-10-01 14:32" */
   createdAt: string;
 }

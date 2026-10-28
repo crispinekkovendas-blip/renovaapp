@@ -9,6 +9,7 @@ import { searchKey } from "../normalize.ts";
 import { guideEntries } from "../clinical-guide.ts";
 import { PRESCRIPTION_DRIVE } from "../prescription-drive/index.ts";
 import type { DriveEntry } from "../prescription-drive/index.ts";
+import { orthoChunks, orthoTerms } from "../ortho-guide/chunks.ts";
 
 /**
  * O Guia clínico em trechos para a pergunta à IA, das três abas:
@@ -25,7 +26,7 @@ import type { DriveEntry } from "../prescription-drive/index.ts";
  * "receita-" ou "drive-": o mesmo assunto pode existir em duas abas.
  */
 
-export type ChunkSource = "plantao" | "receitas" | "drive";
+export type ChunkSource = "plantao" | "receitas" | "drive" | "ortopedia";
 
 export interface GuideChunk {
   /** "sepse-e-choque-septico#2", "receita-cistite-itu-baixa-nao-complicada#0", "drive-enxaqueca#0" */
@@ -46,6 +47,7 @@ export const SOURCE_LABEL: Readonly<Record<ChunkSource, string>> = {
   plantao: "Guia de Prescrições da Emergência (plantão)",
   receitas: "Receitas prontas da clínica",
   drive: "Drive de prescrições revisado",
+  ortopedia: "Guia de ortopedia ambulatorial (Renova)",
 };
 
 /** Trecho grande demais vira dois: a IA lê melhor e a busca acerta mais. */
@@ -67,9 +69,9 @@ function blockLine(b: GuideBlock): string {
   return line;
 }
 
-/** Todos os trechos do Guia clínico: plantão, receitas prontas e Drive. */
+/** Todos os trechos do Guia clínico: plantão, receitas prontas, Drive e ortopedia. */
 export function guideChunks(): GuideChunk[] {
-  return [...plantaoChunks(), ...receitaChunks(), ...driveChunks()];
+  return [...plantaoChunks(), ...receitaChunks(), ...driveChunks(), ...orthoChunks()];
 }
 
 function plantaoChunks(): GuideChunk[] {
@@ -184,12 +186,15 @@ function corpus() {
         chunks.map((c) => {
           // Nome popular e sintoma acham o tópico; ficam só no índice, não no texto que a IA lê.
           const { names, symptoms } = termsFor(c.topic);
+          // Na ortopedia, como o paciente fala, as manobras e os remédios (mesmos pesos da aba no site).
+          const orto = c.source === "ortopedia" ? orthoTerms(c.slug) : null;
           return {
             id: c.id,
             fields: [
               { text: c.topic, weight: 10 },
               // Mesmo peso das abas: o nome exato ("migranha") vence o parecido no título ("migrans").
-              { text: names.join(" "), weight: 8 },
+              { text: [...names, ...(orto?.names ?? [])].join(" "), weight: 8 },
+              { text: orto ? [...orto.exams, ...orto.drugs].join(" ") : "", weight: 5 },
               { text: c.section ?? "", weight: 4 },
               { text: symptoms.join(" "), weight: 4 },
               { text: c.chapter, weight: 2 },

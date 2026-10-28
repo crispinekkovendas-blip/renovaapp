@@ -108,6 +108,14 @@ fun HomeScreen(
         delay(80)
         value = withContext(Dispatchers.Default) { content.search.query(query, boost = { prefs.boost(query, it) }) }
     }
+    val orthoResults by produceState(GuideResults.EMPTY, query, content) {
+        if (query.isBlank() || content.ortho == null) {
+            value = GuideResults.EMPTY
+            return@produceState
+        }
+        delay(80)
+        value = withContext(Dispatchers.Default) { content.ortho.search.query(query, limit = 5) }
+    }
     val voice = rememberVoiceInput { onAsk(it) }
     var menu by remember { mutableStateOf(false) }
 
@@ -165,7 +173,7 @@ fun HomeScreen(
             if (query.isBlank()) {
                 HomeSections(ready, prefs, onOpen, onAsk, onNavigate, voice, onQuery = { query = it })
             } else {
-                Results(content, query.trim(), results, filter, onFilter = { filter = it }, onSuggestion = { query = it }, onAsk = onAsk) { ref ->
+                Results(content, query.trim(), results, orthoResults, filter, onFilter = { filter = it }, onSuggestion = { query = it }, onAsk = onAsk) { ref ->
                     prefs.rememberPick(query, ref.id)
                     onOpen(ref)
                 }
@@ -179,6 +187,7 @@ private fun Results(
     content: GuideContent,
     q: String,
     results: GuideResults,
+    ortho: GuideResults,
     filter: String?,
     onFilter: (String?) -> Unit,
     onSuggestion: (String) -> Unit,
@@ -245,6 +254,25 @@ private fun Results(
                 trailing = item.cid?.let { cid -> @Composable { CidChip(cid) } },
             )
         }
+        // A ortopedia tem índice próprio: vem como seção, depois das três abas.
+        if (ortho.rows.isNotEmpty()) {
+            item(key = "h-ortopedia") { SectionHeader("Ortopedia") }
+            items(ortho.rows, key = { "orto-" + it.item.id }) { row ->
+                val item = row.item
+                ListRow(
+                    title = searchHighlighted(item.title, row.marks),
+                    onClick = { content.describe(item.id)?.let(onOpen) },
+                    meta = {
+                        MetaRow {
+                            SourcePill("ortopedia")
+                            MutedText(item.where)
+                        }
+                    },
+                    support = row.line?.let { searchHighlighted(it, row.marks) },
+                    trailing = item.cid?.let { cid -> @Composable { CidChip(cid) } },
+                )
+            }
+        }
     }
 }
 
@@ -304,7 +332,7 @@ private fun HomeSections(
             item { SectionHeader("Abertos por último") }
             items(recentRefs, key = { "rec-" + it.id }) { ItemRow(it, onOpen) }
         }
-        item { SectionHeader("As três abas") }
+        item { SectionHeader("As abas") }
         item {
             TabCard("Receitas prontas", "${content.recipes.size} receitas por condição, com a orientação ao paciente") { onNavigate(Routes.RECEITAS) }
         }
@@ -313,6 +341,11 @@ private fun HomeSections(
         }
         item {
             TabCard("Drive de prescrições", "${content.driveEntries.size} condições de consultório, com dose de criança") { onNavigate(Routes.DRIVE) }
+        }
+        content.ortho?.let { o ->
+            item {
+                TabCard("Ortopedia", "${o.topics.size} tópicos na ordem da consulta, com a consulta guiada e a nota SOAP") { onNavigate(Routes.ORTOPEDIA) }
+            }
         }
     }
 }

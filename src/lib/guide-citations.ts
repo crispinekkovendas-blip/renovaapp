@@ -7,10 +7,10 @@
 export const CITATION = /\[\[?[a-z0-9-]+#\d+\]?(?:\s*[,;]?\s*\[?[a-z0-9-]+#\d+\]?)*\]\]?/g;
 
 /** A aba de cada fonte, pelo id: "drive-…", "receita-…" ou um tópico do plantão. */
-export const SOURCE_NAME = { plantao: "Plantão", receitas: "Receitas prontas", drive: "Drive" } as const;
+export const SOURCE_NAME = { plantao: "Plantão", receitas: "Receitas prontas", drive: "Drive", ortopedia: "Ortopedia" } as const;
 
 export function sourceOf(id: string): keyof typeof SOURCE_NAME {
-  return id.startsWith("drive-") ? "drive" : id.startsWith("receita-") ? "receitas" : "plantao";
+  return id.startsWith("drive-") ? "drive" : id.startsWith("receita-") ? "receitas" : id.startsWith("orto-") ? "ortopedia" : "plantao";
 }
 
 /** Onde abrir uma fonte citada; respostas antigas da memória não trazem o caminho. */
@@ -19,6 +19,7 @@ export function sourceHref(id: string, href?: string): string {
   const slug = id.split("#")[0];
   if (slug.startsWith("drive-")) return `/guia/drive/${slug.slice("drive-".length)}`;
   if (slug.startsWith("receita-")) return "/guia";
+  if (slug.startsWith("orto-")) return `/guia/ortopedia/${slug.slice("orto-".length)}`;
   return `/guia/plantao/${slug}`;
 }
 

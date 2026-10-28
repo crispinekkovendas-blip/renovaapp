@@ -25,6 +25,12 @@ import { TARJA_LABEL } from "./medications.ts";
 import { searchKey } from "./normalize.ts";
 import { driveTabRevisions, plantaoTabRevisions, receitasTabRevisions } from "./guide-tab-revisions.ts";
 import type { TabRevision } from "./guide-tab-revisions.ts";
+import { FIRST_DAY, ORTHO_CREDIT, ORTHO_GUIDE, orthoDocs, orthoSearchDoc } from "./ortho-guide/index.ts";
+import type { OrthoTopic } from "./ortho-guide/index.ts";
+import { ORTHO_REGIONS, TRAUMA_TOPICS, UNIVERSAL_ALARM } from "./ortho-guide/consult.ts";
+import type { OrthoRegion } from "./ortho-guide/consult.ts";
+import { CURRENT_ORTHO_REVISION, ORTHO_CHANGES, ORTHO_REVISIONS, orthoTopicRevised } from "./ortho-guide/revisions.ts";
+import { conciseDiff } from "./revision-diff.ts";
 
 /**
  * O Guia clínico inteiro para o app Android, num arquivo só: as três abas já
@@ -129,6 +135,44 @@ export interface AppCondition {
   alarm: string[];
 }
 
+/** Um tópico de ortopedia como vai ao app: o do site, com id, capítulo e quantas mudanças da revisão atual o tocam. */
+export interface AppOrthoTopic extends OrthoTopic {
+  id: string;
+  chapter: string;
+  revised: number;
+}
+
+/** Uma mudança do Guia de ortopedia: antes, agora e motivo, com o diff curto. */
+export interface AppOrthoChange {
+  rev: number;
+  slug: string;
+  title: string;
+  section: string;
+  before: string;
+  after: string;
+  why: string;
+  alsoIn: string[];
+  concise: ConciseLine[];
+}
+
+/**
+ * O Guia de ortopedia inteiro para o app: os tópicos na ordem da consulta, as
+ * regiões e alarmes da consulta guiada, os atalhos do primeiro dia, as
+ * revisões e um índice de busca só dele (a busca única das três abas segue
+ * igual — o motor do app é comparado com o do site trecho a trecho).
+ */
+export interface AppOrtho {
+  credit: { title: string; revision: number; writtenAt: string; revisedAt: string; reviewedBy: string | null };
+  revision: { current: number; list: { n: number; date: string; label: string }[] };
+  firstDay: { slug: string; label: string; hint: string }[];
+  regions: OrthoRegion[];
+  universalAlarm: string[];
+  traumaTopics: string[];
+  chapters: { title: string; intro: string; topics: AppOrthoTopic[] }[];
+  changes: AppOrthoChange[];
+  search: { docs: SearchDoc[]; items: { id: string; source: "ortopedia"; title: string; where: string; cid: string | null; lines: string[] }[] };
+}
+
 export interface AppBundle {
   /** Hash do conteúdo: muda quando qualquer coisa do guia muda. */
   version: string;
@@ -143,6 +187,47 @@ export interface AppBundle {
   conditions: AppCondition[];
   /** O que cada revisão mudou, da mais nova para a mais antiga, por aba. */
   changes: { rev: number; tabs: { tab: GuideSource; count: string; groups: AppChangeGroup[] }[] }[];
+  ortopedia: AppOrtho;
+}
+
+function buildOrtho(): AppOrtho {
+  const title = new Map(ORTHO_GUIDE.flatMap((c) => c.topics.map((t) => [t.slug, t.title] as const)));
+  const docs = orthoDocs();
+  return {
+    credit: { ...ORTHO_CREDIT },
+    revision: { current: CURRENT_ORTHO_REVISION, list: ORTHO_REVISIONS.map((r) => ({ n: r.n, date: r.date, label: r.label })) },
+    firstDay: FIRST_DAY.map((s) => ({ ...s })),
+    regions: ORTHO_REGIONS.map((r) => ({ ...r, topics: [...r.topics], alarm: [...r.alarm] })),
+    universalAlarm: [...UNIVERSAL_ALARM],
+    traumaTopics: [...TRAUMA_TOPICS],
+    chapters: ORTHO_GUIDE.map((c) => ({
+      title: c.title,
+      intro: c.intro,
+      topics: c.topics.map((t): AppOrthoTopic => ({ ...t, id: `ortopedia:${t.slug}`, chapter: c.title, revised: orthoTopicRevised(t.slug) })),
+    })),
+    changes: ORTHO_CHANGES.map((c) => ({
+      rev: c.rev,
+      slug: c.slug,
+      title: title.get(c.slug) ?? c.slug,
+      section: c.section,
+      before: c.before,
+      after: c.after,
+      why: c.why,
+      alsoIn: [...(c.alsoIn ?? [])],
+      concise: [{ parts: conciseDiff(c.before, c.after) }],
+    })),
+    search: {
+      docs: docs.map((d) => ({ ...orthoSearchDoc(d), id: `ortopedia:${d.slug}` })),
+      items: docs.map((d) => ({
+        id: `ortopedia:${d.slug}`,
+        source: "ortopedia" as const,
+        title: d.title,
+        where: d.chapter,
+        cid: d.cid === "—" ? null : d.cid,
+        lines: [d.summary, ...d.aliases.map((a) => `Também chamado: ${a}`), ...d.exams.map((e) => `Manobra: ${e}`), ...d.drugs],
+      })),
+    },
+  };
 }
 
 /** "Cistite (ITU baixa não complicada)" → "cistite-itu-baixa-nao-complicada" (o mesmo de chunks.ts). */
@@ -297,6 +382,7 @@ function buildBundle(): Omit<AppBundle, "version"> {
     search: { synonyms: SYNONYM_TABLE, docs: guideSearchDocs(data), items: searchItems },
     conditions,
     changes,
+    ortopedia: buildOrtho(),
   };
 }
 

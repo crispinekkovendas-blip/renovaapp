@@ -47,6 +47,7 @@ fun sourceTag(source: String): String = when (source) {
     "receitas" -> "Receita pronta"
     "plantao" -> "Plantão"
     "drive" -> "Drive"
+    "ortopedia" -> "Ortopedia"
     else -> source
 }
 
@@ -54,6 +55,7 @@ fun sourceFilterLabel(source: String): String = when (source) {
     "receitas" -> "Receitas prontas"
     "plantao" -> "Plantão"
     "drive" -> "Drive"
+    "ortopedia" -> "Ortopedia"
     else -> source
 }
 
@@ -64,6 +66,7 @@ fun SourcePill(source: String, modifier: Modifier = Modifier) {
     val (bg, fg) = when (source) {
         "receitas" -> g.receitasBg to g.receitasFg
         "plantao" -> g.plantaoBg to g.plantaoFg
+        "ortopedia" -> MaterialTheme.colorScheme.tertiaryContainer to MaterialTheme.colorScheme.onTertiaryContainer
         else -> g.driveBg to g.driveFg
     }
     Pill(sourceTag(source), bg, fg, modifier)

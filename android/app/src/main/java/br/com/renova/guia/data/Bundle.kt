@@ -25,6 +25,8 @@ data class GuideBundle(
     val changes: List<RevisionChanges> = emptyList(),
     /** Para o "Escutar o paciente": cada condição com todos os nomes e queixas e os itens das três abas. */
     val conditions: List<GuideCondition> = emptyList(),
+    /** O Guia de ortopedia (OrthoBundle.kt); pacotes antigos não têm. */
+    val ortopedia: OrthoTab? = null,
 )
 
 @Serializable

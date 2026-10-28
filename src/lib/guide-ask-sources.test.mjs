@@ -43,6 +43,8 @@ test("citação de receita e do Drive vira link para o lugar certo, mesmo em res
   assert.equal(sourceOf("drive-enxaqueca#0"), "drive");
   assert.equal(sourceOf("receita-crise-de-enxaqueca#0"), "receitas");
   assert.equal(sourceOf("enxaqueca#0"), "plantao");
+  assert.equal(sourceOf("orto-entorse-de-tornozelo#1"), "ortopedia");
+  assert.equal(sourceHref("orto-entorse-de-tornozelo#1"), "/guia/ortopedia/entorse-de-tornozelo");
   assert.equal(sourceHref("drive-enxaqueca#0"), "/guia/drive/enxaqueca");
   assert.equal(sourceHref("enxaqueca#1"), "/guia/plantao/enxaqueca");
   assert.equal(sourceHref("receita-crise-de-enxaqueca#0", "/guia?q=Crise%20de%20enxaqueca"), "/guia?q=Crise%20de%20enxaqueca");

@@ -3,7 +3,7 @@ import { askGuide, guideAiEnabled, MAX_QUESTION } from "@/lib/guide-ask";
 import type { AskTurn } from "@/lib/guide-ask";
 
 /**
- * Pergunta ao Guia clínico (plantão, receitas prontas e Drive): responde em NDJSON (um evento por linha),
+ * Pergunta ao Guia clínico (plantão, receitas prontas, Drive e ortopedia): responde em NDJSON (um evento por linha),
  * para a tela mostrar a busca e escrever a resposta enquanto ela chega. Aceita a sessão do site (cookie) e o
  * token do app Android (Authorization: Bearer).
  */
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
   }
   if (!guideAiEnabled()) return Response.json({ error: "A IA não está configurada." }, { status: 503 });
 
-  let body: { question?: unknown; history?: unknown; fresh?: unknown };
+  let body: { question?: unknown; history?: unknown; fresh?: unknown; context?: unknown };
   try {
     body = await request.json();
   } catch {
@@ -57,12 +57,14 @@ export async function POST(request: Request) {
   }
 
   const history = parseHistory(body.history);
+  // A tela do app em que o médico está (só o app manda): curta, sem dados de paciente.
+  const context = typeof body.context === "string" ? body.context.trim().slice(0, 200) : undefined;
   const encoder = new TextEncoder();
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       const send = (event: unknown) => controller.enqueue(encoder.encode(JSON.stringify(event) + "\n"));
       try {
-        for await (const event of askGuide(question, history, undefined, { fresh: body.fresh === true })) {
+        for await (const event of askGuide(question, history, undefined, { fresh: body.fresh === true, context })) {
           if (request.signal.aborted) break;
           send(event);
         }

@@ -73,21 +73,23 @@ const DEFAULT_DEPS: AskDeps = {
   },
 };
 
-export const SYSTEM = `Você responde perguntas de médicos usando SOMENTE os trechos do Guia clínico que aparecem nesta conversa — os anexados à pergunta e os que você buscar com a ferramenta buscar_no_guia. O guia tem três fontes, e cada trecho diz de qual veio (atributo fonte):
+export const SYSTEM = `Você responde perguntas de médicos usando SOMENTE os trechos do Guia clínico que aparecem nesta conversa — os anexados à pergunta e os que você buscar com a ferramenta buscar_no_guia. O guia tem quatro fontes, e cada trecho diz de qual veio (atributo fonte):
 - "Guia de Prescrições da Emergência (plantão)": pronto-socorro e sala vermelha.
 - "Receitas prontas da clínica": receitas de consultório, ponto de partida para adulto sem comorbidade.
 - "Drive de prescrições revisado": consultório e pronto-atendimento, com dose de criança.
+- "Guia de ortopedia ambulatorial (Renova)": consulta de ortopedia para o clínico geral — o que perguntar, as manobras do exame e o que significam, sinais de alarme, pedido de imagem, conduta, receita, imobilização, quando encaminhar e atestado.
 
 Regras:
-- Use a fonte que combina com o cenário da pergunta: plantão, PS ou sala vermelha → guia de plantão; consultório, receita para casa ou criança → receitas prontas e Drive. Se o cenário não está claro e as fontes dizem coisas diferentes, mostre as duas, cada uma com a sua fonte.
-- Diga de qual fonte vem cada conduta (ex.: "No guia de plantão: …", "Pela receita pronta: …", "No Drive: …").
+- Use a fonte que combina com o cenário da pergunta: plantão, PS ou sala vermelha → guia de plantão; consultório, receita para casa ou criança → receitas prontas e Drive; dor musculoesquelética, trauma de membro, coluna, exame ortopédico, imobilização ou atestado por lesão → guia de ortopedia. Se o cenário não está claro e as fontes dizem coisas diferentes, mostre as duas, cada uma com a sua fonte.
+- Diga de qual fonte vem cada conduta (ex.: "No guia de plantão: …", "Pela receita pronta: …", "No Drive: …", "No guia de ortopedia: …").
+- Quando a pergunta vier com "Contexto" (a tela em que o médico está no app), responda para aquela situação: se ele está num tópico de ortopedia, priorize esse tópico; se está na consulta guiada, responda como quem está ao lado dele no consultório. Não repita o contexto na resposta.
 - Receita pronta é ponto de partida para adulto sem comorbidade: lembre isso quando a pergunta envolver gestante, criança, idoso, alergia ou doença renal.
 - Se os trechos não bastam, busque de novo com outros termos (nome do medicamento, da condição, sinônimo). No máximo ${MAX_SEARCHES} buscas.
 - Se o guia não traz a informação, diga isso claramente ("O guia não traz …") e pare. Nunca complete com conhecimento próprio: não invente dose, diluição, intervalo, via, duração nem indicação.
 - Copie doses, apresentações, diluições e vias exatamente como no trecho.
 - Se a pergunta traz peso ou idade, você pode calcular a partir da dose por kg do trecho, sempre escrevendo a conta inteira (dose por kg × peso = total por dia; total ÷ número de tomadas = dose por tomada). Se o trecho dá uma faixa (ex.: 80–90 mg/kg/dia), calcule as duas pontas (80 × 15 = 1.200 mg; 90 × 15 = 1.350 mg). Confira cada multiplicação antes de escrever. Respeite e mostre a dose máxima do trecho.
 - Se o trecho diz [corrigido pela revisão …], use o texto corrigido e avise que foi corrigido. Se diz [conferir: …], repita o aviso.
-- Cite a fonte logo após cada afirmação com [[id]], usando exatamente o id do trecho (ex.: [[sepse-e-choque-septico#1]], [[receita-cistite-itu-baixa-nao-complicada#0]], [[drive-enxaqueca#0]]). Duas fontes: [[a#1]] [[b#2]], cada uma no seu par de colchetes.
+- Cite a fonte logo após cada afirmação com [[id]], usando exatamente o id do trecho (ex.: [[sepse-e-choque-septico#1]], [[receita-cistite-itu-baixa-nao-complicada#0]], [[drive-enxaqueca#0]], [[orto-entorse-de-tornozelo#1]]). Duas fontes: [[a#1]] [[b#2]], cada uma no seu par de colchetes.
 - Quando a pergunta descreve queixas ou sintomas sem dizer qual é a condição, comece por **Hipóteses**: até 3 condições do guia que combinam, da mais para a menos provável, cada uma com o porquê (quais das queixas relatadas a sustentam), o que perguntar ou examinar para confirmar ou afastar e os sinais de alarme, se houver. Só depois a conduta do guia para a hipótese principal — receita, medicamentos e doses, com as fontes. No porquê você pode usar raciocínio clínico geral; dose, conduta e medicamento continuam vindo só dos trechos. Hipótese é apoio à decisão, não diagnóstico. Nesse caso, até ~300 palavras.
 - Formato de plantão, em português do Brasil: comece pela resposta direta (dose/conduta), depois detalhes em tópicos curtos com "- ". Use **negrito** só para doses. Sem introdução, sem despedida. Até ~200 palavras, salvo se pedirem mais.
 - Não peça nem use dados que identifiquem o paciente.`;
@@ -95,7 +97,7 @@ Regras:
 const TOOL = {
   name: "buscar_no_guia",
   description:
-    "Busca trechos no Guia clínico — guia de plantão, receitas prontas e Drive —, por palavra e por sentido. Aceita condição, medicamento, sigla, sinônimo, sintoma ou uma frase. Devolve até 6 trechos com id, fonte, tópico e texto.",
+    "Busca trechos no Guia clínico — guia de plantão, receitas prontas, Drive e guia de ortopedia —, por palavra e por sentido. Aceita condição, medicamento, sigla, sinônimo, sintoma ou uma frase. Devolve até 6 trechos com id, fonte, tópico e texto.",
   parameters: {
     type: "object",
     properties: { consulta: { type: "string", description: "O que buscar, ex.: 'adrenalina anafilaxia pediátrica'" } },
@@ -111,11 +113,13 @@ export async function* askGuide(
   question: string,
   history: readonly AskTurn[] = [],
   deps: AskDeps = DEFAULT_DEPS,
-  options: { fresh?: boolean } = {}
+  options: { fresh?: boolean; context?: string } = {}
 ): AsyncGenerator<AskEvent> {
-  // Pergunta solta (não seguimento) já respondida antes: volta da memória.
-  // Seguimento depende da conversa, então sempre vai à IA.
-  const key = history.length === 0 ? questionKey(question) : null;
+  // A tela em que o médico está no app ("Ortopedia › Entorse de tornozelo"): entra na busca e na pergunta.
+  const context = options.context?.trim().slice(0, 200) || null;
+  // Pergunta solta (não seguimento, sem contexto de tela) já respondida antes: volta da memória.
+  // Seguimento e pergunta com contexto dependem da situação, então sempre vão à IA.
+  const key = history.length === 0 && !context ? questionKey(question) : null;
   const store = deps.store;
   if (key && store && !options.fresh) {
     try {
@@ -136,7 +140,7 @@ export async function* askGuide(
   // Num seguimento ("e em criança?"), a busca inicial leva junto a pergunta anterior.
   const lastUser = [...history].reverse().find((h) => h.role === "user")?.content ?? "";
   const [initial, extra] = await Promise.all([
-    deps.retrieve(question, 6),
+    deps.retrieve(context ? `${context} ${question}` : question, 6),
     lastUser ? deps.retrieve(`${lastUser} ${question}`, 3) : Promise.resolve([]),
   ]);
   for (const c of [...initial, ...extra]) seen.set(c.id, c);
@@ -145,7 +149,14 @@ export async function* askGuide(
     ...history.slice(-6).map((h) => ({ role: h.role === "user" ? ("user" as const) : ("model" as const), parts: [{ text: h.content }] })),
     {
       role: "user",
-      parts: [{ text: `Pergunta: ${question}\n\nTrechos do guia já encontrados para esta pergunta:\n\n${chunksBlock([...seen.values()])}` }],
+      parts: [
+        {
+          text:
+            `Pergunta: ${question}\n\n` +
+            (context ? `Contexto: o médico está na tela "${context}" do app.\n\n` : "") +
+            `Trechos do guia já encontrados para esta pergunta:\n\n${chunksBlock([...seen.values()])}`,
+        },
+      ],
     },
   ];
 

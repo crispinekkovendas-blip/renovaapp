@@ -15,6 +15,9 @@ class GuideContent(val bundle: GuideBundle) {
     val driveEntries: List<Pair<DriveSection, DriveEntry>> = bundle.drive.sections.flatMap { s -> s.entries.map { s to it } }
     private val driveBySlug = driveEntries.associateBy { it.second.slug }
 
+    /** O Guia de ortopedia, quando o pacote o traz (a busca da aba usa os mesmos sinônimos). */
+    val ortho: OrthoContent? = bundle.ortopedia?.let { OrthoContent(it, bundle.search.synonyms) }
+
     /** O índice da busca: montado na primeira vez que alguém pede (o repositório já pede logo ao abrir, fora da tela). */
     val search: GuideSearchEngine by lazy { GuideSearchEngine(bundle.search) }
 
@@ -44,16 +47,18 @@ class GuideContent(val bundle: GuideBundle) {
             "receitas" -> recipeById[id]?.let { ItemRef(id, "receitas", it.name, it.group, Routes.recipe(it.slug)) }
             "plantao" -> topicBySlug[key]?.let { (c, t) -> ItemRef(id, "plantao", t.title, c.title, Routes.topic(t.slug)) }
             "drive" -> driveBySlug[key]?.let { (s, e) -> ItemRef(id, "drive", e.title, s.title, Routes.drive(e.slug)) }
+            "ortopedia" -> ortho?.topic(key)?.let { ItemRef(id, "ortopedia", it.title, it.chapter, Routes.ortoTopic(it.slug)) }
             else -> null
         }
     }
 
-    /** A rota de uma citação da Super Inteligência: "sepse-e-choque-septico#1", "receita-…#0", "drive-…#0". */
+    /** A rota de uma citação da Super Inteligência: "sepse-e-choque-septico#1", "receita-…#0", "drive-…#0", "orto-…#1". */
     fun citationRoute(citationId: String): String? {
         val slug = citationId.substringBefore("#")
         return when {
             slug.startsWith("receita-") -> recipe(slug.removePrefix("receita-"))?.let { Routes.recipe(it.slug) }
             slug.startsWith("drive-") -> driveEntry(slug.removePrefix("drive-"))?.let { Routes.drive(it.second.slug) }
+            slug.startsWith("orto-") -> ortho?.topic(slug.removePrefix("orto-"))?.let { Routes.ortoTopic(it.slug) }
             else -> topic(slug)?.let { Routes.topic(it.second.slug) }
         }
     }
@@ -80,8 +85,15 @@ object Routes {
     const val RECIPE = "receita/{slug}"
     const val TOPIC = "topico/{slug}"
     const val DRIVE_ENTRY = "entrada/{slug}"
+    const val ORTOPEDIA = "ortopedia"
+    const val ORTO_TOPIC = "orto/{slug}"
+    /** A consulta guiada; `?t=` abre já no roteiro do tópico. */
+    const val ORTO_CONSULTA = "orto-consulta?t={slug}"
+    const val ORTO_MUDANCAS = "orto-mudancas"
 
     fun recipe(slug: String) = "receita/$slug"
     fun topic(slug: String) = "topico/$slug"
     fun drive(slug: String) = "entrada/$slug"
+    fun ortoTopic(slug: String) = "orto/$slug"
+    fun ortoConsulta(slug: String? = null) = if (slug == null) "orto-consulta" else "orto-consulta?t=$slug"
 }

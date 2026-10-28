@@ -42,7 +42,8 @@ class AskViewModel(
 
     val busy: Boolean get() = _thread.value.lastOrNull()?.done == false
 
-    fun ask(question: String, fresh: Boolean = false) {
+    /** `context`: a tela em que o médico está ("Ortopedia › Entorse de tornozelo"), para a resposta vir para aquela situação. */
+    fun ask(question: String, fresh: Boolean = false, context: String? = null) {
         val q = question.trim()
         if (q.length < 3 || busy) return
         val account = tokens.load()
@@ -56,7 +57,7 @@ class AskViewModel(
         }.takeLast(6)
         _thread.value = _thread.value + Exchange(q)
         job = viewModelScope.launch {
-            api.ask(account.token, q, history, fresh).collect { event ->
+            api.ask(account.token, q, history, fresh, context).collect { event ->
                 when (event) {
                     is AskEvent.Search -> update { it.copy(searches = it.searches + event.query) }
                     is AskEvent.Text -> update { it.copy(answer = it.answer + event.delta) }
