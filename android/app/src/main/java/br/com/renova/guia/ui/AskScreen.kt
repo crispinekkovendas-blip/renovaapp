@@ -74,7 +74,7 @@ private val EXAMPLES = listOf(
     "Receita para cistite em mulher adulta?",
     "Amoxicilina na otite média em criança de 15 kg?",
     "O que orientar no início do antidepressivo?",
-    "Torceu o tornozelo ontem: preciso de raio-X?",
+    "Luxação anterior do ombro: como reduzo e o que faço depois?",
 )
 
 /**

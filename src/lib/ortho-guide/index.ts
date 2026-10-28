@@ -6,15 +6,16 @@ export type { OrthoChapter, OrthoExam, OrthoRx, OrthoTopic } from "./types.ts";
 export { ORTHO_GUIDE };
 
 /**
- * Guia de ortopedia: texto próprio da Renova para o clínico que assume o
- * ambulatório de ortopedia. Não é reprodução de livro — por isso vive no
- * repositório, e não no Supabase como os guias licenciados.
+ * Guia de ortopedia: texto próprio da Renova para o médico que assume a vaga
+ * de ortopedia no SUS e é, ali, o ortopedista de plantão e de ambulatório.
+ * Não é reprodução de livro — por isso vive no repositório, e não no
+ * Supabase como os guias licenciados.
  */
 export const ORTHO_CREDIT = {
-  title: "Guia de ortopedia ambulatorial",
-  revision: 2,
+  title: "Guia de ortopedia — plantão e ambulatório",
+  revision: 3,
   writtenAt: "21 de outubro de 2026",
-  revisedAt: "27 de outubro de 2026",
+  revisedAt: "28 de outubro de 2026",
   reviewedBy: null as string | null,
 } as const;
 
@@ -88,11 +89,14 @@ export function orthoSearchDoc(d: OrthoDoc): SearchDoc {
   };
 }
 
-/** Atalhos do primeiro dia: os cinco tópicos de base, na ordem de leitura. */
+/** Atalhos do primeiro dia: os oito tópicos de base, na ordem de leitura. */
 export const FIRST_DAY: readonly { slug: string; label: string; hint: string }[] = [
-  { slug: "quando-encaminhar-no-mesmo-dia", label: "O que não espera", hint: "A lista do pronto-socorro" },
-  { slug: "como-pedir-o-raio-x", label: "Pedir o raio-X", hint: "Incidências por região" },
-  { slug: "analgesia-em-escada", label: "Medicar a dor", hint: "Os quatro degraus" },
-  { slug: "imobilizacoes-e-orteses", label: "Imobilizar", hint: "Tala, tipoia, bota" },
+  { slug: "quando-encaminhar-no-mesmo-dia", label: "O que não espera", hint: "O que você resolve hoje e o que vai para a cirurgia" },
+  { slug: "regulacao-e-cirurgia-no-sus", label: "Regulação", hint: "Como pedir a vaga e o que escrever" },
+  { slug: "como-pedir-o-raio-x", label: "Raio-X", hint: "Pedir e ler, por região" },
+  { slug: "analgesia-em-escada", label: "Medicar a dor", hint: "Da veia à receita" },
+  { slug: "anestesia-local-bloqueios-e-sedacao", label: "Bloquear e sedar", hint: "Hematoma, digital, fáscia ilíaca" },
+  { slug: "imobilizacoes-e-orteses", label: "Tala e gesso", hint: "A técnica, passo a passo" },
+  { slug: "puncao-e-infiltracao-articular", label: "Puncionar e infiltrar", hint: "Joelho, ombro, punho, quadril" },
   { slug: "atestado-e-afastamento", label: "Atestado", hint: "Dias por condição" },
 ];

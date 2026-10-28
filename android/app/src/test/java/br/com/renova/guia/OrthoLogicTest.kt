@@ -20,16 +20,24 @@ class OrthoLogicTest {
 
     @Test
     fun `o pacote traz a ortopedia inteira, com regiões e atalhos apontando para tópicos reais`() {
-        assertEquals(36, ortho.topics.size)
-        assertEquals(31, ortho.conditions.size)
-        assertEquals(2, ortho.tab.revision.current)
+        assertEquals(54, ortho.topics.size)
+        assertEquals(46, ortho.conditions.size)
+        assertEquals(3, ortho.tab.revision.current)
+        // A 3ª revisão: todo tópico tem "na urgência", "no retorno" e "cirurgia e regulação" (que começa por "Sai da sua mão").
+        for (t in ortho.topics) {
+            assertTrue(t.slug, t.urgent.isNotEmpty() && t.clinic.isNotEmpty() && t.refer.first().startsWith("Sai da sua mão"))
+        }
+        val ombro = ortho.topic("luxacao-e-instabilidade-do-ombro")!!
+        assertTrue(ombro.procedures!!.any { it.name.contains("Cunningham") && it.steps.size >= 3 && it.whenTo.isNotBlank() })
+        assertEquals("trauma-grave", ortho.regionOf("fratura-exposta")!!.key)
         val slugs = ortho.slugs.toSet()
         for (r in ortho.tab.regions) for (s in r.topics) assertTrue("${r.key}: $s", s in slugs)
         for (s in ortho.tab.firstDay) assertTrue(s.slug, s.slug in slugs)
         for (s in ortho.tab.traumaTopics) assertTrue(s, s in slugs)
         for (c in ortho.tab.changes) assertTrue(c.slug, c.slug in slugs)
-        assertTrue(ortho.topic("lombalgia-aguda")!!.revised >= 2)
-        assertTrue(ortho.changesOf("lombalgia-aguda").any { it.section.contains("Tramadol") })
+        assertTrue(ortho.topic("lombalgia-aguda")!!.revised >= 1)
+        assertTrue(ortho.changesOf("lombalgia-aguda", 2).any { it.section.contains("Tramadol") })
+        assertTrue(ortho.changesOf("lombalgia-aguda").any { it.section == "Encaminhar → Cirurgia e regulação" })
     }
 
     @Test
@@ -98,18 +106,20 @@ class OrthoLogicTest {
         assertTrue(note.contains("- Palpação ligamentar: POSITIVO ("))
         assertFalse(note.contains("Gaveta anterior e inclinação talar"))
         assertTrue(note.contains("SINAIS DE ALARME: " + ortho.tab.universalAlarm[1].take(20)))
-        assertTrue(note.contains("ENCAMINHAMENTO NO MESMO DIA"))
+        assertTrue(note.contains("ALARME PRESENTE: conduta de urgência hoje"))
+        assertTrue(note.contains("- Na urgência: "))
+        assertTrue(note.contains("- Cirurgia/regulação: Sai da sua mão"))
         assertTrue(note.contains("· Dipirona 1 g — "))
         assertTrue(note.contains("· Naproxeno 500 mg — "))
         assertFalse(note.contains("· Paracetamol"))
         assertTrue(note.contains("Atestado: 7 dias · Retorno: "))
-        assertTrue(note.endsWith("Roteiro: Guia de ortopedia Renova, revisão 2."))
+        assertTrue(note.endsWith("Roteiro: Guia de ortopedia Renova, revisão 3."))
 
         val empty = OrthoConsult.buildSoapNote(ortho, ortho.region("lombar")!!, ortho.topic("lombalgia-aguda")!!, ConsultAnswers(region = "lombar", trauma = false, topic = "lombalgia-aguda"))
         assertTrue(empty.contains("nenhuma pergunta marcada"))
         assertTrue(empty.contains("nenhuma manobra registrada"))
         assertTrue(empty.contains("Sem sinais de alarme"))
-        assertFalse(empty.contains("ENCAMINHAMENTO NO MESMO DIA"))
+        assertFalse(empty.contains("ALARME PRESENTE"))
     }
 
     @Test

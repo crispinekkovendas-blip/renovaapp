@@ -95,8 +95,9 @@ object OrthoConsult {
         lines += ""
 
         lines += "P — Conduta"
-        if (alarms.isNotEmpty()) lines += "- ENCAMINHAMENTO NO MESMO DIA pelos sinais de alarme acima."
+        if (alarms.isNotEmpty()) lines += "- ALARME PRESENTE: conduta de urgência hoje (ver “Na urgência”); cirurgia ou regulação se indicado."
         topic.imaging.firstOrNull()?.let { lines += "- Imagem: $it" }
+        topic.urgent.firstOrNull()?.let { lines += "- Na urgência: $it" }
         for (p in topic.plan.take(3)) lines += "- $p"
         val rx = a.rx.sorted().mapNotNull { topic.rx.getOrNull(it) }
         if (rx.isNotEmpty()) {
@@ -104,7 +105,7 @@ object OrthoConsult {
             for (r in rx) lines += "  · ${r.name} — ${r.posology}"
         }
         topic.immobilize?.firstOrNull()?.let { lines += "- Imobilização: $it" }
-        lines += "- Encaminhar: ${topic.refer.firstOrNull().orEmpty()}"
+        lines += "- Cirurgia/regulação: ${topic.refer.firstOrNull().orEmpty()}"
         lines += "- Atestado: ${a.leave.trim().ifBlank { topic.leave }} · Retorno: ${topic.followup}"
         lines += ""
         lines += "Roteiro: Guia de ortopedia Renova, revisão ${ortho.tab.revision.current}."

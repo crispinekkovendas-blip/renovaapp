@@ -359,7 +359,7 @@ fun OrthoCreditText(ortho: OrthoContent) {
     val c = ortho.tab.credit
     MutedText(
         "${c.title}, publicado em ${c.writtenAt}; revisão ${c.revision}${if (c.revisedAt.isNotBlank()) " em ${c.revisedAt}" else ""}. Texto próprio da Renova, a partir das diretrizes citadas no pé de cada tópico. " +
-            (c.reviewedBy?.let { "Revisado por $it. " } ?: "Ainda sem revisão por ortopedista: use como roteiro de primeira consulta e confira com o protocolo do serviço. ") +
+            (c.reviewedBy?.let { "Revisado por $it. " } ?: "Escrito para o médico que é o ortopedista de plantão e de ambulatório no SUS; ainda sem revisão por ortopedista — confira doses, técnicas e condutas com o protocolo do serviço. ") +
             "Doses de adulto sem comorbidade, salvo indicação. Os dias de atestado são sugestão.",
         Modifier.padding(top = 16.dp),
     )
@@ -404,6 +404,21 @@ fun OrthoTopicBody(topic: OrthoTopic) {
                 OrthoSection("Imagem", "quando pedir e como escrever")
                 Bullets(topic.imaging)
             }
+            if (topic.urgent.isNotEmpty()) {
+                OrthoSection("Na urgência", "você é o ortopedista de plantão: o que faz hoje")
+                for (u in topic.urgent) {
+                    Text(
+                        "▶ $u",
+                        modifier = Modifier.padding(top = 4.dp).fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(MaterialTheme.colorScheme.secondaryContainer).padding(8.dp),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    )
+                }
+            }
+            topic.procedures?.takeIf { it.isNotEmpty() }?.let { procedures ->
+                OrthoSection("Procedimentos", "passo a passo, no serviço")
+                for (p in procedures) ProcedureCard(p)
+            }
             if (topic.plan.isNotEmpty()) {
                 OrthoSection("Conduta", "o que fazer e orientar")
                 Bullets(topic.plan)
@@ -416,8 +431,12 @@ fun OrthoTopicBody(topic: OrthoTopic) {
                 OrthoSection("Imobilizar", "órtese ou tala")
                 Bullets(it)
             }
+            if (topic.clinic.isNotEmpty()) {
+                OrthoSection("No retorno", "o seguimento no ambulatório")
+                Bullets(topic.clinic)
+            }
             if (topic.refer.isNotEmpty()) {
-                OrthoSection("Encaminhar", "quando o ortopedista entra")
+                OrthoSection("Cirurgia e regulação", "o que sai da sua mão, e com que urgência")
                 Bullets(topic.refer)
             }
             OrthoSection("Atestado e retorno", "sugestão — ajuste ao trabalho")
@@ -433,6 +452,20 @@ fun OrthoTopicBody(topic: OrthoTopic) {
             }
             if (topic.sources.isNotEmpty()) MutedText("Baseado em: ${topic.sources.joinToString(" · ")}.", Modifier.padding(top = 12.dp))
         }
+    }
+}
+
+/** Um procedimento: quando, material, passos numerados e o depois. */
+@Composable
+fun ProcedureCard(p: br.com.renova.guia.data.OrthoProcedure) {
+    Column(
+        Modifier.padding(top = 8.dp).fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.surfaceContainerLow).padding(10.dp),
+    ) {
+        Text(p.name, fontWeight = FontWeight.ExtraBold, style = MaterialTheme.typography.bodyMedium)
+        Text("Quando: ${p.whenTo}", style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 4.dp))
+        Text("Material: ${p.needs}", style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 2.dp))
+        p.steps.forEachIndexed { i, s -> Text("${i + 1}. $s", style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 4.dp, start = 4.dp)) }
+        Text("Depois: ${p.after}", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 6.dp))
     }
 }
 

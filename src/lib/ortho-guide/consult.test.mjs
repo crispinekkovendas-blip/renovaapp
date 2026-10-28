@@ -1,7 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { EMPTY_ANSWERS, ORTHO_REGIONS, TRAUMA_TOPICS, UNIVERSAL_ALARM, alarmTexts, buildSoapNote, orderTopics, regionOf, stepOf } from "./consult.ts";
-import { findOrthoTopic, orthoSlugs } from "./index.ts";
+import { ORTHO_GUIDE, findOrthoTopic, orthoSlugs } from "./index.ts";
+import { CURRENT_ORTHO_REVISION } from "./revisions.ts";
 
 test("toda região aponta para tópicos que existem, e toda condição clínica está em alguma região", () => {
   const slugs = new Set(orthoSlugs());
@@ -14,8 +15,9 @@ test("toda região aponta para tópicos que existem, e toda condição clínica 
       covered.add(s);
     }
   }
-  // As cinco páginas de base não são condições; o resto precisa estar numa região.
-  const base = new Set(["como-pedir-o-raio-x", "analgesia-em-escada", "imobilizacoes-e-orteses", "atestado-e-afastamento", "quando-encaminhar-no-mesmo-dia"]);
+  // As páginas de base (primeiro capítulo) não são condições; o resto precisa estar numa região.
+  const base = new Set(ORTHO_GUIDE[0].topics.map((t) => t.slug));
+  assert.ok(base.size >= 8);
   for (const s of slugs) if (!base.has(s)) assert.ok(covered.has(s), `${s} fora das regiões`);
   for (const s of TRAUMA_TOPICS) assert.ok(slugs.has(s), s);
 });
@@ -61,7 +63,10 @@ test("a nota SOAP traz o que foi marcado, o alarme e a receita escolhida", () =>
   assert.match(note, /- Palpação ligamentar: POSITIVO \(/);
   assert.doesNotMatch(note, /Gaveta anterior e inclinação talar/);
   assert.match(note, new RegExp(`SINAIS DE ALARME: ${UNIVERSAL_ALARM[1].slice(0, 20)}`));
-  assert.match(note, /ENCAMINHAMENTO NO MESMO DIA/);
+  assert.match(note, /ALARME PRESENTE: conduta de urgência hoje/);
+  assert.match(note, /- Na urgência: /);
+  assert.match(note, /- Cirurgia\/regulação: Sai da sua mão/);
+  assert.ok(note.endsWith(`Roteiro: Guia de ortopedia Renova, revisão ${CURRENT_ORTHO_REVISION}.`));
   assert.match(note, /· Dipirona 1 g — /);
   assert.match(note, /· Naproxeno 500 mg — /);
   assert.doesNotMatch(note, /· Paracetamol/);
@@ -76,6 +81,6 @@ test("sem nada marcado, a nota ainda sai inteira e usa o atestado do guia", () =
   assert.match(note, /nenhuma pergunta marcada/);
   assert.match(note, /nenhuma manobra registrada/);
   assert.match(note, /Sem sinais de alarme/);
-  assert.doesNotMatch(note, /ENCAMINHAMENTO NO MESMO DIA/);
+  assert.doesNotMatch(note, /ALARME PRESENTE/);
   assert.match(note, new RegExp(`Atestado: ${topic.leave.slice(0, 10)}`));
 });

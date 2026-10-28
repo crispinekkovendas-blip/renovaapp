@@ -57,12 +57,12 @@ let version: string | null = null;
  * nomes e sintomas (clinical-terms.ts), que muda o que a busca acha: uma
  * resposta guardada como "o guia não traz" pode passar a ter resposta.
  */
-const PROMPT_REVISION = 3;
+const PROMPT_REVISION = 4;
 
 export function guideVersion(): string {
   if (!version) {
     const chunks = guideChunks().map((c) => `${c.id}:${c.text}`).join("\n");
-    // PROMPT_REVISION: subir quando o SYSTEM do guide-ask mudar o formato da resposta (2: hipóteses antes da conduta; 3: fonte ortopedia e contexto).
+    // PROMPT_REVISION: subir quando o SYSTEM do guide-ask mudar o formato da resposta (2: hipóteses antes da conduta; 3: fonte ortopedia e contexto; 4: o médico é o ortopedista — nunca "encaminhe ao ortopedista").
     version = textHash(`prompt:${PROMPT_REVISION}\n${chunks}\n${JSON.stringify(CONDITION_TERMS.map(allTermsOf))}`);
   }
   return version;

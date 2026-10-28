@@ -21,9 +21,9 @@ const EXAMPLES = {
     "O que orientar no início do antidepressivo?",
   ],
   ortopedia: [
-    "Torceu o tornozelo ontem: preciso de raio-X?",
-    "Lombalgia aguda sem alarme: receita e quantos dias de atestado?",
-    "Como faço o teste de Lachman e o que significa?",
+    "Luxação anterior do ombro: como reduzo e o que faço depois?",
+    "Fratura exposta de tíbia: antibiótico, tétano e o que escrever na regulação?",
+    "Colles desviada: bloqueio de hematoma, redução e critérios para a placa?",
   ],
 } as const;
 

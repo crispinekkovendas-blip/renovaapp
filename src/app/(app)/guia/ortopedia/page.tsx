@@ -9,7 +9,7 @@ import { guideAiEnabled } from "@/lib/guide-ask";
 
 export const metadata = { title: "Ortopedia" };
 
-/** O guia de ortopedia ambulatorial, para o clínico que assume a vaga de ortopedia. */
+/** O guia de ortopedia — plantão e ambulatório — para o médico que assume a vaga de ortopedia no SUS e é, ali, o ortopedista. */
 export default async function OrtopediaPage() {
   await requireRole("admin", "profissional");
   const stats = orthoStats();
@@ -23,8 +23,9 @@ export default async function OrtopediaPage() {
           </Link>
         }
       >
-        Ambulatório de ortopedia para o clínico geral: {stats.topics} condições em {stats.chapters} capítulos, cada uma na ordem da
-        consulta — perguntar, examinar ({stats.exams} manobras), alarme, imagem, conduta, receita, encaminhar e atestado.
+        Você é o ortopedista de plantão e de ambulatório: {stats.topics} tópicos em {stats.chapters} capítulos, cada um na ordem do
+        atendimento — perguntar, examinar ({stats.exams} manobras), alarme, imagem, o que fazer na urgência, procedimentos passo a
+        passo, conduta, receita, o retorno, o que vai para a cirurgia pela regulação, e atestado.
       </GuideHeader>
       {guideAiEnabled() ? <AskBox examples="ortopedia" defaultScope="ortopedia" /> : null}
       <OrthoIndex docs={orthoDocs()} />

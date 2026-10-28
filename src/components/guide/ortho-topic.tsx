@@ -2,19 +2,23 @@ import type { ReactNode } from "react";
 import type { OrthoTopic } from "@/lib/ortho-guide";
 
 /**
- * Um tópico do Guia de ortopedia na ordem da consulta: perguntar, examinar,
- * alarme, imagem, conduta, receita, imobilizar, encaminhar, atestado e
- * retorno. Cada seção tem um id para o sumário lateral.
+ * Um tópico do Guia de ortopedia na ordem do atendimento: perguntar,
+ * examinar, alarme, imagem, na urgência, procedimentos, conduta, receita,
+ * imobilizar, no retorno, cirurgia e regulação, atestado e retorno. Cada
+ * seção tem um id para o sumário lateral.
  */
 export const ORTHO_SECTIONS = [
   ["perguntar", "Perguntar"],
   ["examinar", "Examinar"],
   ["alarme", "Alarme"],
   ["imagem", "Imagem"],
+  ["urgencia", "Na urgência"],
+  ["procedimentos", "Procedimentos"],
   ["conduta", "Conduta"],
   ["receita", "Receita"],
   ["imobilizar", "Imobilizar"],
-  ["encaminhar", "Encaminhar"],
+  ["retorno", "No retorno"],
+  ["cirurgia", "Cirurgia e regulação"],
   ["atestado", "Atestado e retorno"],
 ] as const;
 
@@ -61,6 +65,46 @@ export function OrthoTopicBody({ topic }: { topic: OrthoTopic }) {
         </Section>
       ) : null}
 
+      <Section id="urgencia" title="Na urgência" hint="você é o ortopedista de plantão: o que faz hoje">
+        <ul className="space-y-1.5">
+          {topic.urgent.map((u, i) => (
+            <li key={i} className="flex gap-2 rounded-xl border border-pine-200 bg-pine-50 px-3 py-2 text-[13.5px] text-pine-950">
+              <span aria-hidden className="shrink-0 font-extrabold text-pine-600">▶</span>
+              <span className="min-w-0">{u}</span>
+            </li>
+          ))}
+        </ul>
+      </Section>
+
+      {topic.procedures && topic.procedures.length > 0 ? (
+        <Section id="procedimentos" title="Procedimentos" hint="passo a passo, no serviço">
+          <ol className="space-y-3">
+            {topic.procedures.map((p) => (
+              <li key={p.name} className="rounded-xl border border-pine-900/10 bg-white px-3.5 py-3">
+                <p className="text-[14.5px] font-extrabold text-pine-950">{p.name}</p>
+                <p className="mt-1 text-[13.5px]">
+                  <span className="mr-1 rounded bg-pine-100 px-1 text-[10px] font-extrabold tracking-wide text-pine-800 uppercase">Quando</span>
+                  {p.when}
+                </p>
+                <p className="mt-1 text-[13.5px]">
+                  <span className="mr-1 rounded bg-pine-100 px-1 text-[10px] font-extrabold tracking-wide text-pine-800 uppercase">Material</span>
+                  {p.needs}
+                </p>
+                <ol className="mt-2 list-decimal space-y-1 pl-5 text-[13.5px]">
+                  {p.steps.map((st, i) => (
+                    <li key={i}>{st}</li>
+                  ))}
+                </ol>
+                <p className="mt-2 text-[13.5px]">
+                  <span className="mr-1 rounded bg-sun-100 px-1 text-[10px] font-extrabold tracking-wide text-pine-800 uppercase">Depois</span>
+                  {p.after}
+                </p>
+              </li>
+            ))}
+          </ol>
+        </Section>
+      ) : null}
+
       <Section id="conduta" title="Conduta" hint="o que fazer e orientar">
         <Bullets items={topic.plan} />
       </Section>
@@ -88,7 +132,11 @@ export function OrthoTopicBody({ topic }: { topic: OrthoTopic }) {
         </Section>
       ) : null}
 
-      <Section id="encaminhar" title="Encaminhar" hint="quando o ortopedista entra">
+      <Section id="retorno" title="No retorno" hint="o seguimento no ambulatório">
+        <Bullets items={topic.clinic} />
+      </Section>
+
+      <Section id="cirurgia" title="Cirurgia e regulação" hint="o que sai da sua mão, e com que urgência">
         <Bullets items={topic.refer} />
       </Section>
 

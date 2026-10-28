@@ -1,10 +1,12 @@
 import type { OrthoTopic } from "./types.ts";
+import { CURRENT_ORTHO_REVISION } from "./revisions.ts";
 
 /**
- * A consulta guiada de ortopedia: o médico que nunca atendeu ortopedia
- * escolhe onde dói, confere o alarme da região, escolhe a condição que
- * combina e segue o roteiro do tópico marcando o que perguntou e o que o
- * exame deu. No fim sai a nota SOAP para colar no prontuário.
+ * A consulta guiada de ortopedia: o médico — o ortopedista de plantão, que
+ * nunca atendeu ortopedia — escolhe onde dói, confere o alarme da região,
+ * escolhe a condição que combina e segue o roteiro do tópico marcando o que
+ * perguntou e o que o exame deu. No fim sai a nota SOAP para colar no
+ * prontuário.
  */
 
 export interface OrthoRegion {
@@ -20,10 +22,10 @@ export interface OrthoRegion {
 
 /** Alarmes que valem para qualquer região. */
 export const UNIVERSAL_ALARM: readonly string[] = [
-  "Articulação quente, inchada e que não deixa mexer, com ou sem febre (artrite séptica até a punção)",
-  "Ferida sobre o osso quebrado ou deformidade grosseira (fratura exposta ou luxação)",
-  "Dor desproporcional, piora ao estirar os dedos, dormência ou dedos pálidos (síndrome compartimental)",
-  "Pulso ausente, mão ou pé frio, perda de força ou sensibilidade distal (lesão vascular ou nervosa)",
+  "Articulação quente, inchada e que não deixa mexer, com ou sem febre (artrite séptica até a punção — puncione agora)",
+  "Ferida sobre o osso quebrado ou deformidade grosseira (fratura exposta: antibiótico na primeira hora; luxação: reduza)",
+  "Dor desproporcional, piora ao estirar os dedos, dormência ou dedos pálidos (síndrome compartimental: abra tudo, fasciotomia em horas)",
+  "Pulso ausente, mão ou pé frio, perda de força ou sensibilidade distal (lesão vascular ou nervosa: alinhe, reduza, vascular hoje)",
   "Dor noturna constante com emagrecimento, câncer prévio ou febre (tumor ou infecção)",
 ];
 
@@ -42,9 +44,9 @@ export const ORTHO_REGIONS: readonly OrthoRegion[] = [
     key: "ombro",
     label: "Ombro e clavícula",
     short: "Ombro",
-    topics: ["sindrome-do-impacto-e-manguito-rotador", "capsulite-adesiva", "luxacao-e-instabilidade-do-ombro", "fratura-de-clavicula"],
+    topics: ["luxacao-e-instabilidade-do-ombro", "fratura-do-umero-proximal", "fratura-de-clavicula", "sindrome-do-impacto-e-manguito-rotador", "capsulite-adesiva"],
     alarm: [
-      "Ombro saiu do lugar e ainda está fora (luxação: raio-X e redução no pronto-socorro)",
+      "Ombro saiu do lugar e ainda está fora (luxação: raio-X e redução por você, com lidocaína intra-articular ou sedação)",
       "Fraqueza súbita para levantar o braço depois de queda em menos de 60 anos (ruptura aguda do manguito)",
       "Dor no ombro esquerdo com esforço, suor ou falta de ar e ombro normal ao exame (coração)",
     ],
@@ -53,20 +55,34 @@ export const ORTHO_REGIONS: readonly OrthoRegion[] = [
     key: "cotovelo",
     label: "Cotovelo",
     short: "Cotovelo",
-    topics: ["epicondilite"],
+    topics: ["luxacao-de-cotovelo-e-fratura-da-cabeca-do-radio", "fratura-supracondiliana-do-umero", "pronacao-dolorosa", "epicondilite"],
     alarm: [
-      "Cotovelo com derrame, quente ou travado depois de queda (fratura da cabeça do rádio ou supracondiliana na criança)",
-      "Criança que não mexe o cotovelo após queda (fratura até prova em contrário: raio-X e ortopedia hoje)",
+      "Cotovelo deformado após queda (luxação: raio-X, sedação e redução por tração — sua, hoje)",
+      "Cotovelo com derrame, quente ou travado depois de queda (fratura da cabeça do rádio no adulto; supracondiliana na criança)",
+      "Criança com o cotovelo inchado que não mexe após queda (supracondiliana até prova em contrário: pulso, nervos, raio-X; desviada vai para os fios hoje)",
+      "Criança pequena que parou de usar o braço após um puxão, sem edema (pronação dolorosa: reduza, sem raio-X)",
     ],
   },
   {
     key: "punho-mao",
     label: "Punho e mão",
     short: "Punho e mão",
-    topics: ["fratura-do-radio-distal", "fratura-de-escafoide", "sindrome-do-tunel-do-carpo", "tenossinovite-de-de-quervain", "dedo-em-gatilho", "rizartrose"],
+    topics: [
+      "fratura-do-radio-distal",
+      "fratura-de-escafoide",
+      "fraturas-de-metacarpo-e-falanges",
+      "luxacao-de-dedo-e-lesoes-de-tendao",
+      "ferimentos-da-mao-unha-e-ponta-do-dedo",
+      "fraturas-na-crianca-torus-galho-verde-e-fise",
+      "sindrome-do-tunel-do-carpo",
+      "tenossinovite-de-de-quervain",
+      "dedo-em-gatilho",
+      "rizartrose",
+    ],
     alarm: [
       "Queda sobre a mão com dor na tabaqueira anatômica (escafoide: imobilizar mesmo com raio-X normal)",
-      "Dedo que não dobra a ponta, ferida sobre tendão ou articulação, mordedura (cirurgia da mão hoje)",
+      "Dedo que não dobra a ponta sozinho, tendão ou nervo cortado, ferida sobre articulação, mordedura, injeção de alta pressão (cirurgia da mão hoje; teste tendão e nervo antes de anestesiar)",
+      "Dedo que cruza o vizinho ao fechar a mão (rotação: cirurgia, qualquer grau)",
       "Atrofia na base do polegar ou dormência constante (túnel do carpo grave: cirurgia, não órtese)",
     ],
   },
@@ -86,22 +102,23 @@ export const ORTHO_REGIONS: readonly OrthoRegion[] = [
     key: "quadril",
     label: "Quadril e virilha",
     short: "Quadril",
-    topics: ["fratura-de-quadril-no-idoso", "osteoartrite-de-quadril", "sindrome-dolorosa-do-grande-trocanter", "dor-no-quadril-na-crianca"],
+    topics: ["fratura-de-quadril-no-idoso", "fraturas-de-pelve-e-sacro-no-idoso", "luxacao-de-quadril-joelho-e-tornozelo", "osteoartrite-de-quadril", "sindrome-dolorosa-do-grande-trocanter", "dor-no-quadril-na-crianca"],
     alarm: [
-      "Idoso que caiu e não consegue apoiar a perna, mesmo com raio-X normal (fratura de quadril: hospital hoje)",
-      "Criança que manca com febre ou não quer andar (artrite séptica do quadril até prova em contrário)",
-      "Adolescente com dor no quadril ou joelho e a perna rodando para fora ao fletir (epifisiólise: sem apoiar, ortopedia hoje)",
+      "Idoso que caiu e não consegue apoiar a perna, mesmo com raio-X normal (fratura de quadril ou de pelve: interna, bloqueio, tomografia se o raio-X é normal)",
+      "Perna encurtada, fletida e rodada para dentro após acidente ou com prótese (luxação de quadril: redução sob sedação em até 6 h)",
+      "Criança que manca com febre ou não quer andar (artrite séptica do quadril até prova em contrário: punção hoje)",
+      "Adolescente com dor no quadril ou joelho e a perna rodando para fora ao fletir (epifisiólise: sem apoiar, internar, fixação em 24–48 h)",
     ],
   },
   {
     key: "joelho",
     label: "Joelho",
     short: "Joelho",
-    topics: ["entorse-de-joelho-ligamentos", "lesao-meniscal", "osteoartrite-de-joelho", "dor-patelofemoral", "cisto-de-baker-e-bursites-do-joelho"],
+    topics: ["entorse-de-joelho-ligamentos", "fratura-da-patela-e-aparelho-extensor", "lesao-meniscal", "osteoartrite-de-joelho", "dor-patelofemoral", "cisto-de-baker-e-bursites-do-joelho"],
     alarm: [
-      "Joelho travado que não estica (alça de balde: ortopedista em 48 h)",
-      "Não consegue esticar o joelho ativamente depois de trauma (ruptura de quadríceps ou patelar, fratura de patela)",
-      "Joelho frouxo em várias direções ou pulso do pé alterado (luxação de joelho: artéria poplítea — hoje)",
+      "Joelho travado que não estica (alça de balde: não force, artroscopia em 48 h)",
+      "Não consegue elevar a perna esticada depois de trauma (ruptura de quadríceps ou patelar, patela desviada: imobilizador em extensão, cirurgia em 1–2 semanas)",
+      "Joelho frouxo em várias direções ou pulso do pé alterado (luxação de joelho: reduza, pulsos de hora em hora, vascular hoje)",
       "Panturrilha inchada e dolorosa de repente (trombose até o Doppler dizer o contrário)",
     ],
   },
@@ -109,11 +126,23 @@ export const ORTHO_REGIONS: readonly OrthoRegion[] = [
     key: "tornozelo-pe",
     label: "Tornozelo e pé",
     short: "Tornozelo e pé",
-    topics: ["entorse-de-tornozelo", "fratura-de-metatarso", "tendao-de-aquiles", "fascite-plantar", "halux-valgo-e-metatarsalgia"],
+    topics: ["entorse-de-tornozelo", "fraturas-do-tornozelo", "fratura-de-metatarso", "tendao-de-aquiles", "fascite-plantar", "halux-valgo-e-metatarsalgia"],
     alarm: [
-      "Estalo na panturrilha e não fica na ponta do pé (ruptura do Aquiles: Thompson, imobilizar em equino, ortopedista em 48 h)",
-      "Dor no meio do pé com roxo na planta e não pisa na ponta (Lisfranc: tomografia hoje)",
+      "Pé deslocado com a pele tensa sobre o maléolo (luxação do tornozelo: reduza antes do raio-X)",
+      "Estalo na panturrilha e não fica na ponta do pé (ruptura do Aquiles: Thompson, equino hoje, decisão em 48 h)",
+      "Dor no meio do pé com roxo na planta e não pisa na ponta (Lisfranc: tomografia e cirurgia em dias)",
       "Diabético com pé quente, inchado ou com ferida (infecção ou Charcot: urgência)",
+    ],
+  },
+  {
+    key: "trauma-grave",
+    label: "Trauma grave: ferida sobre a fratura, compartimento, diáfise",
+    short: "Trauma grave",
+    topics: ["fratura-exposta", "sindrome-compartimental-e-gesso-apertado", "fraturas-diafisarias-femur-tibia-umero"],
+    alarm: [
+      "Qualquer ferida sobre o foco de fratura (exposta: antibiótico EV na primeira hora, tétano, lavagem, tala — cirurgia em 24 h)",
+      "Dor crescente apesar da analgesia, piora ao esticar os dedos, compartimento tenso (compartimental: abra gesso e algodão até a pele; fasciotomia em horas)",
+      "Coxa tensa e crescente, hipotensão (fêmur sangra 1–1,5 L: dois acessos, sangue, tração, vaga em 24–48 h)",
     ],
   },
   {
@@ -131,16 +160,31 @@ export const ORTHO_REGIONS: readonly OrthoRegion[] = [
 /** Tópicos em que o trauma é a porta de entrada — com “houve trauma” marcado, vêm primeiro. */
 export const TRAUMA_TOPICS: ReadonlySet<string> = new Set([
   "luxacao-e-instabilidade-do-ombro",
+  "fratura-do-umero-proximal",
   "fratura-de-clavicula",
+  "luxacao-de-cotovelo-e-fratura-da-cabeca-do-radio",
+  "fratura-supracondiliana-do-umero",
+  "pronacao-dolorosa",
   "fratura-do-radio-distal",
   "fratura-de-escafoide",
+  "fraturas-de-metacarpo-e-falanges",
+  "luxacao-de-dedo-e-lesoes-de-tendao",
+  "ferimentos-da-mao-unha-e-ponta-do-dedo",
+  "fraturas-na-crianca-torus-galho-verde-e-fise",
   "fratura-vertebral-osteoporotica",
   "fratura-de-quadril-no-idoso",
+  "fraturas-de-pelve-e-sacro-no-idoso",
+  "luxacao-de-quadril-joelho-e-tornozelo",
   "entorse-de-joelho-ligamentos",
+  "fratura-da-patela-e-aparelho-extensor",
   "lesao-meniscal",
   "entorse-de-tornozelo",
+  "fraturas-do-tornozelo",
   "fratura-de-metatarso",
   "tendao-de-aquiles",
+  "fratura-exposta",
+  "sindrome-compartimental-e-gesso-apertado",
+  "fraturas-diafisarias-femur-tibia-umero",
 ]);
 
 export function regionOf(slug: string): OrthoRegion | null {
@@ -232,8 +276,9 @@ export function buildSoapNote(region: OrthoRegion, topic: OrthoTopic, answers: C
   lines.push("");
 
   lines.push("P — Conduta");
-  if (alarms.length) lines.push("- ENCAMINHAMENTO NO MESMO DIA pelos sinais de alarme acima.");
+  if (alarms.length) lines.push("- ALARME PRESENTE: conduta de urgência hoje (ver “Na urgência”); cirurgia ou regulação se indicado.");
   if (topic.imaging.length) lines.push(`- Imagem: ${topic.imaging[0]}`);
+  if (topic.urgent.length) lines.push(`- Na urgência: ${topic.urgent[0]}`);
   for (const p of topic.plan.slice(0, 3)) lines.push(`- ${p}`);
   const rx = answers.rx.filter((i) => topic.rx[i]).map((i) => topic.rx[i]);
   if (rx.length) {
@@ -241,10 +286,10 @@ export function buildSoapNote(region: OrthoRegion, topic: OrthoTopic, answers: C
     for (const r of rx) lines.push(`  · ${r.name} — ${r.posology}`);
   }
   if (topic.immobilize?.length) lines.push(`- Imobilização: ${topic.immobilize[0]}`);
-  lines.push(`- Encaminhar: ${topic.refer[0]}`);
+  lines.push(`- Cirurgia/regulação: ${topic.refer[0]}`);
   lines.push(`- Atestado: ${answers.leave.trim() || topic.leave} · Retorno: ${topic.followup}`);
   lines.push("");
-  lines.push("Roteiro: Guia de ortopedia Renova, revisão 1.");
+  lines.push(`Roteiro: Guia de ortopedia Renova, revisão ${CURRENT_ORTHO_REVISION}.`);
   return lines.join("\n");
 }
 

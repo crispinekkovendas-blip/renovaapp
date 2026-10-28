@@ -8,7 +8,7 @@ const topics = () => ORTHO_GUIDE.flatMap((c) => c.topics);
 test("o guia está inteiro: capítulos com intro, tópicos com as seções que o médico precisa, slugs únicos", () => {
   const { chapters, topics: n } = orthoStats();
   assert.ok(chapters >= 8, `só ${chapters} capítulos`);
-  assert.ok(n >= 30, `só ${n} tópicos`);
+  assert.ok(n >= 54, `só ${n} tópicos`);
   const slugs = orthoSlugs();
   assert.equal(new Set(slugs).size, slugs.length);
   for (const c of ORTHO_GUIDE) assert.ok(c.intro.length > 20, c.title);
@@ -19,7 +19,15 @@ test("o guia está inteiro: capítulos com intro, tópicos com as seções que o
     assert.ok(t.ask.length >= 1, `${t.title}: sem anamnese`);
     assert.ok(t.alarm.length >= 1, `${t.title}: sem alarme`);
     assert.ok(t.plan.length >= 1, `${t.title}: sem conduta`);
-    assert.ok(t.refer.length >= 1, `${t.title}: sem critério de encaminhar`);
+    assert.ok(t.urgent.length >= 1, `${t.title}: sem "na urgência"`);
+    assert.ok(t.clinic.length >= 1, `${t.title}: sem "no retorno"`);
+    assert.ok(t.refer.length >= 1, `${t.title}: sem "cirurgia e regulação"`);
+    assert.match(t.refer[0], /^Sai da sua mão/, `${t.title}: o trecho de cirurgia e regulação começa por "Sai da sua mão"`);
+    for (const p of t.procedures ?? []) assert.ok(p.name && p.when && p.needs && p.steps.length >= 2 && p.after, `${t.title}: procedimento incompleto`);
+    // O médico é o ortopedista: o guia não manda ninguém "ao ortopedista".
+    for (const line of [...t.urgent, ...t.plan, ...t.alarm, ...t.refer, ...t.clinic, t.summary]) {
+      assert.doesNotMatch(line, /\b(ao|para o|encaminhe ao) ortopedista\b(?! de plantão)/i, `${t.title}: ${line.slice(0, 60)}`);
+    }
     assert.ok(t.leave.length > 0 && t.followup.length > 0, `${t.title}: sem atestado ou retorno`);
     assert.ok(t.sources.length >= 1, `${t.title}: sem fonte`);
     for (const e of t.exam) assert.ok(e.name && e.how && e.positive, `${t.title}: manobra incompleta`);

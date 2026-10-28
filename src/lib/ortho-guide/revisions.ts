@@ -1,6 +1,7 @@
 import { ORTHO_GUIDE } from "./data.ts";
 import { conciseDiff } from "../revision-diff.ts";
 import type { ConciseLine } from "../revision-diff.ts";
+import { REV3_CHANGES } from "./revisions-rev3.ts";
 
 /**
  * As revisões do Guia de ortopedia: cada mudança de conteúdo com o texto de
@@ -18,6 +19,7 @@ export interface OrthoRevision {
 export const ORTHO_REVISIONS: readonly OrthoRevision[] = [
   { n: 1, date: "21/10/2026", label: "Publicação" },
   { n: 2, date: "27/10/2026", label: "2ª revisão" },
+  { n: 3, date: "28/10/2026", label: "3ª revisão — você é o ortopedista" },
 ];
 
 export const CURRENT_ORTHO_REVISION = ORTHO_REVISIONS[ORTHO_REVISIONS.length - 1].n;
@@ -139,6 +141,7 @@ export const ORTHO_CHANGES: readonly OrthoChange[] = [
     after: "M80.0 / S22.0 / S32.0",
     why: "S32.0 é só a fratura de vértebra lombar; a fratura por fragilidade é mais frequente na transição toracolombar e na coluna torácica, que é S22.0.",
   },
+  ...REV3_CHANGES,
 ];
 
 /** FNV-1a de 32 bits: id curto e estável para a decisão do médico ficar presa à mudança. */

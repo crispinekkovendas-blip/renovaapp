@@ -101,7 +101,7 @@ export function OrthoConsult({ topics, initialTopic }: { topics: readonly OrthoT
 
       {alarms.length > 0 && step !== "nota" ? (
         <div role="alert" className="mb-4 rounded-2xl border border-rose-300 bg-rose-50 p-3.5 text-rose-950">
-          <p className="text-[13px] font-extrabold tracking-wide uppercase">⚠ Sinal de alarme marcado — encaminhar no mesmo dia</p>
+          <p className="text-[13px] font-extrabold tracking-wide uppercase">⚠ Sinal de alarme marcado — conduta de urgência hoje</p>
           <ul className="mt-1 list-disc pl-5 text-[13.5px]">
             {alarms.map((a) => (
               <li key={a}>{a}</li>
@@ -215,7 +215,7 @@ function AlarmStep({ region, answers, onChange, onNext }: { region: OrthoRegion;
   const canNext = answers.trauma !== null;
   return (
     <section>
-      <StepTitle hint="30 segundos que separam o ambulatório do pronto-socorro">Antes de tudo: {region.label.toLowerCase()}</StepTitle>
+      <StepTitle hint="30 segundos que separam o que você resolve hoje do que vai para a cirurgia">Antes de tudo: {region.label.toLowerCase()}</StepTitle>
 
       <fieldset className="rounded-2xl border border-pine-900/10 bg-white p-3.5">
         <legend className="px-1 text-[13px] font-extrabold text-pine-950">Houve trauma (queda, torção, pancada)?</legend>
@@ -416,7 +416,10 @@ function ScriptStep({ topic, answers, onChange, onNext }: { topic: OrthoTopic; a
         </Block>
       ) : null}
 
-      <Block n={topic.imaging.length ? 5 : 4} title="Conduta" hint="o que fazer e explicar ao paciente">
+      <Block n={topic.imaging.length ? 5 : 4} title="Conduta" hint="na urgência, o que fazer e explicar ao paciente">
+        <div className="mb-2 rounded-xl border border-pine-200 bg-pine-50 px-3 py-2 text-[13.5px] text-pine-950">
+          <b>Na urgência:</b> {topic.urgent[0]}
+        </div>
         <Bullets items={topic.plan} />
         {topic.immobilize?.length ? (
           <div className="mt-2 rounded-xl border border-pine-900/10 bg-white px-3 py-2 text-[13.5px]">
@@ -444,7 +447,7 @@ function ScriptStep({ topic, answers, onChange, onNext }: { topic: OrthoTopic; a
         </Block>
       ) : null}
 
-      <Block n={topic.imaging.length ? 7 : 6} title="Encaminhar, atestado e retorno">
+      <Block n={topic.imaging.length ? 7 : 6} title="Cirurgia e regulação, atestado e retorno">
         <Bullets items={topic.refer} />
         <div className="mt-2 grid gap-2 sm:grid-cols-2">
           <label className="block text-[12.5px] font-bold text-pine-900/60">

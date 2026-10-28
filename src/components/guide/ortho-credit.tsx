@@ -19,7 +19,7 @@ export function OrthoCredit({ compact = false }: { compact?: boolean }) {
       <p className="mt-1.5">
         {ORTHO_CREDIT.reviewedBy
           ? `Revisado por ${ORTHO_CREDIT.reviewedBy}.`
-          : "Ainda sem revisão por ortopedista: use como roteiro de primeira consulta e confira doses e condutas com o protocolo do serviço."}{" "}
+          : "Escrito para o médico que é o ortopedista de plantão e de ambulatório no SUS; ainda sem revisão por ortopedista — confira doses, técnicas e condutas com o protocolo do serviço."}{" "}
         Doses de adulto sem comorbidade, salvo indicação. Os dias de atestado são sugestão — ajuste à função do paciente.
       </p>
     </div>

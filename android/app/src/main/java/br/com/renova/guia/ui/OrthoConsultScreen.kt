@@ -163,7 +163,7 @@ private fun RegionStep(ortho: OrthoContent, selected: String?, onPick: (String) 
 
 @Composable
 private fun AlarmStep(ortho: OrthoContent, region: OrthoRegion, a: ConsultAnswers, vm: ConsultViewModel) {
-    StepTitle("Antes de tudo: ${region.label.lowercase()}", "30 segundos que separam o ambulatório do pronto-socorro")
+    StepTitle("Antes de tudo: ${region.label.lowercase()}", "30 segundos que separam o que você resolve hoje do que vai para a cirurgia")
     Text("Houve trauma (queda, torção, pancada)?", fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 4.dp))
     Row(Modifier.padding(top = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         FilterChip(selected = a.trauma == true, onClick = { vm.setTrauma(true) }, label = { Text("Sim, houve trauma") }, modifier = Modifier.testTag("trauma-sim"))
@@ -276,7 +276,8 @@ private fun ScriptStep(topic: OrthoTopic, a: ConsultAnswers, vm: ConsultViewMode
         topic.alarm.forEachIndexed { i, t -> AlarmCheck(t, i in a.topicAlarm) { vm.toggleTopicAlarm(i) } }
     }
     if (topic.imaging.isNotEmpty()) Block(n++, "Imagem", "o que pedir e como escrever") { Bullets(topic.imaging) }
-    Block(n++, "Conduta", "o que fazer e explicar ao paciente") {
+    Block(n++, "Conduta", "na urgência, o que fazer e explicar ao paciente") {
+        topic.urgent.firstOrNull()?.let { Text("Na urgência: $it", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(bottom = 6.dp)) }
         Bullets(topic.plan)
         topic.immobilize?.takeIf { it.isNotEmpty() }?.let { Text("Imobilizar: " + it.joinToString(" "), style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 6.dp)) }
     }
@@ -299,7 +300,7 @@ private fun ScriptStep(topic: OrthoTopic, a: ConsultAnswers, vm: ConsultViewMode
             }
         }
     }
-    Block(n, "Encaminhar, atestado e retorno") {
+    Block(n, "Cirurgia e regulação, atestado e retorno") {
         Bullets(topic.refer)
         OutlinedTextField(
             value = a.leave,

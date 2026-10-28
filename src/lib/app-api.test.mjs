@@ -68,8 +68,8 @@ test("pacote do app: as três abas, ids únicos e iguais aos da busca e das cita
 
   // O Guia de ortopedia vai inteiro, com a busca própria e a consulta guiada apontando para tópicos reais.
   const orto = bundle.ortopedia;
-  assert.equal(orthoTopics.length, 36);
-  assert.equal(orto.revision.current, 2);
+  assert.equal(orthoTopics.length, 54);
+  assert.equal(orto.revision.current, 3);
   assert.deepEqual(new Set(orto.search.docs.map((d) => d.id)), new Set(orthoTopics.map((t) => t.id)));
   assert.deepEqual(new Set(orto.search.items.map((d) => d.id)), new Set(orthoTopics.map((t) => t.id)));
   for (const t of orthoTopics) assert.equal(t.id, `ortopedia:${t.slug}`);
@@ -88,7 +88,7 @@ test("pacote do app: as três abas, ids únicos e iguais aos da busca e das cita
   assert.equal(bundle.changes[0].rev, bundle.revision.current, "a revisão atual vem primeiro");
 
   assert.ok(!/Licensed to|kevintuco/i.test(json), "o pacote nunca leva a marca d'água do e-book");
-  assert.ok(json.length < 3_000_000, `pacote grande demais: ${json.length}`);
+  assert.ok(json.length < 4_000_000, `pacote grande demais: ${json.length}`);
 });
 
 test("pacote do app: a busca montada com ele acha nas três fontes", () => {

@@ -23,10 +23,13 @@ export default async function OrtopediaTopicPage({ params }: { params: Promise<{
     ...(topic.exam.length ? ["examinar"] : []),
     "alarme",
     ...(topic.imaging.length ? ["imagem"] : []),
+    "urgencia",
+    ...(topic.procedures?.length ? ["procedimentos"] : []),
     "conduta",
     ...(topic.rx.length ? ["receita"] : []),
     ...(topic.immobilize?.length ? ["imobilizar"] : []),
-    "encaminhar",
+    "retorno",
+    "cirurgia",
     "atestado",
   ]);
 

@@ -1,5 +1,6 @@
 package br.com.renova.guia.data
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /*
@@ -61,9 +62,16 @@ data class OrthoTopic(
     val exam: List<OrthoExam> = emptyList(),
     val alarm: List<String> = emptyList(),
     val imaging: List<String> = emptyList(),
+    /** Na urgência: o que o médico — o ortopedista de plantão — faz hoje com este paciente. */
+    val urgent: List<String> = emptyList(),
+    /** Os procedimentos que ele faz no serviço, passo a passo. */
+    val procedures: List<OrthoProcedure>? = null,
     val plan: List<String> = emptyList(),
     val rx: List<OrthoRx> = emptyList(),
     val immobilize: List<String>? = null,
+    /** No retorno (ambulatório): o seguimento. */
+    val clinic: List<String> = emptyList(),
+    /** Cirurgia e regulação: o que sai da mão dele, e com que urgência. */
     val refer: List<String> = emptyList(),
     val leave: String = "",
     val followup: String = "",
@@ -78,6 +86,16 @@ data class OrthoTopic(
 
 @Serializable
 data class OrthoExam(val name: String, val how: String, val positive: String)
+
+/** Um procedimento do plantão: redução, tala, gesso, bloqueio, punção, infiltração. `when` é palavra reservada no Kotlin. */
+@Serializable
+data class OrthoProcedure(
+    val name: String,
+    @SerialName("when") val whenTo: String,
+    val needs: String,
+    val steps: List<String> = emptyList(),
+    val after: String,
+)
 
 @Serializable
 data class OrthoRx(val name: String, val posology: String, val note: String? = null)
