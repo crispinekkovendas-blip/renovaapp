@@ -1,8 +1,10 @@
 # Guia Renova — app Android
 
-O Guia clínico do Renova (Receitas prontas, Plantão e emergência, Drive de
-prescrições) como app nativo em Kotlin + Jetpack Compose, com a Super
-Inteligência.
+O Guia clínico do Renova como app nativo em Kotlin + Jetpack Compose, em três
+abas: **Plantão** (Receitas prontas, Emergência, Drive de prescrições),
+**Ortopedia** (o guia próprio da Renova, com a consulta guiada e a nota SOAP) e
+**Perguntar** (Super Inteligência, também disponível em toda tela com o contexto
+da tela e o escopo Plantão/Ortopedia).
 
 ## Como funciona
 
@@ -17,8 +19,13 @@ Inteligência.
   busca lá, rode os testes aqui.
 - **Super Inteligência**: pelo servidor (`POST /api/guia/perguntar` com o token);
   a chave do Gemini nunca vai ao aparelho. Citações abrem o trecho no app.
+- **Ortopedia**: vem no campo `ortopedia` do pacote com índice de busca próprio
+  (tópicos na ordem da consulta, regiões e alarmes da consulta guiada, atalhos do
+  primeiro dia, revisões). Tópico com as seções do plantão (na urgência,
+  procedimentos passo a passo, no retorno, cirurgia e regulação).
 - **Mais**: favoritos e recentes, pergunta por voz, enviar/copiar receita
-  (WhatsApp), aviso de revisão nova, modo escuro.
+  (WhatsApp), aviso de revisão nova, tema escuro (⋮ › Tema escuro), "O app abre
+  em" Plantão ou Ortopedia.
 
 ## Build
 

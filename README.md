@@ -44,6 +44,8 @@ O banco vem de `CONTENT_DATABASE_URL` ou `DATABASE_URL`. Sem acesso a ele, o pro
 | **Relatórios** | Produção por profissional, taxa de falta, receita por convênio, origem dos agendamentos. |
 | **Configurações** | Dados da clínica, profissionais, usuários, horários de atendimento e chaves da API. Somente admin. |
 | **API pública** | REST em `/api/v1/*` (patients, appointments, professionals) com chave `Bearer rnv_…` gerada em Configurações → API. |
+| **Guia clínico** | Duas áreas: **Plantão** (Receitas prontas, Emergência, Drive de prescrições — conteúdo licenciado, fora do git) e **Ortopedia** (guia próprio da Renova em `src/lib/ortho-guide/`: 54 tópicos na ordem da consulta, procedimentos passo a passo, consulta guiada com nota SOAP, revisões com antes/agora/motivo). Busca única e Super Inteligência (Gemini, RAG) com escopo por área. |
+| **App Android** | O Guia clínico como app nativo (`android/`, Kotlin + Compose): guia inteiro sem internet, busca igual à do site, Super Inteligência em toda tela. APK assinado pelo GitHub Actions e distribuído em Guia clínico › App Android. |
 
 ## Stack
 
@@ -60,7 +62,12 @@ O banco vem de `CONTENT_DATABASE_URL` ou `DATABASE_URL`. Sem acesso a ele, o pro
 
 ## Deploy
 
+A produção é promovida à mão (branch de produção `producao`, nunca recebe push):
+
 ```bash
-npm run build          # verificação local
-vercel deploy --prod --yes
+npm test && npm run build          # verificação local
+npm run content:push               # se mexeu em conteúdo privado (guia, vetores)
+npx vercel deploy --yes            # preview
+npx vercel promote <url> --yes     # produção
+gh workflow run android.yml -f publish=true --ref memed-fase-0   # APK novo (o CI faz commit em android-releases/; promover de novo)
 ```
