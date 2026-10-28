@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Fragment, useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
-import type { AskEvent, AskTurn } from "@/lib/guide-ask";
+import type { AskEvent, AskScope, AskTurn } from "@/lib/guide-ask";
 import { CITATION, SOURCE_NAME, citedIds, sourceHref, sourceOf } from "@/lib/guide-citations";
 
 type Source = Extract<AskEvent, { t: "sources" }>["items"][number];
@@ -19,13 +19,53 @@ interface Exchange {
   cachedAt: string | null;
 }
 
+/** O escopo da pergunta, como o médico escolhe: tudo, só o Plantão ou só a Ortopedia. */
+const SCOPES: readonly { key: AskScope | null; label: string }[] = [
+  { key: null, label: "Tudo" },
+  { key: "plantao", label: "Plantão" },
+  { key: "ortopedia", label: "Ortopedia" },
+];
+
+export function ScopePills({ value, onChange, light }: { value: AskScope | null; onChange(scope: AskScope | null): void; light?: boolean }) {
+  return (
+    <div role="radiogroup" aria-label="Onde a Super Inteligência procura" className="flex flex-wrap items-center gap-1">
+      <span className={`mr-1 text-[11.5px] font-semibold ${light ? "text-white/60" : "text-pine-900/50"}`}>Procurar em</span>
+      {SCOPES.map((s) => {
+        const on = s.key === value;
+        return (
+          <button
+            key={s.label}
+            type="button"
+            role="radio"
+            aria-checked={on}
+            onClick={() => onChange(s.key)}
+            className={`rounded-full px-2.5 py-1 text-[11.5px] font-bold transition-colors pointer-coarse:min-h-9 ${
+              light
+                ? on
+                  ? "bg-sun-400 text-pine-950"
+                  : "bg-white/10 text-white/80 hover:bg-white/20"
+                : on
+                  ? "bg-pine-950 text-white"
+                  : "bg-pine-100/70 text-pine-900/70 hover:bg-pine-200"
+            }`}
+          >
+            {s.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 /**
  * "Perguntar ao guia": a resposta chega enquanto é escrita, com as buscas
  * que a IA fez e cada afirmação ligada ao trecho de onde veio. Perguntas de
- * seguimento levam a conversa junto.
+ * seguimento levam a conversa junto. O escopo (tudo, Plantão ou Ortopedia)
+ * vale para as próximas perguntas e pode ser trocado aqui.
  */
-export function GuideAsk({ question, onClose }: { question: string; onClose(): void }) {
+export function GuideAsk({ question, scope: initialScope = null, onClose }: { question: string; scope?: AskScope | null; onClose(): void }) {
   const [thread, setThread] = useState<Exchange[]>([]);
+  const [scope, setScope] = useState<AskScope | null>(initialScope);
   const [followUp, setFollowUp] = useState("");
   const busy = thread.some((e) => !e.done);
   const abort = useRef<AbortController | null>(null);
@@ -46,7 +86,7 @@ export function GuideAsk({ question, onClose }: { question: string; onClose(): v
       const res = await fetch("/api/guia/perguntar", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ question: q, history, fresh }),
+        body: JSON.stringify({ question: q, history, fresh, scope: scope ?? undefined }),
         signal: abort.current.signal,
       });
       if (!res.ok || !res.body) {
@@ -94,7 +134,10 @@ export function GuideAsk({ question, onClose }: { question: string; onClose(): v
       className="card mb-4 border-pine-200 bg-gradient-to-b from-pine-50/70 to-white p-4 sm:p-5"
     >
       <div className="flex items-start justify-between gap-3">
-        <p className="text-[11px] font-extrabold tracking-[0.12em] text-pine-700 uppercase">✨ Pergunta ao guia</p>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+          <p className="text-[11px] font-extrabold tracking-[0.12em] text-pine-700 uppercase">✨ Pergunta ao guia</p>
+          <ScopePills value={scope} onChange={setScope} />
+        </div>
         <button
           type="button"
           onClick={() => {

@@ -11,12 +11,12 @@ import { RevisionList } from "@/components/guide/revision-list";
 import { headlineLine } from "@/lib/revision-diff";
 import type { ConciseLine } from "@/lib/revision-diff";
 
-export const metadata = { title: "Revisões do guia" };
+export const metadata = { title: "Revisões do Plantão" };
 
 type Tab = "receitas" | "plantao" | "drive";
 const TABS: { key: Tab; label: string }[] = [
   { key: "receitas", label: "Receitas prontas" },
-  { key: "plantao", label: "Plantão e emergência" },
+  { key: "plantao", label: "Emergência" },
   { key: "drive", label: "Drive de prescrições" },
 ];
 
@@ -127,13 +127,14 @@ export default async function RevisoesPage({ searchParams }: { searchParams: Pro
       <header className="mb-4 sm:mb-5">
         <nav aria-label="Caminho" className="mb-2 text-xs font-semibold text-pine-900/50">
           <Link href="/guia" className="text-pine-600 hover:underline">
-            Guia clínico
+            Plantão
           </Link>{" "}
           › Revisões
         </nav>
-        <h1 className="text-2xl font-extrabold tracking-tight text-pine-950 sm:text-[28px]">Revisões do guia</h1>
+        <h1 className="text-2xl font-extrabold tracking-tight text-pine-950 sm:text-[28px]">Revisões do Plantão</h1>
         <p className="mt-1 max-w-2xl text-sm text-pine-900/60">
-          Tudo o que cada revisão mudou nas Receitas prontas, no Plantão e no Drive: o que era antes, o que ficou e o motivo.
+          Tudo o que cada revisão mudou nas três seções do Plantão — Receitas prontas, Emergência e Drive: o que era antes, o
+          que ficou e o motivo.
           A versão em uso é sempre a mais nova; a anterior fica registrada aqui. Marque em cada mudança se concorda ou
           discorda — e copie as discordâncias para avisar a equipe.
         </p>

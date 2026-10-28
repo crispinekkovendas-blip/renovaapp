@@ -66,7 +66,7 @@ export type GuideItem =
 /** Como a fonte aparece em cada resultado. */
 export const SOURCE_TAG: Readonly<Record<GuideSource, string>> = {
   receitas: "Receita pronta",
-  plantao: "Plantão",
+  plantao: "Emergência",
   drive: "Drive",
 };
 

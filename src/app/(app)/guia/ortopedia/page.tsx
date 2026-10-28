@@ -4,6 +4,8 @@ import { ORTHO_CREDIT, orthoDocs, orthoStats } from "@/lib/ortho-guide";
 import { GuideHeader } from "@/components/guide/guide-header";
 import { OrthoIndex } from "@/components/guide/ortho-index";
 import { OrthoCredit } from "@/components/guide/ortho-credit";
+import { AskBox } from "@/components/guide/ask-box";
+import { guideAiEnabled } from "@/lib/guide-ask";
 
 export const metadata = { title: "Ortopedia" };
 
@@ -24,6 +26,7 @@ export default async function OrtopediaPage() {
         Ambulatório de ortopedia para o clínico geral: {stats.topics} condições em {stats.chapters} capítulos, cada uma na ordem da
         consulta — perguntar, examinar ({stats.exams} manobras), alarme, imagem, conduta, receita, encaminhar e atestado.
       </GuideHeader>
+      {guideAiEnabled() ? <AskBox examples="ortopedia" defaultScope="ortopedia" /> : null}
       <OrthoIndex docs={orthoDocs()} />
       <div className="mt-8">
         <OrthoCredit />

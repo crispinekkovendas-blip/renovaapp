@@ -11,10 +11,11 @@ import {
   IconWallet,
 } from "@/components/icons";
 
-export interface NavTab {
-  href: string;
-  label: string;
-}
+import { activeTab } from "@/lib/active-tab";
+import type { NavTab } from "@/lib/active-tab";
+
+export { activeTab };
+export type { NavTab };
 
 export interface NavItem {
   href: string;
@@ -69,7 +70,8 @@ export const NAV_ITEMS: NavItem[] = [
     icon: IconTemplate,
     roles: ["admin", "profissional"],
   },
-  // Consulta clínica (receitas prontas + orientações): de quem prescreve.
+  // Consulta clínica, de quem prescreve: duas áreas — o Plantão (receitas prontas,
+  // emergência e Drive, com a busca única) e a Ortopedia — e o app Android.
   {
     href: "/guia",
     label: "Guia clínico",
@@ -77,9 +79,7 @@ export const NAV_ITEMS: NavItem[] = [
     icon: IconBook,
     roles: ["admin", "profissional"],
     tabs: [
-      { href: "/guia", label: "Receitas prontas" },
-      { href: "/guia/plantao", label: "Plantão e emergência" },
-      { href: "/guia/drive", label: "Drive de prescrições" },
+      { href: "/guia", label: "Plantão" },
       { href: "/guia/ortopedia", label: "Ortopedia" },
       { href: "/guia/app", label: "App Android" },
     ],

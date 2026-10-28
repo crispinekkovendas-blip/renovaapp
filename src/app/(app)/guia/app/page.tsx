@@ -35,7 +35,7 @@ export default async function AppAndroidPage() {
   return (
     <div className="mx-auto max-w-3xl">
       <GuideHeader title="App Android">
-        O Guia clínico no celular: receitas prontas, plantão e Drive sem internet, a mesma busca do site, a Super Inteligência e o
+        O Guia clínico no celular: Plantão (receitas prontas, emergência e Drive) e Ortopedia sem internet, a mesma busca do site, a Super Inteligência e o
         “Escutar o paciente”. Entre com a mesma conta do site.
       </GuideHeader>
 

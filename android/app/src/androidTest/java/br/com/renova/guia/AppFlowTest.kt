@@ -124,6 +124,17 @@ class AppFlowTest {
         compose.waitUntil(timeout) { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }
     }
 
+    /** Volta ao começo da aba Plantão (a busca vazia, com a fila das seções). */
+    private fun goHome() {
+        compose.onNodeWithTag("tab-plantao").performClick()
+        compose.waitForIdle()
+        // Tocar na aba em que já está volta ao começo dela.
+        compose.onNodeWithTag("tab-plantao").performClick()
+        waitForTag("search-field")
+        compose.onNodeWithTag("search-field").performTextClearance()
+        waitForTag("section-receitas")
+    }
+
     @Test
     fun fluxoCompleto() {
         ActivityScenario.launch(MainActivity::class.java).use {
@@ -144,8 +155,9 @@ class AppFlowTest {
             shot("03-aviso-revisao-nova")
             compose.onNodeWithText("Depois").performClick()
 
-            // Busca única: as três fontes juntas.
+            // A aba Plantão: a busca única das três seções.
             waitForTag("search-field")
+            waitForTag("section-receitas")
             shot("04-busca")
             compose.onNodeWithTag("search-field").performTextInput("enxaqueca")
             waitForText("Crise de enxaqueca", 90_000)
@@ -154,9 +166,9 @@ class AppFlowTest {
             waitForText("Sintoma:", 60_000)
             shot("06-busca-sintoma")
 
-            // Tópico do plantão: marca-texto e o histórico do trecho.
-            compose.onNodeWithTag("results").performScrollToNode(hasText("Enxaqueca") and hasText("Plantão"))
-            compose.onAllNodes(hasText("Enxaqueca") and hasText("Plantão")).onFirst().performClick()
+            // Tópico da emergência: marca-texto e o histórico do trecho.
+            compose.onNodeWithTag("results").performScrollToNode(hasText("Enxaqueca") and hasText("Emergência"))
+            compose.onAllNodes(hasText("Enxaqueca") and hasText("Emergência")).onFirst().performClick()
             waitForText("Página")
             shot("07-topico-plantao")
             val alerts = compose.onAllNodesWithText("⚠ conferir — toque para ver o aviso").fetchSemanticsNodes()
@@ -168,8 +180,9 @@ class AppFlowTest {
                 compose.waitForIdle()
             }
 
-            // Receitas prontas: a lista e uma receita.
-            compose.onNodeWithTag("tab-receitas").performClick()
+            // Receitas prontas (seção do Plantão): a lista e uma receita.
+            goHome()
+            compose.onNodeWithTag("section-receitas").performClick()
             waitForTag("receitas-list")
             shot("09-receitas")
             compose.onNodeWithTag("receitas-list").performScrollToNode(hasText("Crise de enxaqueca"))
@@ -177,8 +190,9 @@ class AppFlowTest {
             waitForText("ORIENTAÇÃO AO PACIENTE")
             shot("10-receita")
 
-            // Drive: a lista e uma entrada.
-            compose.onNodeWithTag("tab-drive").performClick()
+            // Drive (seção do Plantão): a lista e uma entrada.
+            goHome()
+            compose.onNodeWithTag("section-drive").performClick()
             waitForTag("drive-list")
             shot("11-drive")
             compose.onNodeWithTag("drive-list").performScrollToNode(hasText("Enxaqueca"))
@@ -186,14 +200,22 @@ class AppFlowTest {
             waitForText("Histórico: do card original")
             shot("12-drive-entrada")
 
-            // Plantão: a lista por capítulo.
-            compose.onNodeWithTag("tab-plantao").performClick()
+            // Emergência (seção do Plantão): a lista por capítulo.
+            goHome()
+            compose.onNodeWithTag("section-emergencia").performClick()
             waitForTag("plantao-list")
-            shot("13-plantao")
+            shot("13-emergencia")
 
-            // Super Inteligência: pergunta e resposta com as fontes.
+            // Ortopedia: a aba, com "Atender agora".
+            compose.onNodeWithTag("tab-ortopedia").performClick()
+            waitForText("Atender agora", 30_000)
+            shot("13b-ortopedia")
+
+            // Super Inteligência: o escopo (tudo, Plantão, Ortopedia), a pergunta e a resposta com as fontes.
             compose.onNodeWithTag("tab-perguntar").performClick()
             waitForTag("ask-field")
+            waitForTag("scope-plantao")
+            compose.onNodeWithTag("scope-plantao").performClick()
             shot("14-perguntar")
             compose.onNodeWithTag("ask-field").performTextInput("Como tratar a crise de enxaqueca?")
             // Pelo "Enviar" do teclado: o botão ainda se move enquanto o teclado sobe.
@@ -202,12 +224,7 @@ class AppFlowTest {
             shot("15-resposta")
 
             // O que mudou no guia.
-            // A aba Busca volta onde parou (o tópico aberto pela busca); tocar de novo volta ao começo.
-            compose.onNodeWithTag("tab-busca").performClick()
-            compose.waitForIdle()
-            compose.onNodeWithTag("tab-busca").performClick()
-            waitForTag("search-field")
-            compose.onNodeWithTag("search-field").performTextClearance()
+            goHome()
             waitForText("Ver o que cada revisão mudou")
             compose.onNodeWithText("Ver o que cada revisão mudou").performClick()
             waitForTag("changes")

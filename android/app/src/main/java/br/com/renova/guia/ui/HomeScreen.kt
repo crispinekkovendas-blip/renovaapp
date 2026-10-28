@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.CloudOff
+import androidx.compose.material.icons.filled.Healing
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
@@ -83,9 +84,10 @@ import kotlinx.coroutines.withContext
 private val SOURCES = listOf("receitas", "plantao", "drive")
 
 /**
- * A busca única do Guia clínico: procura nas receitas prontas, no plantão e
- * no Drive ao mesmo tempo, sem internet. Vazia, mostra favoritos, recentes,
- * a Super Inteligência e as abas.
+ * A aba Plantão: a busca única das três seções — receitas prontas,
+ * emergência e Drive — ao mesmo tempo, sem internet. Vazia, mostra as
+ * seções, favoritos, recentes e a Super Inteligência. A Ortopedia é a outra
+ * aba, com busca própria; o que a busca daqui acha lá vem numa seção à parte.
  */
 @Composable
 fun HomeScreen(
@@ -120,7 +122,7 @@ fun HomeScreen(
     var menu by remember { mutableStateOf(false) }
 
     ScreenScaffold(
-        title = "Guia clínico",
+        title = "Plantão",
         actions = {
             if (ready.syncing) {
                 Icon(Icons.Filled.Sync, contentDescription = "Sincronizando", modifier = Modifier.padding(12.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -144,6 +146,13 @@ fun HomeScreen(
                     text = { Text(if (dark) "Tema claro" else "Tema escuro") },
                     leadingIcon = { Icon(if (dark) Icons.Filled.LightMode else Icons.Filled.DarkMode, null) },
                     onClick = { menu = false; prefs.toggleDarkTheme() },
+                )
+                // O clínico que assumiu a ortopedia abre o app já nela (vale na próxima abertura).
+                val area by prefs.homeArea.collectAsState()
+                DropdownMenuItem(
+                    text = { Text(if (area == "ortopedia") "Abrir o app no Plantão" else "Abrir o app na Ortopedia") },
+                    leadingIcon = { Icon(Icons.Filled.Healing, null) },
+                    onClick = { menu = false; prefs.setHomeArea(if (area == "ortopedia") null else "ortopedia") },
                 )
                 DropdownMenuItem(
                     text = { Text("Sobre e conta") },
@@ -214,7 +223,7 @@ private fun Results(
         }
         item {
             MutedText(
-                if (results.rows.isEmpty()) "Nada encontrado nas três abas." else "${results.rows.size} ${if (results.rows.size == 1) "resultado" else "resultados"} em receitas, plantão e Drive",
+                if (results.rows.isEmpty()) "Nada encontrado no Plantão." else "${results.rows.size} ${if (results.rows.size == 1) "resultado" else "resultados"} em receitas, emergência e Drive",
             )
         }
         if (present.size > 1) {
@@ -254,7 +263,7 @@ private fun Results(
                 trailing = item.cid?.let { cid -> @Composable { CidChip(cid) } },
             )
         }
-        // A ortopedia tem índice próprio: vem como seção, depois das três abas.
+        // A ortopedia é a outra aba, com índice próprio: o que a busca acha lá vem como seção, depois das três seções do Plantão.
         if (ortho.rows.isNotEmpty()) {
             item(key = "h-ortopedia") { SectionHeader("Ortopedia") }
             items(ortho.rows, key = { "orto-" + it.item.id }) { row ->
@@ -296,6 +305,14 @@ private fun HomeSections(
                 Notice("Sem conexão: usando o guia guardado neste aparelho. A Super Inteligência volta com a internet.")
             }
         }
+        // As três seções do Plantão, para folhear.
+        item {
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.testTag("sections")) {
+                item { SectionButton("Receitas prontas", "section-receitas") { onNavigate(Routes.RECEITAS) } }
+                item { SectionButton("Emergência", "section-emergencia") { onNavigate(Routes.PLANTAO) } }
+                item { SectionButton("Drive", "section-drive") { onNavigate(Routes.DRIVE) } }
+            }
+        }
         if (searches.isNotEmpty()) {
             item {
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -332,22 +349,23 @@ private fun HomeSections(
             item { SectionHeader("Abertos por último") }
             items(recentRefs, key = { "rec-" + it.id }) { ItemRow(it, onOpen) }
         }
-        item { SectionHeader("As abas") }
+        item { SectionHeader("As seções do Plantão") }
         item {
             TabCard("Receitas prontas", "${content.recipes.size} receitas por condição, com a orientação ao paciente") { onNavigate(Routes.RECEITAS) }
         }
         item {
-            TabCard("Plantão e emergência", "${content.topics.size} tópicos de pronto-socorro e sala vermelha") { onNavigate(Routes.PLANTAO) }
+            TabCard("Emergência", "${content.topics.size} tópicos de pronto-socorro e sala vermelha") { onNavigate(Routes.PLANTAO) }
         }
         item {
             TabCard("Drive de prescrições", "${content.driveEntries.size} condições de consultório, com dose de criança") { onNavigate(Routes.DRIVE) }
         }
-        content.ortho?.let { o ->
-            item {
-                TabCard("Ortopedia", "${o.topics.size} tópicos na ordem da consulta, com a consulta guiada e a nota SOAP") { onNavigate(Routes.ORTOPEDIA) }
-            }
-        }
     }
+}
+
+/** Um botão de seção na fila do alto: abre a lista para folhear. */
+@Composable
+private fun SectionButton(label: String, tag: String, onClick: () -> Unit) {
+    FilledTonalButton(onClick = onClick, modifier = Modifier.testTag(tag)) { Text(label) }
 }
 
 @Composable
@@ -398,7 +416,7 @@ private fun AskCard(onOpen: () -> Unit, voice: (() -> Unit)?) {
                 Text("Super Inteligência — pergunte ao guia", fontWeight = FontWeight.ExtraBold, modifier = Modifier.weight(1f))
             }
             Text(
-                "Escreva a dúvida como falaria com um colega. A resposta vem só do guia — plantão, receitas prontas e Drive —, com a fonte de cada trecho.",
+                "Escreva a dúvida como falaria com um colega. A resposta vem só do guia — Plantão (receitas prontas, emergência e Drive) e Ortopedia —, com a fonte de cada trecho.",
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(top = 4.dp, bottom = 10.dp),
             )

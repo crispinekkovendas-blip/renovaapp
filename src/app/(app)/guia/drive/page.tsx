@@ -48,7 +48,7 @@ export default async function DrivePage() {
         {stats.entries} condições de consultório e pronto-atendimento, revistas pelas diretrizes atuais: a receita pronta para
         copiar, a dose de criança, os cuidados e a fonte.
       </GuideHeader>
-      {guideAiEnabled() ? <AskBox scope="consultorio" /> : null}
+      {guideAiEnabled() ? <AskBox examples="consultorio" defaultScope="plantao" /> : null}
       <DriveIndex />
       <p className="mt-8 rounded-2xl border border-pine-900/10 bg-white/70 p-4 text-[13px] text-pine-900/65">
         Lista de condições do <b className="text-pine-950">{DRIVE_CREDIT.basedOn}</b>. As receitas, doses e orientações

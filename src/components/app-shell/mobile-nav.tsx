@@ -8,6 +8,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { IconLogout } from "@/components/icons";
 import { CloseButton } from "@/components/close-button";
 import type { Role } from "@/lib/db";
+import { guideHomeHref, useHomeArea } from "@/components/guide/home-area";
 import { activeNavItem, navItemsFor } from "./nav-config";
 
 /**
@@ -63,6 +64,9 @@ export function MobileTabBar({ name, role }: { name: string; role: Role }) {
   const rest = items.slice(MAX_TABS);
   const activeHref = activeNavItem(pathname, items)?.href;
   const isActive = (href: string) => href === activeHref;
+  // "Guia clínico" abre na área que o médico escolheu (Plantão ou Ortopedia).
+  const homeArea = useHomeArea();
+  const hrefOf = (href: string) => (href === "/guia" ? guideHomeHref(homeArea) : href);
   const moreActive = rest.some((item) => isActive(item.href)) || pathname === "/conta" || pathname.startsWith("/ajuda");
 
   // Trocar de página fecha a folha.
@@ -96,7 +100,7 @@ export function MobileTabBar({ name, role }: { name: string; role: Role }) {
             return (
               <li key={item.href} className="min-w-0 flex-1">
                 <Link
-                  href={item.href}
+                  href={hrefOf(item.href)}
                   aria-current={active ? "page" : undefined}
                   className={`tabbar-item ${active ? "active" : ""}`}
                 >
@@ -160,7 +164,7 @@ export function MobileTabBar({ name, role }: { name: string; role: Role }) {
                 const Icon = item.icon;
                 return (
                   <li key={item.href}>
-                    <Link href={item.href} className={`nav-pill min-h-12 ${isActive(item.href) ? "active" : ""}`}>
+                    <Link href={hrefOf(item.href)} className={`nav-pill min-h-12 ${isActive(item.href) ? "active" : ""}`}>
                       <Icon />
                       {item.label}
                     </Link>

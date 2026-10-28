@@ -18,11 +18,13 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +39,7 @@ import br.com.renova.guia.data.GuideContent
 import br.com.renova.guia.data.GuideState
 import br.com.renova.guia.data.RevisionChanges
 import br.com.renova.guia.ui.components.ConciseLines
+import br.com.renova.guia.data.UserPrefs
 import br.com.renova.guia.ui.components.MutedText
 import br.com.renova.guia.ui.components.RevisionBadge
 import br.com.renova.guia.ui.components.SectionHeader
@@ -131,9 +134,10 @@ fun NewRevisionDialog(content: GuideContent, rev: Int, onSee: () -> Unit, onDism
 
 /** A conta, a versão do guia e os créditos. */
 @Composable
-fun AboutScreen(ready: GuideState.Ready, onBack: () -> Unit, onSync: () -> Unit, onLogout: () -> Unit) {
+fun AboutScreen(ready: GuideState.Ready, prefs: UserPrefs, onBack: () -> Unit, onSync: () -> Unit, onLogout: () -> Unit) {
     val content = ready.content
     var confirm by remember { mutableStateOf(false) }
+    val area by prefs.homeArea.collectAsState()
     ScreenScaffold(title = "Sobre e conta", onBack = onBack) { padding ->
         Column(
             Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
@@ -157,6 +161,12 @@ fun AboutScreen(ready: GuideState.Ready, onBack: () -> Unit, onSync: () -> Unit,
                     }
                 }
             }
+            SectionHeader("O app abre em")
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FilterChip(selected = area != "ortopedia", onClick = { prefs.setHomeArea(null) }, label = { Text("Plantão") }, modifier = Modifier.testTag("area-plantao"))
+                FilterChip(selected = area == "ortopedia", onClick = { prefs.setHomeArea("ortopedia") }, label = { Text("Ortopedia") }, modifier = Modifier.testTag("area-ortopedia"))
+            }
+            MutedText("Vale na próxima vez que o app abrir. A Super Inteligência da aba Perguntar também começa procurando nessa área.")
             val plantao = content.bundle.plantao.credit
             SectionHeader("Créditos")
             Text(

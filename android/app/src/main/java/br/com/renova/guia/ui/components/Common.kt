@@ -45,7 +45,7 @@ import br.com.renova.guia.ui.theme.GuideTheme
 /** O nome de cada fonte, como no site. */
 fun sourceTag(source: String): String = when (source) {
     "receitas" -> "Receita pronta"
-    "plantao" -> "Plantão"
+    "plantao" -> "Emergência"
     "drive" -> "Drive"
     "ortopedia" -> "Ortopedia"
     else -> source
@@ -53,13 +53,13 @@ fun sourceTag(source: String): String = when (source) {
 
 fun sourceFilterLabel(source: String): String = when (source) {
     "receitas" -> "Receitas prontas"
-    "plantao" -> "Plantão"
+    "plantao" -> "Emergência"
     "drive" -> "Drive"
     "ortopedia" -> "Ortopedia"
     else -> source
 }
 
-/** A etiqueta colorida da fonte: verde receita, rosa plantão, azul Drive. */
+/** A etiqueta colorida da fonte: verde receita, rosa emergência, azul Drive. */
 @Composable
 fun SourcePill(source: String, modifier: Modifier = Modifier) {
     val g = GuideTheme.colors

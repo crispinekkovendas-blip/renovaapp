@@ -6,11 +6,13 @@ import { driveDocs } from "@/lib/prescription-drive";
 import { guideAiEnabled } from "@/lib/guide-ask";
 import { GuideDataProvider } from "@/components/guide/guide-data";
 import { GuideSearch } from "@/components/guide/guide-search";
+import { GuideChrome } from "@/components/guide/guide-chrome";
 
 /**
- * A seção Guia clínico: as três abas (Receitas prontas, Plantão e
- * emergência, Drive de prescrições) com uma busca só no alto, que procura
- * nas três ao mesmo tempo.
+ * A seção Guia clínico, em duas áreas: o Plantão — três seções (Receitas
+ * prontas, Emergência, Drive de prescrições) com uma busca só no alto, que
+ * procura nas três ao mesmo tempo — e a Ortopedia, com índice e busca
+ * próprios. "Guia clínico" na barra abre na área que o médico escolheu.
  *
  * O guia inteiro chega daqui, uma vez: o layout não é refeito na troca de
  * aba, então trocar de aba não baixa tudo de novo — as abas leem do mesmo
@@ -28,6 +30,7 @@ export default async function GuiaLayout({ children }: { children: ReactNode }) 
         aiEnabled={aiOn}
         aiOffReason={!aiOn && session.role === "admin" ? "a variável GEMINI_API_KEY não chegou a este servidor." : null}
       >
+        <GuideChrome />
         {children}
       </GuideSearch>
     </GuideDataProvider>

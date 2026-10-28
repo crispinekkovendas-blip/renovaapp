@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { logoutAction } from "@/lib/actions";
 import { IconLogout } from "@/components/icons";
 import type { Role } from "@/lib/db";
+import { guideHomeHref, useHomeArea } from "@/components/guide/home-area";
 import { activeNavItem, navItemsFor } from "./nav-config";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -29,6 +30,9 @@ export function SideNav({ name, role }: { name: string; role: Role }) {
   const pathname = usePathname();
   const items = navItemsFor(role);
   const activeHref = activeNavItem(pathname, items)?.href;
+  // "Guia clínico" abre na área que o médico escolheu (Plantão ou Ortopedia).
+  const homeArea = useHomeArea();
+  const hrefOf = (href: string) => (href === "/guia" ? guideHomeHref(homeArea) : href);
   const initial = name.trim().charAt(0).toUpperCase() || "?";
 
   return (
@@ -77,7 +81,7 @@ export function SideNav({ name, role }: { name: string; role: Role }) {
             return (
               <Link
                 key={item.href}
-                href={item.href}
+                href={hrefOf(item.href)}
                 title={item.label}
                 aria-current={active ? "page" : undefined}
                 className={`nav-pill justify-center lg:justify-start peek:justify-start ${active ? "active" : ""}`}

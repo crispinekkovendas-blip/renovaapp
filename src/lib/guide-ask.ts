@@ -58,7 +58,7 @@ export interface AskTurn {
 /** O que a pergunta usa de fora: o modelo e a recuperação (trocáveis no teste). */
 export interface AskDeps {
   generate(req: GeminiRequest): AsyncGenerator<GeminiChunk>;
-  retrieve(query: string, limit: number): Promise<GuideChunk[]>;
+  retrieve(query: string, limit: number, sources?: readonly ChunkSource[]): Promise<GuideChunk[]>;
   /** Memória de respostas; sem ela, toda pergunta vai à IA. */
   store?: AnswerStore;
 }
@@ -109,17 +109,35 @@ function chunksBlock(chunks: readonly GuideChunk[]): string {
   return chunks.length ? chunks.map(formatChunk).join("\n\n") : "Nenhum trecho encontrado para essa busca.";
 }
 
+/**
+ * O escopo da pergunta, escolhido pelo médico: só o Plantão (receitas prontas,
+ * emergência e Drive) ou só a ortopedia. Sem escopo, o guia inteiro.
+ */
+export type AskScope = "plantao" | "ortopedia";
+export const ASK_SCOPES: Readonly<Record<AskScope, { label: string; sources: readonly ChunkSource[] }>> = {
+  plantao: { label: "o Plantão (receitas prontas, emergência e Drive)", sources: ["plantao", "receitas", "drive"] },
+  ortopedia: { label: "o Guia de ortopedia", sources: ["ortopedia"] },
+};
+
+export function parseScope(raw: unknown): AskScope | undefined {
+  return raw === "plantao" || raw === "ortopedia" ? raw : undefined;
+}
+
 export async function* askGuide(
   question: string,
   history: readonly AskTurn[] = [],
   deps: AskDeps = DEFAULT_DEPS,
-  options: { fresh?: boolean; context?: string } = {}
+  options: { fresh?: boolean; context?: string; scope?: AskScope } = {}
 ): AsyncGenerator<AskEvent> {
   // A tela em que o médico está no app ("Ortopedia › Entorse de tornozelo"): entra na busca e na pergunta.
   const context = options.context?.trim().slice(0, 200) || null;
+  const scope = options.scope && ASK_SCOPES[options.scope] ? options.scope : null;
+  const sources = scope ? ASK_SCOPES[scope].sources : undefined;
   // Pergunta solta (não seguimento, sem contexto de tela) já respondida antes: volta da memória.
   // Seguimento e pergunta com contexto dependem da situação, então sempre vão à IA.
-  const key = history.length === 0 && !context ? questionKey(question) : null;
+  // Com escopo, a memória é por escopo: a mesma pergunta só na ortopedia é outra resposta.
+  const baseKey = history.length === 0 && !context ? questionKey(question) : null;
+  const key = baseKey ? (scope ? `${scope}:${baseKey}` : baseKey) : null;
   const store = deps.store;
   if (key && store && !options.fresh) {
     try {
@@ -140,8 +158,8 @@ export async function* askGuide(
   // Num seguimento ("e em criança?"), a busca inicial leva junto a pergunta anterior.
   const lastUser = [...history].reverse().find((h) => h.role === "user")?.content ?? "";
   const [initial, extra] = await Promise.all([
-    deps.retrieve(context ? `${context} ${question}` : question, 6),
-    lastUser ? deps.retrieve(`${lastUser} ${question}`, 3) : Promise.resolve([]),
+    deps.retrieve(context ? `${context} ${question}` : question, 6, sources),
+    lastUser ? deps.retrieve(`${lastUser} ${question}`, 3, sources) : Promise.resolve([]),
   ]);
   for (const c of [...initial, ...extra]) seen.set(c.id, c);
 
@@ -154,6 +172,9 @@ export async function* askGuide(
           text:
             `Pergunta: ${question}\n\n` +
             (context ? `Contexto: o médico está na tela "${context}" do app.\n\n` : "") +
+            (scope
+              ? `Escopo: o médico pediu resposta só com ${ASK_SCOPES[scope].label}; os trechos e a busca vêm só dali. Se a resposta estiver em outra parte do guia, diga que ela está fora do escopo escolhido.\n\n`
+              : "") +
             `Trechos do guia já encontrados para esta pergunta:\n\n${chunksBlock([...seen.values()])}`,
         },
       ],
@@ -187,7 +208,7 @@ export async function* askGuide(
     for (const call of calls) {
       const q = String(call.functionCall?.args?.consulta ?? "").slice(0, 200);
       yield { t: "search", q };
-      const found = await deps.retrieve(q, 6);
+      const found = await deps.retrieve(q, 6, sources);
       for (const c of found) seen.set(c.id, c);
       results.push({ functionResponse: { name: TOOL.name, response: { trechos: chunksBlock(found) } } });
     }

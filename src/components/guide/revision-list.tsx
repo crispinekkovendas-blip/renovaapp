@@ -26,7 +26,7 @@ type Decision = "ok" | "no";
 type Filter = "todas" | "faltam" | "no";
 
 const KEY = "renova:revisoes:decisoes:v1";
-const TAB_LABEL: Record<string, string> = { receitas: "Receitas prontas", plantao: "Plantão", drive: "Drive", ortopedia: "Ortopedia" };
+const TAB_LABEL: Record<string, string> = { receitas: "Receitas prontas", plantao: "Emergência", drive: "Drive", ortopedia: "Ortopedia" };
 
 function load(): Record<string, Decision> {
   try {

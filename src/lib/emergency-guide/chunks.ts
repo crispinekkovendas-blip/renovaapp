@@ -212,12 +212,19 @@ export function chunkById(id: string): GuideChunk | undefined {
   return corpus().byId.get(id);
 }
 
-/** Os trechos mais relevantes para uma consulta (a busca do guia, sobre trechos). */
-export function retrieveChunks(query: string, limit = 6): GuideChunk[] {
+/**
+ * Os trechos mais relevantes para uma consulta (a busca do guia, sobre trechos).
+ * `sources` restringe às abas pedidas (o escopo da pergunta: só o Plantão, só a ortopedia).
+ */
+export function retrieveChunks(query: string, limit = 6, sources?: readonly ChunkSource[]): GuideChunk[] {
   const { index, byId } = corpus();
-  return search(index, query, { limit, match: "any" })
+  const only = sources ? new Set(sources) : null;
+  // Com escopo, a busca pede mais e filtra: as abas de fora não roubam vaga.
+  return search(index, query, { limit: only ? limit * 6 : limit, match: "any" })
     .hits.map((h) => byId.get(h.id))
-    .filter((c): c is GuideChunk => Boolean(c));
+    .filter((c): c is GuideChunk => Boolean(c))
+    .filter((c) => !only || only.has(c.source))
+    .slice(0, limit);
 }
 
 /**
@@ -225,12 +232,14 @@ export function retrieveChunks(query: string, limit = 6): GuideChunk[] {
  * sentido (embeddings do Gemini), juntas por posição. Sem Gemini, ou se ele
  * falhar, fica só a por palavra — a pergunta nunca fica sem trechos.
  */
-export async function retrieveHybrid(query: string, limit = 6): Promise<GuideChunk[]> {
+export async function retrieveHybrid(query: string, limit = 6, sources?: readonly ChunkSource[]): Promise<GuideChunk[]> {
   const { chunks, byId } = corpus();
-  const lexical = retrieveChunks(query, 20).map((c) => c.id);
+  const only = sources ? new Set(sources) : null;
+  const pool = only ? chunks.filter((c) => only.has(c.source)) : chunks;
+  const lexical = retrieveChunks(query, 20, sources).map((c) => c.id);
   if (!geminiEnabled()) return lexical.slice(0, limit).map((id) => byId.get(id)!);
   try {
-    const semantic = (await semanticRank(query, chunks, 20)).map((r) => r.id);
+    const semantic = (await semanticRank(query, pool, 20)).map((r) => r.id);
     // O sentido pesa mais: em pergunta narrativa ("não para de convulsionar") a busca por
     // palavra casa com palavras soltas; ela ainda acha nomes e siglas que o sentido perde.
     return fuseRanks([lexical, semantic], [0.5, 1])

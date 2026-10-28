@@ -9,7 +9,7 @@ import { RevisionCarousel } from "@/components/guide/revision-carousel";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const found = findGuideTopic((await params).slug);
-  return { title: found ? `${found.topic.title} · Plantão` : "Plantão e emergência" };
+  return { title: found ? `${found.topic.title} · Emergência` : "Emergência" };
 }
 
 /** Um tópico do guia de plantão, com os outros do mesmo capítulo ao lado. */
@@ -26,8 +26,12 @@ export default async function PlantaoTopicPage({ params }: { params: Promise<{ s
     <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[minmax(0,1fr)_15rem]">
       <article className="min-w-0">
         <nav aria-label="Caminho" className="mb-2 text-xs font-semibold text-pine-900/50">
+          <Link href="/guia" className="text-pine-600 hover:underline">
+            Plantão
+          </Link>{" "}
+          ›{" "}
           <Link href="/guia/plantao" className="text-pine-600 hover:underline">
-            Plantão e emergência
+            Emergência
           </Link>{" "}
           › {chapter.title}
         </nav>

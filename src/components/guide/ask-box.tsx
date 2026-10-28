@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { GuideAsk } from "./guide-ask";
+import type { AskScope } from "@/lib/guide-ask";
+import { GuideAsk, ScopePills } from "./guide-ask";
 
 /**
  * Perguntas de exemplo, para quem abre a Super Inteligência sem saber o que
  * digitar. Ficam aqui dentro: página do servidor não pode ler valor de módulo
- * "use client" (dá erro ao abrir a página), então ela passa só o `scope`.
+ * "use client" (dá erro ao abrir a página), então ela passa só a chave.
  */
 const EXAMPLES = {
   plantao: [
@@ -19,28 +20,38 @@ const EXAMPLES = {
     "Amoxicilina na otite média em criança de 15 kg?",
     "O que orientar no início do antidepressivo?",
   ],
+  ortopedia: [
+    "Torceu o tornozelo ontem: preciso de raio-X?",
+    "Lombalgia aguda sem alarme: receita e quantos dias de atestado?",
+    "Como faço o teste de Lachman e o que significa?",
+  ],
 } as const;
 
 /**
  * A Super Inteligência: a caixa da pergunta e, depois, a resposta com a
- * fonte de cada trecho — do guia de plantão, das receitas prontas e do
- * Drive. Pode ser controlada (no plantão a barra de busca também pergunta)
- * ou cuidar sozinha da pergunta.
+ * fonte de cada trecho — do Plantão (emergência, receitas prontas e Drive) e
+ * da Ortopedia. O escopo (tudo, Plantão ou Ortopedia) começa na área da
+ * página e pode ser trocado. Pode ser controlada (na emergência a barra de
+ * busca também pergunta) ou cuidar sozinha da pergunta.
  */
 export function AskBox({
-  scope,
+  examples: exampleKey,
+  defaultScope = null,
   asking: controlled,
   onAsk,
   onClose,
 }: {
-  scope: keyof typeof EXAMPLES;
+  examples: keyof typeof EXAMPLES;
+  /** O escopo inicial: a área da página (Plantão ou Ortopedia); null é o guia inteiro. */
+  defaultScope?: AskScope | null;
   asking?: string | null;
   onAsk?(question: string): void;
   onClose?(): void;
 }) {
-  const examples = EXAMPLES[scope];
+  const examples = EXAMPLES[exampleKey];
   const [own, setOwn] = useState<string | null>(null);
   const [text, setText] = useState("");
+  const [scope, setScope] = useState<AskScope | null>(defaultScope);
   const asking = controlled !== undefined ? controlled : own;
   const ask = (q: string) => (onAsk ? onAsk(q) : setOwn(q));
   const close = () => {
@@ -49,7 +60,7 @@ export function AskBox({
     else setOwn(null);
   };
 
-  if (asking) return <GuideAsk key={asking} question={asking} onClose={close} />;
+  if (asking) return <GuideAsk key={asking} question={asking} scope={scope} onClose={close} />;
   return (
     <form
       className="card mb-4 border-pine-200 bg-gradient-to-br from-pine-950 to-pine-800 p-4 text-white sm:p-5"
@@ -63,8 +74,8 @@ export function AskBox({
         <span aria-hidden>✨</span> Super Inteligência — pergunte ao guia
       </p>
       <p className="mt-0.5 text-[12.5px] text-white/70">
-        Escreva a dúvida como falaria com um colega. A resposta vem só do guia — plantão, receitas prontas e Drive —, com a
-        fonte de cada trecho.
+        Escreva a dúvida como falaria com um colega. A resposta vem só do guia — Plantão (receitas prontas, emergência e Drive) e
+        Ortopedia —, com a fonte de cada trecho.
       </p>
       <div className="mt-3 flex gap-2">
         <input
@@ -78,6 +89,9 @@ export function AskBox({
         <button type="submit" disabled={text.trim().length < 3} className="btn shrink-0 bg-sun-400 text-pine-950 hover:bg-sun-300 disabled:opacity-50">
           Perguntar
         </button>
+      </div>
+      <div className="mt-2.5">
+        <ScopePills value={scope} onChange={setScope} light />
       </div>
       <div className="mt-2.5 flex flex-wrap gap-1.5">
         {examples.map((q) => (

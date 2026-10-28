@@ -33,17 +33,29 @@ data class Exchange(
 class AskViewModel(
     private val api: ApiClient,
     private val tokens: TokenStore,
+    initialScope: String? = null,
     private val onUnauthorized: () -> Unit,
 ) : ViewModel() {
     private val _thread = MutableStateFlow<List<Exchange>>(emptyList())
     val thread: StateFlow<List<Exchange>> = _thread.asStateFlow()
 
+    /** O escopo da pergunta: "plantao", "ortopedia" ou null (o guia inteiro). Vale para as próximas perguntas. */
+    private val _scope = MutableStateFlow(initialScope)
+    val scope: StateFlow<String?> = _scope.asStateFlow()
+
+    fun setScope(scope: String?) {
+        _scope.value = scope
+    }
+
     private var job: Job? = null
 
     val busy: Boolean get() = _thread.value.lastOrNull()?.done == false
 
-    /** `context`: a tela em que o médico está ("Ortopedia › Entorse de tornozelo"), para a resposta vir para aquela situação. */
-    fun ask(question: String, fresh: Boolean = false, context: String? = null) {
+    /**
+     * `context`: a tela em que o médico está ("Ortopedia › Entorse de tornozelo"), para a resposta vir para aquela situação.
+     * `scope`: onde procurar; por padrão o escolhido nesta conversa.
+     */
+    fun ask(question: String, fresh: Boolean = false, context: String? = null, scope: String? = _scope.value) {
         val q = question.trim()
         if (q.length < 3 || busy) return
         val account = tokens.load()
@@ -57,7 +69,7 @@ class AskViewModel(
         }.takeLast(6)
         _thread.value = _thread.value + Exchange(q)
         job = viewModelScope.launch {
-            api.ask(account.token, q, history, fresh, context).collect { event ->
+            api.ask(account.token, q, history, fresh, context, scope).collect { event ->
                 when (event) {
                     is AskEvent.Search -> update { it.copy(searches = it.searches + event.query) }
                     is AskEvent.Text -> update { it.copy(answer = it.answer + event.delta) }

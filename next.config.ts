@@ -14,6 +14,13 @@ const nextConfig: NextConfig = {
     // ir ao servidor de novo; salvar qualquer coisa (revalidatePath) invalida.
     staleTimes: { dynamic: 30, static: 180 },
   },
+  // "Emergência" é o nome novo da seção; o caminho continua /guia/plantao.
+  async redirects() {
+    return [
+      { source: "/guia/emergencia", destination: "/guia/plantao", permanent: false },
+      { source: "/guia/emergencia/:slug", destination: "/guia/plantao/:slug", permanent: false },
+    ];
+  },
   outputFileTracingRoot: path.join(process.cwd()),
   outputFileTracingIncludes: {
     "/opengraph-image": BRAND_FONTS,

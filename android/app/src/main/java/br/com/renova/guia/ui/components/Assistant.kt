@@ -80,6 +80,8 @@ fun AssistantSheet(
     content: GuideContent,
     vm: AskViewModel,
     context: AssistantContext,
+    /** O escopo que a tela sugere: ortopedia nas telas dela, Plantão nas outras; o médico pode trocar. */
+    screenScope: String?,
     offline: Boolean,
     onOpenRoute: (String) -> Unit,
     onDismiss: () -> Unit,
@@ -87,12 +89,13 @@ fun AssistantSheet(
     val sheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val thread by vm.thread.collectAsState()
     var text by rememberSaveable { mutableStateOf("") }
+    var scope by rememberSaveable(screenScope) { mutableStateOf(screenScope) }
     val busy = thread.lastOrNull()?.done == false
     val listState = rememberLazyListState()
-    val voice = rememberVoiceInput { spoken -> vm.ask(spoken, context = context.label) }
+    val voice = rememberVoiceInput { spoken -> vm.ask(spoken, context = context.label, scope = scope) }
     fun send(q: String) {
         if (q.trim().length >= 3 && !busy) {
-            vm.ask(q.trim(), context = context.label)
+            vm.ask(q.trim(), context = context.label, scope = scope)
             text = ""
         }
     }
@@ -123,7 +126,7 @@ fun AssistantSheet(
                     item {
                         Column {
                             Text(
-                                "A resposta vem só do guia — plantão, receitas, Drive e ortopedia —, com a fonte de cada trecho, e sabe em que tela você está. Não digite dados do paciente.",
+                                "A resposta vem só do guia — Plantão (receitas prontas, emergência e Drive) e Ortopedia —, com a fonte de cada trecho, e sabe em que tela você está. Não digite dados do paciente.",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.padding(bottom = 8.dp),
@@ -143,10 +146,11 @@ fun AssistantSheet(
                     }
                 }
                 itemsIndexed(thread) { _, exchange ->
-                    ExchangeView(content, exchange, onOpenRoute, onRetry = { vm.ask(exchange.question, fresh = true, context = context.label) })
+                    ExchangeView(content, exchange, onOpenRoute, onRetry = { vm.ask(exchange.question, fresh = true, context = context.label, scope = scope) })
                 }
             }
             if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
+            ScopeChips(scope, { scope = it }, contentPadding = PaddingValues(horizontal = 12.dp))
             Row(
                 Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surfaceContainer).padding(horizontal = 12.dp, vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,

@@ -41,6 +41,15 @@ class UserPrefs(context: Context) {
         prefs.edit().putBoolean(KEY_DARK, next).apply()
     }
 
+    private val _homeArea = MutableStateFlow(prefs.getString(KEY_AREA, null))
+    /** Em que área o app abre: "ortopedia" ou null (o Plantão). Fica neste aparelho; vale na próxima abertura. */
+    val homeArea: StateFlow<String?> = _homeArea.asStateFlow()
+
+    fun setHomeArea(area: String?) {
+        _homeArea.value = area
+        prefs.edit().putString(KEY_AREA, area).apply()
+    }
+
     var lastSeenRevision: Int
         get() = prefs.getInt(KEY_LAST_REVISION, 0)
         set(value) = prefs.edit().putInt(KEY_LAST_REVISION, value).apply()
@@ -117,6 +126,7 @@ class UserPrefs(context: Context) {
         const val KEY_PICKS = "picks"
         const val KEY_LAST_REVISION = "last_revision"
         const val KEY_DARK = "dark_theme"
+        const val KEY_AREA = "home_area"
         const val MAX_RECENTS = 12
         const val MAX_SEARCHES = 8
         const val MAX_PICK_KEYS = 300

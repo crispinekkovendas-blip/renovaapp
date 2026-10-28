@@ -64,6 +64,7 @@ import br.com.renova.guia.ask.citedIds
 import br.com.renova.guia.ask.formatAnswer
 import br.com.renova.guia.data.GuideContent
 import br.com.renova.guia.ui.components.MutedText
+import br.com.renova.guia.ui.components.ScopeChips
 import br.com.renova.guia.ui.components.SourcePill
 import br.com.renova.guia.ui.components.rememberVoiceInput
 
@@ -73,6 +74,7 @@ private val EXAMPLES = listOf(
     "Receita para cistite em mulher adulta?",
     "Amoxicilina na otite média em criança de 15 kg?",
     "O que orientar no início do antidepressivo?",
+    "Torceu o tornozelo ontem: preciso de raio-X?",
 )
 
 /**
@@ -82,6 +84,7 @@ private val EXAMPLES = listOf(
 @Composable
 fun AskScreen(content: GuideContent, vm: AskViewModel, offline: Boolean, onOpenRoute: (String) -> Unit) {
     val thread by vm.thread.collectAsState()
+    val scope by vm.scope.collectAsState()
     var text by rememberSaveable { mutableStateOf("") }
     val busy = thread.lastOrNull()?.done == false
     val listState = rememberLazyListState()
@@ -121,8 +124,8 @@ fun AskScreen(content: GuideContent, vm: AskViewModel, offline: Boolean, onOpenR
                                 Text("Pergunte ao guia", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold)
                             }
                             Text(
-                                "Escreva a dúvida como falaria com um colega. A resposta vem só do guia — plantão, receitas prontas e Drive —, " +
-                                    "com a fonte de cada trecho. O que o guia não traz, ela diz que não traz. Não digite dados do paciente.",
+                                "Escreva a dúvida como falaria com um colega. A resposta vem só do guia — Plantão (receitas prontas, emergência e Drive) e Ortopedia —, " +
+                                    "com a fonte de cada trecho. Escolha onde procurar: tudo, só o Plantão ou só a Ortopedia. O que o guia não traz, ela diz que não traz. Não digite dados do paciente.",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
@@ -139,6 +142,7 @@ fun AskScreen(content: GuideContent, vm: AskViewModel, offline: Boolean, onOpenR
                 }
             }
             if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
+            ScopeChips(scope, vm::setScope, contentPadding = PaddingValues(horizontal = 12.dp))
             Row(
                 Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surfaceContainer).padding(horizontal = 12.dp, vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,

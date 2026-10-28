@@ -259,7 +259,7 @@ fun TopicScreen(content: GuideContent, prefs: UserPrefs, slug: String, onBack: (
     val revisedBlocks = topic.blocks.count { it.history != null }
     ScreenScaffold(title = topic.title, onBack = onBack, actions = { FavoriteButton(prefs, topic.id) }) { padding ->
         DetailColumn(padding) {
-            MutedText("Plantão e emergência › ${chapter.title}")
+            MutedText("Plantão › Emergência › ${chapter.title}")
             val titleHistory = topic.titleHistory
             Text(
                 marked(topic.title, titleHistory != null),

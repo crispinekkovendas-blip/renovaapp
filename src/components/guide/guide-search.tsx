@@ -24,7 +24,7 @@ const INHERIT = [
 const SOURCES: readonly GuideSource[] = ["receitas", "plantao", "drive"];
 
 /** O nome de cada fonte no filtro dos resultados. */
-const FILTER_LABEL: Readonly<Record<GuideSource, string>> = { receitas: "Receitas prontas", plantao: "Plantão", drive: "Drive" };
+const FILTER_LABEL: Readonly<Record<GuideSource, string>> = { receitas: "Receitas prontas", plantao: "Emergência", drive: "Drive" };
 
 /** Uma cor por fonte, para bater o olho na lista misturada. */
 const PILL: Readonly<Record<GuideSource, string>> = {
@@ -36,11 +36,11 @@ const PILL: Readonly<Record<GuideSource, string>> = {
 const MAX_RESULTS = 60;
 
 /**
- * Uma busca só para o Guia clínico, no alto das três abas: procura nas
- * receitas prontas, no plantão e no Drive ao mesmo tempo e mostra tudo numa
- * lista, cada resultado com a fonte. Vazia, a aba mostra o que tem para
- * folhear; com texto, a lista toma o lugar da aba. Na mesma relevância, a aba
- * aberta vem antes.
+ * A busca do Plantão, no alto das três seções dele: procura nas receitas
+ * prontas, na emergência e no Drive ao mesmo tempo e mostra tudo numa lista,
+ * cada resultado com a fonte. Vazia, a seção mostra o que tem para folhear;
+ * com texto, a lista toma o lugar da seção. Na mesma relevância, a seção
+ * aberta vem antes. A Ortopedia tem a busca dela, na aba dela.
  *
  * Mora no layout da seção: na troca de aba nada é baixado de novo, e a busca
  * volta a ser a da URL (?q=) — trocar de aba limpa, voltar do tópico devolve
@@ -110,7 +110,7 @@ export function GuideSearch({
         {tab ? (
           <div className="sticky top-0 z-10 -mx-4 bg-paper/95 px-4 pt-1 pb-3 backdrop-blur-sm sm:mx-0 sm:px-0">
             <SmartSearchInput
-              label="Buscar no Guia clínico: receitas prontas, plantão e Drive"
+              label="Buscar no Plantão: receitas prontas, emergência e Drive"
               placeholder="Busca em tudo: condição, remédio, sintoma ou CID"
               query={s.query}
               onQuery={s.setQuery}
@@ -136,8 +136,8 @@ export function GuideSearch({
             {searching && s.ready ? (
               <p className="mt-1.5 px-1 text-[11.5px] text-pine-900/50" aria-live="polite">
                 {ranked.length === 0
-                  ? "Nada encontrado nas três abas."
-                  : `${ranked.length} ${ranked.length === 1 ? "resultado" : "resultados"} em receitas, plantão e Drive · ↑ ↓ e Enter para abrir · Tab completa a palavra`}
+                  ? "Nada encontrado no Plantão."
+                  : `${ranked.length} ${ranked.length === 1 ? "resultado" : "resultados"} em receitas, emergência e Drive · ↑ ↓ e Enter para abrir · Tab completa a palavra`}
               </p>
             ) : null}
           </div>
@@ -150,7 +150,7 @@ export function GuideSearch({
         {/* Sempre neste lugar da árvore: a resposta não se perde quando o médico abre uma fonte e volta. */}
         {asking ? (
           <div className="mb-4">
-            <GuideAsk key={asking} question={asking} onClose={() => setAsking(null)} />
+            <GuideAsk key={asking} question={asking} scope="plantao" onClose={() => setAsking(null)} />
           </div>
         ) : null}
         {searching ? (
@@ -158,7 +158,12 @@ export function GuideSearch({
             <p className="px-1 py-6 text-sm text-pine-900/50">Preparando a busca…</p>
           ) : ranked.length === 0 ? (
             <div className="card px-5 py-8 text-center text-sm text-pine-900/60">
-              <p>Nada encontrado para “{q}” nas receitas prontas, no plantão nem no Drive.</p>
+              <p>
+                Nada encontrado para “{q}” nas receitas prontas, na emergência nem no Drive.{" "}
+                <Link href={`/guia/ortopedia?q=${encodeURIComponent(q)}`} className="font-bold text-pine-600 hover:underline">
+                  Buscar na Ortopedia →
+                </Link>
+              </p>
               {s.suggestion ? (
                 <p className="mt-2">
                   Você quis dizer{" "}
@@ -207,7 +212,7 @@ export function GuideSearch({
   );
 }
 
-/** Um resultado: a receita abre ali mesmo; o tópico do plantão e a entrada do Drive abrem a página deles. */
+/** Um resultado: a receita abre ali mesmo; o tópico da emergência e a entrada do Drive abrem a página deles. */
 function ResultRow({
   item,
   terms,

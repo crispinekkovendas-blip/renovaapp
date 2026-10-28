@@ -24,15 +24,16 @@ import br.com.renova.guia.ui.components.ListRow
 import br.com.renova.guia.ui.components.SectionHeader
 
 /*
- * As três abas para folhear: chips por grupo, capítulo ou seção, e uma linha
- * por item. A busca fica na aba Busca e procura nas três ao mesmo tempo.
+ * As três seções do Plantão para folhear — Receitas prontas, Emergência e
+ * Drive —: chips por grupo, capítulo ou seção, e uma linha por item. Abrem a
+ * partir da aba Plantão, cuja busca procura nas três ao mesmo tempo.
  */
 
 @Composable
-fun ReceitasScreen(content: GuideContent, onOpen: (String) -> Unit) {
+fun ReceitasScreen(content: GuideContent, onOpen: (String) -> Unit, onBack: () -> Unit) {
     var group by rememberSaveable { mutableStateOf<String?>(null) }
     val groups = content.bundle.receitas.groups.filter { g -> content.recipes.any { it.group == g } }
-    ScreenScaffold(title = "Receitas prontas") { padding ->
+    ScreenScaffold(title = "Receitas prontas", onBack = onBack) { padding ->
         Column(Modifier.padding(padding).fillMaxSize()) {
             FilterChips(
                 options = groups.map { g -> g to content.recipes.count { it.group == g } },
@@ -66,10 +67,10 @@ private fun shortDrug(drug: String): String =
     drug.replace(Regex("^\\d+[.)]\\s*"), "").split(Regex("\\s[(\\[–-]|\\s\\d"))[0].trim()
 
 @Composable
-fun PlantaoScreen(content: GuideContent, onOpen: (String) -> Unit) {
+fun PlantaoScreen(content: GuideContent, onOpen: (String) -> Unit, onBack: () -> Unit) {
     var chapter by rememberSaveable { mutableStateOf<String?>(null) }
     val chapters = content.bundle.plantao.chapters
-    ScreenScaffold(title = "Plantão e emergência") { padding ->
+    ScreenScaffold(title = "Emergência", onBack = onBack) { padding ->
         Column(Modifier.padding(padding).fillMaxSize()) {
             FilterChips(
                 options = chapters.map { it.title to it.topics.size },
@@ -99,10 +100,10 @@ fun PlantaoScreen(content: GuideContent, onOpen: (String) -> Unit) {
 }
 
 @Composable
-fun DriveScreen(content: GuideContent, onOpen: (String) -> Unit) {
+fun DriveScreen(content: GuideContent, onOpen: (String) -> Unit, onBack: () -> Unit) {
     var section by rememberSaveable { mutableStateOf<String?>(null) }
     val sections = content.bundle.drive.sections
-    ScreenScaffold(title = "Drive de prescrições") { padding ->
+    ScreenScaffold(title = "Drive de prescrições", onBack = onBack) { padding ->
         Column(Modifier.padding(padding).fillMaxSize()) {
             FilterChips(
                 options = sections.map { it.title to it.entries.size },

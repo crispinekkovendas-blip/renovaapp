@@ -13,7 +13,7 @@ import { receitasTabRevisions } from "@/lib/guide-tab-revisions";
 
 export const metadata = { title: "Receitas prontas" };
 
-/** Receitas prontas e orientações ao paciente para consultar sem abrir uma ficha. */
+/** Receitas prontas (a primeira seção do Plantão) e orientações ao paciente para consultar sem abrir uma ficha. */
 export default async function GuiaPage() {
   await requireRole("admin", "profissional");
   const entries = guideEntries();
@@ -39,7 +39,7 @@ export default async function GuiaPage() {
         </Link>{" "}
         › Emitir documento.
       </GuideHeader>
-      {guideAiEnabled() ? <AskBox scope="consultorio" /> : null}
+      {guideAiEnabled() ? <AskBox examples="consultorio" defaultScope="plantao" /> : null}
       <ClinicalGuide groups={GUIDE_GROUPS} />
     </div>
   );

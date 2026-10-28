@@ -1,5 +1,5 @@
 import { canUseGuide, requestSession } from "@/lib/request-session";
-import { askGuide, guideAiEnabled, MAX_QUESTION } from "@/lib/guide-ask";
+import { askGuide, guideAiEnabled, MAX_QUESTION, parseScope } from "@/lib/guide-ask";
 import type { AskTurn } from "@/lib/guide-ask";
 
 /**
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
   }
   if (!guideAiEnabled()) return Response.json({ error: "A IA não está configurada." }, { status: 503 });
 
-  let body: { question?: unknown; history?: unknown; fresh?: unknown; context?: unknown };
+  let body: { question?: unknown; history?: unknown; fresh?: unknown; context?: unknown; scope?: unknown };
   try {
     body = await request.json();
   } catch {
@@ -59,12 +59,14 @@ export async function POST(request: Request) {
   const history = parseHistory(body.history);
   // A tela do app em que o médico está (só o app manda): curta, sem dados de paciente.
   const context = typeof body.context === "string" ? body.context.trim().slice(0, 200) : undefined;
+  // O escopo que o médico escolheu: só o Plantão, só a Ortopedia, ou nada (o guia inteiro).
+  const scope = parseScope(body.scope);
   const encoder = new TextEncoder();
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       const send = (event: unknown) => controller.enqueue(encoder.encode(JSON.stringify(event) + "\n"));
       try {
-        for await (const event of askGuide(question, history, undefined, { fresh: body.fresh === true, context })) {
+        for await (const event of askGuide(question, history, undefined, { fresh: body.fresh === true, context, scope })) {
           if (request.signal.aborted) break;
           send(event);
         }

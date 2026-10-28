@@ -5,11 +5,8 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
-import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Healing
 import androidx.compose.material.icons.filled.LocalHospital
-import androidx.compose.material.icons.filled.Medication
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -20,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -46,20 +44,31 @@ import br.com.renova.guia.ui.components.AssistantContext
 import br.com.renova.guia.ui.components.AssistantFab
 import br.com.renova.guia.ui.components.AssistantSheet
 import br.com.renova.guia.ui.components.CrashNotice
+import br.com.renova.guia.ui.components.SCOPE_ORTOPEDIA
+import br.com.renova.guia.ui.components.SCOPE_PLANTAO
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 
 private data class Tab(val route: String, val label: String, val icon: ImageVector, val tag: String)
 
+/**
+ * As três abas: Plantão (a busca única e as seções Receitas prontas,
+ * Emergência e Drive), Ortopedia e Perguntar. A rota da aba Plantão continua
+ * "busca", para o estado guardado seguir valendo.
+ */
 private val TABS = listOf(
-    Tab(Routes.BUSCA, "Busca", Icons.Filled.Search, "tab-busca"),
-    Tab(Routes.RECEITAS, "Receitas", Icons.Filled.Medication, "tab-receitas"),
-    Tab(Routes.PLANTAO, "Plantão", Icons.Filled.LocalHospital, "tab-plantao"),
-    Tab(Routes.DRIVE, "Drive", Icons.Filled.Folder, "tab-drive"),
+    Tab(Routes.BUSCA, "Plantão", Icons.Filled.LocalHospital, "tab-plantao"),
     Tab(Routes.ORTOPEDIA, "Ortopedia", Icons.Filled.Healing, "tab-ortopedia"),
     Tab(Routes.PERGUNTAR, "Perguntar", Icons.Filled.AutoAwesome, "tab-perguntar"),
 )
+
+/** O escopo que cada tela sugere à Super Inteligência: ortopedia nas telas dela, Plantão nas outras, nenhum na aba Perguntar. */
+private fun scopeOfRoute(route: String?): String? = when {
+    route == null || route == Routes.PERGUNTAR -> null
+    route == Routes.ORTOPEDIA || route.startsWith("orto") -> SCOPE_ORTOPEDIA
+    else -> SCOPE_PLANTAO
+}
 
 /** O app inteiro: login, download do guia ou as abas, conforme o estado. */
 @Composable
@@ -80,8 +89,11 @@ private fun MainScaffold(container: AppContainer, ready: GuideState.Ready) {
     val nav = rememberNavController()
     val content = ready.content
     val prefs = container.prefs
+    // A aba Perguntar começa procurando na área em que o app abre (o clínico da ortopedia, na ortopedia).
     val askVm: AskViewModel = viewModel {
-        AskViewModel(container.api, container.tokens) { container.guide.logout("Sessão expirada. Entre novamente.") }
+        AskViewModel(container.api, container.tokens, initialScope = prefs.homeArea.value?.let { SCOPE_ORTOPEDIA }) {
+            container.guide.logout("Sessão expirada. Entre novamente.")
+        }
     }
     // A Super Inteligência da folha (botão em toda tela) tem conversa própria, com o contexto da tela.
     val assistantVm: AskViewModel = viewModel(key = "assistant") {
@@ -92,7 +104,9 @@ private fun MainScaffold(container: AppContainer, ready: GuideState.Ready) {
     val newRevision by container.guide.newRevision.collectAsStateWithLifecycle()
     val backStack by nav.currentBackStackEntryAsState()
     val route = backStack?.destination?.route
-    var tab by rememberSaveable { mutableStateOf(Routes.BUSCA) }
+    // O app abre na área escolhida em Sobre (ou no menu): a Ortopedia, se o pacote já a tem; senão o Plantão.
+    val startRoute = remember { if (prefs.homeArea.value == "ortopedia" && content.ortho != null) Routes.ORTOPEDIA else Routes.BUSCA }
+    var tab by rememberSaveable { mutableStateOf(startRoute) }
     LaunchedEffect(route) { if (TABS.any { it.route == route }) tab = route!! }
 
     fun open(route: String) = nav.navigate(route) { launchSingleTop = true }
@@ -131,7 +145,7 @@ private fun MainScaffold(container: AppContainer, ready: GuideState.Ready) {
             }
         },
     ) { padding ->
-        NavHost(nav, startDestination = Routes.BUSCA, modifier = Modifier.padding(padding).consumeWindowInsets(padding)) {
+        NavHost(nav, startDestination = startRoute, modifier = Modifier.padding(padding).consumeWindowInsets(padding)) {
             composable(Routes.BUSCA) {
                 HomeScreen(
                     ready = ready,
@@ -142,9 +156,9 @@ private fun MainScaffold(container: AppContainer, ready: GuideState.Ready) {
                     onSync = { container.guide.syncInBackground() },
                 )
             }
-            composable(Routes.RECEITAS) { ReceitasScreen(content, ::openRoute) }
-            composable(Routes.PLANTAO) { PlantaoScreen(content, ::openRoute) }
-            composable(Routes.DRIVE) { DriveScreen(content, ::openRoute) }
+            composable(Routes.RECEITAS) { ReceitasScreen(content, ::openRoute, onBack = { nav.popBackStack() }) }
+            composable(Routes.PLANTAO) { PlantaoScreen(content, ::openRoute, onBack = { nav.popBackStack() }) }
+            composable(Routes.DRIVE) { DriveScreen(content, ::openRoute, onBack = { nav.popBackStack() }) }
             composable(Routes.PERGUNTAR) { AskScreen(content, askVm, ready.offline, ::openRoute) }
             composable(Routes.RECIPE) { entry ->
                 RecipeScreen(content, prefs, entry.arguments?.getString("slug").orEmpty(), onBack = { nav.popBackStack() })
@@ -189,7 +203,7 @@ private fun MainScaffold(container: AppContainer, ready: GuideState.Ready) {
                 ListenScreen(content, onOpen = ::openRoute, onAsk = { q -> askVm.ask(q); tab = Routes.PERGUNTAR; selectTab(Routes.PERGUNTAR) }, onBack = { nav.popBackStack() })
             }
             composable(Routes.SOBRE) {
-                AboutScreen(ready, onBack = { nav.popBackStack() }, onSync = { container.guide.syncInBackground() }, onLogout = { container.guide.logout() })
+                AboutScreen(ready, prefs, onBack = { nav.popBackStack() }, onSync = { container.guide.syncInBackground() }, onLogout = { container.guide.logout() })
             }
         }
     }
@@ -199,7 +213,8 @@ private fun MainScaffold(container: AppContainer, ready: GuideState.Ready) {
             content,
             assistantVm,
             assistantContext(route, backStack?.arguments?.getString("slug"), content, consultVm),
-            ready.offline,
+            screenScope = scopeOfRoute(route),
+            offline = ready.offline,
             onOpenRoute = { r -> assistantOpen = false; openRoute(r) },
             onDismiss = { assistantOpen = false },
         )
@@ -249,7 +264,7 @@ private fun NoOrthoScreen(onSync: () -> Unit) {
 /**
  * O que a tela atual diz à Super Inteligência e as perguntas prontas para
  * ela: num tópico de ortopedia, as manobras e a receita dele; na consulta
- * guiada, a região, a condição e o passo; nas outras abas, o item aberto.
+ * guiada, a região, a condição e o passo; nas outras telas, o item aberto.
  */
 private fun assistantContext(route: String?, slug: String?, content: GuideContent, consult: ConsultViewModel): AssistantContext {
     val ortho = content.ortho
@@ -281,17 +296,17 @@ private fun assistantContext(route: String?, slug: String?, content: GuideConten
         }
         route == Routes.ORTOPEDIA -> AssistantContext("Ortopedia (índice)", listOf("Por onde começo numa consulta de ortopedia?", "Como peço o raio-X de joelho?", "O que encaminho no mesmo dia?"))
         route == Routes.ORTO_MUDANCAS -> AssistantContext("Ortopedia › O que mudou", listOf("Resuma o que mudou na última revisão da ortopedia"))
-        route == Routes.TOPIC -> AssistantContext("Plantão › ${content.topic(key)?.second?.title.orEmpty()}", listOf("Resuma a conduta deste tópico", "E em criança?"))
+        route == Routes.TOPIC -> AssistantContext("Emergência › ${content.topic(key)?.second?.title.orEmpty()}", listOf("Resuma a conduta deste tópico", "E em criança?"))
         route == Routes.RECIPE -> AssistantContext("Receita pronta › ${content.recipe(key)?.name.orEmpty()}", listOf("Alternativa se houver alergia?", "O que orientar ao paciente?"))
         route == Routes.DRIVE_ENTRY -> AssistantContext("Drive › ${content.driveEntry(key)?.second?.title.orEmpty()}", listOf("Dose para criança de 15 kg?", "Resuma a conduta"))
         else -> AssistantContext(
             when (route) {
                 Routes.RECEITAS -> "Receitas prontas"
-                Routes.PLANTAO -> "Plantão e emergência"
+                Routes.PLANTAO -> "Emergência"
                 Routes.DRIVE -> "Drive de prescrições"
                 Routes.ESCUTAR -> "Escutar o paciente"
                 Routes.MUDANCAS -> "O que mudou no guia"
-                else -> "Guia clínico"
+                else -> "Plantão"
             },
             generic,
         )

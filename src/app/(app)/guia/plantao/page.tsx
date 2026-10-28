@@ -11,20 +11,20 @@ import { SeeMore } from "@/components/guide/see-more";
 import { SEE_MORE_TAB } from "@/components/guide/review-history";
 import { TabRevisions } from "@/components/guide/concise";
 
-export const metadata = { title: "Plantão e emergência" };
+export const metadata = { title: "Emergência" };
 
-/** O guia de prescrições da emergência, para o médico que também dá plantão. */
+/** Emergência (seção do Plantão): o guia de prescrições da emergência, para o médico que também dá plantão. */
 export default async function PlantaoPage() {
   await requireRole("admin", "profissional");
   const stats = guideStats();
   return (
     <div className="mx-auto max-w-5xl">
       <GuideHeader
-        title="Plantão e emergência"
+        title="Emergência"
         action={
           <SeeMore
             label="Revisões · ver mais"
-            title="Revisões do Plantão e emergência"
+            title="Revisões da Emergência"
             subtitle={`${stats.fixes} trechos corrigidos e ${stats.notes} avisos desde a publicação`}
             className={SEE_MORE_TAB}
           >
@@ -35,7 +35,7 @@ export default async function PlantaoPage() {
         Prescrições de pronto-socorro e sala vermelha: {stats.topics} tópicos em {stats.chapters} capítulos, com diluições e doses
         pediátricas.
       </GuideHeader>
-      {guideAiEnabled() ? <AskBox scope="plantao" /> : null}
+      {guideAiEnabled() ? <AskBox examples="plantao" defaultScope="plantao" /> : null}
       <EmergencyIndex />
       <div className="mt-8">
         <GuideCredit />
