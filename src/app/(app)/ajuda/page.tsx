@@ -48,6 +48,13 @@ const STEPS: readonly Step[] = [
 
 const NEWS: readonly { date: string; items: readonly string[] }[] = [
   {
+    date: "28 de outubro de 2026",
+    items: [
+      "Super Inteligência lê a ortopedia: o Guia de ortopedia virou a quarta fonte da pergunta ao guia — perguntas sobre dor musculoesquelética, trauma de membro, coluna, exame ortopédico, imobilização ou atestado por lesão agora respondem com o guia de ortopedia, citando e abrindo o tópico. No app Android, a pergunta leva junto a tela em que o médico está.",
+      "App Android (Guia Renova): nova aba Ortopedia com busca por como o paciente fala, manobra, remédio ou CID; cada tópico na ordem da consulta; “Atender agora”, a consulta guiada em cinco passos com a nota SOAP para copiar; “O que mudou” com antes, agora e motivo; e o botão “Perguntar” em toda tela, que abre a Super Inteligência sabendo em que tela você está. Baixe o APK novo em Guia clínico › App Android.",
+    ],
+  },
+  {
     date: "27 de outubro de 2026",
     items: [
       "Ortopedia › 2ª revisão: o guia inteiro foi relido e 8 trechos mudaram — a receita do tramadol (sai em receita de controle especial em duas vias, não na notificação A), o cuidado do anti-inflamatório na gestação (evitar a partir de 20 semanas), o corticoide na ciática e no ombro congelado (agora com os esquemas dos ensaios citados), o ibuprofeno da criança em gotas por kg e o CID da fratura vertebral. Cada mudança está em Ortopedia › Revisões com o texto de antes, o de agora e o motivo, para marcar Concordo ou Discordo; o tópico avisa quando foi tocado. O resto do guia foi conferido e ficou como estava.",
