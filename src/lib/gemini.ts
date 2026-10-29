@@ -190,6 +190,56 @@ export async function* streamGenerate(req: GeminiRequest, signal?: AbortSignal):
   if (last) yield last;
 }
 
+/* ---------- Geração de uma vez (JSON e áudio) ---------- */
+
+export type GeminiInputPart = { text: string } | { inlineData: { mimeType: string; data: string } };
+
+/**
+ * Uma resposta inteira (sem streaming). Com `schema`, o Gemini devolve JSON
+ * nesse formato (o texto ainda é lido com tolerância por quem chama). Mesma
+ * troca de modelo do streaming quando um está sem cota.
+ */
+export async function generateOnce(req: {
+  system: string;
+  contents: Array<{ role: "user" | "model"; parts: GeminiInputPart[] }>;
+  schema?: Record<string, unknown>;
+  models?: readonly string[];
+  maxOutputTokens?: number;
+  temperature?: number;
+}): Promise<string> {
+  const body = {
+    systemInstruction: { parts: [{ text: req.system }] },
+    contents: req.contents,
+    generationConfig: {
+      temperature: req.temperature ?? 0.3,
+      maxOutputTokens: req.maxOutputTokens ?? 4096,
+      thinkingConfig: { thinkingLevel: GEMINI_THINKING },
+      ...(req.schema ? { responseMimeType: "application/json", responseSchema: req.schema } : {}),
+    },
+  };
+  const models = req.models?.length ? req.models : GEMINI_MODELS;
+  const now = Date.now();
+  const chain = models.filter((m) => (unavailableUntil.get(m) ?? 0) <= now);
+  let lastError: unknown = null;
+  for (const model of chain.length ? chain : models) {
+    try {
+      const res = await post(`models/${model}:generateContent`, body, AbortSignal.timeout(45_000), 0);
+      const json = (await res.json()) as { candidates?: { content?: { parts?: GeminiPart[] } }[] };
+      const text = (json.candidates?.[0]?.content?.parts ?? [])
+        .filter((p) => !p.thought && typeof p.text === "string")
+        .map((p) => p.text)
+        .join("");
+      if (text.trim()) return text;
+      lastError = new Error(`Gemini ${model}: resposta vazia`);
+    } catch (error) {
+      lastError = error;
+      if (!/Gemini (503|429)/.test(String(error))) throw error;
+      unavailableUntil.set(model, Date.now() + SKIP_MS);
+    }
+  }
+  throw lastError ?? new Error("Gemini indisponível");
+}
+
 export function parseSseEvent(event: string): GeminiChunk | null {
   const data = event
     .split(/\r?\n/)

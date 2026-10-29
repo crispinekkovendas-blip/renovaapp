@@ -141,6 +141,16 @@ export function IconBook(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+/** Balão de conversa: o atendimento pelo WhatsApp. */
+export function IconChat(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z" />
+      <path d="M8.5 10.5h7M8.5 13.5h4.5" />
+    </svg>
+  );
+}
+
 /** Folha com lápis: modelos e protocolos que a clínica personaliza. */
 export function IconTemplate(props: SVGProps<SVGSVGElement>) {
   return (

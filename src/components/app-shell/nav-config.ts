@@ -3,6 +3,7 @@ import type { Role } from "@/lib/db";
 import {
   IconBook,
   IconCalendar,
+  IconChat,
   IconFileText,
   IconHome,
   IconSettings,
@@ -50,6 +51,18 @@ export const NAV_ITEMS: NavItem[] = [
     short: "Pacientes",
     icon: IconUsers,
     roles: TODOS,
+  },
+  // Triagem e teleconsulta pelo WhatsApp: dado de saúde, então médico e admin.
+  {
+    href: "/whatsapp",
+    label: "WhatsApp",
+    icon: IconChat,
+    roles: ["admin", "profissional"],
+    tabs: [
+      { href: "/whatsapp", label: "Conversas" },
+      { href: "/whatsapp/simulador", label: "Simulador" },
+      { href: "/whatsapp/configurar", label: "Configurar" },
+    ],
   },
   {
     // Recepção cobra e recebe no balcão, então mantém Financeiro.
