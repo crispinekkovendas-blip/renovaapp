@@ -151,6 +151,16 @@ export function IconChat(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+/** Folha com "Rx": o Receituário. */
+export function IconRx(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M6 3h9l4 4v14H6z" />
+      <path d="M10 10v7M10 10h2.5a2 2 0 0 1 0 4H10M12 14l3.5 3.5M15.5 14 12 17.5" />
+    </svg>
+  );
+}
+
 /** Folha com lápis: modelos e protocolos que a clínica personaliza. */
 export function IconTemplate(props: SVGProps<SVGSVGElement>) {
   return (

@@ -6,6 +6,7 @@ import {
   IconChat,
   IconFileText,
   IconHome,
+  IconRx,
   IconSettings,
   IconTemplate,
   IconUsers,
@@ -51,6 +52,21 @@ export const NAV_ITEMS: NavItem[] = [
     short: "Pacientes",
     icon: IconUsers,
     roles: TODOS,
+  },
+  // Receitas fora da ficha: escolher o paciente, histórico, renovações de uso contínuo
+  // e o que mais se receita. Quem emite documento médico: profissional e admin.
+  {
+    href: "/receituario",
+    label: "Receituário",
+    short: "Receitas",
+    icon: IconRx,
+    roles: ["admin", "profissional"],
+    tabs: [
+      { href: "/receituario", label: "Nova receita" },
+      { href: "/receituario/historico", label: "Histórico" },
+      { href: "/receituario/renovacoes", label: "Renovações" },
+      { href: "/receituario/mais-receitados", label: "Mais receitados" },
+    ],
   },
   // Triagem e teleconsulta pelo WhatsApp: dado de saúde, então médico e admin.
   {
