@@ -40,6 +40,8 @@ O banco vem de `CONTENT_DATABASE_URL` ou `DATABASE_URL`. Sem acesso a ele, o pro
 | **Agendamento online** | Portal público em `/agendar` (profissional → dia → horário → dados), baseado nos horários configurados; cria paciente automaticamente por telefone. |
 | **Pacientes** | Cadastro com CPF, convênio, contato; busca por nome/CPF/telefone. |
 | **Prontuário** | Atendimentos SOAP + receita; impressão de receituário e atestado (A4, cabeçalho da clínica); resumo do histórico por IA (opcional, requer `ANTHROPIC_API_KEY`). |
+| **Receituário** | Seção própria (`/receituario`, médico e admin) em volta do compositor de documentos: **Nova receita** (escolher o paciente, ver alergia e última receita, abrir o compositor já no receituário ou renovar a última; rascunhos e últimas receitas ao lado), **Histórico** (busca por paciente/CPF/código RNV, medicamento, período, papel e revogadas), **Renovações** (uso contínuo: controle especial 30 dias, simples 180 como lembrete; Renovar e aviso por wa.me) e **Mais receitados** (posologias usuais por período). Lógica pura em `src/lib/receituario.ts`. |
+| **WhatsApp** | Triagem e teleconsulta pelo número da clínica (WhatsApp Cloud API oficial da Meta): consentimento LGPD, triagem pelo Gemini (só com a chave do plano pago confirmada em Configurar; sem ela, questionário fixo), resumo para o paciente conferir, cobrança ASAAS (Pix, cartão, boleto) lançada no Financeiro, conversa do médico pela tela e resumo da consulta (Gemini) salvo no prontuário depois de revisado. Sinais de alarme param a triagem e orientam o SAMU 192. Simulador para testar sem a Meta. Código em `src/lib/whatsapp/`; depende de `migrations/2026-10-29-whatsapp.sql`. |
 | **Financeiro** | Lançamentos por mês, baixa de pagamento, cobrança automática ao concluir consulta; faturamento por convênio com exportação CSV. |
 | **Relatórios** | Produção por profissional, taxa de falta, receita por convênio, origem dos agendamentos. |
 | **Configurações** | Dados da clínica, profissionais, usuários, horários de atendimento e chaves da API. Somente admin. |
@@ -58,6 +60,10 @@ O banco vem de `CONTENT_DATABASE_URL` ou `DATABASE_URL`. Sem acesso a ele, o pro
 
 - `DATABASE_URL` — string de conexão do pooler (em `.env.local` para dev e nas envs do projeto Vercel)
 - `SESSION_SECRET` — só produção
+- `GEMINI_API_KEY` — Super Inteligência do Guia clínico e, no WhatsApp, triagem/resumo (só com a confirmação de plano pago em WhatsApp › Configurar)
+- WhatsApp (Meta Cloud API): `WHATSAPP_TOKEN` (token permanente de usuário do sistema), `WHATSAPP_APP_SECRET`, `WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_VERIFY_TOKEN`; opcional `WHATSAPP_GRAPH_VERSION` (padrão `v24.0`). Webhook na Meta: `https://renovaapp.vercel.app/api/whatsapp/webhook` (campo `messages`)
+- ASAAS: `ASAAS_API_KEY`, `ASAAS_WEBHOOK_TOKEN`, `ASAAS_ENV` (vazio = sandbox, `producao` = real); opcional `ASAAS_BASE_URL`. Webhook na ASAAS: `https://renovaapp.vercel.app/api/asaas/webhook`
+- WhatsApp › Configurar mostra quais dessas faltam (só os nomes, nunca os valores)
 - ⚠️ Ao adicionar envs pelo PowerShell, use `vercel env add NOME production --value "..."` — piping (`"..." | vercel env add`) injeta um BOM UTF-8 que corrompe o valor.
 
 ## Deploy
