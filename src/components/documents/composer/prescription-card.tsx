@@ -5,7 +5,6 @@ import { MAX_COMPOSER_ITEMS } from "@/lib/composer";
 import type { ComposerTemplate } from "@/lib/composer";
 import type { PrescriptionItem } from "@/lib/prescription";
 import type { FrequentItem } from "@/lib/rx-suggestions";
-import { IconPlus } from "@/components/icons";
 import { PrescriptionEditor } from "../prescription-editor";
 import { LimitNote, QUICK_CHIP } from "./ui";
 
@@ -17,9 +16,6 @@ export interface PrescriptionCardProps {
   rxProtocols: ReadonlyArray<ComposerTemplate>;
   /** O que este médico mais receita, para o "Seus mais receitados" do editor. */
   frequentRx: ReadonlyArray<FrequentItem>;
-  /** Em quantos documentos a lista sai e com quantos medicamentos (`prescriptionSummary`). */
-  docCount: number;
-  medicationCount: number;
   full: boolean;
   protocolName: string;
   onProtocolNameChange(name: string): void;
@@ -27,7 +23,6 @@ export interface PrescriptionCardProps {
   onDismissProtocolMessage: () => void;
   savingProtocol: boolean;
   onSaveProtocol(): void;
-  onInclude(): void;
   /** O medicamento aberto no cartão (um por vez). */
   editing: { index: number; nonce: number } | null;
   onEdit(index: number | null, options?: { silent?: boolean }): void;
@@ -43,8 +38,9 @@ export interface PrescriptionCardProps {
 
 /**
  * O receituário em três telas do compositor: "lista" (a receita, os
- * protocolos da clínica, salvar como protocolo, "Incluir"), "adicionar" (a
- * busca) e "medicamento" (posologia, quantidade, via do que está aberto).
+ * protocolos da clínica, salvar como protocolo), "adicionar" (a busca) e
+ * "medicamento" (posologia, quantidade, via do que está aberto). Incluir na
+ * emissão e fechar o medicamento são o botão do rodapé do compositor.
  */
 export function PrescriptionCard({
   rx,
@@ -52,8 +48,6 @@ export function PrescriptionCard({
   allergies,
   rxProtocols,
   frequentRx,
-  docCount,
-  medicationCount,
   full,
   protocolName,
   onProtocolNameChange,
@@ -61,7 +55,6 @@ export function PrescriptionCard({
   onDismissProtocolMessage,
   savingProtocol,
   onSaveProtocol,
-  onInclude,
   editing,
   onEdit,
   onShowOnSheet,
@@ -116,55 +109,42 @@ export function PrescriptionCard({
       />
 
       {list && rx.length > 0 ? (
-        <div className="rounded-2xl border border-dashed border-[var(--color-line)] p-3">
-          <div className="flex flex-wrap items-end gap-2">
-            <div className="min-w-0 basis-full sm:flex-1 sm:basis-auto">
-              <label className="label" htmlFor="rx-protocolo">
-                Salvar esta lista como protocolo
-              </label>
-              <input
-                className="input"
-                id="rx-protocolo"
-                maxLength={80}
-                value={protocolName}
-                placeholder="Ex.: Gripe adulto, ITU não complicada"
-                onChange={(e) => onProtocolNameChange(e.target.value)}
-              />
+        <details className="rounded-2xl border border-dashed border-[var(--color-line)] p-3">
+          <summary className="cursor-pointer text-[12.5px] font-bold text-pine-700">Salvar esta lista como protocolo</summary>
+          <div className="mt-2">
+            <div className="flex flex-wrap items-end gap-2">
+              <div className="min-w-0 basis-full sm:flex-1 sm:basis-auto">
+                <label className="label" htmlFor="rx-protocolo">
+                  Nome do protocolo
+                </label>
+                <input
+                  className="input"
+                  id="rx-protocolo"
+                  maxLength={80}
+                  value={protocolName}
+                  placeholder="Ex.: Gripe adulto, ITU não complicada"
+                  onChange={(e) => onProtocolNameChange(e.target.value)}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={onSaveProtocol}
+                disabled={savingProtocol || protocolName.trim() === ""}
+                className="btn btn-outline w-full disabled:opacity-50 sm:w-auto"
+              >
+                {savingProtocol ? "Salvando…" : "Salvar protocolo"}
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={onSaveProtocol}
-              disabled={savingProtocol || protocolName.trim() === ""}
-              className="btn btn-outline w-full disabled:opacity-50 sm:w-auto"
-            >
-              {savingProtocol ? "Salvando…" : "Salvar protocolo"}
-            </button>
-          </div>
-          {protocolMessage ? (
-            <Feedback key={protocolMessage.text} tone={protocolMessage.tone} className="mt-1.5" onClose={onDismissProtocolMessage}>
-              {protocolMessage.text}
-            </Feedback>
-          ) : null}
-        </div>
-      ) : null}
+            {protocolMessage ? (
+              <Feedback key={protocolMessage.text} tone={protocolMessage.tone} className="mt-1.5" onClose={onDismissProtocolMessage}>
+                {protocolMessage.text}
+              </Feedback>
+            ) : null}
+            </div>
+          </details>
+        ) : null}
+        {list && full ? <LimitNote max={MAX_COMPOSER_ITEMS} /> : null}
 
-      {list ? (
-        <div className="flex flex-wrap items-center justify-end gap-2 pt-1">
-          {full ? <LimitNote max={MAX_COMPOSER_ITEMS} /> : null}
-          <button type="button" onClick={() => onRxChange([])} className="btn btn-outline" disabled={rx.length === 0}>
-            Limpar
-          </button>
-          <button
-            type="button"
-            onClick={onInclude}
-            className="btn btn-primary flex-1 disabled:opacity-50 sm:flex-none"
-            disabled={docCount === 0 || full}
-          >
-            <IconPlus className="h-4 w-4" />
-            {docCount > 1 ? `Incluir ${docCount} documentos (${medicationCount} medicamentos)` : "Incluir na emissão"}
-          </button>
-        </div>
-      ) : null}
-    </section>
-  );
-}
+      </section>
+    );
+  }

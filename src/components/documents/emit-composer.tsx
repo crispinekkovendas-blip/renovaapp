@@ -41,7 +41,7 @@ import type { ComposerStep, ComposerTab } from "@/lib/composer-editor";
 import { SCREEN_TITLE, initialScreen, isTextTab, screenAfterType, screenForTab } from "@/lib/composer-screens";
 import { stackStorageKey } from "@/lib/composer-rail";
 import { fmtDate } from "@/lib/format";
-import { blockedItems, serializeItems as serializePrescription } from "@/lib/prescription";
+import { blockedItems, itemComplete, serializeItems as serializePrescription } from "@/lib/prescription";
 import type { PrescriptionItem } from "@/lib/prescription";
 import { ComposerRail } from "./composer-rail";
 import type { RailDocument, RailPatient } from "./composer-rail";
@@ -51,6 +51,7 @@ import type { PreviewPage } from "./composer/preview-viewer";
 import { RX_DRAG_TYPE, decodeDragItems, documentIndexes, firstAdded, pageOfItem } from "@/lib/rx-canvas";
 import { moveItem } from "@/lib/reorder";
 import { ComposerActionBar } from "./composer/action-bar";
+import type { BarAction } from "./composer/action-bar";
 import { useDraft } from "./composer/use-draft";
 import type { DraftState } from "@/lib/drafts";
 import { readLocalDraft, removeLocalDraft } from "@/lib/local-drafts";
@@ -643,15 +644,6 @@ export function EmitComposer({
       <div className="min-w-0 space-y-3">
         {!previewOn ? <ShowPreviewButton onShow={() => setPreviewOn(true)} /> : null}
         {content}
-        {tab !== "receita" ? (
-          <button
-            type="button"
-            onClick={() => go("previa")}
-            className="flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border border-[var(--color-line)] bg-white text-sm font-bold text-pine-700 lg:hidden"
-          >
-            Ver a folha
-          </button>
-        ) : null}
       </div>
       {previewOn ? <DesktopPreview {...preview} onHide={() => setPreviewOn(false)} /> : null}
     </div>
@@ -721,8 +713,6 @@ export function EmitComposer({
         allergies={patient.allergies}
         rxProtocols={rxProtocols}
         frequentRx={frequentRx}
-        docCount={rxSummary.docs.length}
-        medicationCount={rxSummary.medicationCount}
         full={full}
         protocolName={protocol.rxName}
         onProtocolNameChange={protocol.setRxName}
@@ -730,7 +720,6 @@ export function EmitComposer({
         onDismissProtocolMessage={protocol.clearRxMessage}
         savingProtocol={protocol.saving}
         onSaveProtocol={protocol.saveRx}
-        onInclude={includePrescription}
         editing={editing}
         onEdit={editRx}
         onShowOnSheet={(index) => {
@@ -756,23 +745,47 @@ export function EmitComposer({
         onDropTemplate={dropTemplate}
         // Trocar o modelo toma o lugar desta tela: escolher outro volta a empilhar só "montar".
         onChangeModel={isTextTab(tab) ? () => go("modelo", { replace: true }) : undefined}
+        actionsInBar
       />
     );
 
   // Tela 2c — a folha inteira, como vai sair; daqui também se inclui na emissão.
   const previewScreen = (
-    <div className="mx-auto max-w-3xl space-y-4">
+    <div className="mx-auto max-w-3xl">
       <PreviewViewer {...preview} />
-      <div className="flex flex-wrap gap-2 [&>*]:flex-1">
-        <button type="button" onClick={back} className="btn btn-outline">
-          Voltar a editar
-        </button>
-        <button type="button" onClick={include} disabled={!canInclude} className="btn btn-primary disabled:opacity-50">
-          {editor.editing && tab !== "receituario" ? "Salvar item" : "Incluir na emissão"}
-        </button>
-      </div>
     </div>
   );
+
+  /**
+   * O rodapé: um botão principal por tela, sempre à direita. "Continuar" é
+   * quem inclui na emissão; "Pronto" fecha o medicamento. Escolher o tipo, o
+   * modelo ou um medicamento da busca já avança sozinho — ali não há botão.
+   */
+  const continueLabel = editor.editing && tab !== "receituario" ? "Salvar alterações" : "Continuar";
+  const toStack: BarAction | null = items.length > 0 ? { label: `Nesta emissão (${items.length})`, onClick: () => go("emissao") } : null;
+  const seeSheet: BarAction = { label: "Ver a folha", onClick: () => go("previa"), mobileOnly: true };
+  const includeAction: BarAction = { label: continueLabel, onClick: include, disabled: !canInclude };
+  const bar: { primary: BarAction | null; secondary: BarAction | null } =
+    screen === "tipo"
+      ? { primary: toStack, secondary: null }
+      : screen === "montar"
+        ? tab === "receita"
+          ? { primary: toStack, secondary: null }
+          : tab === "receituario" && rx.length === 0 && toStack
+            ? { primary: toStack, secondary: null }
+            : { primary: includeAction, secondary: seeSheet }
+        : screen === "medicamento"
+          ? { primary: { label: "Pronto", onClick: () => editRx(null), disabled: !openMedication || !itemComplete(openMedication) }, secondary: null }
+          : screen === "previa"
+            ? { primary: includeAction, secondary: { label: "Voltar a editar", onClick: back } }
+            : screen === "emissao"
+              ? {
+                  primary: { label: "Continuar", onClick: () => go("revisar"), disabled: items.length === 0 },
+                  secondary: { label: "+ Outro documento", onClick: () => go("tipo"), disabled: full },
+                }
+              : screen === "revisar"
+                ? { primary: { label: "Emitir e enviar", submit: true }, secondary: { label: "Voltar", onClick: back } }
+                : { primary: null, secondary: null };
 
   // Tela 3 — a pilha: o que sai nesta emissão, com reordenar, editar (volta a Montar) e remover.
   const stackScreen = (
@@ -791,14 +804,6 @@ export function EmitComposer({
         onProtocolClinic={protocol.setClinic}
         onProtocolSave={protocol.save}
       />
-      <button
-        type="button"
-        onClick={() => go("tipo")}
-        disabled={full}
-        className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-pine-900/15 px-4 py-4 text-sm font-bold text-pine-700 transition-colors hover:border-pine-400 hover:bg-pine-50 disabled:opacity-50"
-      >
-        + Adicionar outro documento
-      </button>
     </div>
   );
 
@@ -933,15 +938,7 @@ export function EmitComposer({
         reviewScreen
       )}
 
-      <ComposerActionBar
-        screen={screen}
-        countLabel={countLabel}
-        itemCount={items.length}
-        onGo={go}
-        onBack={back}
-        onClose={close}
-        closing={closing}
-      />
+      <ComposerActionBar countLabel={countLabel} primary={bar.primary} secondary={bar.secondary} />
     </form>
   );
 }

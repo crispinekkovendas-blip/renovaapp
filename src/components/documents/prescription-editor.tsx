@@ -467,7 +467,9 @@ export function PrescriptionEditor({
               />
               Uso contínuo
             </label>
-            {/* Enviar: o cartão fecha e o medicamento fica na folha. Sem posologia não sai. */}
+            {/* Enviar: o cartão fecha e o medicamento fica na folha. Sem posologia não sai.
+                Na tela do medicamento, quem faz isso é o "Pronto" do rodapé. */}
+            {view === "medicamento" ? null : (
             <button
               type="button"
               onClick={ship}
@@ -476,6 +478,7 @@ export function PrescriptionEditor({
             >
               {itemComplete(current.item) ? "Enviar para a receita →" : "Escolha a posologia para enviar"}
             </button>
+            )}
           </div>
         </div>
       ) : !all ? null : items.length === 0 ? (

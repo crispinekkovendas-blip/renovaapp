@@ -1,11 +1,19 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
-import { SCREEN_STEP } from "@/lib/composer-screens";
-import type { ScreenId } from "@/lib/composer-screens";
 import { IconArrowRight } from "./icons";
 
-function SubmitButton() {
+/** Uma ação do rodapé. `submit`: o botão que emite (o formulário em volta é o da emissão). */
+export interface BarAction {
+  label: string;
+  onClick?(): void;
+  disabled?: boolean;
+  submit?: boolean;
+  /** Só abaixo do lg (ex.: "Ver a folha", que no computador já está ao lado). */
+  mobileOnly?: boolean;
+}
+
+function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
   return (
     <button type="submit" className="btn btn-primary disabled:opacity-50" disabled={pending}>
@@ -13,7 +21,7 @@ function SubmitButton() {
         "Emitindo…"
       ) : (
         <>
-          Emitir e enviar
+          {label}
           <IconArrowRight className="h-4 w-4" />
         </>
       )}
@@ -22,80 +30,51 @@ function SubmitButton() {
 }
 
 /**
- * Rodapé grudado embaixo de cada tela do compositor, com as ações dela:
- *
- * - Tipo e as telas de Montar (modelo, preencher, receita, adicionar,
- *   medicamento, prévia): "Salvar rascunho" e, se já há algo, "Nesta emissão
- *   (n)"; incluir o documento é o botão do próprio editor (ou da prévia).
- * - Nesta emissão: "Outro documento" e "Continuar".
- * - Revisar: "Voltar" e "Emitir e enviar".
+ * Rodapé grudado embaixo de cada tela do compositor: **um botão principal**,
+ * sempre no mesmo lugar (à direita), e no máximo um secundário ao lado. Quem
+ * decide o que cada tela mostra é o compositor; fechar e guardar o rascunho é
+ * o "×" do alto. Sem ação nenhuma (tocar já avança, como na escolha do tipo),
+ * o rodapé some.
  *
  * Abaixo do md ele para logo acima da barra de abas do app (4rem + área segura)
  * e sangra até a borda na medida do padding do <main> (px-4 → sm:px-6 → md:px-8).
  */
 export function ComposerActionBar({
-  screen,
   countLabel,
-  itemCount,
-  onGo,
-  onBack,
-  onClose,
-  closing,
+  primary,
+  secondary,
 }: {
-  screen: ScreenId;
   countLabel: string;
-  itemCount: number;
-  onGo(screen: ScreenId): void;
-  onBack(): void;
-  /** Guarda o rascunho e fecha. */
-  onClose(): void;
-  closing: boolean;
+  primary: BarAction | null;
+  secondary: BarAction | null;
 }) {
-  const split = "w-full sm:w-auto [&>*]:flex-1 sm:[&>*]:flex-none";
-  const step = SCREEN_STEP[screen];
+  if (!primary && !secondary) return null;
   return (
-    <div className="sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] z-20 -mx-4 -mb-8 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-[var(--color-line)] bg-paper/90 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 md:bottom-0 md:-mx-8 md:-mb-6 md:px-8">
+    <div className="sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] z-20 -mx-4 -mb-8 flex items-center justify-between gap-3 border-t border-[var(--color-line)] bg-paper/90 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 md:bottom-0 md:-mx-8 md:-mb-6 md:px-8">
       <p className="hidden text-xs text-pine-900/60 sm:block">
         <span className="font-bold text-pine-950">{countLabel}</span>
-        <span> · mesma data, mesmo profissional, um link só para o paciente</span>
       </p>
-      <div className={`flex items-center gap-2 ${split}`}>
-        {step === "tipo" || step === "montar" ? (
-          <>
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={closing}
-              className="btn btn-outline disabled:opacity-60"
-              title="Guarda o que está montado como rascunho e fecha"
-            >
-              {closing ? "Salvando…" : "Salvar rascunho"}
-            </button>
-            {itemCount > 0 ? (
-              <button type="button" onClick={() => onGo("emissao")} className="btn btn-primary">
-                Nesta emissão ({itemCount})
-                <IconArrowRight className="h-4 w-4" />
-              </button>
-            ) : null}
-          </>
-        ) : step === "emissao" ? (
-          <>
-            <button type="button" onClick={() => onGo("tipo")} className="btn btn-outline">
-              + Outro documento
-            </button>
-            <button type="button" onClick={() => onGo("revisar")} disabled={itemCount === 0} className="btn btn-primary disabled:opacity-50">
-              Continuar
+      <div className="flex w-full items-center gap-2 sm:ml-auto sm:w-auto [&>*]:flex-1 sm:[&>*]:flex-none">
+        {secondary ? (
+          <button
+            type="button"
+            onClick={secondary.onClick}
+            disabled={secondary.disabled}
+            className={`btn btn-outline disabled:opacity-50 ${secondary.mobileOnly ? "lg:hidden" : ""}`}
+          >
+            {secondary.label}
+          </button>
+        ) : null}
+        {primary ? (
+          primary.submit ? (
+            <SubmitButton label={primary.label} />
+          ) : (
+            <button type="button" onClick={primary.onClick} disabled={primary.disabled} className="btn btn-primary disabled:opacity-50">
+              {primary.label}
               <IconArrowRight className="h-4 w-4" />
             </button>
-          </>
-        ) : (
-          <>
-            <button type="button" onClick={onBack} className="btn btn-outline">
-              Voltar
-            </button>
-            <SubmitButton />
-          </>
-        )}
+          )
+        ) : null}
       </div>
     </div>
   );

@@ -39,6 +39,8 @@ export interface TextEditorCardProps {
    * do seletor aparece "Modelo: X · Trocar", que volta para lá.
    */
   onChangeModel?(): void;
+  /** O rodapé do compositor faz o "Incluir" (o "Continuar"): os botões do cartão somem. */
+  actionsInBar?: boolean;
 }
 
 /** O editor de atestado, encaminhamento, laudo e orientações: modelo, campos, título e texto. */
@@ -58,6 +60,7 @@ export function TextEditorCard({
   onReset,
   onDropTemplate,
   onChangeModel,
+  actionsInBar = false,
 }: TextEditorCardProps) {
   // Um modelo arrastado pousando sobre o editor.
   const [dropping, setDropping] = useState(false);
@@ -204,27 +207,31 @@ export function TextEditorCard({
         />
       </div>
 
-      <div className="flex flex-wrap items-center justify-end gap-2 pt-1">
-        {full && !editor.editing ? <LimitNote max={MAX_COMPOSER_ITEMS} /> : null}
-        <button type="button" onClick={onReset} className="btn btn-outline">
-          {editor.editing ? "Cancelar" : "Limpar"}
-        </button>
-        <button
-          type="button"
-          onClick={onInclude}
-          className="btn btn-primary flex-1 disabled:opacity-50 sm:flex-none"
-          disabled={editor.editing ? empty : empty || full}
-        >
-          {editor.editing ? (
-            "Salvar item"
-          ) : (
-            <>
-              <IconPlus className="h-4 w-4" />
-              Incluir na emissão
-            </>
-          )}
-        </button>
-      </div>
+      {actionsInBar ? (
+        full && !editor.editing ? <LimitNote max={MAX_COMPOSER_ITEMS} /> : null
+      ) : (
+        <div className="flex flex-wrap items-center justify-end gap-2 pt-1">
+          {full && !editor.editing ? <LimitNote max={MAX_COMPOSER_ITEMS} /> : null}
+          <button type="button" onClick={onReset} className="btn btn-outline">
+            {editor.editing ? "Cancelar" : "Limpar"}
+          </button>
+          <button
+            type="button"
+            onClick={onInclude}
+            className="btn btn-primary flex-1 disabled:opacity-50 sm:flex-none"
+            disabled={editor.editing ? empty : empty || full}
+          >
+            {editor.editing ? (
+              "Salvar item"
+            ) : (
+              <>
+                <IconPlus className="h-4 w-4" />
+                Incluir na emissão
+              </>
+            )}
+          </button>
+        </div>
+      )}
     </section>
   );
 }

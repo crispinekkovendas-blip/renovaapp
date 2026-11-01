@@ -59,7 +59,7 @@ export function ComposerStack({
       <div className="card overflow-hidden">
         {items.length === 0 ? (
           <p className="px-4 py-4 text-sm text-pine-900/55 sm:px-5 sm:py-5">
-            Nenhum documento ainda. Toque em “+ Adicionar outro documento”, monte e inclua aqui.
+            Nenhum documento ainda. Toque em “+ Outro documento”, embaixo, para montar o primeiro.
           </p>
         ) : (
           <StackList items={items} onItemsChange={onItemsChange} editingCode={editingCode} onEdit={onEdit} onRemove={onRemove} />
