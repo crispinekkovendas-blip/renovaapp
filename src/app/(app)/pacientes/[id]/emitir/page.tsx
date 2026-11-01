@@ -2,9 +2,9 @@ import { EmitScreen } from "./emit-screen";
 import type { EmitQuery } from "./emit-screen";
 
 /**
- * "Emitir documentos" como página inteira: o que abre num F5 ou num link
- * direto. Pela ficha, a mesma tela abre como pop-up (rota interceptada em
- * `@modal/(.)pacientes/[id]/emitir`).
+ * "Emitir documentos": o compositor como telas do app, com voltar
+ * (tipo → montar → nesta emissão → revisar). Antes abria como pop-up por cima
+ * da ficha; agora é sempre esta página.
  */
 export default function EmitPage({
   params,
@@ -13,5 +13,5 @@ export default function EmitPage({
   params: Promise<{ id: string }>;
   searchParams: Promise<EmitQuery>;
 }) {
-  return <EmitScreen params={params} searchParams={searchParams} presentation="page" />;
+  return <EmitScreen params={params} searchParams={searchParams} />;
 }

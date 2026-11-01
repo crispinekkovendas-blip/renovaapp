@@ -48,6 +48,12 @@ const STEPS: readonly Step[] = [
 
 const NEWS: readonly { date: string; items: readonly string[] }[] = [
   {
+    date: "1º de novembro de 2026",
+    items: [
+      "Emitir documentos virou telas do app, não mais um pop-up: 1) O que vai emitir — um cartão grande por tipo (Receituário, Atestado, Encaminhamento, Laudo, Orientações, Receita digital), com Perfil, Histórico e Modelos do paciente embaixo; 2) Montar — os modelos, o editor e a folha (ao lado no computador, aba Prévia no celular); “Incluir na emissão” leva à tela seguinte; 3) Nesta emissão — o que vai sair, para reordenar, editar, remover ou “+ Adicionar outro documento”; 4) Revisar e emitir. Toda tela tem a seta de voltar no alto, e o voltar do celular também anda entre elas; o “×” fecha guardando o rascunho. Vindo do Receituário, fechar volta para o Receituário. A barra de etapas no alto mostra onde você está.",
+    ],
+  },
+  {
     date: "29 de outubro de 2026",
     items: [
       "Receituário (nova seção no menu, para médico e admin): receitar sem passar pela ficha, em quatro telas. Nova receita — busque o paciente (ou escolha entre os atendidos por último), veja a alergia e a data da última receita e clique em “Nova receita” ou “Renovar última”: o compositor abre por cima, já no receituário; ao lado, os rascunhos em andamento, as últimas receitas e quantas saíram hoje e no mês. Histórico — todas as suas receitas (as da clínica para o admin) com busca por paciente, CPF ou código RNV, por medicamento, período, papel (simples ou controle especial) e revogadas, e em cada uma Ver, PDF e Renovar. Renovações — quem toma remédio de uso contínuo e quando a última receita deixa de valer (controle especial: 30 dias; simples: 180 dias, como lembrete), com “Renovar” e “Avisar no WhatsApp” com a mensagem pronta. Mais receitados — o que você mais prescreve, para quantos pacientes e com quais posologias, por período; cada remédio abre o histórico filtrado. No celular, “Receitas” entrou na barra de baixo (o WhatsApp foi para “Mais”).",

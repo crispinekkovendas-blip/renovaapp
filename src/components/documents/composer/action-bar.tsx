@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
-import type { ComposerStep } from "@/lib/composer-editor";
+import type { ScreenId } from "@/lib/composer-screens";
 import { IconArrowRight } from "./icons";
 
 function SubmitButton() {
@@ -21,71 +21,73 @@ function SubmitButton() {
 }
 
 /**
- * Rodapé grudado embaixo da coluna principal: a contagem e as ações do passo atual.
- * Abaixo do md ele para logo acima da barra de abas do app (4rem + área segura) e
- * sangra até a borda na medida do padding do <main> (px-4 → sm:px-6 → md:px-8).
- * É o papel da `.mobile-action-bar`, mas aquela vira bloco estático no sm e este
- * continua grudado em todo tamanho, como sempre foi no desktop.
+ * Rodapé grudado embaixo de cada tela do compositor, com as ações dela:
+ *
+ * - Tipo e Montar: "Salvar rascunho" e, se já há algo, "Nesta emissão (n)";
+ *   em Montar, incluir o documento é o botão do próprio editor.
+ * - Nesta emissão: "Outro documento" e "Continuar".
+ * - Revisar: "Voltar" e "Emitir e enviar".
+ *
+ * Abaixo do md ele para logo acima da barra de abas do app (4rem + área segura)
+ * e sangra até a borda na medida do padding do <main> (px-4 → sm:px-6 → md:px-8).
  */
 export function ComposerActionBar({
-  step,
-  patientId,
+  screen,
   countLabel,
-  canContinue,
-  onStepChange,
+  itemCount,
+  onGo,
+  onBack,
   onClose,
   closing,
-  inSheet,
 }: {
-  step: ComposerStep;
-  patientId: number;
+  screen: ScreenId;
   countLabel: string;
-  canContinue: boolean;
-  onStepChange(step: ComposerStep): void;
-  /** Guarda o rascunho e volta à ficha. */
+  itemCount: number;
+  onGo(screen: ScreenId): void;
+  onBack(): void;
+  /** Guarda o rascunho e fecha. */
   onClose(): void;
   closing: boolean;
-  /** Dentro do pop-up: gruda no fundo da folha (não há barra de abas embaixo). */
-  inSheet: boolean;
 }) {
-  const place = inSheet
-    ? "sticky bottom-0 z-20 -mx-4 px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
-    : "sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] z-20 -mx-4 px-4 -mb-8 sm:-mx-6 sm:px-6 md:bottom-0 md:-mx-8 md:-mb-6 md:px-8";
+  const split = "w-full sm:w-auto [&>*]:flex-1 sm:[&>*]:flex-none";
   return (
-    <div
-      className={`${place} flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-[var(--color-line)] bg-paper/90 pt-3 backdrop-blur ${inSheet ? "" : "pb-3"}`}
-    >
-      {/* No celular: na montagem, contagem + Continuar numa linha só (o "← Ficha" do
-          cabeçalho faz o Cancelar); na revisão, Voltar e Emitir dividem a largura. */}
-      <p className={`text-xs text-pine-900/60 ${step === "review" ? "hidden sm:block" : ""}`}>
+    <div className="sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] z-20 -mx-4 -mb-8 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-[var(--color-line)] bg-paper/90 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 md:bottom-0 md:-mx-8 md:-mb-6 md:px-8">
+      <p className="hidden text-xs text-pine-900/60 sm:block">
         <span className="font-bold text-pine-950">{countLabel}</span>
-        <span className="hidden sm:inline"> · mesma data, mesmo profissional, um link só para o paciente</span>
+        <span> · mesma data, mesmo profissional, um link só para o paciente</span>
       </p>
-      <div className={`flex items-center gap-2 ${step === "review" ? "w-full sm:w-auto [&>*]:flex-1 sm:[&>*]:flex-none" : ""}`}>
-        {step === "compose" ? (
+      <div className={`flex items-center gap-2 ${split}`}>
+        {screen === "tipo" || screen === "montar" ? (
           <>
             <button
               type="button"
               onClick={onClose}
               disabled={closing}
-              className="btn btn-outline hidden disabled:opacity-60 sm:inline-flex"
-              title="Guarda o que está montado como rascunho e volta à ficha"
+              className="btn btn-outline disabled:opacity-60"
+              title="Guarda o que está montado como rascunho e fecha"
             >
               {closing ? "Salvando…" : "Salvar rascunho"}
             </button>
-            <button
-              type="button"
-              onClick={() => onStepChange("review")}
-              disabled={!canContinue}
-              className="btn btn-primary disabled:opacity-50"
-            >
+            {itemCount > 0 ? (
+              <button type="button" onClick={() => onGo("emissao")} className="btn btn-primary">
+                Nesta emissão ({itemCount})
+                <IconArrowRight className="h-4 w-4" />
+              </button>
+            ) : null}
+          </>
+        ) : screen === "emissao" ? (
+          <>
+            <button type="button" onClick={() => onGo("tipo")} className="btn btn-outline">
+              + Outro documento
+            </button>
+            <button type="button" onClick={() => onGo("revisar")} disabled={itemCount === 0} className="btn btn-primary disabled:opacity-50">
               Continuar
               <IconArrowRight className="h-4 w-4" />
             </button>
           </>
         ) : (
           <>
-            <button type="button" onClick={() => onStepChange("compose")} className="btn btn-outline">
+            <button type="button" onClick={onBack} className="btn btn-outline">
               Voltar
             </button>
             <SubmitButton />

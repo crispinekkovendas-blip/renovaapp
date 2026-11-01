@@ -145,7 +145,7 @@ export default async function HistoricoPage({ searchParams }: { searchParams: Pr
                   {rx.revokedAt ? <span className="chip bg-rose-100 text-rose-700">Revogada</span> : null}
                   <span className="ml-auto flex gap-1">
                     <SmallLink href={rxLinks.ver(rx.patientId, rx.docId)}>Ver</SmallLink>
-                    <SmallLink href={rxLinks.renovar(rx.patientId, rx.docId)}>Renovar</SmallLink>
+                    <SmallLink href={rxLinks.renovar(rx.patientId, rx.docId, "/receituario/historico")}>Renovar</SmallLink>
                   </span>
                 </div>
               </li>
@@ -197,7 +197,7 @@ export default async function HistoricoPage({ searchParams }: { searchParams: Pr
                         >
                           PDF
                         </a>
-                        <SmallLink href={rxLinks.renovar(rx.patientId, rx.docId)}>Renovar</SmallLink>
+                        <SmallLink href={rxLinks.renovar(rx.patientId, rx.docId, "/receituario/historico")}>Renovar</SmallLink>
                       </span>
                     </td>
                   </tr>

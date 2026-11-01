@@ -21,6 +21,8 @@ export interface TabOption {
 export interface TypePickerProps {
   tabs: ReadonlyArray<TabOption>;
   tab: ComposerTab;
+  /** A fileira de tipos do celular; a tela de montar a esconde (o tipo já foi escolhido na tela anterior). */
+  showTypes?: boolean;
   /** Quantas vezes cada modelo já saiu num documento ("Mais usados" dos modelos). */
   templateUsage: Readonly<Record<number, number>>;
   subkind: AtestadoSubkind | null;
@@ -48,6 +50,7 @@ function startTemplateDrag(e: DragEvent, template: ComposerTemplate) {
 export const TypePicker = memo(function TypePicker({
   tabs,
   tab,
+  showTypes = true,
   templateUsage,
   subkind,
   kindTemplates,
@@ -61,7 +64,7 @@ export const TypePicker = memo(function TypePicker({
   return (
     <>
       {/* No computador a barra é uma coluna ao lado (emit-composer); aqui, a fileira do celular. */}
-      <TypeRail tabs={tabs} tab={tab} onSelect={onSelectTab} className="lg:hidden" />
+      {showTypes ? <TypeRail tabs={tabs} tab={tab} onSelect={onSelectTab} className="lg:hidden" /> : null}
       {tab === "atestado" ? (
         <nav aria-label="Tipo de atestado" className={`${CHIP_ROW} gap-1.5`}>
           {ATESTADO_SUBKINDS.map((item) => (

@@ -37,6 +37,7 @@ import {
   prescriptionToItems,
 } from "@/lib/composer-editor";
 import type { ComposerStep, ComposerTab, MobileView } from "@/lib/composer-editor";
+import { SCREEN_TITLE, initialScreen } from "@/lib/composer-screens";
 import { stackStorageKey } from "@/lib/composer-rail";
 import { fmtDate } from "@/lib/format";
 import { blockedItems, serializeItems as serializePrescription } from "@/lib/prescription";
@@ -49,11 +50,10 @@ import type { PreviewPage } from "./composer/preview-viewer";
 import { RX_DRAG_TYPE, decodeDragItems, documentIndexes, firstAdded, pageOfItem } from "@/lib/rx-canvas";
 import { moveItem } from "@/lib/reorder";
 import { ComposerActionBar } from "./composer/action-bar";
-import { ComposerSheet } from "./composer/sheet";
 import { useDraft } from "./composer/use-draft";
 import type { DraftState } from "@/lib/drafts";
 import { readLocalDraft, removeLocalDraft } from "@/lib/local-drafts";
-import { ComposerHeader, StepIndicator } from "./composer/composer-header";
+import { ScreenBar, TypeScreen, useScreens } from "./composer/screens";
 import { ComposerStack } from "./composer/composer-stack";
 import { usePreviewPreference, useProtocolDrafts, useRealPdf, useStoredStack } from "./composer/hooks";
 import { DesktopPreview, MobilePreview, MobileViewSwitch, ShowPreviewButton } from "./composer/preview-panels";
@@ -67,7 +67,6 @@ import { DEFAULT_SHEET_STYLE, SHEET_PRESETS, isDefaultStyle } from "@/lib/sheet-
 import type { SheetStyle, SheetTemplate } from "@/lib/sheet-style";
 import { TextEditorCard } from "./composer/text-editor";
 import { TypePicker } from "./composer/type-picker";
-import { TypeRail } from "./composer/type-rail";
 import type { TabOption } from "./composer/type-picker";
 import { Banner } from "./composer/ui";
 import type { ComposerActions, ComposerPatient, ComposerProfessional } from "./composer/types";
@@ -77,35 +76,26 @@ export type { ComposerActions, ComposerPatient, ComposerProfessional, SeedableDo
 
 /**
  * "Emitir documentos": um compositor só para atestado, encaminhamento, laudo,
- * orientações e receituário. Dois passos — montar a pilha (tipo → modelo →
- * campos → Incluir) e revisar (paciente, data, profissional, portal, WhatsApp)
- * — e um único <form action={emitDocumentsAction}> em volta de tudo: a pilha
- * vai no campo escondido `items` (JSON de ComposerItem, ver src/lib/composer.ts)
- * e os controles da revisão são inputs de verdade. O código de autenticidade
- * de cada item nasce aqui, no navegador, e aparece desde o primeiro clique;
- * o servidor só o troca se já existir.
+ * orientações e receituário, em **telas inteiras do app**, uma por vez, cada
+ * uma com "←" (o voltar do celular também anda entre elas — a tela vive em
+ * `?tela=`, ver src/lib/composer-screens.ts):
  *
- * A tela segue a da Mevo: cabeçalho com o avatar e o nome do paciente e o
- * código do documento à direita, a linha das etapas, as pílulas de tipo, os
- * modelos em chips, o editor, a pilha "Nesta emissão" e um rodapé grudado
- * embaixo com "Continuar" / "Emitir e enviar". A pílula "Receita digital"
- * abre a Memed (assinatura digital). O rail de 64px à direita (Perfil,
- * Histórico, Modelos, Ajuda — composer-rail.tsx) abre as gavetas flutuando
- * ao lado; `ComposerActions` é o que ele usa para mexer na pilha.
+ *   1. Tipo — o que vai emitir (cartões grandes) + Perfil/Histórico/Modelos;
+ *   2. Montar — modelos, o editor do tipo e a folha (ao lado no computador,
+ *      aba "Prévia" no celular); "Incluir" leva à tela 3;
+ *   3. Nesta emissão — a pilha: reordenar, editar (volta à 2), remover,
+ *      "+ Outro documento" (volta à 1), "Continuar";
+ *   4. Revisar — paciente, data, profissional, envio, folha; "Emitir e enviar".
  *
- * Abaixo do lg (celular e tablet) o editor ocupa a largura toda: os tipos e
- * os modelos viram fileiras que rolam de lado, o rail vira uma barra de
- * quatro botões cujas gavetas sobem como folhas, a prévia vira a aba "Prévia"
- * de um controle segmentado (a folha A4 encolhida até caber) e o rodapé gruda
- * logo acima da barra de abas do app. Arrastar não existe no toque: tocar num
- * modelo aplica, e a pilha tem botões de subir/descer.
+ * Um único <form action={emitDocumentsAction}> em volta de tudo: a pilha vai
+ * no campo escondido `items` (JSON de ComposerItem, ver src/lib/composer.ts) e
+ * os controles da revisão são inputs de verdade. O código de autenticidade de
+ * cada item nasce aqui, no navegador; o servidor só o troca se já existir.
  *
  * Organização: este arquivo junta o estado e liga as peças de ./composer/.
  * O editor é um reducer puro (src/lib/composer-editor.ts, testado); a pilha
  * guardada, a preferência da prévia, o PDF real e os protocolos são hooks
- * (composer/hooks.ts). A prévia acompanha cada tecla; as peças que não
- * dependem do texto (tipos e modelos, linhas da pilha, rail, folha) são
- * memo e recebem callbacks estáveis, então digitar não as refaz.
+ * (composer/hooks.ts); as telas, composer/screens.tsx.
  */
 
 export interface EmitComposerProps {
@@ -129,8 +119,10 @@ export interface EmitComposerProps {
   frequentRx: FrequentItem[];
   /** Quantas vezes cada modelo já saiu num documento (a aba "Mais usados" dos modelos). */
   templateUsage?: Readonly<Record<number, number>>;
-  /** "modal": pop-up por cima da ficha (rota interceptada); "page": a página inteira (F5, link direto). */
-  presentation: "modal" | "page";
+  /** O tipo veio no link (`?kind=`): o compositor abre direto na tela de montar. */
+  kindChosen?: boolean;
+  /** Para onde "×" e "Salvar rascunho" voltam (`?volta=`); sem ele, a ficha na aba Documentos. */
+  returnTo?: string | null;
   /** Rascunho sendo continuado: número do banco ou "local-…" do navegador. */
   draftId: string | null;
   /** O rascunho do banco já lido pela página (o do navegador é lido aqui, depois da hidratação). */
@@ -189,7 +181,8 @@ export function EmitComposer({
   memedEnabled,
   frequentRx,
   templateUsage = NO_USAGE,
-  presentation,
+  kindChosen = false,
+  returnTo = null,
   draftId: initialDraftId,
   draftState,
   seedItems,
@@ -205,7 +198,6 @@ export function EmitComposer({
   canEditSheet = false,
   canSaveSheetForClinic = false,
 }: EmitComposerProps) {
-  const [step, setStep] = useState<ComposerStep>("compose");
   const [{ tab, editor }, dispatch] = useReducer(composerReducer, undefined, () =>
     draftState
       ? {
@@ -292,8 +284,15 @@ export function EmitComposer({
     } catch {
       // Sem sessionStorage: nada guardado.
     }
-    router.replace(`/pacientes/${patientId}?aba=documentos`);
-  }, [closing, draft, stackKey, router, patientId]);
+    router.replace(returnTo ?? `/pacientes/${patientId}?aba=documentos`);
+  }, [closing, draft, stackKey, router, patientId, returnTo]);
+
+  /* ---------- as telas: tipo → montar → nesta emissão → revisar ---------- */
+
+  const [startScreen] = useState(() => initialScreen({ itemCount: items.length, kindChosen }));
+  const { screen, go, back } = useScreens(startScreen, items.length, close);
+  // A revisão é o único passo que emite; o resto é montagem.
+  const step: ComposerStep = screen === "revisar" ? "review" : "compose";
 
   // Revisão.
   const [professionalId, setProfessionalId] = useState<number>(defaultProfessionalId ?? professionals[0]?.id ?? 0);
@@ -390,19 +389,21 @@ export function EmitComposer({
       if (t.kind === PROTOCOL_KIND) {
         setItems((current) => appendItems(current, seedFromTemplate(t, templates, ctx)));
         clearProtocolMessage();
+        go("emissao");
         return;
       }
       dispatch({ type: "apply-template", template: t, code: generateDocumentCode() });
+      go("montar");
     },
-    [templates, ctx, setItems, clearProtocolMessage]
+    [templates, ctx, setItems, clearProtocolMessage, go]
   );
 
   const editItem = useCallback(
     (item: ComposerItem) => {
       dispatch({ type: "edit-item", editor: editorFromItem(item, templates) });
-      document.getElementById("emit-editor")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      go("montar");
     },
-    [templates]
+    [templates, go]
   );
 
   const remove = useCallback(
@@ -416,12 +417,18 @@ export function EmitComposer({
   const actions: ComposerActions = useMemo(
     () => ({
       items,
-      appendItems: (more) => setItems((current) => appendItems(current, more)),
-      appendFromDocument: (doc) => setItems((current) => appendItems(current, [seedFromDocument(doc, templates, ctx)])),
+      appendItems: (more) => {
+        setItems((current) => appendItems(current, more));
+        go("emissao");
+      },
+      appendFromDocument: (doc) => {
+        setItems((current) => appendItems(current, [seedFromDocument(doc, templates, ctx)]));
+        go("emissao");
+      },
       applyTemplate,
       openProtocolForm,
     }),
-    [items, setItems, templates, ctx, applyTemplate, openProtocolForm]
+    [items, setItems, templates, ctx, applyTemplate, openProtocolForm, go]
   );
 
   const railPatient: RailPatient = useMemo(
@@ -461,6 +468,7 @@ export function EmitComposer({
       setItems((current) => appendItems(current, [item]));
     }
     dispatch({ type: "reset", code: generateDocumentCode() });
+    go("emissao");
   }
 
   /** Toda mudança da lista passa aqui: o que entrou aparece na folha, na página certa. */
@@ -492,6 +500,7 @@ export function EmitComposer({
     setItems((current) => appendItems(current, built));
     setRx([]);
     setEditing(null);
+    go("emissao");
   }
 
   function dropTemplate(templateId: number) {
@@ -587,48 +596,51 @@ export function EmitComposer({
   };
 
   const showMobilePreview = tab !== "receita" && mobileView === "previa";
+  const tabLabel = tabs.find((t) => t.tab === tab)?.label ?? "Documento";
 
-  // Uma grade só para os dois tamanhos: no celular é uma coluna — tipos, editor, pilha — e no
-  // desktop a prévia ocupa a coluna da direita. Perfil, Histórico, Modelos e Ajuda ficaram numa
-  // barra discreta no alto (ao lado das etapas), para a folha ter espaço e ser legível.
-  const composeStep = (
-    // No computador os tipos são uma barra estreita à esquerda, como a do YouTube recolhida.
-    <div className="lg:flex lg:items-start lg:gap-4">
-      {/* No pop-up a barra encosta na borda (~12px), como a do YouTube: o respiro de 32px da folha fica para o resto. */}
-      <TypeRail
-        tabs={tabs}
-        tab={tab}
-        onSelect={selectTab}
-        vertical
-        className={`hidden lg:sticky lg:top-4 lg:flex ${presentation === "modal" ? "lg:-ml-5" : ""}`}
-      />
-      <div
-        // grid-rows: a prévia (3 fileiras) é mais alta que o editor; a sobra fica embaixo da pilha, não entre os blocos.
-        className={`grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)] items-start gap-4 lg:grid-rows-[auto_auto_1fr] lg:gap-x-6 ${
-          previewOn ? "lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] xl:grid-cols-[minmax(0,1fr)_minmax(0,31.5rem)]" : ""
-        }`}
-      >
-        <div className="space-y-3">
-          {!previewOn ? <ShowPreviewButton onShow={() => setPreviewOn(true)} /> : null}
-          <TypePicker
-            tabs={tabs}
-            tab={tab}
-            templateUsage={templateUsage}
-            subkind={editor.subkind}
-            kindTemplates={kindTemplates}
-            protocols={protocols}
-            templateId={editor.templateId}
-            full={full}
-            onSelectTab={selectTab}
-            onSelectSubkind={selectSubkind}
-            onApplyTemplate={applyTemplate}
-          />
-        </div>
+  const rail = (
+    <ComposerRail
+      patient={railPatient}
+      documents={documents}
+      templates={templates}
+      actions={actions}
+      clinicName={clinicName}
+      portalUrl={portalUrl}
+      canManageTemplates={canManageTemplates}
+      backUrl={composerUrl(patientId, editor.kind, editor.subkind, encounterId)}
+      className="w-full lg:w-auto"
+    />
+  );
 
-        {previewOn ? (
-          <DesktopPreview {...preview} onHide={() => setPreviewOn(false)} />
-        ) : null}
+  // Tela 2 — montar um documento do tipo escolhido: modelos, editor e, no computador, a folha ao lado.
+  // No celular a folha é a aba "Prévia" do controle segmentado.
+  const buildScreen = (
+    <div
+      className={`grid min-w-0 grid-cols-[minmax(0,1fr)] items-start gap-4 lg:grid-rows-[auto_1fr] lg:gap-x-6 ${
+        previewOn ? "lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] xl:grid-cols-[minmax(0,1fr)_minmax(0,31.5rem)]" : ""
+      }`}
+    >
+      <div className="space-y-3">
+        {!previewOn ? <ShowPreviewButton onShow={() => setPreviewOn(true)} /> : null}
+        <TypePicker
+          tabs={tabs}
+          tab={tab}
+          showTypes={false}
+          templateUsage={templateUsage}
+          subkind={editor.subkind}
+          kindTemplates={kindTemplates}
+          protocols={protocols}
+          templateId={editor.templateId}
+          full={full}
+          onSelectTab={selectTab}
+          onSelectSubkind={selectSubkind}
+          onApplyTemplate={applyTemplate}
+        />
+      </div>
 
+      {previewOn ? <DesktopPreview {...preview} onHide={() => setPreviewOn(false)} /> : null}
+
+      <div className="space-y-3">
         {tab !== "receita" ? <MobileViewSwitch view={mobileView} onChange={setMobileView} /> : null}
         {showMobilePreview ? <MobilePreview {...preview} /> : null}
 
@@ -678,26 +690,104 @@ export function EmitComposer({
             />
           )}
         </div>
-
-        <ComposerStack
-          items={items}
-          onItemsChange={setItems}
-          editingCode={editor.editing}
-          onEdit={editItem}
-          onRemove={remove}
-          protocol={protocol.draft}
-          canManageTemplates={canManageTemplates}
-          onProtocolOpen={openProtocolForm}
-          onProtocolClose={protocol.closeForm}
-          onProtocolName={protocol.setName}
-          onProtocolClinic={protocol.setClinic}
-          onProtocolSave={protocol.save}
-        />
       </div>
     </div>
   );
 
-  const form = (
+  // Tela 3 — a pilha: o que sai nesta emissão, com reordenar, editar (volta a Montar) e remover.
+  const stackScreen = (
+    <div className="mx-auto max-w-3xl space-y-4">
+      <ComposerStack
+        items={items}
+        onItemsChange={setItems}
+        editingCode={editor.editing}
+        onEdit={editItem}
+        onRemove={remove}
+        protocol={protocol.draft}
+        canManageTemplates={canManageTemplates}
+        onProtocolOpen={openProtocolForm}
+        onProtocolClose={protocol.closeForm}
+        onProtocolName={protocol.setName}
+        onProtocolClinic={protocol.setClinic}
+        onProtocolSave={protocol.save}
+      />
+      <button
+        type="button"
+        onClick={() => go("tipo")}
+        disabled={full}
+        className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-pine-900/15 px-4 py-4 text-sm font-bold text-pine-700 transition-colors hover:border-pine-400 hover:bg-pine-50 disabled:opacity-50"
+      >
+        + Adicionar outro documento
+      </button>
+    </div>
+  );
+
+  // Tela 4 — revisar: paciente, data, profissional, envio, folha e (no receituário) a versão bilíngue.
+  const reviewScreen = (
+    <ReviewStep
+      patient={patient}
+      displayName={displayName}
+      professionals={professionals}
+      professionalId={professionalId}
+      onProfessionalChange={setProfessionalId}
+      professional={professional}
+      date={date}
+      today={today}
+      onDateChange={setDate}
+      send={send}
+      onSendChange={setSend}
+      items={items}
+      countLabel={countLabel}
+      sheetPanel={
+        <>
+          {items.some((item) => item.kind === "receituario") ? (
+            <section className="card p-4 sm:p-5" aria-label="Receita para comprar fora do país">
+              <label className="flex min-h-11 items-start gap-2 text-sm sm:min-h-0">
+                <input
+                  type="checkbox"
+                  checked={bilingual}
+                  onChange={(e) => setBilingual(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 accent-pine-700"
+                />
+                <span>
+                  <span className="font-bold text-pine-950">Receita bilíngue (português e espanhol)</span>
+                  <span className="mt-0.5 block text-xs text-pine-900/60">
+                    Para o paciente comprar fora do país (ex.: Paraguai) e trazer o medicamento: rótulos e posologia também em
+                    espanhol e a declaração de uso pessoal na quantidade do tratamento.
+                  </span>
+                </span>
+              </label>
+            </section>
+          ) : null}
+          <SheetStylePanel
+            style={sheet.style}
+            choice={sheet.choice}
+            onChange={chooseSheet}
+            templates={sheetTemplates}
+            onTemplatesChange={setSheetTemplates}
+            logos={sheetLogos}
+            onLogo={(hash, dataUrl) => setSheetLogos((all) => ({ ...all, [hash]: dataUrl }))}
+            canEdit={canEditSheet}
+            canSaveForClinic={canSaveSheetForClinic}
+            professionalId={professionalId}
+            sheet={{
+              date: fmtDate(date),
+              code: editor.code,
+              clinicName,
+              clinicLine,
+              clinicCnes,
+              patientName: displayName,
+              patientCpf: patient.cpf,
+              professional,
+            }}
+            sampleItems={rx}
+          />
+        </>
+      }
+    />
+  );
+
+  return (
     <form
       action={emitDocumentsAction}
       onSubmit={(e) => {
@@ -723,121 +813,51 @@ export function EmitComposer({
         <input type="hidden" name="draft_id" value={draft.draftId} />
       ) : null}
 
+      <ScreenBar
+        screen={screen}
+        title={screen === "montar" ? tabLabel : SCREEN_TITLE[screen]}
+        displayName={displayName}
+        encounterDate={encounterDate}
+        draftStatus={draft.status}
+        code={screen === "montar" && tab !== "receita" && editor.code ? { kind: editor.kind, value: editor.code } : null}
+        onBack={back}
+        onClose={close}
+        closing={closing}
+      />
+
       {error ? <Banner tone="erro">{emitErrorMessage(error)}</Banner> : null}
       {ok === "perfil" ? <Banner tone="ok">Cadastro do paciente atualizado. A pilha continua como estava.</Banner> : null}
 
-      <ComposerHeader
-        patientId={patientId}
-        displayName={displayName}
-        encounterDate={encounterDate}
-        step={step}
-        countLabel={countLabel}
-        code={tab !== "receita" && editor.code ? { kind: editor.kind, value: editor.code } : null}
-        onClose={close}
-        closing={closing}
-        draftStatus={draft.status}
-      />
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <StepIndicator step={step} />
-        {step === "compose" ? (
-          <ComposerRail
-            patient={railPatient}
-            documents={documents}
-            templates={templates}
-            actions={actions}
-            clinicName={clinicName}
-            portalUrl={portalUrl}
-            canManageTemplates={canManageTemplates}
-            backUrl={composerUrl(patientId, editor.kind, editor.subkind, encounterId)}
-            className="w-full lg:w-auto"
-          />
-        ) : null}
-      </div>
-
-      {step === "compose" ? (
-        composeStep
-      ) : (
-        <ReviewStep
-          patient={patient}
-          displayName={displayName}
-          professionals={professionals}
-          professionalId={professionalId}
-          onProfessionalChange={setProfessionalId}
-          professional={professional}
-          date={date}
-          today={today}
-          onDateChange={setDate}
-          send={send}
-          onSendChange={setSend}
-          items={items}
+      {screen === "tipo" ? (
+        <TypeScreen
+          tabs={tabs}
+          tab={tab}
+          onChoose={(next) => {
+            selectTab(next);
+            go("montar");
+          }}
+          itemCount={items.length}
           countLabel={countLabel}
-          sheetPanel={
-            <>
-            {items.some((item) => item.kind === "receituario") ? (
-              <section className="card p-4 sm:p-5" aria-label="Receita para comprar fora do país">
-                <label className="flex min-h-11 items-start gap-2 text-sm sm:min-h-0">
-                  <input
-                    type="checkbox"
-                    checked={bilingual}
-                    onChange={(e) => setBilingual(e.target.checked)}
-                    className="mt-0.5 h-4 w-4 accent-pine-700"
-                  />
-                  <span>
-                    <span className="font-bold text-pine-950">Receita bilíngue (português e espanhol)</span>
-                    <span className="mt-0.5 block text-xs text-pine-900/60">
-                      Para o paciente comprar fora do país (ex.: Paraguai) e trazer o medicamento: rótulos e posologia também em
-                      espanhol e a declaração de uso pessoal na quantidade do tratamento.
-                    </span>
-                  </span>
-                </label>
-              </section>
-            ) : null}
-            <SheetStylePanel
-              style={sheet.style}
-              choice={sheet.choice}
-              onChange={chooseSheet}
-              templates={sheetTemplates}
-              onTemplatesChange={setSheetTemplates}
-              logos={sheetLogos}
-              onLogo={(hash, dataUrl) => setSheetLogos((all) => ({ ...all, [hash]: dataUrl }))}
-              canEdit={canEditSheet}
-              canSaveForClinic={canSaveSheetForClinic}
-              professionalId={professionalId}
-              sheet={{
-                date: fmtDate(date),
-                code: editor.code,
-                clinicName,
-                clinicLine,
-                clinicCnes,
-                patientName: displayName,
-                patientCpf: patient.cpf,
-                professional,
-              }}
-              sampleItems={rx}
-            />
-            </>
-          }
+          onOpenStack={() => go("emissao")}
+          rail={rail}
         />
+      ) : screen === "montar" ? (
+        buildScreen
+      ) : screen === "emissao" ? (
+        stackScreen
+      ) : (
+        reviewScreen
       )}
 
       <ComposerActionBar
-        step={step}
-        patientId={patientId}
+        screen={screen}
         countLabel={countLabel}
-        canContinue={items.length > 0}
-        onStepChange={setStep}
+        itemCount={items.length}
+        onGo={go}
+        onBack={back}
         onClose={close}
         closing={closing}
-        inSheet={presentation === "modal"}
       />
     </form>
-  );
-
-  return presentation === "modal" ? (
-    <ComposerSheet onClose={close} label={`Emitir documentos — ${displayName}`}>
-      {form}
-    </ComposerSheet>
-  ) : (
-    form
   );
 }

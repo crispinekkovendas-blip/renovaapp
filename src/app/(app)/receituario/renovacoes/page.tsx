@@ -106,7 +106,7 @@ export default async function RenovacoesPage({ searchParams }: { searchParams: P
                     </a>
                   ) : null}
                   <SmallLink href={rxLinks.ver(r.patientId, r.docId)}>Ver</SmallLink>
-                  <Link href={rxLinks.renovar(r.patientId, r.docId)} className="btn btn-primary flex-1 px-3 py-1.5 text-xs sm:flex-none">
+                  <Link href={rxLinks.renovar(r.patientId, r.docId, "/receituario/renovacoes")} className="btn btn-primary flex-1 px-3 py-1.5 text-xs sm:flex-none">
                     Renovar
                   </Link>
                 </div>

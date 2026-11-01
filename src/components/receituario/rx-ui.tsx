@@ -39,11 +39,17 @@ export function daysLeftLabel(days: number): string {
   return `venceu há ${-days} dia${days === -1 ? "" : "s"}`;
 }
 
-/** Os caminhos do compositor que as telas usam (ele abre por cima, como pop-up, na navegação normal). */
+/**
+ * Os caminhos do compositor que as telas usam. `volta` faz o "×" e o
+ * "Salvar rascunho" do compositor voltarem para a tela de onde se veio.
+ */
+const back = (volta: string) => `&volta=${encodeURIComponent(volta)}`;
 export const rxLinks = {
-  nova: (patientId: number) => `/pacientes/${patientId}/emitir?kind=receituario`,
-  renovar: (patientId: number, docId: number) => `/pacientes/${patientId}/emitir?kind=receituario&from=${docId}`,
-  rascunho: (patientId: number, draftId: number) => `/pacientes/${patientId}/emitir?rascunho=${draftId}`,
+  nova: (patientId: number, volta = "/receituario") => `/pacientes/${patientId}/emitir?kind=receituario${back(volta)}`,
+  renovar: (patientId: number, docId: number, volta = "/receituario") =>
+    `/pacientes/${patientId}/emitir?kind=receituario&from=${docId}${back(volta)}`,
+  rascunho: (patientId: number, draftId: number, volta = "/receituario") =>
+    `/pacientes/${patientId}/emitir?rascunho=${draftId}${back(volta)}`,
   ver: (patientId: number, docId: number) => `/pacientes/${patientId}/documentos/${docId}`,
   pdf: (patientId: number, docId: number) => `/pacientes/${patientId}/documentos/${docId}/pdf`,
   ficha: (patientId: number) => `/pacientes/${patientId}`,

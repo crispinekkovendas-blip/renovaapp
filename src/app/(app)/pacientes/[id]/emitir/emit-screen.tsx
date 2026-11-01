@@ -45,22 +45,24 @@ export interface EmitQuery {
   modelo?: string;
   /** Rascunho a continuar: número do banco ou "local-…" do navegador. */
   rascunho?: string;
+  /** Para onde fechar volta (ex.: `/receituario`); só caminhos internos. */
+  volta?: string;
+  /** A tela do compositor (`tipo`, `montar`, `emissao`, `revisar`) — o próprio compositor cuida dela. */
+  tela?: string;
   erro?: string;
   ok?: string;
 }
 
 /**
- * A tela do compositor, usada pela página (F5, link direto) e pelo pop-up
- * por cima da ficha (`@modal/(.)pacientes/[id]/emitir`).
+ * O compositor em telas inteiras (tipo → montar → nesta emissão → revisar),
+ * cada uma com voltar. Já não abre como pop-up: é uma página do app.
  */
 export async function EmitScreen({
   params,
   searchParams,
-  presentation,
 }: {
   params: Promise<{ id: string }>;
   searchParams: Promise<EmitQuery>;
-  presentation: "modal" | "page";
 }) {
   const session = await requireSession();
   const [{ id }, query] = await Promise.all([params, searchParams]);
@@ -190,7 +192,8 @@ export async function EmitScreen({
           memedEnabled={memedConfig() !== null}
           frequentRx={frequentRx}
           templateUsage={usage}
-          presentation={presentation}
+          kindChosen={isDocumentKind(query.kind)}
+          returnTo={safeReturn(query.volta)}
           draftId={draftId}
           draftState={draftState}
           seedItems={seedItems}
@@ -231,4 +234,10 @@ function prescriptionFieldOf(fields: string | null): string | null {
   } catch {
     return null;
   }
+}
+
+/** `?volta=` só aceita caminho interno ("/receituario"), nunca outro site ("//x.com", "https://…"). */
+function safeReturn(value: string | undefined): string | null {
+  if (!value || !value.startsWith("/") || value.startsWith("//") || value.includes("\\")) return null;
+  return value.slice(0, 200);
 }
