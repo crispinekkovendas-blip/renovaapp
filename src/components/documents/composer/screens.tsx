@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
-import { SCREENS, SCREEN_PARENT, SCREEN_TITLE, resolveScreen, screenHref, screenIndex } from "@/lib/composer-screens";
+import { SCREEN_PARENT, SCREEN_STEP, STEPS, STEP_LABEL, resolveScreen, screenHref, screenIndex } from "@/lib/composer-screens";
 import type { ScreenId } from "@/lib/composer-screens";
 import { TAB_BLURB } from "@/lib/composer-tabs";
 import type { ComposerTab } from "@/lib/composer-editor";
@@ -46,10 +46,21 @@ export function useScreens(initial: ScreenId, itemCount: number, onExit: () => v
     return () => window.removeEventListener("popstate", onPop);
   }, [fallback]);
 
-  const go = useCallback((next: ScreenId) => {
+  /**
+   * `replace`: troca a tela atual em vez de empilhar — da busca para o
+   * medicamento escolhido, para o "←" do medicamento voltar à receita, não à busca.
+   */
+  const go = useCallback((next: ScreenId, options?: { replace?: boolean }) => {
     if (next === current.current) return;
-    window.history.pushState(null, "", screenHref(window.location.href, next));
-    trail.current.push(next);
+    const href = screenHref(window.location.href, next);
+    if (options?.replace) {
+      window.history.replaceState(null, "", href);
+      trail.current[trail.current.length - 1] = next;
+    } else {
+      window.history.pushState(null, "", href);
+      trail.current.push(next);
+    }
+    current.current = next;
     window.scrollTo({ top: 0 });
   }, []);
 
@@ -148,15 +159,16 @@ export function ScreenBar({
 /** As quatro etapas como traços; o nome de cada uma aparece a partir do sm. */
 function ScreenProgress({ screen }: { screen: ScreenId }) {
   const at = screenIndex(screen);
+  const step = SCREEN_STEP[screen];
   return (
-    <ol className="flex min-w-0 flex-1 items-center gap-1.5" aria-label={`Etapa ${at} de ${SCREENS.length}`}>
-      {SCREENS.map((s, i) => {
+    <ol className="flex min-w-0 flex-1 items-center gap-1.5" aria-label={`Etapa ${at} de ${STEPS.length}`}>
+      {STEPS.map((s, i) => {
         const done = i + 1 <= at;
         return (
-          <li key={s} className="min-w-0 flex-1" aria-current={s === screen ? "step" : undefined}>
+          <li key={s} className="min-w-0 flex-1" aria-current={s === step ? "step" : undefined}>
             <span className={`block h-1 rounded-full ${done ? "bg-pine-700" : "bg-pine-900/10"}`} aria-hidden />
-            <span className={`mt-1 hidden truncate text-[11px] font-bold sm:block ${s === screen ? "text-pine-950" : "text-pine-900/45"}`}>
-              {i + 1} · {s === "tipo" ? "Tipo" : SCREEN_TITLE[s]}
+            <span className={`mt-1 hidden truncate text-[11px] font-bold sm:block ${s === step ? "text-pine-950" : "text-pine-900/45"}`}>
+              {i + 1} · {STEP_LABEL[s]}
             </span>
           </li>
         );

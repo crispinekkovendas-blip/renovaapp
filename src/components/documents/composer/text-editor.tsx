@@ -34,6 +34,11 @@ export interface TextEditorCardProps {
   onReset(): void;
   /** Um modelo solto sobre o editor (o clique no chip continua valendo). */
   onDropTemplate(templateId: number): void;
+  /**
+   * Compositor em telas: o modelo foi escolhido na tela anterior, então em vez
+   * do seletor aparece "Modelo: X · Trocar", que volta para lá.
+   */
+  onChangeModel?(): void;
 }
 
 /** O editor de atestado, encaminhamento, laudo e orientações: modelo, campos, título e texto. */
@@ -52,6 +57,7 @@ export function TextEditorCard({
   onInclude,
   onReset,
   onDropTemplate,
+  onChangeModel,
 }: TextEditorCardProps) {
   // Um modelo arrastado pousando sobre o editor.
   const [dropping, setDropping] = useState(false);
@@ -83,34 +89,49 @@ export function TextEditorCard({
         {editor.editing ? <span className="chip bg-peach-100 text-pine-950">Editando item</span> : null}
       </div>
 
-      <div>
-        <div className="flex items-baseline justify-between gap-3">
-          <label className="label" htmlFor="emit-template">
-            Modelo
-          </label>
-          {canManageTemplates ? (
-            <Link
-              href="/configuracoes/modelos"
-              className="-my-3 inline-flex min-h-11 items-center text-[11px] font-bold text-pine-600 hover:underline sm:my-0 sm:min-h-0"
-            >
-              Gerenciar modelos
-            </Link>
-          ) : null}
+      {onChangeModel ? (
+        <div className="flex items-center justify-between gap-3 rounded-2xl bg-pine-50 px-3 py-2">
+          <p className="min-w-0 truncate text-[13px] text-pine-900/70">
+            Modelo: <span className="font-bold text-pine-950">{modelName}</span>
+          </p>
+          <button
+            type="button"
+            onClick={onChangeModel}
+            className="-my-2 inline-flex min-h-11 shrink-0 items-center text-[12px] font-bold text-pine-600 hover:underline sm:min-h-0"
+          >
+            Trocar
+          </button>
         </div>
-        <select
-          className="input"
-          id="emit-template"
-          value={editor.templateId ?? ""}
-          onChange={(e) => dispatch({ type: "select-template", templateId: Number(e.target.value) || null })}
-        >
-          <option value="">Padrão</option>
-          {kindTemplates.map((t) => (
-            <option key={t.id} value={t.id}>
-              {t.scope === "clinica" ? `${t.name} · da clínica` : t.name}
-            </option>
-          ))}
-        </select>
-      </div>
+      ) : (
+        <div>
+          <div className="flex items-baseline justify-between gap-3">
+            <label className="label" htmlFor="emit-template">
+              Modelo
+            </label>
+            {canManageTemplates ? (
+              <Link
+                href="/configuracoes/modelos"
+                className="-my-3 inline-flex min-h-11 items-center text-[11px] font-bold text-pine-600 hover:underline sm:my-0 sm:min-h-0"
+              >
+                Gerenciar modelos
+              </Link>
+            ) : null}
+          </div>
+          <select
+            className="input"
+            id="emit-template"
+            value={editor.templateId ?? ""}
+            onChange={(e) => dispatch({ type: "select-template", templateId: Number(e.target.value) || null })}
+          >
+            <option value="">Padrão</option>
+            {kindTemplates.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.scope === "clinica" ? `${t.name} · da clínica` : t.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       {editor.kind === "encaminhamento" ? (
         <div>

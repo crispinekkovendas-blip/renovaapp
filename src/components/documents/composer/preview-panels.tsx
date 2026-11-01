@@ -1,15 +1,13 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { MOBILE_VIEWS } from "@/lib/composer-editor";
-import type { MobileView } from "@/lib/composer-editor";
 import { PreviewViewer } from "./preview-viewer";
 import type { PreviewPage, PreviewViewerProps } from "./preview-viewer";
 
 /*
- * A prévia da folha nos dois tamanhos, as duas pelo mesmo visualizador de
- * páginas (preview-viewer.tsx). Abaixo do lg a coluna some e a prévia vira a
- * aba "Prévia".
+ * A prévia da folha ao lado das telas de montar, no computador. Abaixo do lg
+ * a coluna some e a folha é uma tela própria do compositor ("Prévia da folha",
+ * pelo mesmo visualizador de páginas, preview-viewer.tsx).
  */
 
 interface PreviewProps {
@@ -38,35 +36,5 @@ export function ShowPreviewButton({ onShow }: { onShow(): void }) {
         Mostrar prévia
       </button>
     </div>
-  );
-}
-
-/** Abaixo do lg: "Editar | Prévia". Escondido no desktop, não ocupa célula da grade. */
-export function MobileViewSwitch({ view, onChange }: { view: MobileView; onChange(view: MobileView): void }) {
-  return (
-    <div className="grid grid-cols-2 gap-1 rounded-2xl bg-pine-100/60 p-1 lg:hidden" role="group" aria-label="Editor ou prévia">
-      {MOBILE_VIEWS.map((option) => (
-        <button
-          key={option.view}
-          type="button"
-          onClick={() => onChange(option.view)}
-          aria-pressed={view === option.view}
-          className={`min-h-11 rounded-xl text-sm font-bold transition-colors ${
-            view === option.view ? "bg-white text-pine-950 shadow-sm" : "text-pine-900/60"
-          }`}
-        >
-          {option.label}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-/** A aba "Prévia" do celular: o mesmo visualizador, na largura da tela. */
-export function MobilePreview(viewer: PreviewProps) {
-  return (
-    <section className="lg:hidden" aria-label="Prévia da folha">
-      <PreviewViewer {...viewer} />
-    </section>
   );
 }

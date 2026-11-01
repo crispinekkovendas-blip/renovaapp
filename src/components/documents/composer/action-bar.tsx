@@ -1,6 +1,7 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
+import { SCREEN_STEP } from "@/lib/composer-screens";
 import type { ScreenId } from "@/lib/composer-screens";
 import { IconArrowRight } from "./icons";
 
@@ -23,8 +24,9 @@ function SubmitButton() {
 /**
  * Rodapé grudado embaixo de cada tela do compositor, com as ações dela:
  *
- * - Tipo e Montar: "Salvar rascunho" e, se já há algo, "Nesta emissão (n)";
- *   em Montar, incluir o documento é o botão do próprio editor.
+ * - Tipo e as telas de Montar (modelo, preencher, receita, adicionar,
+ *   medicamento, prévia): "Salvar rascunho" e, se já há algo, "Nesta emissão
+ *   (n)"; incluir o documento é o botão do próprio editor (ou da prévia).
  * - Nesta emissão: "Outro documento" e "Continuar".
  * - Revisar: "Voltar" e "Emitir e enviar".
  *
@@ -50,6 +52,7 @@ export function ComposerActionBar({
   closing: boolean;
 }) {
   const split = "w-full sm:w-auto [&>*]:flex-1 sm:[&>*]:flex-none";
+  const step = SCREEN_STEP[screen];
   return (
     <div className="sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] z-20 -mx-4 -mb-8 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-[var(--color-line)] bg-paper/90 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 md:bottom-0 md:-mx-8 md:-mb-6 md:px-8">
       <p className="hidden text-xs text-pine-900/60 sm:block">
@@ -57,7 +60,7 @@ export function ComposerActionBar({
         <span> · mesma data, mesmo profissional, um link só para o paciente</span>
       </p>
       <div className={`flex items-center gap-2 ${split}`}>
-        {screen === "tipo" || screen === "montar" ? (
+        {step === "tipo" || step === "montar" ? (
           <>
             <button
               type="button"
@@ -75,7 +78,7 @@ export function ComposerActionBar({
               </button>
             ) : null}
           </>
-        ) : screen === "emissao" ? (
+        ) : step === "emissao" ? (
           <>
             <button type="button" onClick={() => onGo("tipo")} className="btn btn-outline">
               + Outro documento

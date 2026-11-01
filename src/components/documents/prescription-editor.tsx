@@ -122,6 +122,9 @@ export function PrescriptionEditor({
   editing = null,
   onEdit,
   onShowOnSheet,
+  view,
+  onAdd,
+  onAddedMany,
 }: {
   items: PrescriptionItem[];
   onChange: (items: PrescriptionItem[]) => void;
@@ -138,7 +141,22 @@ export function PrescriptionEditor({
   onEdit(index: number | null, options?: { silent?: boolean }): void;
   /** "Ver na folha": leva a prévia à página do item. */
   onShowOnSheet?(index: number): void;
+  /**
+   * Uma parte só, para o compositor em telas: "lista" (a receita, com avisos e
+   * em quantos papéis sai), "adicionar" (busca, mais receitados, receitas
+   * prontas, fórmula) ou "medicamento" (o cartão do que está aberto). Sem
+   * `view`, tudo junto, como sempre.
+   */
+  view?: "lista" | "adicionar" | "medicamento";
+  /** "+ Adicionar medicamento" da lista. */
+  onAdd?(): void;
+  /** Vários entraram de uma vez (receita pronta): nada abre, volta-se à lista. */
+  onAddedMany?(): void;
 }) {
+  const all = view === undefined;
+  const showSearch = all || view === "adicionar";
+  const showCard = all || view === "medicamento";
+  const showSummary = all || view === "lista";
   const [query, setQuery] = useState("");
   const [hits, setHits] = useState<Hit[]>([]);
   const [searching, startSearch] = useTransition();
@@ -223,7 +241,10 @@ export function PrescriptionEditor({
   function addItems(more: PrescriptionItem[]) {
     // Um só ("mais receitados"): abre para revisar. Vários (receita pronta): vão direto para a folha.
     if (more.length === 1) open1({ ...more[0] });
-    else if (more.length > 1) onChange([...items, ...more.map((item) => ({ ...item }))]);
+    else if (more.length > 1) {
+      onChange([...items, ...more.map((item) => ({ ...item }))]);
+      onAddedMany?.();
+    }
   }
 
   /** Medicamento fora do catálogo (manipulado, importado) continua possível. */
@@ -245,75 +266,78 @@ export function PrescriptionEditor({
   return (
     <div className="space-y-4">
       {/* ── Busca ──────────────────────────────────────────── */}
-      <div ref={boxRef} className="relative">
-        <div className="flex flex-wrap items-baseline justify-between gap-x-2">
-          <label className="label" htmlFor="rx-busca">
-            Medicamento
-          </label>
-          <ReadyPrescriptions
-            onPick={(protocol) => addItems(protocolItems(protocol))}
-            dragFor={(protocol) => dragItems(() => protocolItems(protocol))}
-          />
-        </div>
-        <input
-          className="input"
-          id="rx-busca"
-          value={query}
-          autoComplete="off"
-          placeholder="Princípio ativo ou marca — ex.: dipirona"
-          enterKeyHint="search"
-          onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => hits.length > 0 && setOpen(true)}
-        />
-        <p className="mt-1 text-[11px] text-pine-900/50">
-          {searching ? "Buscando…" : "Catálogo da ANVISA. Não achou? Escreva o nome e clique em “Usar assim”."}
-        </p>
-
-        {open && (hits.length > 0 || query.trim().length >= 3) ? (
-          <div className="absolute z-30 mt-1 w-full overflow-hidden rounded-2xl border border-[var(--color-line)] bg-white shadow-lg">
-            <ul className="max-h-[min(18rem,45dvh)] overflow-y-auto overscroll-contain">
-              {hits.map((hit) => (
-                <li
-                  key={`${hit.substance}-${hit.concentration ?? ""}-${hit.form ?? ""}`}
-                  className="border-b border-[var(--color-line)] last:border-b-0"
-                >
-                  <button
-                    type="button"
-                    onClick={() => add(hit)}
-                    {...dragItems(() => [itemFromHit(hit)], clearSearch)}
-                    className="flex min-h-11 w-full items-start gap-3 px-4 py-2.5 text-left transition-colors hover:bg-pine-50"
-                  >
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-[13.5px] font-bold text-pine-950">{hit.label}</span>
-                      <span className="block text-[11.5px] text-pine-900/55">
-                        {hit.form ? `${FORM_INFO[hit.form].label} · ` : ""}
-                        {RECEIPT_KIND_LABEL[receiptKindFor(hit.tarja)]}
-                        {hit.brands > 1 ? ` · ${hit.brands} apresentações` : ""}
-                      </span>
-                    </span>
-                    <span className={`chip shrink-0 ${TARJA_CHIP[hit.tarja]}`}>{TARJA_SHORT[hit.tarja]}</span>
-                  </button>
-                  <HitDoses
-                    hit={hit}
-                    onPick={(dose) => add(hit, dose)}
-                    dragFor={(dose) => dragItems(() => [itemFromHit(hit, dose)], clearSearch)}
-                  />
-                </li>
-              ))}
-            </ul>
-            <button
-              type="button"
-              onClick={addFreeText}
-              className="min-h-11 w-full truncate border-t border-[var(--color-line)] px-4 py-2.5 text-left text-[12.5px] font-bold text-pine-600 hover:bg-pine-50"
-            >
-              Usar assim: “{query.trim()}”
-            </button>
+      {showSearch ? (
+        <div ref={boxRef} className="relative">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-2">
+            <label className="label" htmlFor="rx-busca">
+              Medicamento
+            </label>
+            <ReadyPrescriptions
+              onPick={(protocol) => addItems(protocolItems(protocol))}
+              dragFor={(protocol) => dragItems(() => protocolItems(protocol))}
+            />
           </div>
-        ) : null}
-      </div>
+          <input
+            className="input"
+            id="rx-busca"
+            value={query}
+            autoComplete="off"
+            placeholder="Princípio ativo ou marca — ex.: dipirona"
+            enterKeyHint="search"
+            autoFocus={view === "adicionar"}
+            onChange={(e) => setQuery(e.target.value)}
+            onFocus={() => hits.length > 0 && setOpen(true)}
+          />
+          <p className="mt-1 text-[11px] text-pine-900/50">
+            {searching ? "Buscando…" : "Catálogo da ANVISA. Não achou? Escreva o nome e clique em “Usar assim”."}
+          </p>
+
+          {open && (hits.length > 0 || query.trim().length >= 3) ? (
+            <div className="absolute z-30 mt-1 w-full overflow-hidden rounded-2xl border border-[var(--color-line)] bg-white shadow-lg">
+              <ul className="max-h-[min(18rem,45dvh)] overflow-y-auto overscroll-contain">
+                {hits.map((hit) => (
+                  <li
+                    key={`${hit.substance}-${hit.concentration ?? ""}-${hit.form ?? ""}`}
+                    className="border-b border-[var(--color-line)] last:border-b-0"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => add(hit)}
+                      {...dragItems(() => [itemFromHit(hit)], clearSearch)}
+                      className="flex min-h-11 w-full items-start gap-3 px-4 py-2.5 text-left transition-colors hover:bg-pine-50"
+                    >
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-[13.5px] font-bold text-pine-950">{hit.label}</span>
+                        <span className="block text-[11.5px] text-pine-900/55">
+                          {hit.form ? `${FORM_INFO[hit.form].label} · ` : ""}
+                          {RECEIPT_KIND_LABEL[receiptKindFor(hit.tarja)]}
+                          {hit.brands > 1 ? ` · ${hit.brands} apresentações` : ""}
+                        </span>
+                      </span>
+                      <span className={`chip shrink-0 ${TARJA_CHIP[hit.tarja]}`}>{TARJA_SHORT[hit.tarja]}</span>
+                    </button>
+                    <HitDoses
+                      hit={hit}
+                      onPick={(dose) => add(hit, dose)}
+                      dragFor={(dose) => dragItems(() => [itemFromHit(hit, dose)], clearSearch)}
+                    />
+                  </li>
+                ))}
+              </ul>
+              <button
+                type="button"
+                onClick={addFreeText}
+                className="min-h-11 w-full truncate border-t border-[var(--color-line)] px-4 py-2.5 text-left text-[12.5px] font-bold text-pine-600 hover:bg-pine-50"
+              >
+                Usar assim: “{query.trim()}”
+              </button>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
 
       {/* ── Seus mais receitados ────────────────────────────── */}
-      {frequent.length > 0 ? (
+      {showSearch && frequent.length > 0 ? (
         <div>
           <p className="label mb-1.5">Seus mais receitados</p>
           <div className="scroll-x flex gap-1.5 lg:flex-wrap lg:overflow-visible">
@@ -335,19 +359,21 @@ export function PrescriptionEditor({
       ) : null}
 
       {/* ── Fórmula manipulada: em branco ou da biblioteca ─────── */}
-      <div className="flex flex-wrap items-center gap-2">
-        <button
-          type="button"
-          onClick={() => open1(newFormulaItem())}
-          className="flex min-h-11 items-center rounded-full border border-dashed border-pine-300 px-3 text-[12px] font-bold text-pine-700 hover:border-pine-500 hover:bg-pine-50 sm:min-h-8"
-        >
-          + Fórmula manipulada
-        </button>
-        <ReadyFormulas onPick={(ready) => open1(itemFromFormula(ready))} />
-      </div>
+      {showSearch ? (
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => open1(newFormulaItem())}
+            className="flex min-h-11 items-center rounded-full border border-dashed border-pine-300 px-3 text-[12px] font-bold text-pine-700 hover:border-pine-500 hover:bg-pine-50 sm:min-h-8"
+          >
+            + Fórmula manipulada
+          </button>
+          <ReadyFormulas onPick={(ready) => open1(itemFromFormula(ready))} />
+        </div>
+      ) : null}
 
       {/* ── O medicamento em edição (um por vez) ─────────────── */}
-      {current ? (
+      {showCard && current ? (
         <div
           key={current.index}
           ref={cardRef}
@@ -452,7 +478,7 @@ export function PrescriptionEditor({
             </button>
           </div>
         </div>
-      ) : items.length === 0 ? (
+      ) : !all ? null : items.length === 0 ? (
         <p className="rounded-2xl border border-dashed border-[var(--color-line)] px-5 py-6 text-center text-sm text-pine-900/55">
           Nenhum medicamento ainda. Busque acima para começar a receita.
         </p>
@@ -462,8 +488,11 @@ export function PrescriptionEditor({
         </p>
       )}
 
+      {/* ── A receita como lista (compositor em telas): um toque abre o medicamento ── */}
+      {view === "lista" ? <RxList items={items} onOpen={(index) => onEdit(index)} onAdd={onAdd} /> : null}
+
       {/* ── O que já está na receita: um toque reabre para editar ── */}
-      {items.length > (current ? 1 : 0) ? (
+      {all && items.length > (current ? 1 : 0) ? (
         <div>
           <p className="label mb-1.5">Na receita</p>
           <div className="flex flex-wrap gap-1.5">
@@ -490,7 +519,7 @@ export function PrescriptionEditor({
       ) : null}
 
       {/* ── Avisos ─────────────────────────────────────────── */}
-      {warnings.length > 0 ? (
+      {showSummary && warnings.length > 0 ? (
         <ul className="space-y-2">
           {warnings.map((warning, i) => (
             <li
@@ -511,7 +540,7 @@ export function PrescriptionEditor({
       ) : null}
 
       {/* ── Em quantos papéis isto vai sair ────────────────── */}
-      {documents.length > 0 ? (
+      {showSummary && documents.length > 0 ? (
         <div className="rounded-2xl bg-pine-50 px-4 py-3">
           <p className="text-[11px] font-bold uppercase tracking-wider text-pine-900/50">
             {documents.length === 1 ? "Sai em 1 documento" : `Sai em ${documents.length} documentos`}
@@ -532,6 +561,69 @@ export function PrescriptionEditor({
             </p>
           ) : null}
         </div>
+      ) : null}
+    </div>
+  );
+}
+
+/**
+ * A receita na tela "Receita" do compositor: um cartão por medicamento (nome,
+ * tarja, posologia, quantidade); tocar abre a tela do medicamento. Sem
+ * posologia, o cartão avisa que não sai.
+ */
+function RxList({ items, onOpen, onAdd }: { items: PrescriptionItem[]; onOpen(index: number): void; onAdd?(): void }) {
+  return (
+    <div className="space-y-2">
+      {items.length === 0 ? (
+        <p className="rounded-2xl border border-dashed border-[var(--color-line)] px-5 py-6 text-center text-sm text-pine-900/55">
+          Nenhum medicamento ainda.
+        </p>
+      ) : (
+        <ul className="divide-y divide-[var(--color-line)] overflow-hidden rounded-2xl border border-[var(--color-line)] bg-white">
+          {items.map((item, index) => {
+            const ok = itemComplete(item);
+            return (
+              <li key={index}>
+                <button
+                  type="button"
+                  onClick={() => onOpen(index)}
+                  className="flex min-h-14 w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-pine-50"
+                >
+                  <span className="mt-0.5 w-5 shrink-0 text-right text-[12px] font-bold text-pine-900/45">{index + 1})</span>
+                  <span className="min-w-0 flex-1">
+                    <span className="flex flex-wrap items-center gap-1.5">
+                      <span className="break-words text-[14px] font-extrabold text-pine-950">{item.name}</span>
+                      <span className={`chip ${TARJA_CHIP[item.tarja]}`}>{TARJA_SHORT[item.tarja]}</span>
+                      {item.continuous ? <span className="chip bg-sky-100 text-sky-800">contínuo</span> : null}
+                    </span>
+                    {ok ? (
+                      <span className="mt-0.5 block text-[12.5px] text-pine-900/65">
+                        {item.posology}
+                        {item.quantity ? <span className="text-pine-900/45"> · {item.quantity}</span> : null}
+                      </span>
+                    ) : (
+                      <span className="mt-0.5 block text-[12.5px] font-semibold text-amber-800">
+                        Sem posologia — toque para completar
+                      </span>
+                    )}
+                  </span>
+                  <span aria-hidden className="self-center text-lg text-pine-900/30">
+                    ›
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+      {onAdd ? (
+        <button
+          type="button"
+          onClick={onAdd}
+          className="flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-pine-300 px-4 text-sm font-bold text-pine-700 transition-colors hover:border-pine-500 hover:bg-pine-50"
+        >
+          + Adicionar medicamento
+        </button>
       ) : null}
     </div>
   );

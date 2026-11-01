@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { emitDocumentsAction } from "@/lib/actions-documents";
 import {
@@ -36,8 +37,8 @@ import {
   prescriptionSummary,
   prescriptionToItems,
 } from "@/lib/composer-editor";
-import type { ComposerStep, ComposerTab, MobileView } from "@/lib/composer-editor";
-import { SCREEN_TITLE, initialScreen } from "@/lib/composer-screens";
+import type { ComposerStep, ComposerTab } from "@/lib/composer-editor";
+import { SCREEN_TITLE, initialScreen, isTextTab, screenAfterType, screenForTab } from "@/lib/composer-screens";
 import { stackStorageKey } from "@/lib/composer-rail";
 import { fmtDate } from "@/lib/format";
 import { blockedItems, serializeItems as serializePrescription } from "@/lib/prescription";
@@ -56,7 +57,8 @@ import { readLocalDraft, removeLocalDraft } from "@/lib/local-drafts";
 import { ScreenBar, TypeScreen, useScreens } from "./composer/screens";
 import { ComposerStack } from "./composer/composer-stack";
 import { usePreviewPreference, useProtocolDrafts, useRealPdf, useStoredStack } from "./composer/hooks";
-import { DesktopPreview, MobilePreview, MobileViewSwitch, ShowPreviewButton } from "./composer/preview-panels";
+import { DesktopPreview, ShowPreviewButton } from "./composer/preview-panels";
+import { PreviewViewer } from "./composer/preview-viewer";
 import type { FrequentItem } from "@/lib/rx-suggestions";
 import { PrescriptionCard } from "./composer/prescription-card";
 import { ReceitaCard } from "./composer/receita-card";
@@ -229,8 +231,6 @@ export function EmitComposer({
     return () => clearTimeout(timer);
   }, [sheetFocus]);
   const [previewOn, setPreviewOn] = usePreviewPreference();
-  // No celular a prévia não cabe ao lado: é uma aba do controle segmentado.
-  const [mobileView, setMobileView] = useState<MobileView>("editar");
   const pdf = useRealPdf(patientId);
   const protocol = useProtocolDrafts(items, rx);
   const router = useRouter();
@@ -290,7 +290,10 @@ export function EmitComposer({
   /* ---------- as telas: tipo → montar → nesta emissão → revisar ---------- */
 
   const [startScreen] = useState(() => initialScreen({ itemCount: items.length, kindChosen }));
-  const { screen, go, back } = useScreens(startScreen, items.length, close);
+  const nav = useScreens(startScreen, items.length, close);
+  const { go, back } = nav;
+  // Cada tipo só tem as telas que lhe cabem (F5 em "medicamento" esquece qual estava aberto).
+  const screen = screenForTab(nav.screen, tab, editing !== null);
   // A revisão é o único passo que emite; o resto é montagem.
   const step: ComposerStep = screen === "revisar" ? "review" : "compose";
 
@@ -487,11 +490,15 @@ export function EmitComposer({
       if (index === null) {
         if (editing && !options?.silent) setSheetFocus({ index: editing.index, nonce: Date.now() });
         setEditing(null);
+        // "Enviar para a receita" ou "Remover": volta à receita.
+        if (screen === "medicamento") back();
         return;
       }
       setEditing({ index, nonce: Date.now() });
+      // Da busca, o escolhido toma o lugar dela: o "←" do medicamento leva à receita.
+      go("medicamento", { replace: screen === "adicionar" });
     },
-    [editing]
+    [editing, screen, go, back]
   );
 
   function includePrescription() {
@@ -555,8 +562,8 @@ export function EmitComposer({
           // Pisca o que acabou de entrar; senão, fica marcado o que está aberto no cartão.
           highlight: sheetLit ?? editing?.index ?? null,
           onSelect: (index) => {
-            setMobileView("editar");
             setEditing({ index, nonce: Date.now() });
+            go("medicamento");
           },
           onMove: (from, to) => {
             setRx((current) => moveItem(current, from, to));
@@ -595,8 +602,19 @@ export function EmitComposer({
         : undefined,
   };
 
-  const showMobilePreview = tab !== "receita" && mobileView === "previa";
   const tabLabel = tabs.find((t) => t.tab === tab)?.label ?? "Documento";
+  const openMedication = editing ? rx[editing.index] : undefined;
+  const screenTitle =
+    screen === "montar"
+      ? tabLabel
+      : screen === "modelo"
+        ? `${tabLabel}: o modelo`
+        : screen === "medicamento"
+          ? openMedication?.name.trim() || SCREEN_TITLE.medicamento
+          : SCREEN_TITLE[screen];
+  // O que "Incluir na emissão" leva: a receita (um papel por tipo) ou o documento de texto.
+  const canInclude = tab === "receituario" ? rxSummary.docs.length > 0 && !full : !!body.trim() && (!full || !!editor.editing);
+  const include = tab === "receituario" ? includePrescription : includeItem;
 
   const rail = (
     <ComposerRail
@@ -612,84 +630,146 @@ export function EmitComposer({
     />
   );
 
-  // Tela 2 — montar um documento do tipo escolhido: modelos, editor e, no computador, a folha ao lado.
-  // No celular a folha é a aba "Prévia" do controle segmentado.
-  const buildScreen = (
+  /**
+   * No computador a folha fica ao lado das telas de montar; no celular ela é
+   * uma tela própria ("Ver a folha" → Prévia da folha).
+   */
+  const withPreview = (content: ReactNode) => (
     <div
-      className={`grid min-w-0 grid-cols-[minmax(0,1fr)] items-start gap-4 lg:grid-rows-[auto_1fr] lg:gap-x-6 ${
+      className={`grid min-w-0 grid-cols-[minmax(0,1fr)] items-start gap-4 lg:gap-x-6 ${
         previewOn ? "lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] xl:grid-cols-[minmax(0,1fr)_minmax(0,31.5rem)]" : ""
       }`}
     >
-      <div className="space-y-3">
+      <div className="min-w-0 space-y-3">
         {!previewOn ? <ShowPreviewButton onShow={() => setPreviewOn(true)} /> : null}
-        <TypePicker
-          tabs={tabs}
-          tab={tab}
-          showTypes={false}
-          templateUsage={templateUsage}
-          subkind={editor.subkind}
-          kindTemplates={kindTemplates}
-          protocols={protocols}
-          templateId={editor.templateId}
-          full={full}
-          onSelectTab={selectTab}
-          onSelectSubkind={selectSubkind}
-          onApplyTemplate={applyTemplate}
-        />
+        {content}
+        {tab !== "receita" ? (
+          <button
+            type="button"
+            onClick={() => go("previa")}
+            className="flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border border-[var(--color-line)] bg-white text-sm font-bold text-pine-700 lg:hidden"
+          >
+            Ver a folha
+          </button>
+        ) : null}
       </div>
-
       {previewOn ? <DesktopPreview {...preview} onHide={() => setPreviewOn(false)} /> : null}
+    </div>
+  );
 
-      <div className="space-y-3">
-        {tab !== "receita" ? <MobileViewSwitch view={mobileView} onChange={setMobileView} /> : null}
-        {showMobilePreview ? <MobilePreview {...preview} /> : null}
+  // Texto, tela 2a — o modelo: subtipo do atestado, os modelos em quadradinhos e "Padrão".
+  const modelScreen = (
+    <div className="mx-auto max-w-4xl space-y-4">
+      <TypePicker
+        tabs={tabs}
+        tab={tab}
+        showTypes={false}
+        templateUsage={templateUsage}
+        subkind={editor.subkind}
+        kindTemplates={kindTemplates}
+        protocols={protocols}
+        templateId={editor.templateId}
+        full={full}
+        onSelectTab={selectTab}
+        onSelectSubkind={selectSubkind}
+        onApplyTemplate={applyTemplate}
+      />
+      <button
+        type="button"
+        onClick={() => {
+          dispatch({ type: "select-template", templateId: null });
+          go("montar");
+        }}
+        className="card flex w-full items-center justify-between gap-3 p-4 text-left transition-colors hover:border-pine-400 hover:bg-pine-50/60 sm:p-5"
+      >
+        <span>
+          <span className="block font-bold text-pine-950">Padrão</span>
+          <span className="block text-xs text-pine-900/60">
+            {kindTemplates.length === 0
+              ? "Nenhum modelo salvo para este tipo — comece pelo texto padrão."
+              : "O texto padrão do Renova, sem modelo."}
+          </span>
+        </span>
+        <span aria-hidden className="text-xl text-pine-900/30">
+          ›
+        </span>
+      </button>
+      {editor.manualBody !== null || editor.editing ? (
+        <button
+          type="button"
+          onClick={() => go("montar")}
+          className="w-full rounded-2xl px-4 py-3 text-sm font-bold text-pine-700 hover:bg-pine-50"
+        >
+          Continuar o que já estava preenchido ({modelName}) ›
+        </button>
+      ) : null}
+    </div>
+  );
 
-        <div className={showMobilePreview ? "hidden lg:block" : undefined}>
-          {tab === "receita" ? (
-            <ReceitaCard patientId={patientId} encounterId={encounterId} />
-          ) : tab === "receituario" ? (
-            <PrescriptionCard
-              rx={rx}
-              onRxChange={changeRx}
-              allergies={patient.allergies}
-              rxProtocols={rxProtocols}
-              frequentRx={frequentRx}
-              docCount={rxSummary.docs.length}
-              medicationCount={rxSummary.medicationCount}
-              full={full}
-              protocolName={protocol.rxName}
-              onProtocolNameChange={protocol.setRxName}
-              protocolMessage={protocol.rxMessage}
-              onDismissProtocolMessage={protocol.clearRxMessage}
-              savingProtocol={protocol.saving}
-              onSaveProtocol={protocol.saveRx}
-              onInclude={includePrescription}
-              editing={editing}
-              onEdit={editRx}
-              onShowOnSheet={(index) => {
-                setMobileView("previa");
-                setSheetFocus({ index, nonce: Date.now() });
-              }}
-            />
-          ) : (
-            <TextEditorCard
-              editor={editor}
-              dispatch={dispatch}
-              templateTitle={template.title}
-              modelName={modelName}
-              kindTemplates={kindTemplates}
-              fieldDefs={fieldDefs}
-              title={title}
-              body={body}
-              full={full}
-              canManageTemplates={canManageTemplates}
-              patientSex={patient.sex}
-              onInclude={includeItem}
-              onReset={() => dispatch({ type: "reset", code: generateDocumentCode() })}
-              onDropTemplate={dropTemplate}
-            />
-          )}
-        </div>
+  // Tela 2 — montar, conforme o tipo e a tela: preencher o texto; a receita, a busca ou o medicamento; a Memed.
+  const prescriptionView = screen === "adicionar" ? "adicionar" : screen === "medicamento" ? "medicamento" : "lista";
+  const buildBody =
+    tab === "receita" ? (
+      <ReceitaCard patientId={patientId} encounterId={encounterId} />
+    ) : tab === "receituario" ? (
+      <PrescriptionCard
+        view={prescriptionView}
+        onAdd={() => go("adicionar")}
+        onAddedMany={back}
+        rx={rx}
+        onRxChange={changeRx}
+        allergies={patient.allergies}
+        rxProtocols={rxProtocols}
+        frequentRx={frequentRx}
+        docCount={rxSummary.docs.length}
+        medicationCount={rxSummary.medicationCount}
+        full={full}
+        protocolName={protocol.rxName}
+        onProtocolNameChange={protocol.setRxName}
+        protocolMessage={protocol.rxMessage}
+        onDismissProtocolMessage={protocol.clearRxMessage}
+        savingProtocol={protocol.saving}
+        onSaveProtocol={protocol.saveRx}
+        onInclude={includePrescription}
+        editing={editing}
+        onEdit={editRx}
+        onShowOnSheet={(index) => {
+          setSheetFocus({ index, nonce: Date.now() });
+          go("previa");
+        }}
+      />
+    ) : (
+      <TextEditorCard
+        editor={editor}
+        dispatch={dispatch}
+        templateTitle={template.title}
+        modelName={modelName}
+        kindTemplates={kindTemplates}
+        fieldDefs={fieldDefs}
+        title={title}
+        body={body}
+        full={full}
+        canManageTemplates={canManageTemplates}
+        patientSex={patient.sex}
+        onInclude={includeItem}
+        onReset={() => dispatch({ type: "reset", code: generateDocumentCode() })}
+        onDropTemplate={dropTemplate}
+        // Trocar o modelo toma o lugar desta tela: escolher outro volta a empilhar só "montar".
+        onChangeModel={isTextTab(tab) ? () => go("modelo", { replace: true }) : undefined}
+      />
+    );
+
+  // Tela 2c — a folha inteira, como vai sair; daqui também se inclui na emissão.
+  const previewScreen = (
+    <div className="mx-auto max-w-3xl space-y-4">
+      <PreviewViewer {...preview} />
+      <div className="flex flex-wrap gap-2 [&>*]:flex-1">
+        <button type="button" onClick={back} className="btn btn-outline">
+          Voltar a editar
+        </button>
+        <button type="button" onClick={include} disabled={!canInclude} className="btn btn-primary disabled:opacity-50">
+          {editor.editing && tab !== "receituario" ? "Salvar item" : "Incluir na emissão"}
+        </button>
       </div>
     </div>
   );
@@ -815,11 +895,11 @@ export function EmitComposer({
 
       <ScreenBar
         screen={screen}
-        title={screen === "montar" ? tabLabel : SCREEN_TITLE[screen]}
+        title={screenTitle}
         displayName={displayName}
         encounterDate={encounterDate}
         draftStatus={draft.status}
-        code={screen === "montar" && tab !== "receita" && editor.code ? { kind: editor.kind, value: editor.code } : null}
+        code={(screen === "montar" || screen === "previa") && tab !== "receita" && editor.code ? { kind: editor.kind, value: editor.code } : null}
         onBack={back}
         onClose={close}
         closing={closing}
@@ -834,15 +914,19 @@ export function EmitComposer({
           tab={tab}
           onChoose={(next) => {
             selectTab(next);
-            go("montar");
+            go(screenAfterType(next));
           }}
           itemCount={items.length}
           countLabel={countLabel}
           onOpenStack={() => go("emissao")}
           rail={rail}
         />
-      ) : screen === "montar" ? (
-        buildScreen
+      ) : screen === "modelo" ? (
+        modelScreen
+      ) : screen === "montar" || screen === "adicionar" || screen === "medicamento" ? (
+        withPreview(buildBody)
+      ) : screen === "previa" ? (
+        previewScreen
       ) : screen === "emissao" ? (
         stackScreen
       ) : (

@@ -50,6 +50,7 @@ const NEWS: readonly { date: string; items: readonly string[] }[] = [
   {
     date: "1º de novembro de 2026",
     items: [
+      "Montar ficou em telas menores. Receituário: a receita é uma lista (um cartão por medicamento, com tarja, posologia e quantidade) com “+ Adicionar medicamento”; a busca, os mais receitados, as receitas prontas e a fórmula manipulada ficam numa tela só; escolher um medicamento abre a tela dele (posologia, quantidade, via, uso contínuo) e “Enviar para a receita” volta à lista. Atestado, encaminhamento, laudo e orientações: primeiro a tela do modelo (o tipo de atestado, os modelos e “Padrão”), depois a de preencher, com “Modelo: … · Trocar”. No celular, “Ver a folha” abre a folha inteira numa tela, de onde também se inclui na emissão; no computador ela continua ao lado.",
       "Emitir documentos virou telas do app, não mais um pop-up: 1) O que vai emitir — um cartão grande por tipo (Receituário, Atestado, Encaminhamento, Laudo, Orientações, Receita digital), com Perfil, Histórico e Modelos do paciente embaixo; 2) Montar — os modelos, o editor e a folha (ao lado no computador, aba Prévia no celular); “Incluir na emissão” leva à tela seguinte; 3) Nesta emissão — o que vai sair, para reordenar, editar, remover ou “+ Adicionar outro documento”; 4) Revisar e emitir. Toda tela tem a seta de voltar no alto, e o voltar do celular também anda entre elas; o “×” fecha guardando o rascunho. Vindo do Receituário, fechar volta para o Receituário. A barra de etapas no alto mostra onde você está.",
     ],
   },

@@ -33,9 +33,19 @@ export interface PrescriptionCardProps {
   onEdit(index: number | null, options?: { silent?: boolean }): void;
   /** "Ver na folha" de cada cartão. */
   onShowOnSheet?(index: number): void;
+  /** Que parte mostrar (compositor em telas): a receita, a busca ou o medicamento aberto. */
+  view: "lista" | "adicionar" | "medicamento";
+  /** "+ Adicionar medicamento" da lista. */
+  onAdd(): void;
+  /** Uma receita pronta entrou inteira: volta à lista. */
+  onAddedMany(): void;
 }
 
-/** O receituário: a lista de medicamentos, os protocolos da clínica e "Incluir". */
+/**
+ * O receituário em três telas do compositor: "lista" (a receita, os
+ * protocolos da clínica, salvar como protocolo, "Incluir"), "adicionar" (a
+ * busca) e "medicamento" (posologia, quantidade, via do que está aberto).
+ */
 export function PrescriptionCard({
   rx,
   onRxChange,
@@ -55,17 +65,20 @@ export function PrescriptionCard({
   editing,
   onEdit,
   onShowOnSheet,
+  view,
+  onAdd,
+  onAddedMany,
 }: PrescriptionCardProps) {
+  const list = view === "lista";
   return (
     <section className="card space-y-4 p-4 sm:p-5" aria-label="Receituário">
-      <div className="flex flex-wrap items-center gap-2">
-        <p className="font-display text-lg font-extrabold text-pine-950">Receituário</p>
+      {view === "adicionar" ? (
         <span className="chip bg-pine-50 text-pine-900/70">catálogo da ANVISA</span>
-      </div>
+      ) : null}
 
       {/* Protocolos que a própria clínica salvou. As receitas prontas do Renova
-          (por condição) ficam no editor, em "Receitas prontas". */}
-      {rxProtocols.length > 0 ? (
+          (por condição) ficam na tela de adicionar, em "Receitas prontas". */}
+      {list && rxProtocols.length > 0 ? (
         <div>
           <p className="label mb-1.5">Protocolos da clínica</p>
           <div className="flex flex-wrap gap-1.5">
@@ -97,9 +110,12 @@ export function PrescriptionCard({
         editing={editing}
         onEdit={onEdit}
         onShowOnSheet={onShowOnSheet}
+        view={view}
+        onAdd={onAdd}
+        onAddedMany={onAddedMany}
       />
 
-      {rx.length > 0 ? (
+      {list && rx.length > 0 ? (
         <div className="rounded-2xl border border-dashed border-[var(--color-line)] p-3">
           <div className="flex flex-wrap items-end gap-2">
             <div className="min-w-0 basis-full sm:flex-1 sm:basis-auto">
@@ -132,21 +148,23 @@ export function PrescriptionCard({
         </div>
       ) : null}
 
-      <div className="flex flex-wrap items-center justify-end gap-2 pt-1">
-        {full ? <LimitNote max={MAX_COMPOSER_ITEMS} /> : null}
-        <button type="button" onClick={() => onRxChange([])} className="btn btn-outline" disabled={rx.length === 0}>
-          Limpar
-        </button>
-        <button
-          type="button"
-          onClick={onInclude}
-          className="btn btn-primary flex-1 disabled:opacity-50 sm:flex-none"
-          disabled={docCount === 0 || full}
-        >
-          <IconPlus className="h-4 w-4" />
-          {docCount > 1 ? `Incluir ${docCount} documentos (${medicationCount} medicamentos)` : "Incluir na emissão"}
-        </button>
-      </div>
+      {list ? (
+        <div className="flex flex-wrap items-center justify-end gap-2 pt-1">
+          {full ? <LimitNote max={MAX_COMPOSER_ITEMS} /> : null}
+          <button type="button" onClick={() => onRxChange([])} className="btn btn-outline" disabled={rx.length === 0}>
+            Limpar
+          </button>
+          <button
+            type="button"
+            onClick={onInclude}
+            className="btn btn-primary flex-1 disabled:opacity-50 sm:flex-none"
+            disabled={docCount === 0 || full}
+          >
+            <IconPlus className="h-4 w-4" />
+            {docCount > 1 ? `Incluir ${docCount} documentos (${medicationCount} medicamentos)` : "Incluir na emissão"}
+          </button>
+        </div>
+      ) : null}
     </section>
   );
 }
