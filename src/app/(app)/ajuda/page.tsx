@@ -48,6 +48,12 @@ const STEPS: readonly Step[] = [
 
 const NEWS: readonly { date: string; items: readonly string[] }[] = [
   {
+    date: "2 de novembro de 2026",
+    items: [
+      "A caixinha de cada medicamento agora traz o nome comercial impresso, como numa embalagem de farmácia: Rivotril, Zoloft, Novalgina… cada marca com a sua cor (sempre a mesma), um selinho com a forma (comprimido, cápsula, gotas, seringa…) e, embaixo, a faixa da tarja — vermelha, vermelha tracejada quando a receita fica retida, preta, ou nenhuma na venda livre. Nome comprido quebra em duas ou três linhas. Vale para todas as marcas da lista da ANVISA, na busca, nos mais receitados, na lista da receita, na tela do medicamento e em Receituário › Mais receitados. Sem marca (genérico, fórmula manipulada, item digitado), a caixa mostra o desenho grande da forma. Passar o mouse mostra marca, forma e tarja.",
+    ],
+  },
+  {
     date: "1º de novembro de 2026",
     items: [
       "Nomes comerciais e a caixinha de cada medicamento. A busca do receituário mostra, em cada resultado, as marcas à venda daquele princípio ativo na mesma dose e forma (dipirona 500 mg/mL em gotas: Novalgina, Anador, Dipimed…), tiradas da lista da ANVISA sem os genéricos; buscar pela marca traz o princípio ativo com todas as outras marcas. Ao lado de cada medicamento — na busca, nos seus mais receitados, na lista da receita, na tela do medicamento e em Receituário › Mais receitados — uma caixinha desenhada mostra a forma (comprimido, cápsula, gotas, seringa, bisnaga, spray, pilão da fórmula manipulada…) com a faixa da tarja embaixo, vermelha ou preta, como na caixa de verdade. A receita impressa continua saindo pelo princípio ativo.",

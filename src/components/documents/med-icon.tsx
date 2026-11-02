@@ -2,16 +2,18 @@ import type { ReactNode } from "react";
 import type { DosageForm } from "@/lib/dosage-form";
 import { FORM_INFO } from "@/lib/dosage-form";
 import type { Tarja } from "@/lib/medications";
+import { TARJA_LABEL } from "@/lib/medications";
+import { boxColor, fitBrand } from "@/lib/med-box";
 
 /**
- * A "fotinho" do medicamento na lista: uma caixinha desenhada com o símbolo da
- * forma (comprimido, cápsula, gotas, seringa, bisnaga…) e, embaixo, a faixa da
- * tarja como na caixa de verdade — vermelha, preta ou nenhuma.
+ * A caixinha do medicamento na lista, desenhada como uma embalagem de
+ * farmácia: o nome comercial impresso na frente, a cor da marca (sempre a
+ * mesma para a mesma marca), o selo com a forma farmacêutica (comprimido,
+ * cápsula, gotas, seringa…) e, embaixo, a faixa da tarja como na caixa de
+ * verdade — vermelha, vermelha com o traço da retenção, preta ou nenhuma.
  *
- * Desenho próprio de propósito: foto de embalagem é do fabricante (e da
- * farmácia que fotografou), não existe base aberta delas, e 25 mil
- * apresentações com fotos de fontes diferentes virariam uma lista desigual.
- * A forma e a tarja são o que o médico precisa reconhecer de relance.
+ * Sem marca (genérico, fórmula, item digitado), a mesma caixa traz só o
+ * desenho grande da forma.
  */
 
 const INK = "var(--color-pine-700)";
@@ -24,8 +26,9 @@ const CLAY = "var(--color-clay-500)";
 const PICTOGRAM: Record<DosageForm | "formula" | "outro", ReactNode> = {
   comprimido: (
     <>
-      <circle cx="12" cy="11" r="6.5" fill={SOFT} stroke={INK} strokeWidth="1.4" />
-      <path d="M7.4 15.6 16.6 6.4" stroke={INK} strokeWidth="1.4" strokeLinecap="round" />
+      <ellipse cx="12" cy="12.6" rx="8" ry="5" fill={INK} opacity=".3" />
+      <ellipse cx="12" cy="11" rx="8" ry="5" fill={SOFT} stroke={INK} strokeWidth="1.4" />
+      <path d="M12 7.4v7.2" stroke={INK} strokeWidth="1.4" strokeLinecap="round" />
     </>
   ),
   capsula: (
@@ -126,10 +129,18 @@ const STRIPE: Partial<Record<Tarja, string>> = {
   preta: "#1c1917",
 };
 
+const NEUTRAL = { main: "#5b6b82", dark: "#2c3a4f", tint: "#e3e8ef" };
+
+/** Quadro 72×48: frente 62×41 com topo e lateral em perspectiva. */
+const FRONT = { x: 1, y: 6, w: 62, h: 41 };
+const TEXT_W = 54;
+const CX = FRONT.x + FRONT.w / 2;
+
 export function MedIcon({
   form,
   tarja,
   formula = false,
+  brands,
   size = "md",
   className = "",
 }: {
@@ -137,25 +148,73 @@ export function MedIcon({
   tarja?: Tarja | null;
   /** Fórmula manipulada: o pilão no lugar da forma. */
   formula?: boolean;
+  /** Nomes comerciais (da busca ou guardados no item): o primeiro vai impresso na caixa. */
+  brands?: readonly string[] | null;
   size?: "sm" | "md";
   className?: string;
 }) {
   const kind = formula ? "formula" : (form ?? "outro");
   const stripe = tarja ? STRIPE[tarja] : undefined;
-  const label = formula ? "Fórmula manipulada" : form ? FORM_INFO[form].label : "Medicamento";
+  const formLabel = formula ? "Fórmula manipulada" : form ? FORM_INFO[form].label : "Medicamento";
+  const brand = formula ? null : (brands?.find((b) => b.trim()) ?? null);
+  const color = brand ? boxColor(brand) : NEUTRAL;
+  const label = [brand, formLabel, tarja && tarja !== "desconhecida" ? TARJA_LABEL[tarja] : null].filter(Boolean).join(" · ");
+  const bottom = FRONT.y + FRONT.h - (stripe ? 8 : 0);
+  const zoneTop = FRONT.y + 13;
+  const lines = brand ? fitBrand(brand, TEXT_W, bottom - zoneTop - 1) : [];
+  const nameCenter = (zoneTop + bottom) / 2;
+  const lineGap = (lines[0]?.size ?? 0) * 1.05;
   return (
     <span
       role="img"
       aria-label={label}
       title={label}
-      className={`relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-lg border border-[var(--color-line)] bg-white ${
-        size === "sm" ? "h-8 w-8" : "h-10 w-10"
-      } ${className}`}
+      className={`inline-flex shrink-0 ${size === "sm" ? "h-9 w-[3.375rem]" : "h-12 w-[4.5rem]"} ${className}`}
     >
-      <svg viewBox="0 0 24 24" aria-hidden className={size === "sm" ? "h-6 w-6" : "h-7 w-7"}>
-        {PICTOGRAM[kind]}
+      <svg viewBox="0 0 72 48" aria-hidden className="h-full w-full overflow-visible">
+        {/* topo e lateral da caixa */}
+        <path d="M1 6 9 1h62l-8 5z" fill={color.tint} stroke={color.dark} strokeWidth=".8" strokeLinejoin="round" />
+        <path d="M63 6l8-5v41l-8 5z" fill={color.main} stroke={color.dark} strokeWidth=".8" strokeLinejoin="round" />
+        <path d="M63 6l8-5v41l-8 5z" fill="black" opacity=".18" />
+        {/* frente */}
+        <rect x={FRONT.x} y={FRONT.y} width={FRONT.w} height={FRONT.h} fill="white" stroke={color.dark} strokeWidth=".8" />
+        <path d={`M${FRONT.x} ${FRONT.y}h${FRONT.w}v8H${FRONT.x}z`} fill={color.main} />
+        <path d={`M${FRONT.x + 22} ${FRONT.y + 8}c10-4 22-6 ${FRONT.w - 22} -6v6z`} fill="white" opacity=".22" />
+        {brand ? (
+          <>
+            <circle cx="10" cy={FRONT.y + 7} r="6.5" fill="white" stroke={color.dark} strokeWidth=".8" />
+            <g transform={`translate(${10 - 12 * 0.46} ${FRONT.y + 7 - 11 * 0.46}) scale(.46)`}>{PICTOGRAM[kind]}</g>
+            <text
+              x={CX}
+              textAnchor="middle"
+              fill={color.dark}
+              style={{ fontFamily: "var(--font-sans)", fontWeight: 800, letterSpacing: "-0.01em" }}
+            >
+              {lines.map((line, i) => (
+                <tspan
+                  key={i}
+                  x={CX}
+                  y={nameCenter + line.size * 0.36 + (i - (lines.length - 1) / 2) * lineGap}
+                  fontSize={line.size}
+                  {...(line.squeeze ? { textLength: line.squeeze, lengthAdjust: "spacingAndGlyphs" } : {})}
+                >
+                  {line.text}
+                </tspan>
+              ))}
+            </text>
+          </>
+        ) : (
+          <g transform={`translate(${CX - 12 * 1.15} ${(FRONT.y + 8 + bottom) / 2 - 11 * 1.15}) scale(1.15)`}>{PICTOGRAM[kind]}</g>
+        )}
+        {stripe ? (
+          <>
+            <rect x={FRONT.x + 0.4} y={bottom} width={FRONT.w - 0.8} height={8 - 0.4} fill={stripe} />
+            {tarja === "vermelha_retida" ? (
+              <path d={`M${FRONT.x + 5} ${bottom + 3.8}h${FRONT.w - 10}`} stroke="white" strokeWidth="1.1" strokeDasharray="3 2" />
+            ) : null}
+          </>
+        ) : null}
       </svg>
-      {stripe ? <span aria-hidden className="absolute inset-x-0 bottom-0 h-[5px]" style={{ background: stripe }} /> : null}
     </span>
   );
 }
