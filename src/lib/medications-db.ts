@@ -32,7 +32,26 @@ export async function searchMedications(query: string, limit = 20): Promise<Medi
   try {
     // Relevância primeiro: quem digita "dipirona" recebe a substância pura
     // antes de "CAFEÍNA ANIDRA;DIPIRONA...", que só ganharia por ordem alfabética.
+    //
+    // A busca casa com a substância ou com a marca, e então traz **todas** as
+    // linhas daquelas substâncias: buscou "novalgina", vêm também Anador,
+    // Dorflex Uno… — os nomes comerciais do mesmo remédio (`brandNames`).
     const rows = await sql<MedicationRow>`
+      WITH matched AS (
+        SELECT substance,
+               MIN(CASE
+                     WHEN substance_search LIKE ${prefix} THEN 0
+                     WHEN product_search LIKE ${prefix} THEN 1
+                     ELSE 2
+                   END) AS rank
+        FROM medications
+        WHERE substance_search LIKE ${prefix}
+           OR product_search LIKE ${prefix}
+           OR substance_search LIKE ${anywhere}
+        GROUP BY substance
+        ORDER BY rank, substance
+        LIMIT 60
+      )
       SELECT substance, concentration,
              -- Mesma regra de effectiveTarja(): tarja preta vale para a
              -- substância inteira (a Portaria 344/98 lista o princípio
@@ -53,18 +72,12 @@ export async function searchMedications(query: string, limit = 20): Promise<Medi
              END AS tarja,
              NULLIF(product, '') AS product, presentation, therapeutic_class,
              marketed,
-             CASE
-               WHEN substance_search LIKE ${prefix} THEN 0
-               WHEN product_search LIKE ${prefix} THEN 1
-               ELSE 2
-             END AS rank
+             matched.rank
       FROM medications
-      WHERE substance_search LIKE ${prefix}
-         OR product_search LIKE ${prefix}
-         OR substance_search LIKE ${anywhere}
-      ORDER BY rank, marketed DESC, substance, concentration, product
-      LIMIT 2000`;
-    return collapseMedicationRows(rows, limit);
+      JOIN matched USING (substance)
+      ORDER BY matched.rank, marketed DESC, substance, concentration, product
+      LIMIT 6000`;
+    return collapseMedicationRows(rows, limit, query);
   } catch {
     // Sem tabela (migração pendente): o compositor segue em texto livre.
     return [];

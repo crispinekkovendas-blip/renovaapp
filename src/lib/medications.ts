@@ -251,6 +251,12 @@ export interface MedicationHit {
   tarja: Tarja;
   /** Uma marca conhecida daquela substância, só para o médico reconhecer. */
   product: string | null;
+  /**
+   * Os nomes comerciais à venda daquela substância + concentração + forma
+   * (`brandNames`): "Novalgina", "Anador"… — sem os genéricos, que na CMED
+   * levam o nome da própria substância. Do mais comum ao menos.
+   */
+  products: string[];
   presentation: string | null;
   therapeutic_class: string | null;
   /** Quantas apresentações existem — sinal de que é comum, não um item raro. */
@@ -275,14 +281,18 @@ export interface MedicationRow {
  * representa e dá a posição; entre grupos de mesma relevância, o mais comum
  * (mais apresentações) vem antes.
  */
-export function collapseMedicationRows(rows: readonly MedicationRow[], limit = 20): MedicationHit[] {
-  const groups = new Map<string, { hit: MedicationHit; rank: number; marketed: boolean; order: number }>();
+export function collapseMedicationRows(rows: readonly MedicationRow[], limit = 20, query = ""): MedicationHit[] {
+  const groups = new Map<
+    string,
+    { hit: MedicationHit; rank: number; marketed: boolean; order: number; rows: MedicationRow[] }
+  >();
   rows.forEach((row, order) => {
     const form = formFromPresentation(row.presentation);
     const key = `${row.substance}|${row.concentration ?? ""}|${form ?? ""}`;
     const group = groups.get(key);
     if (group) {
       group.hit.brands++;
+      group.rows.push(row);
       return;
     }
     groups.set(key, {
@@ -295,10 +305,12 @@ export function collapseMedicationRows(rows: readonly MedicationRow[], limit = 2
         presentation: row.presentation,
         therapeutic_class: row.therapeutic_class,
         brands: 1,
+        products: [],
       },
       rank: row.rank,
       marketed: Boolean(row.marketed),
       order,
+      rows: [row],
     });
   });
   return [...groups.values()]
@@ -310,6 +322,93 @@ export function collapseMedicationRows(rows: readonly MedicationRow[], limit = 2
         a.order - b.order,
     )
     .slice(0, limit)
-    .map((g) => g.hit);
+    .map((g) => ({ ...g.hit, products: brandNames(g.hit.substance, g.rows, query) }));
+}
+
+/* ---------- Nomes comerciais ---------- */
+
+/** Quantos nomes comerciais acompanham cada resultado — o resto vira "+N". */
+export const MAX_BRAND_NAMES = 12;
+
+/** Sal, hidratação, "cloridrato de": palavras de substância que não identificam marca. */
+const SALT_WORDS = new Set([
+  "sodica", "sodico", "potassica", "potassico", "calcica", "calcico", "magnesica",
+  "cloridrato", "bromidrato", "maleato", "succinato", "tartarato", "fumarato", "mesilato",
+  "besilato", "acetato", "citrato", "sulfato", "fosfato", "monoidratada", "monoidratado",
+  "trihidratada", "triidratada", "hidratada", "anidra", "anidro", "acido",
+]);
+
+/** As palavras de uma substância (composta ou não) que dizem que um nome é genérico. */
+function substanceWords(substance: string): Set<string> {
+  const words = new Set<string>();
+  for (const word of searchKey(substance).split(" ")) {
+    if (word.length >= 5 && !SALT_WORDS.has(word)) words.add(word);
+  }
+  return words;
+}
+
+/**
+ * Na CMED o genérico se chama pela substância ("DIPIRONA SÓDICA",
+ * "AMOXICILINA + CLAVULANATO DE POTÁSSIO", "LOSARTANA POTASSICA"): é nome
+ * comercial quem não repete nenhuma palavra do princípio ativo.
+ */
+export function isGenericName(product: string, substance: string): boolean {
+  const key = searchKey(product);
+  if (!key || /\bgenerico\b/.test(key)) return true;
+  const words = substanceWords(substance);
+  if (words.size === 0) return false;
+  return key.split(" ").some((word) => words.has(word) || [...words].some((w) => word.length >= 5 && w.startsWith(word)));
+}
+
+/**
+ * "DORFLEX UNO" → "Dorflex Uno"; siglas sem vogal e números ficam como estão
+ * ("VELAMOX BD", "ARADOIS H", "GLIFAGE XR").
+ */
+export function brandCase(product: string): string {
+  return product
+    .trim()
+    .replace(/\s*-\s*/g, "-")
+    .replace(/\s+/g, " ")
+    .split(" ")
+    .map((word) =>
+      /\d/.test(word) || (word.length <= 3 && !/[AEIOUÁÉÍÓÚÂÊÔÃÕ]/i.test(word))
+        ? word.toUpperCase()
+        : word
+            .toLowerCase()
+            .replace(/(^|-)(\p{L})/gu, (_, sep: string, ch: string) => sep + ch.toUpperCase()),
+    )
+    .join(" ");
+}
+
+/**
+ * Os nomes comerciais de um grupo de linhas da CMED: só os comercializados,
+ * sem os genéricos, um por nome (a grafia não importa), do que tem mais
+ * apresentações ao que tem menos. Quem casa com o que o médico digitou vem
+ * primeiro — buscou "novalgina", a Novalgina abre a lista.
+ */
+export function brandNames(
+  substance: string,
+  rows: readonly Pick<MedicationRow, "product" | "marketed">[],
+  query = "",
+): string[] {
+  const counts = new Map<string, { name: string; n: number }>();
+  for (const row of rows) {
+    const product = (row.product ?? "").trim();
+    if (!product || !Number(row.marketed) || isGenericName(product, substance)) continue;
+    const key = searchKey(product);
+    const entry = counts.get(key);
+    if (entry) entry.n++;
+    else counts.set(key, { name: brandCase(product), n: 1 });
+  }
+  const q = searchKey(query);
+  return [...counts.entries()]
+    .sort(
+      ([ka, a], [kb, b]) =>
+        Number(Boolean(q) && kb.startsWith(q)) - Number(Boolean(q) && ka.startsWith(q)) ||
+        b.n - a.n ||
+        a.name.localeCompare(b.name, "pt-BR"),
+    )
+    .slice(0, MAX_BRAND_NAMES)
+    .map(([, v]) => v.name);
 }
 

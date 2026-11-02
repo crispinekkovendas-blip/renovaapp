@@ -1,5 +1,6 @@
 import { searchKey } from "./normalize.ts";
-import { receiptKindFor, type ReceiptKind } from "./medications.ts";
+import { receiptKindFor, type ReceiptKind, type Tarja } from "./medications.ts";
+import { formOfItem, type DosageForm } from "./dosage-form.ts";
 import { itemComplete, type PrescriptionItem } from "./prescription.ts";
 
 /**
@@ -141,6 +142,12 @@ export interface MedicationStat {
   continuous: boolean;
   /** As posologias usadas, a mais frequente primeiro. */
   posologies: { text: string; count: number }[];
+  /** Para a caixinha da lista (`MedIcon`). */
+  form: DosageForm | null;
+  tarja: Tarja;
+  formula: boolean;
+  /** Nomes comerciais guardados no item (receitas a partir de 11/2026). */
+  brands: string[];
 }
 
 /** O que o médico mais receita, por medicamento, com as posologias que costuma usar. `rxs`: a mais nova primeiro. */
@@ -163,6 +170,10 @@ export function medicationStats(rxs: readonly IssuedRx[], limit = 60): Medicatio
           receipt: receiptKindFor(item.tarja),
           continuous: false,
           posologies: [],
+          form: formOfItem(item),
+          tarja: item.tarja,
+          formula: Boolean(item.formula),
+          brands: item.brands ?? [],
           patientSet: new Set(),
           posMap: new Map(),
         };
@@ -171,6 +182,7 @@ export function medicationStats(rxs: readonly IssuedRx[], limit = 60): Medicatio
       stat.count += 1;
       stat.patientSet.add(rx.patientId);
       stat.continuous ||= item.continuous;
+      if (!stat.brands.length && item.brands?.length) stat.brands = item.brands;
       const posKey = searchKey(item.posology);
       const pos = stat.posMap.get(posKey);
       if (pos) pos.count += 1;

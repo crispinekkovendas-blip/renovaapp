@@ -5,6 +5,7 @@ import { medicationStats } from "@/lib/receituario";
 import { listIssuedPrescriptions, rxScope } from "@/lib/receituario-db";
 import { EmptyState, PageHeader } from "@/components/ui";
 import { ReceiptChip } from "@/components/receituario/rx-ui";
+import { MedIcon } from "@/components/documents/med-icon";
 
 /**
  * Receituário › Mais receitados: o que o médico mais prescreve, para quantos
@@ -68,6 +69,7 @@ export default async function MaisReceitadosPage({ searchParams }: { searchParam
             <li key={stat.name} className="px-4 py-3 sm:px-5">
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                 <span className="w-6 shrink-0 text-right font-mono text-xs text-pine-900/40">{index + 1}</span>
+                <MedIcon form={stat.form} tarja={stat.tarja} formula={stat.formula} size="sm" />
                 <Link
                   href={`/receituario/historico?med=${encodeURIComponent(stat.name)}`}
                   className="min-w-0 font-bold text-pine-950 hover:text-pine-600"
@@ -81,11 +83,17 @@ export default async function MaisReceitadosPage({ searchParams }: { searchParam
                   {stat.patients === 1 ? "" : "s"} · última {fmtDate(stat.lastIssuedAt)}
                 </span>
               </div>
-              <div className="mt-1.5 ml-9 h-1.5 rounded-full bg-pine-900/5" aria-hidden>
+              {stat.brands.length ? (
+                <p className="mt-1 ml-[4.75rem] text-xs text-pine-900/55">
+                  <span className="font-semibold text-pine-900/45">Marcas: </span>
+                  {stat.brands.slice(0, 6).join(" · ")}
+                </p>
+              ) : null}
+              <div className="mt-1.5 ml-[4.75rem] h-1.5 rounded-full bg-pine-900/5" aria-hidden>
                 <div className="h-full rounded-full bg-pine-500" style={{ width: `${Math.max(4, (stat.count / max) * 100)}%` }} />
               </div>
               {stat.posologies.length ? (
-                <ul className="mt-1.5 ml-9 space-y-0.5 text-xs text-pine-900/65">
+                <ul className="mt-1.5 ml-[4.75rem] space-y-0.5 text-xs text-pine-900/65">
                   {stat.posologies.map((p) => (
                     <li key={p.text}>
                       {p.text} <span className="text-pine-900/40">· {p.count}×</span>

@@ -183,3 +183,55 @@ test("GLP-1 (canetas): receita sempre retida, em qualquer concentração", async
   assert.equal(hit.form, "injetavel");
 });
 
+
+test("nomes comerciais: sem genéricos, sem fora de linha, do mais comum ao menos", async () => {
+  const { brandNames, isGenericName } = await import("./medications.ts");
+  const row = (product, marketed = 1) => ({ product, marketed });
+  const dipirona = [
+    row("NOVALGINA"), row("NOVALGINA"), row("NOVALGINA"),
+    row("DIPIRONA MONOIDRATADA"), row("DIPIRONA SÓDICA"), row("DIPIRONA SODICA"),
+    row("ANADOR"), row("ANADOR"), row("DORFLEX UNO"), row("DUZOR", 0), row(""),
+  ];
+  assert.deepEqual(brandNames("DIPIRONA MONOIDRATADA", dipirona), ["Novalgina", "Anador", "Dorflex Uno"]);
+  // Quem casa com a busca vem primeiro.
+  assert.deepEqual(brandNames("DIPIRONA MONOIDRATADA", dipirona, "dorf"), ["Dorflex Uno", "Novalgina", "Anador"]);
+
+  // Genérico na CMED tem o nome da substância — composta ou não.
+  assert.equal(isGenericName("AMOXICILINA + CLAVULANATO DE POTÁSSIO", "AMOXICILINA TRIHIDRATADA;CLAVULANATO DE POTÁSSIO"), true);
+  assert.equal(isGenericName("ÁCIDO CLAVULÂNICO + AMOXICILINA", "AMOXICILINA SÓDICA;CLAVULANATO DE POTÁSSIO"), true);
+  assert.equal(isGenericName("LOSARTANA POTASSICA+HIDROCLOROTIAZIDA", "LOSARTANA POTÁSSICA;HIDROCLOROTIAZIDA"), true);
+  assert.equal(isGenericName("AMOXIL", "AMOXICILINA TRIHIDRATADA"), false);
+  assert.equal(isGenericName("ARADOIS H", "LOSARTANA POTÁSSICA;HIDROCLOROTIAZIDA"), false);
+  // "cloridrato" no nome não faz da marca um genérico de outra substância.
+  assert.equal(isGenericName("ZOLOFT", "CLORIDRATO DE SERTRALINA"), false);
+  assert.equal(isGenericName("CLORIDRATO DE SERTRALINA", "CLORIDRATO DE SERTRALINA"), true);
+});
+
+test("nome comercial em caixa de título, siglas como estão", async () => {
+  const { brandCase } = await import("./medications.ts");
+  assert.equal(brandCase("DORFLEX UNO"), "Dorflex Uno");
+  assert.equal(brandCase("VELAMOX BD"), "Velamox BD");
+  assert.equal(brandCase("ARADOIS H"), "Aradois H");
+  assert.equal(brandCase("ANA - FLEX"), "Ana-Flex");
+  assert.equal(brandCase("PURAN T4"), "Puran T4");
+  assert.equal(brandCase("LISADOR DIP"), "Lisador Dip");
+});
+
+test("cada resultado da busca leva os nomes comerciais do seu grupo", async () => {
+  const { collapseMedicationRows } = await import("./medications.ts");
+  const base = { substance: "DIPIRONA MONOIDRATADA", concentration: "500 MG/ML", tarja: "livre", therapeutic_class: null, marketed: 1, rank: 1 };
+  const hits = collapseMedicationRows(
+    [
+      { ...base, product: "NOVALGINA", presentation: "500 MG/ML SOL OR CT FR GOT X 20 ML" },
+      { ...base, product: "ANADOR", presentation: "500 MG/ML SOL OR CT FR GOT X 20 ML" },
+      { ...base, product: "DIPIRONA MONOIDRATADA", presentation: "500 MG/ML SOL OR CT FR GOT X 10 ML" },
+      { ...base, concentration: "500 MG", product: "NOVALGINA", presentation: "500 MG COM CT BL X 10" },
+    ],
+    20,
+    "anador",
+  );
+  assert.equal(hits.length, 2);
+  const gotas = hits.find((h) => h.form === "gotas");
+  assert.deepEqual(gotas.products, ["Anador", "Novalgina"]);
+  assert.deepEqual(hits.find((h) => h.form === "comprimido").products, ["Novalgina"]);
+});

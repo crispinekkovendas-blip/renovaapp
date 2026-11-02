@@ -585,7 +585,7 @@ export async function installLibraryAction(): Promise<void> {
  */
 export async function searchMedicationsAction(
   query: string
-): Promise<{ label: string; substance: string; concentration: string | null; form: DosageForm | null; tarja: Tarja; receipt: ReceiptKind; warning: string | null; brands: number }[]> {
+): Promise<{ label: string; substance: string; concentration: string | null; form: DosageForm | null; tarja: Tarja; receipt: ReceiptKind; warning: string | null; brands: number; products: string[] }[]> {
   await requireSession();
   const hits = await searchMedications(query);
   return hits.map((hit) => ({
@@ -597,6 +597,7 @@ export async function searchMedicationsAction(
     receipt: receiptKindFor(hit.tarja),
     warning: receiptWarning(hit.tarja),
     brands: hit.brands,
+    products: hit.products,
   }));
 }
 

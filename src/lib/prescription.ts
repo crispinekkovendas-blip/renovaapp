@@ -58,6 +58,11 @@ export interface PrescriptionItem {
   form?: DosageForm | null;
   /** Fórmula manipulada: a composição que sai abaixo do nome (formulas.ts). */
   formula?: Formula | null;
+  /**
+   * Nomes comerciais do que saiu da busca ("Novalgina", "Anador"…), para o
+   * médico reconhecer na lista. Só tela: a folha sai com o princípio ativo.
+   */
+  brands?: string[];
 }
 
 export const MAX_PRESCRIPTION_ITEMS = 30;
@@ -119,9 +124,23 @@ export function parseItems(raw: string | null | undefined): PrescriptionItem[] {
         continuous: r.continuous === true || r.continuous === "1",
         ...(isDosageForm(r.form) ? { form: r.form } : {}),
         ...(cleanFormula(r.formula) ? { formula: cleanFormula(r.formula) } : {}),
+        ...(cleanBrands(r.brands).length ? { brands: cleanBrands(r.brands) } : {}),
       },
     ];
   });
+}
+
+/** Até 12 nomes, texto curto — vem do navegador, então é conferido. */
+export function cleanBrands(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  const out: string[] = [];
+  for (const name of value) {
+    if (typeof name !== "string") continue;
+    const clean = name.replace(/\s+/g, " ").trim().slice(0, 40);
+    if (clean && !out.includes(clean)) out.push(clean);
+    if (out.length === 12) break;
+  }
+  return out;
 }
 
 function isTarja(value: unknown): value is Tarja {

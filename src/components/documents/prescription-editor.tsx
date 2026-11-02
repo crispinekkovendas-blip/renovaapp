@@ -27,6 +27,7 @@ import {
 import type { DoseOption, FrequentItem, RxProtocol } from "@/lib/rx-suggestions";
 import { RX_DRAG_TYPE, encodeDragItems } from "@/lib/rx-canvas";
 import type { DragEvent } from "react";
+import { MedIcon } from "./med-icon";
 
 /**
  * Editor do receituário: uma lista de medicamentos, não um texto.
@@ -95,6 +96,25 @@ interface Hit {
   tarja: Tarja;
   warning: string | null;
   brands: number;
+  /** Nomes comerciais à venda (`brandNames`). */
+  products: string[];
+}
+
+/**
+ * "Novalgina · Anador · Dorflex Uno +4": os nomes comerciais numa linha, para
+ * o médico reconhecer o remédio pelo nome que o paciente conhece.
+ */
+function BrandLine({ names, max = 4, className = "" }: { names: readonly string[] | undefined; max?: number; className?: string }) {
+  if (!names?.length) return null;
+  const shown = names.slice(0, max);
+  const rest = names.length - shown.length;
+  return (
+    <span className={`block text-[11.5px] text-pine-900/60 ${className}`} title={names.join(", ")}>
+      <span className="font-semibold text-pine-900/45">Marcas: </span>
+      {shown.join(" · ")}
+      {rest > 0 ? <span className="text-pine-900/45"> +{rest}</span> : null}
+    </span>
+  );
 }
 
 function IconChevron({ up }: { up?: boolean }) {
@@ -306,8 +326,10 @@ export function PrescriptionEditor({
                       {...dragItems(() => [itemFromHit(hit)], clearSearch)}
                       className="flex min-h-11 w-full items-start gap-3 px-4 py-2.5 text-left transition-colors hover:bg-pine-50"
                     >
+                      <MedIcon form={hit.form} tarja={hit.tarja} className="mt-0.5" />
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-[13.5px] font-bold text-pine-950">{hit.label}</span>
+                        <BrandLine names={hit.products} max={5} />
                         <span className="block text-[11.5px] text-pine-900/55">
                           {hit.form ? `${FORM_INFO[hit.form].label} · ` : ""}
                           {RECEIPT_KIND_LABEL[receiptKindFor(hit.tarja)]}
@@ -348,10 +370,13 @@ export function PrescriptionEditor({
                 onClick={() => addItems([item])}
                 {...dragItems(() => [{ ...item }])}
                 title={`${item.name} — ${item.posology} (${count}×)`}
-                className="max-w-[16rem] shrink-0 rounded-xl border border-[var(--color-line)] bg-white px-2.5 py-1 text-left transition-colors hover:border-pine-400 hover:bg-pine-50 pointer-coarse:min-h-11"
+                className="flex max-w-[17rem] shrink-0 items-center gap-2 rounded-xl border border-[var(--color-line)] bg-white px-2 py-1 text-left transition-colors hover:border-pine-400 hover:bg-pine-50 pointer-coarse:min-h-11"
               >
-                <span className="block truncate text-[12px] font-bold text-pine-950">{item.name}</span>
-                <span className="block truncate text-[11px] text-pine-900/55">{item.posology}</span>
+                <MedIcon form={formOfItem(item)} tarja={item.tarja} formula={Boolean(item.formula)} size="sm" />
+                <span className="min-w-0">
+                  <span className="block truncate text-[12px] font-bold text-pine-950">{item.name}</span>
+                  <span className="block truncate text-[11px] text-pine-900/55">{item.posology}</span>
+                </span>
               </button>
             ))}
           </div>
@@ -382,10 +407,12 @@ export function PrescriptionEditor({
           }`}
         >
           <div className="flex items-start justify-between gap-2">
+            <MedIcon form={formOfItem(current.item)} tarja={current.item.tarja} formula={Boolean(current.item.formula)} />
             <div className="min-w-0 flex-1">
               <p className="break-words text-[14px] font-extrabold text-pine-950">
                 {current.index + 1}) {current.item.name}
               </p>
+              <BrandLine names={current.item.brands} max={8} className="mt-0.5" />
               <span className={`chip mt-1 ${TARJA_CHIP[current.item.tarja]}`}>{TARJA_SHORT[current.item.tarja]}</span>
             </div>
             <div className="-mr-1 -mt-1 flex shrink-0 items-center gap-0.5 sm:mr-0 sm:mt-0">
@@ -593,12 +620,14 @@ function RxList({ items, onOpen, onAdd }: { items: PrescriptionItem[]; onOpen(in
                   className="flex min-h-14 w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-pine-50"
                 >
                   <span className="mt-0.5 w-5 shrink-0 text-right text-[12px] font-bold text-pine-900/45">{index + 1})</span>
+                  <MedIcon form={formOfItem(item)} tarja={item.tarja} formula={Boolean(item.formula)} />
                   <span className="min-w-0 flex-1">
                     <span className="flex flex-wrap items-center gap-1.5">
                       <span className="break-words text-[14px] font-extrabold text-pine-950">{item.name}</span>
                       <span className={`chip ${TARJA_CHIP[item.tarja]}`}>{TARJA_SHORT[item.tarja]}</span>
                       {item.continuous ? <span className="chip bg-sky-100 text-sky-800">contínuo</span> : null}
                     </span>
+                    <BrandLine names={item.brands} />
                     {ok ? (
                       <span className="mt-0.5 block text-[12.5px] text-pine-900/65">
                         {item.posology}
@@ -634,7 +663,14 @@ function RxList({ items, onOpen, onAdd }: { items: PrescriptionItem[]; onOpen(in
 
 /** O item que a busca inclui: já com a posologia da bula quando há (`dose` escolhe outra). */
 function itemFromHit(hit: Hit, dose?: DoseOption): PrescriptionItem {
-  const item = { ...emptyItem(), name: hit.label, concentration: hit.concentration, tarja: hit.tarja, form: hit.form };
+  const item: PrescriptionItem = {
+    ...emptyItem(),
+    name: hit.label,
+    concentration: hit.concentration,
+    tarja: hit.tarja,
+    form: hit.form,
+    ...(hit.products.length ? { brands: hit.products } : {}),
+  };
   // Sem escolha explícita, entra com a primeira posologia pronta: quase sempre é a que se usa.
   const chosen = dose ?? doseEntryFor(hit.substance, hit.concentration)?.options[0];
   return chosen ? applyDose(item, chosen) : item;
