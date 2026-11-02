@@ -2,16 +2,16 @@ import type { ReactNode } from "react";
 import type { DosageForm } from "@/lib/dosage-form";
 import { FORM_INFO } from "@/lib/dosage-form";
 import type { Tarja } from "@/lib/medications";
+import { photoCredit, photoForBrands } from "@/lib/medication-photos";
 
 /**
- * A "fotinho" do medicamento na lista: uma caixinha desenhada com o símbolo da
- * forma (comprimido, cápsula, gotas, seringa, bisnaga…) e, embaixo, a faixa da
- * tarja como na caixa de verdade — vermelha, preta ou nenhuma.
+ * A "fotinho" do medicamento na lista. Quando alguma das marcas tem foto de
+ * licença livre (`medication-photos.ts`, do Wikimedia Commons), é ela; senão,
+ * uma caixinha desenhada com o símbolo da forma (comprimido, cápsula, gotas,
+ * seringa, bisnaga…). Nos dois casos, embaixo, a faixa da tarja como na caixa
+ * de verdade — vermelha, preta ou nenhuma.
  *
- * Desenho próprio de propósito: foto de embalagem é do fabricante (e da
- * farmácia que fotografou), não existe base aberta delas, e 25 mil
- * apresentações com fotos de fontes diferentes virariam uma lista desigual.
- * A forma e a tarja são o que o médico precisa reconhecer de relance.
+ * Fotos de farmácias e fabricantes não entram: são deles, e o app é comercial.
  */
 
 const INK = "var(--color-pine-700)";
@@ -130,6 +130,7 @@ export function MedIcon({
   form,
   tarja,
   formula = false,
+  brands,
   size = "md",
   className = "",
 }: {
@@ -137,20 +138,35 @@ export function MedIcon({
   tarja?: Tarja | null;
   /** Fórmula manipulada: o pilão no lugar da forma. */
   formula?: boolean;
+  /** Nomes comerciais (da busca ou guardados no item): o primeiro com foto vence. */
+  brands?: readonly string[] | null;
   size?: "sm" | "md";
   className?: string;
 }) {
   const kind = formula ? "formula" : (form ?? "outro");
   const stripe = tarja ? STRIPE[tarja] : undefined;
   const label = formula ? "Fórmula manipulada" : form ? FORM_INFO[form].label : "Medicamento";
+  const photo = formula ? null : photoForBrands(brands);
+  const box = size === "sm" ? "h-8 w-8" : "h-10 w-10";
+  if (photo) {
+    return (
+      <span
+        title={`${photo.brand} — foto ilustrativa (a embalagem no Brasil pode ser outra). ${photoCredit(photo)}`}
+        className={`relative inline-flex shrink-0 overflow-hidden rounded-lg border border-[var(--color-line)] bg-white ${box} ${className}`}
+      >
+        {/* Miniatura estática de ~5 kB: o otimizador de imagem do Next não ganharia nada aqui. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={photo.src} alt={`${photo.brand} (${label.toLowerCase()})`} loading="lazy" decoding="async" className="h-full w-full object-cover" />
+        {stripe ? <span aria-hidden className="absolute inset-x-0 bottom-0 h-[5px]" style={{ background: stripe }} /> : null}
+      </span>
+    );
+  }
   return (
     <span
       role="img"
       aria-label={label}
       title={label}
-      className={`relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-lg border border-[var(--color-line)] bg-white ${
-        size === "sm" ? "h-8 w-8" : "h-10 w-10"
-      } ${className}`}
+      className={`relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-lg border border-[var(--color-line)] bg-white ${box} ${className}`}
     >
       <svg viewBox="0 0 24 24" aria-hidden className={size === "sm" ? "h-6 w-6" : "h-7 w-7"}>
         {PICTOGRAM[kind]}

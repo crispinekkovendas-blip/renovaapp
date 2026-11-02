@@ -50,6 +50,7 @@ const NEWS: readonly { date: string; items: readonly string[] }[] = [
   {
     date: "1º de novembro de 2026",
     items: [
+      "Fotos reais dos medicamentos. Quando a marca tem uma foto de licença livre no Wikimedia Commons (Rivotril, Zoloft, Losec, Buscopan…), ela aparece no lugar da caixinha desenhada, com a faixa da tarja embaixo. As fotos são ilustrativas — muitas mostram a embalagem de outro país — e cada uma tem autor e licença em Ajuda › Créditos das fotos. Fotos de farmácias e fabricantes não entram: são deles.",
       "Nomes comerciais e a caixinha de cada medicamento. A busca do receituário mostra, em cada resultado, as marcas à venda daquele princípio ativo na mesma dose e forma (dipirona 500 mg/mL em gotas: Novalgina, Anador, Dipimed…), tiradas da lista da ANVISA sem os genéricos; buscar pela marca traz o princípio ativo com todas as outras marcas. Ao lado de cada medicamento — na busca, nos seus mais receitados, na lista da receita, na tela do medicamento e em Receituário › Mais receitados — uma caixinha desenhada mostra a forma (comprimido, cápsula, gotas, seringa, bisnaga, spray, pilão da fórmula manipulada…) com a faixa da tarja embaixo, vermelha ou preta, como na caixa de verdade. A receita impressa continua saindo pelo princípio ativo.",
       "Um botão principal por tela: embaixo, à direita, sempre no mesmo lugar. Na receita e no documento de texto ele é “Continuar” (inclui na emissão e segue); no medicamento, “Pronto” (volta à receita); na revisão, “Emitir e enviar”. Escolher o tipo, o modelo ou um medicamento da busca já avança sozinho. Os botões “Incluir”, “Limpar” e “Enviar para a receita” dos cartões saíram, “Salvar como protocolo” ficou recolhido embaixo da receita, e o rascunho continua sendo guardado pelo “×” do alto.",
       "Montar ficou em telas menores. Receituário: a receita é uma lista (um cartão por medicamento, com tarja, posologia e quantidade) com “+ Adicionar medicamento”; a busca, os mais receitados, as receitas prontas e a fórmula manipulada ficam numa tela só; escolher um medicamento abre a tela dele (posologia, quantidade, via, uso contínuo) e “Enviar para a receita” volta à lista. Atestado, encaminhamento, laudo e orientações: primeiro a tela do modelo (o tipo de atestado, os modelos e “Padrão”), depois a de preencher, com “Modelo: … · Trocar”. No celular, “Ver a folha” abre a folha inteira numa tela, de onde também se inclui na emissão; no computador ela continua ao lado.",
@@ -285,6 +286,13 @@ export default async function AjudaPage() {
           </article>
         ))}
       </section>
+
+      <p className="mt-4 text-xs text-pine-900/55">
+        Fotos dos medicamentos:{" "}
+        <Link href="/ajuda/fotos" className="font-bold text-pine-600 hover:underline">
+          créditos e licenças
+        </Link>
+      </p>
 
       <section id="novidades" className="mt-8 scroll-mt-20 sm:mt-10">
         <SectionTitle>Novidades</SectionTitle>
