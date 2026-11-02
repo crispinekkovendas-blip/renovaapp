@@ -69,7 +69,7 @@ export default async function MaisReceitadosPage({ searchParams }: { searchParam
             <li key={stat.name} className="px-4 py-3 sm:px-5">
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                 <span className="w-6 shrink-0 text-right font-mono text-xs text-pine-900/40">{index + 1}</span>
-                <MedIcon form={stat.form} tarja={stat.tarja} formula={stat.formula} brands={stat.brands} size="sm" />
+                <MedIcon form={stat.form} tarja={stat.tarja} formula={stat.formula} size="sm" />
                 <Link
                   href={`/receituario/historico?med=${encodeURIComponent(stat.name)}`}
                   className="min-w-0 font-bold text-pine-950 hover:text-pine-600"

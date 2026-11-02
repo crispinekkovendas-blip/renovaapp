@@ -326,7 +326,7 @@ export function PrescriptionEditor({
                       {...dragItems(() => [itemFromHit(hit)], clearSearch)}
                       className="flex min-h-11 w-full items-start gap-3 px-4 py-2.5 text-left transition-colors hover:bg-pine-50"
                     >
-                      <MedIcon form={hit.form} tarja={hit.tarja} brands={hit.products} className="mt-0.5" />
+                      <MedIcon form={hit.form} tarja={hit.tarja} className="mt-0.5" />
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-[13.5px] font-bold text-pine-950">{hit.label}</span>
                         <BrandLine names={hit.products} max={5} />
@@ -372,7 +372,7 @@ export function PrescriptionEditor({
                 title={`${item.name} — ${item.posology} (${count}×)`}
                 className="flex max-w-[17rem] shrink-0 items-center gap-2 rounded-xl border border-[var(--color-line)] bg-white px-2 py-1 text-left transition-colors hover:border-pine-400 hover:bg-pine-50 pointer-coarse:min-h-11"
               >
-                <MedIcon form={formOfItem(item)} tarja={item.tarja} formula={Boolean(item.formula)} brands={item.brands} size="sm" />
+                <MedIcon form={formOfItem(item)} tarja={item.tarja} formula={Boolean(item.formula)} size="sm" />
                 <span className="min-w-0">
                   <span className="block truncate text-[12px] font-bold text-pine-950">{item.name}</span>
                   <span className="block truncate text-[11px] text-pine-900/55">{item.posology}</span>
@@ -407,7 +407,7 @@ export function PrescriptionEditor({
           }`}
         >
           <div className="flex items-start justify-between gap-2">
-            <MedIcon form={formOfItem(current.item)} tarja={current.item.tarja} formula={Boolean(current.item.formula)} brands={current.item.brands} />
+            <MedIcon form={formOfItem(current.item)} tarja={current.item.tarja} formula={Boolean(current.item.formula)} />
             <div className="min-w-0 flex-1">
               <p className="break-words text-[14px] font-extrabold text-pine-950">
                 {current.index + 1}) {current.item.name}
@@ -620,7 +620,7 @@ function RxList({ items, onOpen, onAdd }: { items: PrescriptionItem[]; onOpen(in
                   className="flex min-h-14 w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-pine-50"
                 >
                   <span className="mt-0.5 w-5 shrink-0 text-right text-[12px] font-bold text-pine-900/45">{index + 1})</span>
-                  <MedIcon form={formOfItem(item)} tarja={item.tarja} formula={Boolean(item.formula)} brands={item.brands} />
+                  <MedIcon form={formOfItem(item)} tarja={item.tarja} formula={Boolean(item.formula)} />
                   <span className="min-w-0 flex-1">
                     <span className="flex flex-wrap items-center gap-1.5">
                       <span className="break-words text-[14px] font-extrabold text-pine-950">{item.name}</span>
