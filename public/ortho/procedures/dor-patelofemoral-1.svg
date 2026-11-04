@@ -8,6 +8,65 @@
   <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
   <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
 </defs>
+<style>
+/* Ciclo de 6 s para todos os movimentos; cada passo do procedimento ocupa uma fatia dele.
+   Sem animação quando o leitor pede menos movimento e na impressão (o desenho parado é o procedimento completo). */
+.a{animation-duration:6s;animation-iteration-count:infinite;animation-timing-function:ease-in-out;animation-fill-mode:both}
+.lin{animation-timing-function:linear}
+.nudge{animation-name:nudge}
+.draw{animation-name:draw}
+.pulse{animation-name:pulse}
+.blink{animation-name:blink}
+.swing{animation-name:swing}
+.push{animation-name:push}
+.enter{animation-name:enter}
+.enter2{animation-name:enter2}
+.reduce{animation-name:reduce}
+.flip{animation-name:flip}
+.plunge{animation-name:plunge}
+.drain{animation-name:drain}
+.flow{animation-name:flow;animation-timing-function:linear}
+.buzz{animation-name:buzz;animation-duration:.25s;animation-timing-function:linear}
+.travel{animation-name:travel;animation-timing-function:linear}
+.in1{animation-name:in1}.in2{animation-name:in2}.in3{animation-name:in3}
+.out1{animation-name:out1}.out2{animation-name:out2}.out3{animation-name:out3}
+.fade3{animation-name:fade3}
+.squeeze{animation-name:squeeze}.pendulum{animation-name:pendulum}.tighten{animation-name:tighten}
+.hi2{animation-name:hi2}.hi3{animation-name:hi3}.hi4{animation-name:hi4}
+.focus2{animation-name:focus2}.focus3{animation-name:focus3}.focus4{animation-name:focus4}
+@keyframes nudge{0%,100%{transform:translate(0,0)}50%{transform:translate(var(--dx),var(--dy))}}
+@keyframes draw{0%,10%{stroke-dashoffset:1}45%,100%{stroke-dashoffset:0}}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.45}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes swing{0%,12%{transform:rotate(0)}55%,70%{transform:rotate(var(--a))}100%{transform:rotate(0)}}
+@keyframes push{0%,12%{transform:translate(0,0)}55%,70%{transform:translate(var(--dx),var(--dy))}100%{transform:translate(0,0)}}
+@keyframes enter{0%,8%{transform:translate(var(--dx),var(--dy))}38%,85%{transform:translate(0,0)}100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes enter2{0%,8%{transform:translate(var(--dx),var(--dy))}30%,42%{transform:translate(calc(var(--dx)*.45),calc(var(--dy)*.45))}60%,88%{transform:translate(0,0)}100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes reduce{0%,10%{transform:none}30%,40%{transform:translate(var(--dx),var(--dy))}55%,65%{transform:translate(var(--dx),var(--dy)) rotate(var(--a))}85%,100%{transform:none}}
+@keyframes flip{0%,15%{transform:scaleY(1)}50%,70%{transform:scaleY(-1)}100%{transform:scaleY(1)}}
+@keyframes plunge{0%,45%{transform:translate(0,0)}80%,100%{transform:translate(var(--p),0)}}
+@keyframes drain{0%,45%{transform:scaleX(1)}80%,100%{transform:scaleX(.2)}}
+@keyframes flow{0%{stroke-dashoffset:0}100%{stroke-dashoffset:-96}}
+@keyframes buzz{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@keyframes travel{0%,8%{transform:translate(0,0)}92%,100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes in1{0%,18%{opacity:0}26%,100%{opacity:1}}
+@keyframes in2{0%,42%{opacity:0}50%,100%{opacity:1}}
+@keyframes in3{0%,66%{opacity:0}74%,100%{opacity:1}}
+@keyframes out1{0%,22%{opacity:1}30%,100%{opacity:0}}
+@keyframes out2{0%,46%{opacity:1}54%,100%{opacity:0}}
+@keyframes out3{0%,70%{opacity:1}78%,100%{opacity:0}}
+@keyframes squeeze{0%,100%{transform:scale(1)}50%{transform:scale(.8)}}
+@keyframes pendulum{0%,100%{transform:rotate(calc(var(--a)*-1))}50%{transform:rotate(var(--a))}}
+@keyframes tighten{0%,15%{transform:scale(1,1)}55%,70%{transform:scale(.93,1)}100%{transform:scale(1,1)}}
+@keyframes fade3{0%,66%{opacity:.75}80%,100%{opacity:.25}}
+@keyframes hi2{0%{opacity:0}6%,44%{opacity:1}50%,100%{opacity:0}}
+@keyframes hi3{0%{opacity:0}4%,29%{opacity:1}33.3%,100%{opacity:0}}
+@keyframes hi4{0%{opacity:0}3%,22%{opacity:1}25%,100%{opacity:0}}
+@keyframes focus2{0%,44%{opacity:1}50%,94%{opacity:.35}100%{opacity:1}}
+@keyframes focus3{0%,29%{opacity:1}33.3%,96%{opacity:.35}100%{opacity:1}}
+@keyframes focus4{0%,22%{opacity:1}25%,97%{opacity:.35}100%{opacity:1}}
+@media (prefers-reduced-motion:reduce),print{.a{animation:none!important}}
+</style>
 <rect x="40" y="90" width="540" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
 <text x="62" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >Como chega (joelho fletido)</text>
 <path d="M300 250 L300 400" fill="none" stroke="#1c2a4a" stroke-width="180" stroke-linecap="round" stroke-linejoin="round" />
@@ -35,11 +94,11 @@
 <defs><linearGradient id="cg164" gradientUnits="userSpaceOnUse" x1="935" y1="630" x2="785" y2="630"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
 <path d="M860 540 L860 720" fill="none" stroke="url(#cg164)" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M800 400 Q860 370 920 400 Q940 480 860 530 Q780 480 800 400 Z" fill="#e6cdb5" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M830 410 Q870 380 910 410 Q920 460 870 490 Q820 460 830 410 Z" fill="#f8f5ef" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M1020 450 L930 450" fill="none" stroke="#8a6d3b" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<g class="a push" style="--dx:-40px;--dy:0px"><path d="M830 410 Q870 380 910 410 Q920 460 870 490 Q820 460 830 410 Z" fill="#f8f5ef" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /></g>
+<g class="a nudge" style="--dx:-14px;--dy:0px;animation-duration:1.6s"><path d="M1020 450 L930 450" fill="none" stroke="#8a6d3b" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/></g>
 <text x="1030" y="450" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >polegar</text>
 <text x="1030" y="477" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >empurra</text>
-<path d="M760 680 Q700 600 740 520" fill="none" stroke="#8a6d3b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<g class="a draw"><path d="M760 680 Q700 600 740 520" fill="none" stroke="#8a6d3b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)" pathLength="1" stroke-dasharray="1"/></g>
 <text x="640" y="470" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >estender</text>
 <text x="640" y="497" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >devagar</text>
 <text x="620" y="700" font-size="15" text-anchor="start" font-weight="500" fill="#6b7280" >analgesia; às vezes entra só de esticar. Depois: raio-X (fragmento</text>

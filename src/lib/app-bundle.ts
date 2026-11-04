@@ -1,4 +1,4 @@
-import { procedureImage, type OrthoProcedure } from "./ortho-guide/index.ts";
+import { SPRITES_VERSION, procedureImage, type OrthoProcedure } from "./ortho-guide/index.ts";
 import { createHash } from "node:crypto";
 import type { SearchDoc } from "./smart-search.ts";
 import type { ConciseLine } from "./revision-diff.ts";
@@ -141,7 +141,7 @@ export interface AppOrthoTopic extends OrthoTopic {
   id: string;
   chapter: string;
   revised: number;
-  /** Os procedimentos com a ilustração própria (PNG em public/ortho/procedures/png, caminho no site). */
+  /** Os procedimentos com a ilustração própria (SVG animado em public/ortho/procedures, caminho no site). */
   procedures?: (OrthoProcedure & { image: string })[];
 }
 
@@ -172,6 +172,8 @@ export interface AppOrtho {
   universalAlarm: string[];
   traumaTopics: string[];
   chapters: { title: string; intro: string; topics: AppOrthoTopic[] }[];
+  /** Versão das ilustrações: o app apaga a cópia local e baixa de novo quando muda. */
+  spritesVersion: number;
   changes: AppOrthoChange[];
   search: { docs: SearchDoc[]; items: { id: string; source: "ortopedia"; title: string; where: string; cid: string | null; lines: string[] }[] };
 }
@@ -211,9 +213,10 @@ function buildOrtho(): AppOrtho {
         id: `ortopedia:${t.slug}`,
         chapter: c.title,
         revised: orthoTopicRevised(t.slug),
-        procedures: t.procedures?.map((p, k) => ({ ...p, image: procedureImage(t.slug, k + 1).png })),
+        procedures: t.procedures?.map((p, k) => ({ ...p, image: procedureImage(t.slug, k + 1).svg })),
       })),
     })),
+    spritesVersion: SPRITES_VERSION,
     changes: ORTHO_CHANGES.map((c) => ({
       rev: c.rev,
       slug: c.slug,

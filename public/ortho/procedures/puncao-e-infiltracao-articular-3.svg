@@ -8,6 +8,65 @@
   <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
   <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
 </defs>
+<style>
+/* Ciclo de 6 s para todos os movimentos; cada passo do procedimento ocupa uma fatia dele.
+   Sem animação quando o leitor pede menos movimento e na impressão (o desenho parado é o procedimento completo). */
+.a{animation-duration:6s;animation-iteration-count:infinite;animation-timing-function:ease-in-out;animation-fill-mode:both}
+.lin{animation-timing-function:linear}
+.nudge{animation-name:nudge}
+.draw{animation-name:draw}
+.pulse{animation-name:pulse}
+.blink{animation-name:blink}
+.swing{animation-name:swing}
+.push{animation-name:push}
+.enter{animation-name:enter}
+.enter2{animation-name:enter2}
+.reduce{animation-name:reduce}
+.flip{animation-name:flip}
+.plunge{animation-name:plunge}
+.drain{animation-name:drain}
+.flow{animation-name:flow;animation-timing-function:linear}
+.buzz{animation-name:buzz;animation-duration:.25s;animation-timing-function:linear}
+.travel{animation-name:travel;animation-timing-function:linear}
+.in1{animation-name:in1}.in2{animation-name:in2}.in3{animation-name:in3}
+.out1{animation-name:out1}.out2{animation-name:out2}.out3{animation-name:out3}
+.fade3{animation-name:fade3}
+.squeeze{animation-name:squeeze}.pendulum{animation-name:pendulum}.tighten{animation-name:tighten}
+.hi2{animation-name:hi2}.hi3{animation-name:hi3}.hi4{animation-name:hi4}
+.focus2{animation-name:focus2}.focus3{animation-name:focus3}.focus4{animation-name:focus4}
+@keyframes nudge{0%,100%{transform:translate(0,0)}50%{transform:translate(var(--dx),var(--dy))}}
+@keyframes draw{0%,10%{stroke-dashoffset:1}45%,100%{stroke-dashoffset:0}}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.45}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes swing{0%,12%{transform:rotate(0)}55%,70%{transform:rotate(var(--a))}100%{transform:rotate(0)}}
+@keyframes push{0%,12%{transform:translate(0,0)}55%,70%{transform:translate(var(--dx),var(--dy))}100%{transform:translate(0,0)}}
+@keyframes enter{0%,8%{transform:translate(var(--dx),var(--dy))}38%,85%{transform:translate(0,0)}100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes enter2{0%,8%{transform:translate(var(--dx),var(--dy))}30%,42%{transform:translate(calc(var(--dx)*.45),calc(var(--dy)*.45))}60%,88%{transform:translate(0,0)}100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes reduce{0%,10%{transform:none}30%,40%{transform:translate(var(--dx),var(--dy))}55%,65%{transform:translate(var(--dx),var(--dy)) rotate(var(--a))}85%,100%{transform:none}}
+@keyframes flip{0%,15%{transform:scaleY(1)}50%,70%{transform:scaleY(-1)}100%{transform:scaleY(1)}}
+@keyframes plunge{0%,45%{transform:translate(0,0)}80%,100%{transform:translate(var(--p),0)}}
+@keyframes drain{0%,45%{transform:scaleX(1)}80%,100%{transform:scaleX(.2)}}
+@keyframes flow{0%{stroke-dashoffset:0}100%{stroke-dashoffset:-96}}
+@keyframes buzz{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@keyframes travel{0%,8%{transform:translate(0,0)}92%,100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes in1{0%,18%{opacity:0}26%,100%{opacity:1}}
+@keyframes in2{0%,42%{opacity:0}50%,100%{opacity:1}}
+@keyframes in3{0%,66%{opacity:0}74%,100%{opacity:1}}
+@keyframes out1{0%,22%{opacity:1}30%,100%{opacity:0}}
+@keyframes out2{0%,46%{opacity:1}54%,100%{opacity:0}}
+@keyframes out3{0%,70%{opacity:1}78%,100%{opacity:0}}
+@keyframes squeeze{0%,100%{transform:scale(1)}50%{transform:scale(.8)}}
+@keyframes pendulum{0%,100%{transform:rotate(calc(var(--a)*-1))}50%{transform:rotate(var(--a))}}
+@keyframes tighten{0%,15%{transform:scale(1,1)}55%,70%{transform:scale(.93,1)}100%{transform:scale(1,1)}}
+@keyframes fade3{0%,66%{opacity:.75}80%,100%{opacity:.25}}
+@keyframes hi2{0%{opacity:0}6%,44%{opacity:1}50%,100%{opacity:0}}
+@keyframes hi3{0%{opacity:0}4%,29%{opacity:1}33.3%,100%{opacity:0}}
+@keyframes hi4{0%{opacity:0}3%,22%{opacity:1}25%,100%{opacity:0}}
+@keyframes focus2{0%,44%{opacity:1}50%,94%{opacity:.35}100%{opacity:1}}
+@keyframes focus3{0%,29%{opacity:1}33.3%,96%{opacity:.35}100%{opacity:1}}
+@keyframes focus4{0%,22%{opacity:1}25%,97%{opacity:.35}100%{opacity:1}}
+@media (prefers-reduced-motion:reduce),print{.a{animation:none!important}}
+</style>
 <path d="M100 520 L420 520" fill="none" stroke="#1c2a4a" stroke-width="160" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M100 520 L420 520" fill="none" stroke="#f3e4d3" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" />
 <defs><linearGradient id="cg26" gradientUnits="userSpaceOnUse" x1="260" y1="445" x2="260" y2="595"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
@@ -28,17 +87,17 @@
 <text x="200" y="486" font-size="22" text-anchor="start" font-weight="500" fill="#1c2a4a" >palmar longo</text>
 <path d="M450 430 L450 610" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 6" />
 <text x="450" y="640" font-size="22" text-anchor="middle" font-weight="500" fill="#6b7280" >prega proximal do punho</text>
-<circle cx="440" cy="548" r="14" fill="none" stroke="#8a6d3b" stroke-width="4" />
+<g transform="translate(440 548)"><g class="a pulse" style="animation-duration:2s"><g transform="translate(-440 -548)"><circle cx="440" cy="548" r="14" fill="none" stroke="#8a6d3b" stroke-width="4" /></g></g></g>
 <path d="M417.6 548 L462.4 548" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M440 525.6 L440 570.4" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-<g transform="translate(440 548) rotate(40) scale(1)"><path d="M0 0 L-110 0" fill="none" stroke="#9aa3b5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+<g class="a enter" style="--dx:-30.6px;--dy:-25.7px"><g transform="translate(440 548) rotate(40) scale(1)"><path d="M0 0 L-110 0" fill="none" stroke="#9aa3b5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M0 0 L-110 0" fill="none" stroke="#1c2a4a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
 <rect x="-124" y="-10" width="14" height="20" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
 <rect x="-264" y="-22" width="140" height="44" rx="4" fill="#ffffff" stroke="#1c2a4a" stroke-width="3" />
-<rect x="-258" y="-16" width="77" height="32" rx="0" fill="#c9a66b" stroke="none" stroke-width="5" />
-<rect x="-300" y="-8" width="36" height="16" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
+<g transform="translate(-181 0)"><g class="a drain"><g transform="translate(181 0)"><rect x="-258" y="-16" width="77" height="32" rx="0" fill="#c9a66b" stroke="none" stroke-width="5" /></g></g></g>
+<g class="a plunge" style="--p:61.6px"><rect x="-300" y="-8" width="36" height="16" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
 <rect x="-308" y="-26" width="10" height="52" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
-<rect x="-270" y="-34" width="8" height="68" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" /></g>
+<rect x="-270" y="-34" width="8" height="68" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" /></g></g></g>
 <path d="M652 160 L440 548" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
 <circle cx="440" cy="548" r="7" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
 <text x="660" y="170" font-size="25" text-anchor="start" font-weight="500" fill="#1c2a4a" >ponto: na prega proximal do punho,</text>

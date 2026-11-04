@@ -158,14 +158,22 @@ class GuideRepository(
     }
 
     /**
-     * Baixa as ilustrações dos procedimentos que ainda não estão no aparelho
-     * (37 PNG, ~2 MB ao todo) e apaga as que o pacote não cita mais. Falha de
-     * rede só deixa a figura de fora; a próxima sincronização tenta de novo.
+     * Baixa as ilustrações animadas dos procedimentos que ainda não estão no
+     * aparelho (37 SVG, ~1 MB ao todo) e apaga as que o pacote não cita mais.
+     * Quando a versão das ilustrações muda no pacote, apaga tudo e baixa de
+     * novo. Falha de rede só deixa a figura de fora; a próxima sincronização
+     * tenta de novo.
      */
     private fun fetchSprites(content: GuideContent) {
         scope.launch {
             val wanted = content.ortho?.topics.orEmpty().flatMap { t -> t.procedures.orEmpty().mapNotNull { it.image } }
             if (wanted.isEmpty()) return@launch
+            val version = content.ortho?.tab?.spritesVersion ?: 0
+            if (prefs.spritesVersion != version) {
+                spritesDir.deleteRecursively()
+                prefs.spritesVersion = version
+                _spritesVersion.value++
+            }
             spritesDir.mkdirs()
             val keep = wanted.map { it.substringAfterLast('/') }.toSet()
             spritesDir.listFiles()?.filter { it.name !in keep }?.forEach { it.delete() }

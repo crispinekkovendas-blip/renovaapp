@@ -8,31 +8,93 @@
   <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
   <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
 </defs>
+<style>
+/* Ciclo de 6 s para todos os movimentos; cada passo do procedimento ocupa uma fatia dele.
+   Sem animação quando o leitor pede menos movimento e na impressão (o desenho parado é o procedimento completo). */
+.a{animation-duration:6s;animation-iteration-count:infinite;animation-timing-function:ease-in-out;animation-fill-mode:both}
+.lin{animation-timing-function:linear}
+.nudge{animation-name:nudge}
+.draw{animation-name:draw}
+.pulse{animation-name:pulse}
+.blink{animation-name:blink}
+.swing{animation-name:swing}
+.push{animation-name:push}
+.enter{animation-name:enter}
+.enter2{animation-name:enter2}
+.reduce{animation-name:reduce}
+.flip{animation-name:flip}
+.plunge{animation-name:plunge}
+.drain{animation-name:drain}
+.flow{animation-name:flow;animation-timing-function:linear}
+.buzz{animation-name:buzz;animation-duration:.25s;animation-timing-function:linear}
+.travel{animation-name:travel;animation-timing-function:linear}
+.in1{animation-name:in1}.in2{animation-name:in2}.in3{animation-name:in3}
+.out1{animation-name:out1}.out2{animation-name:out2}.out3{animation-name:out3}
+.fade3{animation-name:fade3}
+.squeeze{animation-name:squeeze}.pendulum{animation-name:pendulum}.tighten{animation-name:tighten}
+.hi2{animation-name:hi2}.hi3{animation-name:hi3}.hi4{animation-name:hi4}
+.focus2{animation-name:focus2}.focus3{animation-name:focus3}.focus4{animation-name:focus4}
+@keyframes nudge{0%,100%{transform:translate(0,0)}50%{transform:translate(var(--dx),var(--dy))}}
+@keyframes draw{0%,10%{stroke-dashoffset:1}45%,100%{stroke-dashoffset:0}}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.45}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes swing{0%,12%{transform:rotate(0)}55%,70%{transform:rotate(var(--a))}100%{transform:rotate(0)}}
+@keyframes push{0%,12%{transform:translate(0,0)}55%,70%{transform:translate(var(--dx),var(--dy))}100%{transform:translate(0,0)}}
+@keyframes enter{0%,8%{transform:translate(var(--dx),var(--dy))}38%,85%{transform:translate(0,0)}100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes enter2{0%,8%{transform:translate(var(--dx),var(--dy))}30%,42%{transform:translate(calc(var(--dx)*.45),calc(var(--dy)*.45))}60%,88%{transform:translate(0,0)}100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes reduce{0%,10%{transform:none}30%,40%{transform:translate(var(--dx),var(--dy))}55%,65%{transform:translate(var(--dx),var(--dy)) rotate(var(--a))}85%,100%{transform:none}}
+@keyframes flip{0%,15%{transform:scaleY(1)}50%,70%{transform:scaleY(-1)}100%{transform:scaleY(1)}}
+@keyframes plunge{0%,45%{transform:translate(0,0)}80%,100%{transform:translate(var(--p),0)}}
+@keyframes drain{0%,45%{transform:scaleX(1)}80%,100%{transform:scaleX(.2)}}
+@keyframes flow{0%{stroke-dashoffset:0}100%{stroke-dashoffset:-96}}
+@keyframes buzz{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@keyframes travel{0%,8%{transform:translate(0,0)}92%,100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes in1{0%,18%{opacity:0}26%,100%{opacity:1}}
+@keyframes in2{0%,42%{opacity:0}50%,100%{opacity:1}}
+@keyframes in3{0%,66%{opacity:0}74%,100%{opacity:1}}
+@keyframes out1{0%,22%{opacity:1}30%,100%{opacity:0}}
+@keyframes out2{0%,46%{opacity:1}54%,100%{opacity:0}}
+@keyframes out3{0%,70%{opacity:1}78%,100%{opacity:0}}
+@keyframes squeeze{0%,100%{transform:scale(1)}50%{transform:scale(.8)}}
+@keyframes pendulum{0%,100%{transform:rotate(calc(var(--a)*-1))}50%{transform:rotate(var(--a))}}
+@keyframes tighten{0%,15%{transform:scale(1,1)}55%,70%{transform:scale(.93,1)}100%{transform:scale(1,1)}}
+@keyframes fade3{0%,66%{opacity:.75}80%,100%{opacity:.25}}
+@keyframes hi2{0%{opacity:0}6%,44%{opacity:1}50%,100%{opacity:0}}
+@keyframes hi3{0%{opacity:0}4%,29%{opacity:1}33.3%,100%{opacity:0}}
+@keyframes hi4{0%{opacity:0}3%,22%{opacity:1}25%,100%{opacity:0}}
+@keyframes focus2{0%,44%{opacity:1}50%,94%{opacity:.35}100%{opacity:1}}
+@keyframes focus3{0%,29%{opacity:1}33.3%,96%{opacity:.35}100%{opacity:1}}
+@keyframes focus4{0%,22%{opacity:1}25%,97%{opacity:.35}100%{opacity:1}}
+@media (prefers-reduced-motion:reduce),print{.a{animation:none!important}}
+</style>
 <rect x="40" y="90" width="360" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
 <text x="62" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >1 · Retirar a unha</text>
+<g class="a hi3" style="animation-delay:-6s"><rect x="40" y="90" width="360" height="680" rx="14" fill="none" stroke="#8a6d3b" stroke-width="5" opacity="0"/></g>
 <path d="M130 680 L130 330 Q130 190 230 190 Q330 190 330 330 L330 680 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M160 520 L160 300 Q160 230 230 240 Q300 230 300 300 L300 520 Q230 560 160 520 Z" fill="#f2c9b8" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M190 300 L230 350 L210 400 L250 460" fill="none" stroke="#b3261e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M160 300 L160 160 Q230 110 300 160 L300 300 Q230 330 160 300 Z" fill="#f9efe3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(230 300)"><g class="a swing" style="--a:-14deg"><g transform="translate(-230 -300)"><path d="M160 300 L160 160 Q230 110 300 160 L300 300 Q230 330 160 300 Z" fill="#f9efe3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <g transform="translate(290 150)"><path d="M0 0 L70 -40" fill="none" stroke="#9aa3b5" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M0 0 L10 30" fill="none" stroke="#9aa3b5" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" /></g>
+<path d="M0 0 L10 30" fill="none" stroke="#9aa3b5" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" /></g></g></g></g>
 <text x="60" y="600" font-size="19" text-anchor="start" font-weight="500" fill="#6b7280" >bloqueio digital; descolar</text>
 <text x="60" y="625" font-size="19" text-anchor="start" font-weight="500" fill="#6b7280" >com tesoura fina ou pinça,</text>
 <text x="60" y="650" font-size="19" text-anchor="start" font-weight="500" fill="#6b7280" >guardar a unha em soro</text>
 <rect x="420" y="90" width="360" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
 <text x="442" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >2 · Suturar o leito</text>
+<g class="a hi3" style="animation-delay:-4s"><rect x="420" y="90" width="360" height="680" rx="14" fill="none" stroke="#8a6d3b" stroke-width="5" opacity="0"/></g>
 <path d="M510 680 L510 330 Q510 190 610 190 Q710 190 710 330 L710 680 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M540 520 L540 300 Q540 230 610 240 Q680 230 680 300 L680 520 Q610 560 540 520 Z" fill="#f2c9b8" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M570 300 L610 350 L590 400 L630 460" fill="none" stroke="#b3261e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M560 310 L620 320" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M580 355 L630 365" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M600 400 L640 410" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M620 445 L650 455" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<g class="a in1"><path d="M560 310 L620 320" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" /></g>
+<g class="a in1"><path d="M580 355 L630 365" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" /></g>
+<g class="a in2"><path d="M600 400 L640 410" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" /></g>
+<g class="a in3"><path d="M620 445 L650 455" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" /></g>
 <text x="440" y="600" font-size="19" text-anchor="start" font-weight="500" fill="#6b7280" >fio absorvível 6-0 (ou cola),</text>
 <text x="440" y="625" font-size="19" text-anchor="start" font-weight="500" fill="#6b7280" >pontos simples, sem apertar;</text>
 <text x="440" y="650" font-size="19" text-anchor="start" font-weight="500" fill="#6b7280" >lavar bem antes</text>
 <rect x="800" y="90" width="360" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
 <text x="822" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >3 · Unha de volta</text>
+<g class="a hi3" style="animation-delay:-2s"><rect x="800" y="90" width="360" height="680" rx="14" fill="none" stroke="#8a6d3b" stroke-width="5" opacity="0"/></g>
 <path d="M890 680 L890 330 Q890 190 990 190 Q1090 190 1090 330 L1090 680 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M920 520 L920 300 Q920 230 990 240 Q1060 230 1060 300 L1060 520 Q990 560 920 520 Z" fill="#f2c9b8" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M920 520 L920 300 Q920 230 990 240 Q1060 230 1060 300 L1060 520 Q990 560 920 520 Z" fill="#f9efe3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { FIRST_DAY, ORTHO_GUIDE, SPRITES_VERSION, findOrthoTopic, orthoDocs, orthoSearchDoc, orthoSlugs, orthoStats } from "./ortho-guide/index.ts";
 import { buildIndex, search } from "./smart-search.ts";
 
@@ -93,14 +93,19 @@ test("a busca acha pelo nome popular, pela manobra e pelo remédio", () => {
   assert.equal(top("cinta pelvica"), "fraturas-de-pelve-e-sacro-no-idoso");
 });
 
-test("todo procedimento tem a sua ilustração (SVG para o site e o PDF, PNG para o app) em public/ortho/procedures", () => {
+test("todo procedimento tem a sua ilustração animada (SVG com CSS) em public/ortho/procedures", () => {
   const dir = new URL("../../public/ortho/procedures/", import.meta.url);
   let n = 0;
   for (const t of topics()) {
     (t.procedures ?? []).forEach((p, k) => {
       n++;
-      for (const f of [`${t.slug}-${k + 1}.svg`, `png/${t.slug}-${k + 1}.v${SPRITES_VERSION}.png`]) assert.ok(existsSync(new URL(f, dir)), `${p.name}: falta ${f}`);
+      const f = `${t.slug}-${k + 1}.svg`, url = new URL(f, dir);
+      assert.ok(existsSync(url), `${p.name}: falta ${f}`);
+      const svg = readFileSync(url, "utf8");
+      assert.ok(svg.includes("@keyframes") && svg.includes('class="a '), `${p.name}: ${f} sem animação`);
+      assert.ok(svg.includes("prefers-reduced-motion"), `${p.name}: ${f} sem a regra de menos movimento`);
     });
   }
   assert.equal(n, 37);
+  assert.ok(Number.isInteger(SPRITES_VERSION) && SPRITES_VERSION >= 3);
 });

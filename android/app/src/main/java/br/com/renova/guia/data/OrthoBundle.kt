@@ -19,6 +19,8 @@ data class OrthoTab(
     val universalAlarm: List<String> = emptyList(),
     val traumaTopics: List<String> = emptyList(),
     val chapters: List<OrthoChapter> = emptyList(),
+    /** Versão das ilustrações dos procedimentos: mudou, o app apaga a cópia local e baixa de novo. */
+    val spritesVersion: Int = 0,
     val changes: List<OrthoChange> = emptyList(),
     val search: OrthoSearch = OrthoSearch(),
 )

@@ -8,12 +8,71 @@
   <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
   <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
 </defs>
+<style>
+/* Ciclo de 6 s para todos os movimentos; cada passo do procedimento ocupa uma fatia dele.
+   Sem animação quando o leitor pede menos movimento e na impressão (o desenho parado é o procedimento completo). */
+.a{animation-duration:6s;animation-iteration-count:infinite;animation-timing-function:ease-in-out;animation-fill-mode:both}
+.lin{animation-timing-function:linear}
+.nudge{animation-name:nudge}
+.draw{animation-name:draw}
+.pulse{animation-name:pulse}
+.blink{animation-name:blink}
+.swing{animation-name:swing}
+.push{animation-name:push}
+.enter{animation-name:enter}
+.enter2{animation-name:enter2}
+.reduce{animation-name:reduce}
+.flip{animation-name:flip}
+.plunge{animation-name:plunge}
+.drain{animation-name:drain}
+.flow{animation-name:flow;animation-timing-function:linear}
+.buzz{animation-name:buzz;animation-duration:.25s;animation-timing-function:linear}
+.travel{animation-name:travel;animation-timing-function:linear}
+.in1{animation-name:in1}.in2{animation-name:in2}.in3{animation-name:in3}
+.out1{animation-name:out1}.out2{animation-name:out2}.out3{animation-name:out3}
+.fade3{animation-name:fade3}
+.squeeze{animation-name:squeeze}.pendulum{animation-name:pendulum}.tighten{animation-name:tighten}
+.hi2{animation-name:hi2}.hi3{animation-name:hi3}.hi4{animation-name:hi4}
+.focus2{animation-name:focus2}.focus3{animation-name:focus3}.focus4{animation-name:focus4}
+@keyframes nudge{0%,100%{transform:translate(0,0)}50%{transform:translate(var(--dx),var(--dy))}}
+@keyframes draw{0%,10%{stroke-dashoffset:1}45%,100%{stroke-dashoffset:0}}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.45}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes swing{0%,12%{transform:rotate(0)}55%,70%{transform:rotate(var(--a))}100%{transform:rotate(0)}}
+@keyframes push{0%,12%{transform:translate(0,0)}55%,70%{transform:translate(var(--dx),var(--dy))}100%{transform:translate(0,0)}}
+@keyframes enter{0%,8%{transform:translate(var(--dx),var(--dy))}38%,85%{transform:translate(0,0)}100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes enter2{0%,8%{transform:translate(var(--dx),var(--dy))}30%,42%{transform:translate(calc(var(--dx)*.45),calc(var(--dy)*.45))}60%,88%{transform:translate(0,0)}100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes reduce{0%,10%{transform:none}30%,40%{transform:translate(var(--dx),var(--dy))}55%,65%{transform:translate(var(--dx),var(--dy)) rotate(var(--a))}85%,100%{transform:none}}
+@keyframes flip{0%,15%{transform:scaleY(1)}50%,70%{transform:scaleY(-1)}100%{transform:scaleY(1)}}
+@keyframes plunge{0%,45%{transform:translate(0,0)}80%,100%{transform:translate(var(--p),0)}}
+@keyframes drain{0%,45%{transform:scaleX(1)}80%,100%{transform:scaleX(.2)}}
+@keyframes flow{0%{stroke-dashoffset:0}100%{stroke-dashoffset:-96}}
+@keyframes buzz{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@keyframes travel{0%,8%{transform:translate(0,0)}92%,100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes in1{0%,18%{opacity:0}26%,100%{opacity:1}}
+@keyframes in2{0%,42%{opacity:0}50%,100%{opacity:1}}
+@keyframes in3{0%,66%{opacity:0}74%,100%{opacity:1}}
+@keyframes out1{0%,22%{opacity:1}30%,100%{opacity:0}}
+@keyframes out2{0%,46%{opacity:1}54%,100%{opacity:0}}
+@keyframes out3{0%,70%{opacity:1}78%,100%{opacity:0}}
+@keyframes squeeze{0%,100%{transform:scale(1)}50%{transform:scale(.8)}}
+@keyframes pendulum{0%,100%{transform:rotate(calc(var(--a)*-1))}50%{transform:rotate(var(--a))}}
+@keyframes tighten{0%,15%{transform:scale(1,1)}55%,70%{transform:scale(.93,1)}100%{transform:scale(1,1)}}
+@keyframes fade3{0%,66%{opacity:.75}80%,100%{opacity:.25}}
+@keyframes hi2{0%{opacity:0}6%,44%{opacity:1}50%,100%{opacity:0}}
+@keyframes hi3{0%{opacity:0}4%,29%{opacity:1}33.3%,100%{opacity:0}}
+@keyframes hi4{0%{opacity:0}3%,22%{opacity:1}25%,100%{opacity:0}}
+@keyframes focus2{0%,44%{opacity:1}50%,94%{opacity:.35}100%{opacity:1}}
+@keyframes focus3{0%,29%{opacity:1}33.3%,96%{opacity:.35}100%{opacity:1}}
+@keyframes focus4{0%,22%{opacity:1}25%,97%{opacity:.35}100%{opacity:1}}
+@media (prefers-reduced-motion:reduce),print{.a{animation:none!important}}
+</style>
 <path d="M60 130 L380 130 L400 500 L60 520 Z" fill="#d7dde8" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <text x="120" y="330" font-size="24" text-anchor="start" font-weight="500" fill="#6b7280" >tórax</text>
-<path d="M416 200 L444 200 L444 540 Q444 600 500 606 L560 606 L600 180 L628 180 L588 630 L500 632 Q416 628 416 540 Z" fill="#fbf8f2" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M416 200 L444 200 L444 540 Q444 600 500 606 L560 606 L600 180 L628 180 L588 630 L500 632 Q416 628 416 540 Z" fill="url(#cotton)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M380 200 L412 200 L412 540 Q412 630 500 640 L592 640 L636 150 L668 150 L620 660 L500 672 Q380 662 380 540 Z" fill="#ece7dc" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M380 200 L412 200 L412 540 Q412 630 500 640 L592 640 L636 150 L668 150 L620 660 L500 672 Q380 662 380 540 Z" fill="url(#hatch)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<g class="a in1"><path d="M416 200 L444 200 L444 540 Q444 600 500 606 L560 606 L600 180 L628 180 L588 630 L500 632 Q416 628 416 540 Z" fill="#fbf8f2" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M416 200 L444 200 L444 540 Q444 600 500 606 L560 606 L600 180 L628 180 L588 630 L500 632 Q416 628 416 540 Z" fill="url(#cotton)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /></g>
+<g class="a in2"><path d="M380 200 L412 200 L412 540 Q412 630 500 640 L592 640 L636 150 L668 150 L620 660 L500 672 Q380 662 380 540 Z" fill="#ece7dc" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M380 200 L412 200 L412 540 Q412 630 500 640 L592 640 L636 150 L668 150 L620 660 L500 672 Q380 662 380 540 Z" fill="url(#hatch)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /></g>
 <path d="M520 150 L520 500" fill="none" stroke="#1c2a4a" stroke-width="140" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M520 500 L820 500" fill="none" stroke="#1c2a4a" stroke-width="120" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M520 150 L520 500" fill="none" stroke="#f3e4d3" stroke-width="130" stroke-linecap="round" stroke-linejoin="round" />
@@ -34,7 +93,7 @@
 <path d="M44 12 L110.9 32.7" fill="none" stroke="url(#hg43f)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M44 36 L97.5 52.5" fill="none" stroke="url(#hg43f)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M-34 -46 L4 -92" fill="none" stroke="url(#hg43f)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" /></g>
-<path d="M445 190 L595 214" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<g class="a in3"><path d="M445 190 L595 214" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
 <path d="M445 227.5 L595 251.5" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
 <path d="M445 265 L595 289" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
 <path d="M445 302.5 L595 326.5" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
@@ -42,7 +101,7 @@
 <path d="M445 377.5 L595 401.5" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
 <path d="M445 415 L595 439" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
 <path d="M445 452.5 L595 476.5" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
-<path d="M445 490 L595 490" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M445 490 L595 490" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" /></g>
 <path d="M540 130 Q700 120 740 500" fill="none" stroke="#b9c3d4" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M740 500 L860 500" fill="none" stroke="#b9c3d4" stroke-width="60" stroke-linecap="butt" stroke-linejoin="round" />
 <path d="M740 500 L860 500" fill="none" stroke="#1c2a4a" stroke-width="64" stroke-linecap="butt" stroke-linejoin="round" />

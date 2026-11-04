@@ -8,29 +8,91 @@
   <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
   <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
 </defs>
+<style>
+/* Ciclo de 6 s para todos os movimentos; cada passo do procedimento ocupa uma fatia dele.
+   Sem animação quando o leitor pede menos movimento e na impressão (o desenho parado é o procedimento completo). */
+.a{animation-duration:6s;animation-iteration-count:infinite;animation-timing-function:ease-in-out;animation-fill-mode:both}
+.lin{animation-timing-function:linear}
+.nudge{animation-name:nudge}
+.draw{animation-name:draw}
+.pulse{animation-name:pulse}
+.blink{animation-name:blink}
+.swing{animation-name:swing}
+.push{animation-name:push}
+.enter{animation-name:enter}
+.enter2{animation-name:enter2}
+.reduce{animation-name:reduce}
+.flip{animation-name:flip}
+.plunge{animation-name:plunge}
+.drain{animation-name:drain}
+.flow{animation-name:flow;animation-timing-function:linear}
+.buzz{animation-name:buzz;animation-duration:.25s;animation-timing-function:linear}
+.travel{animation-name:travel;animation-timing-function:linear}
+.in1{animation-name:in1}.in2{animation-name:in2}.in3{animation-name:in3}
+.out1{animation-name:out1}.out2{animation-name:out2}.out3{animation-name:out3}
+.fade3{animation-name:fade3}
+.squeeze{animation-name:squeeze}.pendulum{animation-name:pendulum}.tighten{animation-name:tighten}
+.hi2{animation-name:hi2}.hi3{animation-name:hi3}.hi4{animation-name:hi4}
+.focus2{animation-name:focus2}.focus3{animation-name:focus3}.focus4{animation-name:focus4}
+@keyframes nudge{0%,100%{transform:translate(0,0)}50%{transform:translate(var(--dx),var(--dy))}}
+@keyframes draw{0%,10%{stroke-dashoffset:1}45%,100%{stroke-dashoffset:0}}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.45}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes swing{0%,12%{transform:rotate(0)}55%,70%{transform:rotate(var(--a))}100%{transform:rotate(0)}}
+@keyframes push{0%,12%{transform:translate(0,0)}55%,70%{transform:translate(var(--dx),var(--dy))}100%{transform:translate(0,0)}}
+@keyframes enter{0%,8%{transform:translate(var(--dx),var(--dy))}38%,85%{transform:translate(0,0)}100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes enter2{0%,8%{transform:translate(var(--dx),var(--dy))}30%,42%{transform:translate(calc(var(--dx)*.45),calc(var(--dy)*.45))}60%,88%{transform:translate(0,0)}100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes reduce{0%,10%{transform:none}30%,40%{transform:translate(var(--dx),var(--dy))}55%,65%{transform:translate(var(--dx),var(--dy)) rotate(var(--a))}85%,100%{transform:none}}
+@keyframes flip{0%,15%{transform:scaleY(1)}50%,70%{transform:scaleY(-1)}100%{transform:scaleY(1)}}
+@keyframes plunge{0%,45%{transform:translate(0,0)}80%,100%{transform:translate(var(--p),0)}}
+@keyframes drain{0%,45%{transform:scaleX(1)}80%,100%{transform:scaleX(.2)}}
+@keyframes flow{0%{stroke-dashoffset:0}100%{stroke-dashoffset:-96}}
+@keyframes buzz{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@keyframes travel{0%,8%{transform:translate(0,0)}92%,100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes in1{0%,18%{opacity:0}26%,100%{opacity:1}}
+@keyframes in2{0%,42%{opacity:0}50%,100%{opacity:1}}
+@keyframes in3{0%,66%{opacity:0}74%,100%{opacity:1}}
+@keyframes out1{0%,22%{opacity:1}30%,100%{opacity:0}}
+@keyframes out2{0%,46%{opacity:1}54%,100%{opacity:0}}
+@keyframes out3{0%,70%{opacity:1}78%,100%{opacity:0}}
+@keyframes squeeze{0%,100%{transform:scale(1)}50%{transform:scale(.8)}}
+@keyframes pendulum{0%,100%{transform:rotate(calc(var(--a)*-1))}50%{transform:rotate(var(--a))}}
+@keyframes tighten{0%,15%{transform:scale(1,1)}55%,70%{transform:scale(.93,1)}100%{transform:scale(1,1)}}
+@keyframes fade3{0%,66%{opacity:.75}80%,100%{opacity:.25}}
+@keyframes hi2{0%{opacity:0}6%,44%{opacity:1}50%,100%{opacity:0}}
+@keyframes hi3{0%{opacity:0}4%,29%{opacity:1}33.3%,100%{opacity:0}}
+@keyframes hi4{0%{opacity:0}3%,22%{opacity:1}25%,100%{opacity:0}}
+@keyframes focus2{0%,44%{opacity:1}50%,94%{opacity:.35}100%{opacity:1}}
+@keyframes focus3{0%,29%{opacity:1}33.3%,96%{opacity:.35}100%{opacity:1}}
+@keyframes focus4{0%,22%{opacity:1}25%,97%{opacity:.35}100%{opacity:1}}
+@media (prefers-reduced-motion:reduce),print{.a{animation:none!important}}
+</style>
 <rect x="60" y="120" width="1080" height="90" rx="12" fill="#d7dde8" stroke="#1c2a4a" stroke-width="3" />
 <text x="600" y="176" font-size="30" text-anchor="middle" font-weight="700" fill="#1c2a4a" >Quantas doses de vacina antitetânica na vida? Última quando?</text>
-<path d="M230 215 L230 260" fill="none" stroke="#1c2a4a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ahn)"/>
+<g class="a hi3" style="animation-delay:-6s"><rect x="52" y="252" width="356" height="396" rx="14" fill="none" stroke="#8a6d3b" stroke-width="5" opacity="0"/></g>
+<g class="a nudge" style="--dx:0px;--dy:11.3px;animation-duration:1.6s"><path d="M230 215 L230 260" fill="none" stroke="#1c2a4a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ahn)"/></g>
 <rect x="60" y="260" width="340" height="110" rx="12" fill="#ffffff" stroke="#1c2a4a" stroke-width="3" />
 <text x="80" y="302" font-size="26" text-anchor="start" font-weight="500" fill="#6b7280" >3 doses ou mais</text>
 <text x="80" y="334" font-size="26" text-anchor="start" font-weight="500" fill="#6b7280" >última &lt; 5 anos</text>
-<path d="M230 372 L230 410" fill="none" stroke="#1c2a4a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ahn)"/>
+<g class="a nudge" style="--dx:0px;--dy:9.5px;animation-duration:1.6s"><path d="M230 372 L230 410" fill="none" stroke="#1c2a4a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ahn)"/></g>
 <rect x="60" y="410" width="340" height="230" rx="12" fill="#2f6b4f" stroke="#2f6b4f" stroke-width="3" />
 <text x="230" y="470" font-size="44" text-anchor="middle" font-weight="800" fill="#ffffff" >NADA</text>
 <text x="230" y="520" font-size="24" text-anchor="middle" font-weight="500" fill="#ffffff" >nem vacina, nem soro</text>
-<path d="M600 215 L600 260" fill="none" stroke="#1c2a4a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ahn)"/>
+<g class="a hi3" style="animation-delay:-4s"><rect x="422" y="252" width="356" height="396" rx="14" fill="none" stroke="#8a6d3b" stroke-width="5" opacity="0"/></g>
+<g class="a nudge" style="--dx:0px;--dy:11.3px;animation-duration:1.6s"><path d="M600 215 L600 260" fill="none" stroke="#1c2a4a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ahn)"/></g>
 <rect x="430" y="260" width="340" height="110" rx="12" fill="#ffffff" stroke="#1c2a4a" stroke-width="3" />
 <text x="450" y="302" font-size="26" text-anchor="start" font-weight="500" fill="#6b7280" >3 doses ou mais</text>
 <text x="450" y="334" font-size="26" text-anchor="start" font-weight="500" fill="#6b7280" >última há 5 anos ou mais</text>
-<path d="M600 372 L600 410" fill="none" stroke="#1c2a4a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ahn)"/>
+<g class="a nudge" style="--dx:0px;--dy:9.5px;animation-duration:1.6s"><path d="M600 372 L600 410" fill="none" stroke="#1c2a4a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ahn)"/></g>
 <rect x="430" y="410" width="340" height="230" rx="12" fill="#8a6d3b" stroke="#8a6d3b" stroke-width="3" />
 <text x="600" y="470" font-size="44" text-anchor="middle" font-weight="800" fill="#ffffff" >dT</text>
 <text x="600" y="520" font-size="24" text-anchor="middle" font-weight="500" fill="#ffffff" >1 dose de reforço agora</text>
-<path d="M970 215 L970 260" fill="none" stroke="#1c2a4a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ahn)"/>
+<g class="a hi3" style="animation-delay:-2s"><rect x="792" y="252" width="356" height="396" rx="14" fill="none" stroke="#8a6d3b" stroke-width="5" opacity="0"/></g>
+<g class="a nudge" style="--dx:0px;--dy:11.3px;animation-duration:1.6s"><path d="M970 215 L970 260" fill="none" stroke="#1c2a4a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ahn)"/></g>
 <rect x="800" y="260" width="340" height="110" rx="12" fill="#ffffff" stroke="#1c2a4a" stroke-width="3" />
 <text x="820" y="302" font-size="26" text-anchor="start" font-weight="500" fill="#6b7280" >menos de 3 doses,</text>
 <text x="820" y="334" font-size="26" text-anchor="start" font-weight="500" fill="#6b7280" >não sabe ou nenhuma</text>
-<path d="M970 372 L970 410" fill="none" stroke="#1c2a4a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ahn)"/>
+<g class="a nudge" style="--dx:0px;--dy:9.5px;animation-duration:1.6s"><path d="M970 372 L970 410" fill="none" stroke="#1c2a4a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ahn)"/></g>
 <rect x="800" y="410" width="340" height="230" rx="12" fill="#b3261e" stroke="#b3261e" stroke-width="3" />
 <text x="970" y="470" font-size="44" text-anchor="middle" font-weight="800" fill="#ffffff" >dT + IGHAT</text>
 <text x="970" y="520" font-size="24" text-anchor="middle" font-weight="500" fill="#ffffff" >vacina agora (completar</text>,<text x="970" y="552" font-size="24" text-anchor="middle" font-weight="500" fill="#ffffff" >o esquema) + imunoglobulina</text>,<text x="970" y="584" font-size="24" text-anchor="middle" font-weight="500" fill="#ffffff" >250 UI IM em outro local</text>

@@ -1,6 +1,6 @@
 // Sprites 1–13: bases do primeiro dia (raio-X, talas, gesso, bloqueios, sedação, punções) e tétano.
 import * as L from "./lib.mjs";
-const { C, svg, g, path, circle, rect, line, dot, text, label, title, caption, step, panel, arrow, arc, limb, limbPoly, chain, bone, fracture, hand, foot, head, person, plaster, cotton, bandage, syringe, needle, film, xbone, target, bed, check, bullets } = L;
+const { C, svg, g, path, circle, rect, line, dot, text, label, title, caption, step, panel, arrow, arc, limb, limbPoly, chain, bone, fracture, hand, foot, head, person, plaster, cotton, bandage, syringe, needle, film, xbone, target, bed, check, bullets, anim, pivot, along, spotlight } = L;
 
 export const PART1 = [
   // 1. Leitura do raio-X de trauma em 60 segundos
@@ -13,13 +13,13 @@ export const PART1 = [
     ...[[205, 290], [250, 285], [295, 292], [335, 300]].map(([x, y]) => circle(x, y, 22, { fill: "#d7dbe3", stroke: "#2a3140", sw: 2 })),
     ...[[175, 250, 160, 140], [225, 240, 215, 120], [270, 240, 265, 115], [315, 250, 320, 125], [350, 265, 375, 160]].map(([x1, y1, x2, y2]) => xbone(x1, y1, x2, y2, 20)),
     // fratura (degrau cortical) marcada
-    path("M198 420 L236 404 L232 386", { stroke: C.alarm, sw: 5 }), circle(220, 405, 46, { fill: "none", stroke: C.accent, sw: 5, extra: 'stroke-dasharray="12 10"' }),
+    path("M198 420 L236 404 L232 386", { stroke: C.alarm, sw: 5 }), pivot(220, 405, "pulse", { dur: 2.5 }, circle(220, 405, 46, { fill: "none", stroke: C.accent, sw: 5, extra: 'stroke-dasharray="12 10"' })),
     rect(62, 702, 436, 56, { fill: C.film, stroke: "none" }), text(80, 150, "AP", { size: 28, color: "#cfd6e3", weight: 700 }), text(80, 740, "duas incidências, sempre", { size: 24, color: "#cfd6e3" }),
     // lista ABCS
-    step("A", 560, 160), text(610, 172, "Alinhamento", { size: 34, weight: 700 }), caption(610, 212, "eixo do osso e das articulações; luxação?"),
-    step("B", 560, 290), text(610, 302, "Bone — o osso", { size: 34, weight: 700 }), caption(610, 342, "siga a cortical com o olho: degrau,\ninterrupção, zona escura = fratura"),
-    step("C", 560, 450), text(610, 462, "Cartilagem — a articulação", { size: 34, weight: 700 }), caption(610, 502, "espaço articular simétrico? superfície\narticular contínua? (Salter-Harris na criança)"),
-    step("S", 560, 610), text(610, 622, "Soft tissue — partes moles", { size: 34, weight: 700 }), caption(610, 662, "edema, derrame (coxim gorduroso no cotovelo),\nar, corpo estranho"),
+    anim("focus4", { delay: 0 }, step("A", 560, 160), text(610, 172, "Alinhamento", { size: 34, weight: 700 }), caption(610, 212, "eixo do osso e das articulações; luxação?")),
+    anim("focus4", { delay: 1 / 4 }, step("B", 560, 290), text(610, 302, "Bone — o osso", { size: 34, weight: 700 }), caption(610, 342, "siga a cortical com o olho: degrau,\ninterrupção, zona escura = fratura")),
+    anim("focus4", { delay: 2 / 4 }, step("C", 560, 450), text(610, 462, "Cartilagem — a articulação", { size: 34, weight: 700 }), caption(610, 502, "espaço articular simétrico? superfície\narticular contínua? (Salter-Harris na criança)")),
+    anim("focus4", { delay: 3 / 4 }, step("S", 560, 610), text(610, 622, "Soft tissue — partes moles", { size: 34, weight: 700 }), caption(610, 662, "edema, derrame (coxim gorduroso no cotovelo),\nar, corpo estranho")),
     arrow(545, 405, 480, 405), text(1150, 760, "compare com o lado oposto na criança", { size: 24, color: C.muted, anchor: "end" }),
   ], { title: "Leitura do raio-X de trauma" }) },
 
@@ -28,19 +28,19 @@ export const PART1 = [
     title("Tala gessada: a técnica"),
     panel(40, 90, 560, 680, "Antebraquiopalmar"),
     // antebraço + mão, vista lateral; tala volar
-    cotton("M100 478 L420 478 Q470 478 520 472 L520 504 Q470 512 420 510 L100 510 Z"),
-    plaster("M110 504 L420 504 Q470 504 525 496 L525 534 Q470 542 420 540 L110 540 Z"),
+    anim("in1", {}, cotton("M100 478 L420 478 Q470 478 520 472 L520 504 Q470 512 420 510 L100 510 Z")),
+    anim("in2", {}, plaster("M110 504 L420 504 Q470 504 525 496 L525 534 Q470 542 420 540 L110 540 Z")),
     limb(110, 420, 420, 420, 110), hand(510, 420, 0, 1.15, { flex: 0.35 }),
-    bandage(120, 420, 440, 420, 130, 8),
+    anim("in3", {}, bandage(120, 420, 440, 420, 130, 8)),
     label(70, 620, "malha → algodão → 10–12 camadas\n→ moldar com a palma → atadura", { size: 25 }),
     label(70, 700, "punho 20° extensão · MF livres", { size: 25, to: [470, 456] }),
     arrow(300, 330, 300, 365), text(300, 315, "moldar com a palma, não com os dedos", { size: 23, anchor: "middle", color: C.muted }),
     panel(620, 90, 540, 680, "Suropodálica"),
     // perna + pé (dedos para a direita): a tala fica atrás (esquerda) e sob a planta
-    cotton("M820 240 L842 240 L842 590 Q842 610 870 614 L1060 622 L1060 648 L860 640 Q816 634 816 590 Z"),
-    plaster("M786 240 L818 240 L818 592 Q818 638 866 644 L1066 652 L1066 690 L856 680 Q786 672 786 596 Z"),
+    anim("in1", {}, cotton("M820 240 L842 240 L842 590 Q842 610 870 614 L1060 622 L1060 648 L860 640 Q816 634 816 590 Z")),
+    anim("in2", {}, plaster("M786 240 L818 240 L818 592 Q818 638 866 644 L1066 652 L1066 690 L856 680 Q786 672 786 596 Z")),
     limb(900, 240, 900, 540, 120), foot(900, 580, 0, 1.15),
-    bandage(900, 270, 900, 530, 140, 7),
+    anim("in3", {}, bandage(900, 270, 900, 530, 140, 7)),
     label(650, 700, "tornozelo a 90°, joelho livre · 12–15 camadas,\nda ponta do pé a 2 dedos abaixo do joelho", { size: 23 }),
     arc(1000, 520, 1010, 580, 960, 600, { sw: 5 }), text(1020, 520, "90°", { size: 26, color: C.accent, weight: 700 }),
   ], { title: "Tala gessada" }) },
@@ -58,7 +58,7 @@ export const PART1 = [
     // bivalve: linhas de corte
     panel(760, 100, 400, 330, "Feito no dia? Bivalvar"),
     limb(800, 280, 1100, 280, 100), plaster("M810 225 L1100 225 L1100 335 L810 335 Z"),
-    line(800, 280, 1110, 280, { stroke: C.alarm, sw: 4, dash: "14 10" }), line(800, 225, 800, 335, { stroke: C.alarm, sw: 4, dash: "14 10" }),
+    anim("flow", { dur: 1.5 }, line(800, 280, 1110, 280, { stroke: C.alarm, sw: 4, dash: "14 10" }), line(800, 225, 800, 335, { stroke: C.alarm, sw: 4, dash: "14 10" })),
     caption(790, 400, "cortar dos dois lados e abrir\no algodão até a pele", 24),
   ], { title: "Gesso circular" }) },
 
@@ -69,7 +69,7 @@ export const PART1 = [
     limb(120, 460, 600, 460, 150), hand(700, 460, 0, 1.45, { flex: 0.15 }),
     bone(160, 440, 560, 440, 44), bone(170, 500, 560, 500, 30), fracture(160, 440, 560, 440, 0.86, 44),
     path("M486 400 L530 400 L520 470 L492 470 Z", { fill: C.blood, stroke: "none", opacity: 0.35 }),
-    syringe(506, 428, 70, { len: 120, barrel: 150, fillLiquid: C.blood }),
+    syringe(506, 428, 70, { len: 120, barrel: 150, fillLiquid: C.blood, aspirate: true }),
     label(80, 700, "1. palpar o degrau no dorso (foco da fratura)\n2. assepsia; agulha 22–25G perpendicular, sentir entrar no foco\n3. aspirar sangue escuro = está no hematoma\n4. injetar lidocaína 1–2% sem vasoconstritor, 5–10 mL; esperar 5–10 min", { size: 25 }),
     label(820, 150, "sangue do hematoma\nna seringa confirma", { size: 26, to: [548, 300] }),
     text(1150, 600, "não usar se a pele sobre o foco", { size: 24, anchor: "end", color: C.alarm }), text(1150, 630, "estiver ferida (exposta) ou infectada", { size: 24, anchor: "end", color: C.alarm }),
@@ -95,7 +95,7 @@ export const PART1 = [
     // pelve de frente: EIAS esquerda/direita, tubérculo púbico, linha
     path("M120 240 Q180 160 300 200 Q360 230 420 200 Q540 160 600 240 Q560 330 480 360 Q420 420 360 520 Q300 420 240 360 Q160 330 120 240 Z", { fill: C.bone }),
     dot(150, 250, 11, C.line), dot(360, 440, 11, C.line), text(90, 230, "EIAS", { size: 26, weight: 700 }), text(380, 470, "tubérculo púbico", { size: 26, weight: 700 }),
-    line(150, 250, 360, 440, { stroke: C.accent, sw: 4, dash: "10 8" }), dot(220, 313, 8), dot(290, 377, 8),
+    anim("flow", { dur: 2 }, line(150, 250, 360, 440, { stroke: C.accent, sw: 4, dash: "10 8" })), dot(220, 313, 8), dot(290, 377, 8),
     text(205, 300, "⅓", { size: 24, anchor: "end", color: C.accent }), text(240, 345, "⅓", { size: 24, color: C.accent }),
     target(232, 346, 16), arrow(232, 346, 232, 362, { sw: 1 }),
     label(80, 600, "1 cm abaixo da junção do terço lateral\ncom o terço médio da linha EIAS → púbis", { size: 25, to: [232, 346] }),
@@ -105,7 +105,7 @@ export const PART1 = [
     line(720, 440, 1130, 440, { sw: 6 }), rect(720, 440, 410, 60, { fill: "#e4b0a0", stroke: C.line, sw: 3 }), line(720, 500, 1130, 500, { sw: 6 }), rect(720, 500, 410, 120, { fill: "#d9a090", stroke: C.line, sw: 3 }),
     text(735, 368, "pele e subcutâneo", { size: 22 }), text(735, 423, "tecido gorduroso", { size: 22 }), text(735, 478, "sartório / TFL", { size: 22 }), text(735, 560, "iliopsoas — o anestésico\nse espalha por cima dele", { size: 22 }),
     text(1120, 432, "fáscia lata · pop 1", { size: 22, anchor: "end", weight: 700, color: C.accent }), text(1120, 492, "fáscia ilíaca · pop 2", { size: 22, anchor: "end", weight: 700, color: C.accent }),
-    syringe(930, 505, 90, { len: 200, barrel: 110 }), path("M870 505 Q930 540 990 505", { fill: C.accent2, stroke: C.accent, sw: 3, opacity: 0.8 }),
+    anim("enter2", { dx: "0px", dy: "-60px" }, syringe(930, 505, 90, { len: 200, barrel: 110, depth: 0 })), anim("in3", {}, path("M870 505 Q930 540 990 505", { fill: C.accent2, stroke: C.accent, sw: 3, opacity: 0.8 })),
     caption(720, 668, "agulha romba, perpendicular;\n30–40 mL (ropivacaína 0,375% ou\nlidocaína 1%, dose por kg); 15–20 min", 23),
   ], { title: "Bloqueio da fáscia ilíaca" }) },
 
@@ -115,12 +115,12 @@ export const PART1 = [
     bed(120, 520, 760, 40),
     person({ head: [220, 470], neck: [280, 490], hip: [620, 490], hipL: [620, 490], kneeL: [760, 470], ankleL: [860, 500], shoulderL: [300, 490], elbowL: [420, 470], handL: [520, 500] }),
     // monitor
-    rect(900, 140, 260, 200, { fill: C.film, sw: 4, rx: 10 }), path("M920 250 L960 250 L975 200 L990 300 L1005 250 L1060 250 L1075 215 L1090 285 L1100 250 L1140 250", { stroke: "#7ee0a0", sw: 3 }),
+    rect(900, 140, 260, 200, { fill: C.film, sw: 4, rx: 10 }), anim("draw", { dur: 3 }, path("M920 250 L960 250 L975 200 L990 300 L1005 250 L1060 250 L1075 215 L1090 285 L1100 250 L1140 250", { stroke: "#7ee0a0", sw: 3, extra: 'pathLength="1" stroke-dasharray="1"' })),
     text(920, 180, "SpO₂ 98   FC 72", { size: 22, color: "#cfd6e3" }), text(920, 320, "PA 128/80   EtCO₂ 38", { size: 22, color: "#cfd6e3" }),
     line(900, 340, 760, 470, { stroke: C.metal, sw: 3 }), circle(770, 470, 10, { fill: C.metal }),
     // segunda pessoa com bolsa-válvula-máscara na cabeceira
     person({ head: [80, 300], neck: [80, 345], hip: [80, 480], shoulderL: [95, 350], elbowL: [150, 400], handL: [190, 440] }, { cloth: C.cloth2 }),
-    circle(200, 445, 34, { fill: C.cloth, sw: 4 }), path("M232 445 Q260 420 270 455 Q262 480 232 468 Z", { fill: C.metal }),
+    pivot(200, 445, "squeeze", { dur: 3 }, circle(200, 445, 34, { fill: C.cloth, sw: 4 })), path("M232 445 Q260 420 270 455 Q262 480 232 468 Z", { fill: C.metal }),
     line(80, 480, 80, 560, { sw: 8 }),
     bullets(120, 630, ["jejum e via aérea avaliados · consentimento", "oxigênio, aspirador, bolsa-válvula-máscara, cânulas", "monitor contínuo (SpO₂, FC, PA, capnografia se houver)", "quem reduz não é quem seda: segunda pessoa só na via aérea"], { size: 24, gap: 36 }),
   ], { title: "Sedação para redução" }) },
@@ -192,10 +192,10 @@ export const PART1 = [
     // quadril e coxa de lado (paciente deitado sobre o outro lado, dor para cima)
     path("M90 620 Q120 380 300 360 L560 380 Q640 400 640 500 L640 640 L90 640 Z", { fill: C.cloth }),
     path("M180 400 Q220 330 320 330 L560 345 Q600 370 600 420 Q600 470 560 480 L320 470 Q220 470 180 400 Z", { fill: C.skin }),
-    circle(400, 400, 44, { fill: C.bone, sw: 4 }), circle(400, 400, 60, { fill: "none", stroke: C.accent, sw: 4, extra: 'stroke-dasharray="12 10"' }),
+    circle(400, 400, 44, { fill: C.bone, sw: 4 }), pivot(400, 400, "pulse", { dur: 2.5 }, circle(400, 400, 60, { fill: "none", stroke: C.accent, sw: 4, extra: 'stroke-dasharray="12 10"' })),
     label(120, 560, "trocânter maior: o ponto\nmais doloroso à palpação", { size: 22, to: [372, 420] }),
     target(400, 360, 12), syringe(400, 360, 90, { len: 120, barrel: 130 }),
-    path("M400 360 L372 300 M400 360 L400 290 M400 360 L428 300", { stroke: C.accent, sw: 3, dash: "8 6" }),
+    anim("in3", {}, path("M400 360 L372 300 M400 360 L400 290 M400 360 L428 300", { stroke: C.accent, sw: 3, dash: "8 6" })),
     text(470, 300, "em leque", { size: 22, color: C.accent, weight: 700 }),
     bullets(720, 160, ["deitado de lado, dor para cima,\n   joelhos fletidos", "palpar o ponto mais doloroso\n   sobre o trocânter", "agulha 21G perpendicular até\n   tocar o osso; recuar 2 mm", "40 mg triancinolona + 4–6 mL\n   lidocaína, em leque"], { size: 24, gap: 44 }),
     caption(720, 560, "dor pode piorar 2–3 dias (corticoide);\nmelhora em 1 semana.\nNão repetir antes de 3 meses.", 22),
@@ -208,7 +208,7 @@ export const PART1 = [
     // três colunas
     ...[["3 doses ou mais\núltima < 5 anos", "NADA", "nem vacina, nem soro", "#2f6b4f"], ["3 doses ou mais\núltima há 5 anos ou mais", "dT", "1 dose de reforço agora", C.accent], ["menos de 3 doses,\nnão sabe ou nenhuma", "dT + IGHAT", "vacina agora (completar\no esquema) + imunoglobulina\n250 UI IM em outro local", C.alarm]].map(([q, a, d, color], i) => {
       const x = 60 + i * 370;
-      return [arrow(x + 170, 215, x + 170, 260, { color: C.line, marker: "ahn", sw: 4 }), rect(x, 260, 340, 110, { fill: C.paper, sw: 3, rx: 12 }), caption(x + 20, 302, q, 26),
+      return [spotlight(x - 8, 252, 356, 396, i, 3), arrow(x + 170, 215, x + 170, 260, { color: C.line, marker: "ahn", sw: 4 }), rect(x, 260, 340, 110, { fill: C.paper, sw: 3, rx: 12 }), caption(x + 20, 302, q, 26),
         arrow(x + 170, 372, x + 170, 410, { color: C.line, marker: "ahn", sw: 4 }), rect(x, 410, 340, 230, { fill: color, stroke: color, sw: 3, rx: 12 }), text(x + 170, 470, a, { size: 44, anchor: "middle", weight: 800, color: C.paper }),
         String(d).split("\n").map((l, k) => text(x + 170, 520 + k * 32, l, { size: 24, anchor: "middle", color: C.paper }))].join("\n");
     }),

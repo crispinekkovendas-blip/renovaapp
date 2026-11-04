@@ -25,10 +25,14 @@ export const ORTHO_CREDIT = {
  * ordem do procedimento no tópico, a partir de 1. SVG para o site e o PDF,
  * PNG (1600 × 1067) para o app Android.
  */
-/** Versão dos PNG: entra no nome do arquivo para o app Android trocar a cópia local quando o desenho muda. */
-export const SPRITES_VERSION = 2;
-export function procedureImage(slug: string, k: number): { svg: string; png: string } {
-  return { svg: `/ortho/procedures/${slug}-${k}.svg`, png: `/ortho/procedures/png/${slug}-${k}.v${SPRITES_VERSION}.png` };
+/**
+ * Versão das ilustrações: vai no pacote do app (`ortopedia.spritesVersion`); quando muda, o Android apaga a
+ * cópia local e baixa os SVG de novo. Subir a cada mudança nos desenhos.
+ */
+export const SPRITES_VERSION = 3;
+/** A ilustração animada (SVG com CSS) do procedimento k (1…) do tópico: no site, no app e, parada, no PDF. */
+export function procedureImage(slug: string, k: number): { svg: string } {
+  return { svg: `/ortho/procedures/${slug}-${k}.svg` };
 }
 
 /** O que o índice mostra de cada tópico (vai ao navegador: sem o corpo). */

@@ -5,8 +5,6 @@ import { writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { spawn } from "node:child_process";
-import { tmpdir } from "node:os";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, "../../..");
@@ -25,20 +23,6 @@ for (const s of parts) {
   sheet.push({ ...p, file });
 }
 console.log(`${sheet.length} sprites em ${out}`);
-// --png: rasteriza cada SVG em public/ortho/procedures/png/<nome>.v<versão>.png (1600 × 1067) para o app Android,
-// com o Chrome headless (6 de cada vez). Precisa do Chrome instalado na máquina.
-if (process.argv.includes("--png")) {
-  const chrome = process.env.CHROME ?? "C:/Program Files/Google/Chrome/Application/chrome.exe";
-  const pngDir = resolve(out, "png"); mkdirSync(pngDir, { recursive: true });
-  const run = (s) => new Promise((res) => {
-    const prof = resolve(tmpdir(), `renova-sprite-${s.n}`);
-    const c = spawn(chrome, ["--headless=new", "--disable-gpu", "--no-first-run", `--user-data-dir=${prof}`, "--window-size=1600,1067", "--hide-scrollbars",
-      `--screenshot=${resolve(pngDir, s.file.replace(/\.svg$/, `.v${guide.SPRITES_VERSION}.png`))}`, pathToFileURL(resolve(out, s.file)).href], { stdio: "ignore" });
-    c.on("exit", res);
-  });
-  for (let i = 0; i < sheet.length; i += 6) await Promise.all(sheet.slice(i, i + 6).map(run));
-  console.log(`${sheet.length} PNG em ${pngDir}`);
-}
 const sheetDir = process.argv.slice(2).find((a) => !a.startsWith("--"));
 if (sheetDir) {
   const esc = (x) => String(x).replace(/&/g, "&amp;").replace(/</g, "&lt;");

@@ -56,12 +56,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import android.graphics.BitmapFactory
-import androidx.compose.foundation.Image
+import android.view.View
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import br.com.renova.guia.RenovaGuiaApp
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
@@ -465,34 +465,59 @@ fun OrthoTopicBody(topic: OrthoTopic) {
 /** Um procedimento: quando, material, passos numerados e o depois. */
 @Composable
 fun ProcedureCard(p: br.com.renova.guia.data.OrthoProcedure) {
-    // A ilustração própria do procedimento: o repositório baixa o PNG uma vez e guarda no aparelho;
-    // a figura aparece assim que chega (spritesVersion) e abre sem internet depois.
+    // A ilustração animada do procedimento (SVG com CSS): o repositório baixa uma vez e guarda no aparelho;
+    // a figura aparece assim que chega (spritesVersion) e abre sem internet depois, num WebView sem JavaScript
+    // e sem rede, que só desenha o arquivo local.
     val context = LocalContext.current
     val guide = (context.applicationContext as? RenovaGuiaApp)?.container?.guide
     val spritesVersion = guide?.spritesVersion?.collectAsState()?.value ?: 0
-    val sprite by produceState<ImageBitmap?>(null, p.image, spritesVersion) {
+    val sprite by produceState<String?>(null, p.image, spritesVersion) {
         value = withContext(Dispatchers.IO) {
             val file = p.image?.let { guide?.spriteFile(it) }
-            if (file != null && file.exists()) runCatching { BitmapFactory.decodeFile(file.path)?.asImageBitmap() }.getOrNull() else null
+            if (file != null && file.exists()) runCatching { file.readText() }.getOrNull() else null
         }
     }
     Column(
         Modifier.padding(top = 8.dp).fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.surfaceContainerLow).padding(10.dp),
     ) {
         Text(p.name, fontWeight = FontWeight.ExtraBold, style = MaterialTheme.typography.bodyMedium)
-        sprite?.let {
-            Image(
-                bitmap = it,
-                contentDescription = "Ilustração: ${p.name}",
-                modifier = Modifier.padding(top = 6.dp).fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Color.White),
-                contentScale = ContentScale.FillWidth,
-            )
-        }
+        sprite?.let { svg -> SpriteView(svg, Modifier.padding(top = 6.dp).fillMaxWidth().aspectRatio(1200f / 800f).clip(RoundedCornerShape(10.dp)).background(Color.White)) }
         Text("Quando: ${p.whenTo}", style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 4.dp))
         Text("Material: ${p.needs}", style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 2.dp))
         p.steps.forEachIndexed { i, s -> Text("${i + 1}. $s", style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 4.dp, start = 4.dp)) }
         Text("Depois: ${p.after}", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 6.dp))
     }
+}
+
+/** O SVG animado dentro de um WebView parado: sem JavaScript, sem rede, sem rolagem; o toque vai para a lista. */
+@Composable
+private fun SpriteView(svg: String, modifier: Modifier) {
+    val page = "<!doctype html><html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">" +
+        "<style>html,body{margin:0;padding:0;background:#fff;overflow:hidden}svg{width:100%;height:auto;display:block}</style></head><body>" + svg + "</body></html>"
+    AndroidView(
+        factory = { ctx ->
+            WebView(ctx).apply {
+                settings.javaScriptEnabled = false
+                settings.allowFileAccess = false
+                settings.allowContentAccess = false
+                settings.loadWithOverviewMode = true
+                settings.useWideViewPort = true
+                isVerticalScrollBarEnabled = false
+                isHorizontalScrollBarEnabled = false
+                overScrollMode = View.OVER_SCROLL_NEVER
+                setBackgroundColor(android.graphics.Color.WHITE)
+                webViewClient = WebViewClient()
+                setOnTouchListener { v, _ -> v.parent?.requestDisallowInterceptTouchEvent(false); true }
+            }
+        },
+        update = { view ->
+            if (view.tag != page) {
+                view.tag = page
+                view.loadDataWithBaseURL(null, page, "text/html", "utf-8", null)
+            }
+        },
+        modifier = modifier,
+    )
 }
 
 @Composable

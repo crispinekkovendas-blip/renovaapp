@@ -29,6 +29,67 @@ export const C = {
 };
 export const W = 1200, H = 800;
 export const SW = 5; // largura do traço padrão
+/** Duração do ciclo da animação (s). Cada passo do procedimento ocupa uma fatia dele. */
+export const D = 6;
+const CSS = `<style>
+/* Ciclo de ${D} s para todos os movimentos; cada passo do procedimento ocupa uma fatia dele.
+   Sem animação quando o leitor pede menos movimento e na impressão (o desenho parado é o procedimento completo). */
+.a{animation-duration:${D}s;animation-iteration-count:infinite;animation-timing-function:ease-in-out;animation-fill-mode:both}
+.lin{animation-timing-function:linear}
+.nudge{animation-name:nudge}
+.draw{animation-name:draw}
+.pulse{animation-name:pulse}
+.blink{animation-name:blink}
+.swing{animation-name:swing}
+.push{animation-name:push}
+.enter{animation-name:enter}
+.enter2{animation-name:enter2}
+.reduce{animation-name:reduce}
+.flip{animation-name:flip}
+.plunge{animation-name:plunge}
+.drain{animation-name:drain}
+.flow{animation-name:flow;animation-timing-function:linear}
+.buzz{animation-name:buzz;animation-duration:.25s;animation-timing-function:linear}
+.travel{animation-name:travel;animation-timing-function:linear}
+.in1{animation-name:in1}.in2{animation-name:in2}.in3{animation-name:in3}
+.out1{animation-name:out1}.out2{animation-name:out2}.out3{animation-name:out3}
+.fade3{animation-name:fade3}
+.squeeze{animation-name:squeeze}.pendulum{animation-name:pendulum}.tighten{animation-name:tighten}
+.hi2{animation-name:hi2}.hi3{animation-name:hi3}.hi4{animation-name:hi4}
+.focus2{animation-name:focus2}.focus3{animation-name:focus3}.focus4{animation-name:focus4}
+@keyframes nudge{0%,100%{transform:translate(0,0)}50%{transform:translate(var(--dx),var(--dy))}}
+@keyframes draw{0%,10%{stroke-dashoffset:1}45%,100%{stroke-dashoffset:0}}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.45}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes swing{0%,12%{transform:rotate(0)}55%,70%{transform:rotate(var(--a))}100%{transform:rotate(0)}}
+@keyframes push{0%,12%{transform:translate(0,0)}55%,70%{transform:translate(var(--dx),var(--dy))}100%{transform:translate(0,0)}}
+@keyframes enter{0%,8%{transform:translate(var(--dx),var(--dy))}38%,85%{transform:translate(0,0)}100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes enter2{0%,8%{transform:translate(var(--dx),var(--dy))}30%,42%{transform:translate(calc(var(--dx)*.45),calc(var(--dy)*.45))}60%,88%{transform:translate(0,0)}100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes reduce{0%,10%{transform:none}30%,40%{transform:translate(var(--dx),var(--dy))}55%,65%{transform:translate(var(--dx),var(--dy)) rotate(var(--a))}85%,100%{transform:none}}
+@keyframes flip{0%,15%{transform:scaleY(1)}50%,70%{transform:scaleY(-1)}100%{transform:scaleY(1)}}
+@keyframes plunge{0%,45%{transform:translate(0,0)}80%,100%{transform:translate(var(--p),0)}}
+@keyframes drain{0%,45%{transform:scaleX(1)}80%,100%{transform:scaleX(.2)}}
+@keyframes flow{0%{stroke-dashoffset:0}100%{stroke-dashoffset:-96}}
+@keyframes buzz{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@keyframes travel{0%,8%{transform:translate(0,0)}92%,100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes in1{0%,18%{opacity:0}26%,100%{opacity:1}}
+@keyframes in2{0%,42%{opacity:0}50%,100%{opacity:1}}
+@keyframes in3{0%,66%{opacity:0}74%,100%{opacity:1}}
+@keyframes out1{0%,22%{opacity:1}30%,100%{opacity:0}}
+@keyframes out2{0%,46%{opacity:1}54%,100%{opacity:0}}
+@keyframes out3{0%,70%{opacity:1}78%,100%{opacity:0}}
+@keyframes squeeze{0%,100%{transform:scale(1)}50%{transform:scale(.8)}}
+@keyframes pendulum{0%,100%{transform:rotate(calc(var(--a)*-1))}50%{transform:rotate(var(--a))}}
+@keyframes tighten{0%,15%{transform:scale(1,1)}55%,70%{transform:scale(.93,1)}100%{transform:scale(1,1)}}
+@keyframes fade3{0%,66%{opacity:.75}80%,100%{opacity:.25}}
+@keyframes hi2{0%{opacity:0}6%,44%{opacity:1}50%,100%{opacity:0}}
+@keyframes hi3{0%{opacity:0}4%,29%{opacity:1}33.3%,100%{opacity:0}}
+@keyframes hi4{0%{opacity:0}3%,22%{opacity:1}25%,100%{opacity:0}}
+@keyframes focus2{0%,44%{opacity:1}50%,94%{opacity:.35}100%{opacity:1}}
+@keyframes focus3{0%,29%{opacity:1}33.3%,96%{opacity:.35}100%{opacity:1}}
+@keyframes focus4{0%,22%{opacity:1}25%,97%{opacity:.35}100%{opacity:1}}
+@media (prefers-reduced-motion:reduce),print{.a{animation:none!important}}
+</style>`;
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const n = (v) => Math.round(v * 10) / 10;
@@ -45,12 +106,36 @@ ${title ? `<title>${esc(title)}</title>` : ""}
   <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="${C.line}" fill-opacity="0.12"/></pattern>
   <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="${C.line}" stroke-opacity="0.08" stroke-width="2"/></pattern>
 </defs>
+${CSS}
 ${(() => { const all = children.flat(Infinity).filter(Boolean); const tops = all.filter((c) => c.includes('data-top="1"')); return [...all.filter((c) => !tops.includes(c)), ...tops].join("\n"); })()}
 </svg>`;
 }
 
 // ---------- primitivas ----------
 export const g = (attrs, ...kids) => `<g ${attrs}>${kids.flat(Infinity).filter(Boolean).join("\n")}</g>`;
+
+// ---------- animação ----------
+/**
+ * Grupo animado: classe de keyframes (ver CSS) + variáveis (--dx, --dy, --a, --p) + atraso em fração do ciclo
+ * (negativo, para o primeiro ciclo já sair no ponto certo). Grupos com a mesma classe/variáveis andam juntos.
+ */
+export function anim(cls, vars = {}, ...kids) {
+  const { delay, dur, ...rest } = vars;
+  const style = [
+    ...Object.entries(rest).map(([k, v]) => `--${k}:${v}`),
+    delay != null ? `animation-delay:${n(-((1 - (delay % 1)) % 1 || 1) * D)}s` : "",
+    dur != null ? `animation-duration:${dur}s` : "",
+  ].filter(Boolean).join(";");
+  return `<g class="a ${cls}"${style ? ` style="${style}"` : ""}>${kids.flat(Infinity).filter(Boolean).join("\n")}</g>`;
+}
+/** Grupo animado em torno de um pivô (rotação, escala): translada ao pivô, anima, volta. */
+export const pivot = (px, py, cls, vars, ...kids) =>
+  g(`transform="translate(${n(px)} ${n(py)})"`, anim(cls, vars, g(`transform="translate(${n(-px)} ${n(-py)})"`, ...kids)));
+/** Vetor unitário × k de (x1,y1)→(x2,y2), em px, para --dx/--dy. */
+export const along = (x1, y1, x2, y2, k) => { const l = Math.hypot(x2 - x1, y2 - y1) || 1; return { dx: `${n((x2 - x1) / l * k)}px`, dy: `${n((y2 - y1) / l * k)}px` }; };
+/** Moldura que acende o painel i de N, no tempo do passo i. */
+export const spotlight = (x, y, w, h, i, N) =>
+  anim(`hi${N}`, { delay: i / N }, rect(x, y, w, h, { fill: "none", stroke: C.accent, sw: 5, rx: 14, extra: 'opacity="0"' }));
 export const path = (d, { fill = "none", stroke = C.line, sw = SW, dash, cap = "round", join = "round", opacity, extra = "" } = {}) =>
   `<path d="${d}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" stroke-linecap="${cap}" stroke-linejoin="${join}"${dash ? ` stroke-dasharray="${dash}"` : ""}${opacity != null ? ` opacity="${opacity}"` : ""} ${extra}/>`;
 export const circle = (x, y, r, { fill = C.paper, stroke = C.line, sw = SW, extra = "" } = {}) => `<circle cx="${n(x)}" cy="${n(y)}" r="${n(r)}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" ${extra}/>`;
@@ -88,9 +173,15 @@ export function panel(x, y, w, h, ttl) {
 }
 
 /** Seta reta (bronze). */
-export const arrow = (x1, y1, x2, y2, { color = C.accent, sw = 7, marker = "ah" } = {}) => path(`M${n(x1)} ${n(y1)} L${n(x2)} ${n(y2)}`, { stroke: color, sw, extra: `marker-end="url(#${marker})"` });
-/** Seta curva por um ponto de controle. */
-export const arc = (x1, y1, cx, cy, x2, y2, { color = C.accent, sw = 7, marker = "ah", dash } = {}) => path(`M${n(x1)} ${n(y1)} Q${n(cx)} ${n(cy)} ${n(x2)} ${n(y2)}`, { stroke: color, sw, dash, extra: `marker-end="url(#${marker})"` });
+export const arrow = (x1, y1, x2, y2, { color = C.accent, sw = 7, marker = "ah", still = false } = {}) => {
+  const p = path(`M${n(x1)} ${n(y1)} L${n(x2)} ${n(y2)}`, { stroke: color, sw, extra: `marker-end="url(#${marker})"` });
+  return still ? p : anim("nudge", { ...along(x1, y1, x2, y2, Math.min(14, Math.hypot(x2 - x1, y2 - y1) * 0.25)), dur: 1.6 }, p);
+};
+/** Seta curva por um ponto de controle: desenha-se ao longo do ciclo. */
+export const arc = (x1, y1, cx, cy, x2, y2, { color = C.accent, sw = 7, marker = "ah", dash, still = false } = {}) => {
+  const p = path(`M${n(x1)} ${n(y1)} Q${n(cx)} ${n(cy)} ${n(x2)} ${n(y2)}`, { stroke: color, sw, dash, extra: `marker-end="url(#${marker})"${still || dash ? "" : ' pathLength="1" stroke-dasharray="1"'}` });
+  return still || dash ? p : anim("draw", {}, p);
+};
 
 const polyD = (pts) => pts.map((p, i) => `${i ? "L" : "M"}${n(p[0])} ${n(p[1])}`).join(" ");
 /** Luz e sombra de um preenchimento (a luz vem de cima); null = sem volume. */
@@ -135,9 +226,9 @@ function shade(pts, w, [hi, lo]) {
  * sem o contorno de um segmento cortando o outro — e por fim luz e sombra.
  * segments: [{ pts: [[x,y],…], w, fill? }]
  */
-export function chain(segments, { stroke = C.line, sw = SW } = {}) {
+export function chain(segments, { stroke = C.line, sw = SW, anim: mv } = {}) {
   const segs = segments.map((s) => ({ fill: C.skin, ...s }));
-  const fills = segs.flatMap((s) => {
+  const fillOf = (s) => {
     const t = s.shade === false ? null : tones(s.fill);
     if (!t) return [path(polyD(s.pts), { stroke: s.fill, sw: s.w })];
     const out = [path(polyD(s.pts), { stroke: s.fill, sw: s.w })];
@@ -147,8 +238,15 @@ export function chain(segments, { stroke = C.line, sw = SW } = {}) {
       out.push(g.defs, path(`M${n(x1)} ${n(y1)} L${n(x2)} ${n(y2)}`, { stroke: g.url, sw: s.w }));
     }
     return out;
-  });
-  return [...segs.map((s) => path(polyD(s.pts), { stroke, sw: s.w + sw * 2 })), ...fills].join("\n");
+  };
+  const outline = (s) => path(polyD(s.pts), { stroke, sw: s.w + sw * 2 });
+  if (!mv) return [...segs.map(outline), ...segs.flatMap(fillOf)].join("\n");
+  // Trecho móvel (a partir do segmento `from`): contornos fixos, contornos móveis, preenchimentos fixos,
+  // preenchimentos móveis — parado, é a cadeia de sempre; em movimento, a articulação continua coberta.
+  const { from, cls, vars = {}, pivot: pv, extra = "" } = mv;
+  const fixed = segs.slice(0, from), moving = segs.slice(from), [px, py] = pv ?? moving[0].pts[0];
+  const wrap = (...kids) => pivot(px, py, cls, vars, ...kids);
+  return [...fixed.map(outline), wrap(moving.map(outline)), ...fixed.flatMap(fillOf), wrap(moving.flatMap(fillOf), extra)].join("\n");
 }
 /** Segmento de membro: cápsula com contorno e volume (pele por padrão). */
 export function limb(x1, y1, x2, y2, w, { fill = C.skin, stroke = C.line, sw = SW, shade: sh = true } = {}) {
@@ -181,7 +279,7 @@ export function fracture(x1, y1, x2, y2, t, w, { color = C.alarm } = {}) {
   const cx = x1 + (x2 - x1) * t, cy = y1 + (y2 - y1) * t, h = w * 0.42;
   const pts = []; const steps = 6;
   for (let i = 0; i <= steps; i++) { const s = -h + (2 * h * i) / steps; const z = (i % 2 ? 1 : -1) * w * 0.18; pts.push([cx + px * s + dx * z, cy + py * s + dy * z]); }
-  return path(pts.map((p, i) => `${i ? "L" : "M"}${n(p[0])} ${n(p[1])}`).join(" "), { stroke: color, sw: 5, join: "miter" });
+  return anim("blink", { dur: 2 }, path(pts.map((p, i) => `${i ? "L" : "M"}${n(p[0])} ${n(p[1])}`).join(" "), { stroke: color, sw: 5, join: "miter" }));
 }
 /** Mão simplificada (luva): palma + 4 dedos + polegar; angle = direção dos dedos em graus; scale ≈ 1. */
 export function hand(x, y, angle = 0, scale = 1, { fill = C.skin, flex = 0 } = {}) {
@@ -240,14 +338,22 @@ export function bandage(x1, y1, x2, y2, w, turns = 6, { color = C.line } = {}) {
   return out.join("\n");
 }
 /** Seringa com agulha: ponta em (x,y), ângulo = direção da agulha (para onde aponta). */
-export function syringe(x, y, angle, { len = 110, barrel = 130, fillLiquid = C.accent2, scale = 1 } = {}) {
-  return g(`transform="translate(${n(x)} ${n(y)}) rotate(${angle}) scale(${scale})"`,
+export function syringe(x, y, angle, { len = 110, barrel = 130, fillLiquid = C.accent2, scale = 1, depth = 40, still = false, aspirate = false } = {}) {
+  const liqX = -len - 14 - barrel + 6, liqW = barrel * 0.55;
+  // êmbolo e líquido: o êmbolo avança (--p) e o líquido encolhe a partir do lado do êmbolo (pivô na ponta do bico)
+  const plunger = [rect(-len - 14 - barrel - 36, -8, 36, 16, { fill: C.metal, sw: 2 }), rect(-len - 14 - barrel - 44, -26, 10, 52, { fill: C.metal, sw: 2 }), rect(-len - 14 - barrel - 6, -34, 8, 68, { fill: C.metal, sw: 2 })];
+  const liquid = rect(liqX, -16, liqW, 32, { fill: fillLiquid, stroke: "none" });
+  const body = [
     line(0, 0, -len, 0, { stroke: C.metal, sw: 4 }), line(0, 0, -len, 0, { stroke: C.line, sw: 1.5 }),
     rect(-len - 14, -10, 14, 20, { fill: C.metal, sw: 2 }),
     rect(-len - 14 - barrel, -22, barrel, 44, { fill: C.paper, sw: 3, rx: 4 }),
-    rect(-len - 14 - barrel + 6, -16, barrel * 0.55, 32, { fill: fillLiquid, stroke: "none" }),
-    rect(-len - 14 - barrel - 36, -8, 36, 16, { fill: C.metal, sw: 2 }), rect(-len - 14 - barrel - 44, -26, 10, 52, { fill: C.metal, sw: 2 }),
-    rect(-len - 14 - barrel - 6, -34, 8, 68, { fill: C.metal, sw: 2 }));
+    still || aspirate ? liquid : pivot(liqX + liqW, 0, "drain", {}, liquid),
+    still ? plunger : anim("plunge", { p: `${n(aspirate ? -liqW * 0.5 : liqW * 0.8)}px` }, plunger),
+  ];
+  const inner = g(`transform="translate(${n(x)} ${n(y)}) rotate(${angle}) scale(${scale})"`, body);
+  if (still || !depth) return inner;
+  const a = angle * Math.PI / 180;
+  return anim("enter", { dx: `${n(-Math.cos(a) * depth)}px`, dy: `${n(-Math.sin(a) * depth)}px` }, inner);
 }
 /** Agulha solta (sem seringa). */
 export const needle = (x, y, angle, len = 90) => g(`transform="translate(${n(x)} ${n(y)}) rotate(${angle})"`, line(0, 0, -len, 0, { stroke: C.metal, sw: 4 }), line(0, 0, -len, 0, { stroke: C.line, sw: 1.5 }), rect(-len - 16, -9, 16, 18, { fill: C.accent, sw: 2 }));
@@ -256,7 +362,7 @@ export const film = (x, y, w, h) => rect(x, y, w, h, { fill: C.film, stroke: C.l
 /** Osso em raio-X (claro sobre o filme). */
 export const xbone = (x1, y1, x2, y2, w) => bone(x1, y1, x2, y2, w, { fill: "#d7dbe3" });
 /** Marca de alvo (X) num ponto. */
-export const target = (x, y, r = 14, color = C.accent) => [circle(x, y, r, { fill: "none", stroke: color, sw: 4 }), line(x - r * 1.6, y, x + r * 1.6, y, { stroke: color, sw: 3 }), line(x, y - r * 1.6, x, y + r * 1.6, { stroke: color, sw: 3 })].join("\n");
+export const target = (x, y, r = 14, color = C.accent) => [pivot(x, y, "pulse", { dur: 2 }, circle(x, y, r, { fill: "none", stroke: color, sw: 4 })), line(x - r * 1.6, y, x + r * 1.6, y, { stroke: color, sw: 3 }), line(x, y - r * 1.6, x, y + r * 1.6, { stroke: color, sw: 3 })].join("\n");
 /** Cama / maca (lateral). */
 export const bed = (x, y, w, h = 36) => [rect(x, y, w, h, { fill: C.cloth2, sw: 4, rx: 8 }), line(x + 30, y + h, x + 30, y + h + 90, { sw: 8 }), line(x + w - 30, y + h, x + w - 30, y + h + 90, { sw: 8 })].join("\n");
 /** Ícone de ✓ ou ✗ */

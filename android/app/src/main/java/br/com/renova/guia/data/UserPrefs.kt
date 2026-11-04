@@ -54,6 +54,11 @@ class UserPrefs(context: Context) {
         get() = prefs.getInt(KEY_LAST_REVISION, 0)
         set(value) = prefs.edit().putInt(KEY_LAST_REVISION, value).apply()
 
+    /** Versão das ilustrações guardadas em filesDir/sprites (ortopedia.spritesVersion do pacote). */
+    var spritesVersion: Int
+        get() = prefs.getInt(KEY_SPRITES, 0)
+        set(value) = prefs.edit().putInt(KEY_SPRITES, value).apply()
+
     fun isFavorite(id: String) = id in _favorites.value
 
     fun toggleFavorite(id: String) {
@@ -125,6 +130,7 @@ class UserPrefs(context: Context) {
         const val KEY_SEARCHES = "searches"
         const val KEY_PICKS = "picks"
         const val KEY_LAST_REVISION = "last_revision"
+        const val KEY_SPRITES = "sprites_version"
         const val KEY_DARK = "dark_theme"
         const val KEY_AREA = "home_area"
         const val MAX_RECENTS = 12

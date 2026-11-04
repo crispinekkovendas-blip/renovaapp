@@ -8,6 +8,65 @@
   <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
   <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
 </defs>
+<style>
+/* Ciclo de 6 s para todos os movimentos; cada passo do procedimento ocupa uma fatia dele.
+   Sem animação quando o leitor pede menos movimento e na impressão (o desenho parado é o procedimento completo). */
+.a{animation-duration:6s;animation-iteration-count:infinite;animation-timing-function:ease-in-out;animation-fill-mode:both}
+.lin{animation-timing-function:linear}
+.nudge{animation-name:nudge}
+.draw{animation-name:draw}
+.pulse{animation-name:pulse}
+.blink{animation-name:blink}
+.swing{animation-name:swing}
+.push{animation-name:push}
+.enter{animation-name:enter}
+.enter2{animation-name:enter2}
+.reduce{animation-name:reduce}
+.flip{animation-name:flip}
+.plunge{animation-name:plunge}
+.drain{animation-name:drain}
+.flow{animation-name:flow;animation-timing-function:linear}
+.buzz{animation-name:buzz;animation-duration:.25s;animation-timing-function:linear}
+.travel{animation-name:travel;animation-timing-function:linear}
+.in1{animation-name:in1}.in2{animation-name:in2}.in3{animation-name:in3}
+.out1{animation-name:out1}.out2{animation-name:out2}.out3{animation-name:out3}
+.fade3{animation-name:fade3}
+.squeeze{animation-name:squeeze}.pendulum{animation-name:pendulum}.tighten{animation-name:tighten}
+.hi2{animation-name:hi2}.hi3{animation-name:hi3}.hi4{animation-name:hi4}
+.focus2{animation-name:focus2}.focus3{animation-name:focus3}.focus4{animation-name:focus4}
+@keyframes nudge{0%,100%{transform:translate(0,0)}50%{transform:translate(var(--dx),var(--dy))}}
+@keyframes draw{0%,10%{stroke-dashoffset:1}45%,100%{stroke-dashoffset:0}}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.45}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes swing{0%,12%{transform:rotate(0)}55%,70%{transform:rotate(var(--a))}100%{transform:rotate(0)}}
+@keyframes push{0%,12%{transform:translate(0,0)}55%,70%{transform:translate(var(--dx),var(--dy))}100%{transform:translate(0,0)}}
+@keyframes enter{0%,8%{transform:translate(var(--dx),var(--dy))}38%,85%{transform:translate(0,0)}100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes enter2{0%,8%{transform:translate(var(--dx),var(--dy))}30%,42%{transform:translate(calc(var(--dx)*.45),calc(var(--dy)*.45))}60%,88%{transform:translate(0,0)}100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes reduce{0%,10%{transform:none}30%,40%{transform:translate(var(--dx),var(--dy))}55%,65%{transform:translate(var(--dx),var(--dy)) rotate(var(--a))}85%,100%{transform:none}}
+@keyframes flip{0%,15%{transform:scaleY(1)}50%,70%{transform:scaleY(-1)}100%{transform:scaleY(1)}}
+@keyframes plunge{0%,45%{transform:translate(0,0)}80%,100%{transform:translate(var(--p),0)}}
+@keyframes drain{0%,45%{transform:scaleX(1)}80%,100%{transform:scaleX(.2)}}
+@keyframes flow{0%{stroke-dashoffset:0}100%{stroke-dashoffset:-96}}
+@keyframes buzz{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@keyframes travel{0%,8%{transform:translate(0,0)}92%,100%{transform:translate(var(--dx),var(--dy))}}
+@keyframes in1{0%,18%{opacity:0}26%,100%{opacity:1}}
+@keyframes in2{0%,42%{opacity:0}50%,100%{opacity:1}}
+@keyframes in3{0%,66%{opacity:0}74%,100%{opacity:1}}
+@keyframes out1{0%,22%{opacity:1}30%,100%{opacity:0}}
+@keyframes out2{0%,46%{opacity:1}54%,100%{opacity:0}}
+@keyframes out3{0%,70%{opacity:1}78%,100%{opacity:0}}
+@keyframes squeeze{0%,100%{transform:scale(1)}50%{transform:scale(.8)}}
+@keyframes pendulum{0%,100%{transform:rotate(calc(var(--a)*-1))}50%{transform:rotate(var(--a))}}
+@keyframes tighten{0%,15%{transform:scale(1,1)}55%,70%{transform:scale(.93,1)}100%{transform:scale(1,1)}}
+@keyframes fade3{0%,66%{opacity:.75}80%,100%{opacity:.25}}
+@keyframes hi2{0%{opacity:0}6%,44%{opacity:1}50%,100%{opacity:0}}
+@keyframes hi3{0%{opacity:0}4%,29%{opacity:1}33.3%,100%{opacity:0}}
+@keyframes hi4{0%{opacity:0}3%,22%{opacity:1}25%,100%{opacity:0}}
+@keyframes focus2{0%,44%{opacity:1}50%,94%{opacity:.35}100%{opacity:1}}
+@keyframes focus3{0%,29%{opacity:1}33.3%,96%{opacity:.35}100%{opacity:1}}
+@keyframes focus4{0%,22%{opacity:1}25%,97%{opacity:.35}100%{opacity:1}}
+@media (prefers-reduced-motion:reduce),print{.a{animation:none!important}}
+</style>
 <rect x="40" y="90" width="540" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
 <text x="62" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >Como está</text>
 <path d="M90 460 L320 460" fill="none" stroke="#1c2a4a" stroke-width="80" stroke-linecap="round" stroke-linejoin="round" />
@@ -20,7 +79,7 @@
 <path d="M335 400 L520 390" fill="none" stroke="url(#cg128)" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" />
 <defs><linearGradient id="cg129" gradientUnits="userSpaceOnUse" x1="563.7" y1="365.2" x2="556.3" y2="424.8"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
 <path d="M520 390 L600 400" fill="none" stroke="url(#cg129)" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M380 310 L380 360" fill="none" stroke="#b3261e" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ahr)"/>
+<g class="a nudge" style="--dx:0px;--dy:12.5px;animation-duration:1.6s"><path d="M380 310 L380 360" fill="none" stroke="#b3261e" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ahr)"/></g>
 <text x="380" y="250" font-size="21" text-anchor="middle" font-weight="500" fill="#b3261e" >falange média por cima</text>
 <text x="380" y="277" font-size="21" text-anchor="middle" font-weight="500" fill="#b3261e" >da cabeça da proximal</text>
 <text x="70" y="620" font-size="21" text-anchor="start" font-weight="500" fill="#6b7280" >bloqueio digital; raio-X antes se</text>
@@ -28,26 +87,26 @@
 <rect x="600" y="90" width="560" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
 <text x="622" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >A manobra</text>
 <path d="M650 460 L880 460" fill="none" stroke="#1c2a4a" stroke-width="80" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(880 460)"><g class="a reduce" style="--dx:22px;--dy:0px;--a:-14deg"><g transform="translate(-880 -460)"><path d="M880 460 L1060 455 L1130 460" fill="none" stroke="#1c2a4a" stroke-width="70" stroke-linecap="round" stroke-linejoin="round" /></g></g></g>
 <path d="M650 460 L880 460" fill="none" stroke="#f3e4d3" stroke-width="70" stroke-linecap="round" stroke-linejoin="round" />
 <defs><linearGradient id="cg130" gradientUnits="userSpaceOnUse" x1="765" y1="425" x2="765" y2="495"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
 <path d="M650 460 L880 460" fill="none" stroke="url(#cg130)" stroke-width="70" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M880 460 L1060 455 L1130 460" fill="none" stroke="#1c2a4a" stroke-width="70" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M880 460 L1060 455 L1130 460" fill="none" stroke="#f3e4d3" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(880 460)"><g class="a reduce" style="--dx:22px;--dy:0px;--a:-14deg"><g transform="translate(-880 -460)"><path d="M880 460 L1060 455 L1130 460" fill="none" stroke="#f3e4d3" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" />
 <defs><linearGradient id="cg131" gradientUnits="userSpaceOnUse" x1="969.2" y1="427.5" x2="970.8" y2="487.5"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
 <path d="M880 460 L1060 455" fill="none" stroke="url(#cg131)" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" />
 <defs><linearGradient id="cg132" gradientUnits="userSpaceOnUse" x1="1097.1" y1="427.6" x2="1092.9" y2="487.4"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
-<path d="M1060 455 L1130 460" fill="none" stroke="url(#cg132)" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M1060 455 L1130 460" fill="none" stroke="url(#cg132)" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" /></g></g></g>
 <circle cx="980" cy="300" r="24" fill="#1c2a4a" stroke="#1c2a4a" stroke-width="2" />
 <text x="980" y="311" font-size="30" text-anchor="middle" font-weight="700" fill="#ffffff" >1</text>
-<path d="M1010 300 L1100 300" fill="none" stroke="#8a6d3b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<g class="a nudge" style="--dx:14px;--dy:0px;animation-duration:1.6s"><path d="M1010 300 L1100 300" fill="none" stroke="#8a6d3b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/></g>
 <text x="980" y="350" font-size="22" text-anchor="middle" font-weight="500" fill="#1c2a4a" >tração no eixo</text>
 <circle cx="760" cy="300" r="24" fill="#1c2a4a" stroke="#1c2a4a" stroke-width="2" />
 <text x="760" y="311" font-size="30" text-anchor="middle" font-weight="700" fill="#ffffff" >2</text>
-<path d="M790 300 Q860 250 920 330" fill="none" stroke="#8a6d3b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<g class="a draw"><path d="M790 300 Q860 250 920 330" fill="none" stroke="#8a6d3b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)" pathLength="1" stroke-dasharray="1"/></g>
 <text x="820" y="240" font-size="22" text-anchor="middle" font-weight="500" fill="#1c2a4a" >leve hiperextensão</text>
 <circle cx="900" cy="620" r="24" fill="#1c2a4a" stroke="#1c2a4a" stroke-width="2" />
 <text x="900" y="631" font-size="30" text-anchor="middle" font-weight="700" fill="#ffffff" >3</text>
-<path d="M900 590 L900 500" fill="none" stroke="#8a6d3b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<g class="a nudge" style="--dx:0px;--dy:-14px;animation-duration:1.6s"><path d="M900 590 L900 500" fill="none" stroke="#8a6d3b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/></g>
 <text x="900" y="680" font-size="22" text-anchor="middle" font-weight="500" fill="#1c2a4a" >polegar empurra a base da</text>
 <text x="900" y="708" font-size="22" text-anchor="middle" font-weight="500" fill="#1c2a4a" >falange média para a palma</text>
 <text x="620" y="760" font-size="15" text-anchor="start" font-weight="500" fill="#6b7280" >depois: testar estabilidade, raio-X, buddy taping 3 semanas, mover cedo</text>

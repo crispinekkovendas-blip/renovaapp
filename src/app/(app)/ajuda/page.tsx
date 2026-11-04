@@ -51,6 +51,7 @@ const NEWS: readonly { date: string; items: readonly string[] }[] = [
     date: "4 de novembro de 2026",
     items: [
       "Ortopedia: os 37 procedimentos do guia ganharam ilustrações próprias — redução, tala, gesso, bloqueio, punção, infiltração — desenhadas passo a passo na paleta do Renova, com o ponto de entrada da agulha, as setas da manobra e as medidas. Aparecem no tópico (site e app Android, onde ficam guardadas para abrir sem internet) e no PDF de estudo.",
+      "As ilustrações agora se mexem: a agulha entra e o êmbolo desce, a tala monta camada por camada (algodão, gesso, atadura), a manobra de redução acontece (tração, rotação, o polegar que empurra), os passos acendem na ordem. Um ciclo de 6 segundos, sempre repetindo; quem pede menos movimento no aparelho vê o desenho parado, que é o procedimento completo. No PDF fica o quadro final.",
     ],
   },
   {
