@@ -1,6 +1,6 @@
 // Sprites 26–37: cotovelo, mão e dedos, criança, patela e Aquiles.
 import * as L from "./lib.mjs";
-const { C, svg, g, path, circle, rect, line, dot, text, label, title, caption, step, panel, arrow, arc, limb, limbPoly, bone, fracture, hand, foot, head, person, plaster, cotton, bandage, syringe, needle, film, xbone, target, bed, check, bullets } = L;
+const { C, svg, g, path, circle, rect, line, dot, text, label, title, caption, step, panel, arrow, arc, limb, limbPoly, chain, bone, fracture, hand, foot, head, person, plaster, cotton, bandage, syringe, needle, film, xbone, target, bed, check, bullets } = L;
 
 /** Dedo de perfil: segmentos (falanges) por pontos. */
 const finger = (pts, w = 60) => limbPoly(pts, w);
@@ -11,7 +11,7 @@ export const PART3 = [
     title("Luxação do cotovelo: ajudante fixa o braço, tração no antebraço, polegar no olécrano"),
     bed(80, 560, 760, 30),
     path("M120 300 L360 300 L360 560 L120 560 Z", { fill: C.cloth, sw: 4 }), text(240, 440, "tórax", { size: 22, anchor: "middle", color: C.muted }),
-    limb(360, 420, 620, 420, 130), limbPoly([[620, 420], [900, 340]], 105), hand(980, 318, -16, 1.15, { flex: 0.2 }),
+    chain([{ pts: [[360, 420], [620, 420]], w: 130 }, { pts: [[620, 420], [900, 340]], w: 105 }]), hand(980, 318, -16, 1.15, { flex: 0.2 }),
     circle(650, 470, 36, { fill: C.bone }), text(650, 540, "olécrano saltado\npara trás", { size: 20, anchor: "middle", color: C.alarm }),
     arrow(480, 300, 480, 350, { sw: 8 }), arrow(480, 540, 480, 490, { sw: 8 }), text(480, 270, "ajudante fixa o úmero", { size: 22, anchor: "middle", weight: 700 }),
     arrow(960, 300, 1080, 265, { sw: 9 }), text(1000, 215, "tração no eixo do antebraço,\ncotovelo em leve flexão", { size: 21, anchor: "middle" }),
@@ -24,7 +24,7 @@ export const PART3 = [
     title("Fratura do boxeador: manobra de Jahss e calha ulnar"),
     panel(40, 90, 560, 680, "Jahss: MF e IFP a 90°"),
     // mão de perfil: metacarpo horizontal, falange proximal vertical para baixo, média horizontal
-    limb(100, 400, 360, 400, 100), fracture(100, 400, 360, 400, 0.88, 100), finger([[360, 400], [372, 540], [500, 560]], 62),
+    chain([{ pts: [[100, 400], [360, 400]], w: 100 }, { pts: [[360, 400], [372, 540], [500, 560]], w: 62 }]), fracture(100, 400, 360, 400, 0.88, 100),
     arrow(372, 640, 372, 580, { sw: 9 }), text(372, 690, "empurrar a falange\nproximal para cima", { size: 22, anchor: "middle", color: C.accent, weight: 700 }),
     arrow(330, 290, 330, 340, { sw: 9 }), text(330, 236, "a outra mão fixa o metacarpo\ne empurra a cabeça para baixo", { size: 21, anchor: "middle" }),
     caption(70, 580, "bloqueio de hematoma ou do nervo ulnar;\naceita até 30–40° no 5º MC; fica\nreduzido só com a tala bem moldada", 20),
@@ -46,7 +46,7 @@ export const PART3 = [
     label(70, 640, "esparadrapo na falange proximal e na\nmédia; deixar a IFP livre para dobrar;\ntrocar quando molhar; 3 semanas", { size: 22 }),
     arrow(400, 380, 350, 380, { sw: 5 }), text(405, 390, "articulação livre", { size: 20 }),
     panel(600, 90, 560, 680, "Posição segura (intrínseco-plus)"),
-    limb(640, 380, 860, 380, 110), limbPoly([[860, 380], [930, 340], [970, 440], [990, 540]], 48),
+    chain([{ pts: [[640, 380], [860, 380]], w: 110 }, { pts: [[860, 380], [930, 340], [970, 440], [990, 540]], w: 48 }]),
     arc(930, 250, 1000, 280, 1000, 360, { sw: 5 }), text(1010, 250, "MF 70–90°", { size: 24, weight: 700, color: C.accent }),
     text(1010, 480, "IF estendidas", { size: 24, weight: 700, color: C.accent }), text(650, 300, "punho 20° extensão", { size: 24, weight: 700, color: C.accent }),
     label(630, 640, "ligamentos colaterais da MF ficam\nesticados: a mão não enrijece.\nQualquer tala de mão sai nessa posição", { size: 22 }),
@@ -71,11 +71,11 @@ export const PART3 = [
   { n: 30, draw: () => svg([
     title("Dedo em martelo: tala com a IFD reta (ou leve hiperextensão), IFP livre, 6–8 semanas"),
     panel(40, 90, 540, 680, "A lesão"),
-    finger([[90, 420], [330, 420], [500, 420]], 66), finger([[500, 420], [600, 500]], 56),
+    chain([{ pts: [[90, 420], [330, 420], [500, 420]], w: 66 }, { pts: [[500, 420], [600, 500]], w: 56 }]),
     arrow(560, 300, 560, 380, { sw: 7, color: C.alarm, marker: "ahr" }), text(330, 250, "ponta cai: não estende\nativamente a IFD", { size: 22, color: C.alarm }),
     caption(70, 620, "raio-X: avulsão óssea > ⅓ da articulação\nou subluxação → cirurgião da mão", 21),
     panel(600, 90, 560, 680, "A tala"),
-    finger([[650, 420], [890, 420], [1060, 420]], 66), finger([[1060, 420], [1130, 412]], 56),
+    chain([{ pts: [[650, 420], [890, 420], [1060, 420]], w: 66 }, { pts: [[1060, 420], [1130, 412]], w: 56 }]),
     plaster("M990 360 L1150 352 L1150 386 L990 394 Z"), rect(1000, 350, 150, 24, { fill: C.cloth2, sw: 3, rx: 4 }), rect(1000, 452, 150, 24, { fill: C.cloth2, sw: 3, rx: 4 }),
     arrow(900, 330, 900, 380, { sw: 5 }), text(900, 310, "IFP livre", { size: 22, anchor: "middle", weight: 700, color: C.accent }),
     label(630, 600, "tala dorsal (alumínio, Stack ou termoplástica)\nsó na IFD; nunca deixar a ponta dobrar —\nnem para lavar (trocar com o dedo apoiado\nna mesa); 6–8 semanas, depois mais 2–4\nsó à noite", { size: 21 }),
@@ -119,7 +119,7 @@ export const PART3 = [
     person({ head: [460, 170], neck: [460, 215], hip: [460, 460], hipL: [440, 460], kneeL: [430, 600], ankleL: [428, 720], hipR: [480, 460], kneeR: [490, 600], ankleR: [492, 720], shoulderR: [505, 228], elbowR: [530, 370], handR: [540, 480] }, { w: 36, headR: 44 }),
     cotton("M360 230 L420 230 L420 400 L560 400 L560 440 L395 440 L370 430 Z"),
     plaster("M340 215 L420 215 L420 380 L560 380 L560 460 L380 460 Q338 440 338 400 Z"),
-    limb(410, 230, 395, 410, 72), limb(395, 410, 560, 410, 62), hand(600, 410, 0, 0.75, { flex: 0.25 }),
+    chain([{ pts: [[410, 230], [395, 410]], w: 72 }, { pts: [[395, 410], [560, 410]], w: 62 }]), hand(600, 410, 0, 0.75, { flex: 0.25 }),
     path("M345 225 L360 225", { stroke: C.alarm, sw: 4 }), text(300, 190, "até a axila", { size: 20, anchor: "end" }),
     bandage(410, 250, 400, 400, 90, 5), bandage(410, 410, 550, 410, 80, 5),
     label(660, 200, "cotovelo a 90°, antebraço neutro\n(polegar para cima); até a prega\npalmar: MF livres", { size: 23, to: [562, 405] }),
@@ -132,7 +132,7 @@ export const PART3 = [
     title("Supracondiliana: tala posterior de cotovelo a ≤ 90°, pulso antes e depois"),
     cotton("M300 160 L330 160 L330 520 Q330 548 360 550 L720 556 L720 584 L350 578 Q296 572 296 520 Z"),
     plaster("M262 160 L296 160 L296 522 Q296 580 352 586 L726 592 L726 632 L340 624 Q262 614 262 530 Z"),
-    limb(380, 160, 380, 500, 120), limb(380, 500, 700, 500, 100), hand(790, 500, 0, 1.15, { flex: 0.3 }),
+    chain([{ pts: [[380, 160], [380, 500]], w: 120 }, { pts: [[380, 500], [700, 500]], w: 100 }]), hand(790, 500, 0, 1.15, { flex: 0.3 }),
     fracture(380, 160, 380, 500, 0.82, 120),
     bandage(380, 190, 380, 490, 140, 7), bandage(400, 500, 690, 500, 120, 7),
     arc(470, 420, 500, 470, 470, 520, { sw: 5 }), text(520, 440, "90° (menos se o\npulso enfraquece)", { size: 22, weight: 700, color: C.accent }),
@@ -144,11 +144,11 @@ export const PART3 = [
   { n: 35, draw: () => svg([
     title("Pronação dolorosa: hiperpronação (1ª escolha) ou supinação-flexão"),
     panel(40, 90, 560, 680, "Hiperpronação"),
-    limb(200, 180, 200, 420, 70), limb(200, 420, 440, 420, 60), hand(500, 420, 0, 0.8),
+    chain([{ pts: [[200, 180], [200, 420]], w: 70 }, { pts: [[200, 420], [440, 420]], w: 60 }]), hand(500, 420, 0, 0.8),
     hand(200, 480, -90, 0.9), dot(230, 430, 10, C.accent), text(90, 540, "seu polegar sobre a cabeça do rádio", { size: 21 }),
     arc(520, 330, 560, 400, 500, 470, { sw: 7 }), text(320, 620, "segure o punho e gire o antebraço\npara dentro (palma para baixo), firme\ne rápido, até o fim; sente o clique", { size: 21, anchor: "middle" }),
     panel(620, 90, 540, 680, "Supinação-flexão"),
-    limb(760, 180, 760, 420, 70), limb(760, 420, 1000, 420, 60), hand(1060, 420, 0, 0.8),
+    chain([{ pts: [[760, 180], [760, 420]], w: 70 }, { pts: [[760, 420], [1000, 420]], w: 60 }]), hand(1060, 420, 0, 0.8),
     hand(760, 480, -90, 0.9), dot(790, 430, 10, C.accent),
     arc(1040, 480, 1090, 420, 1040, 360, { sw: 7 }), text(1090, 330, "1. supinar", { size: 22, weight: 700, color: C.accent }),
     arc(1000, 380, 920, 220, 790, 240, { sw: 7 }), text(820, 200, "2. fletir até o ombro", { size: 22, weight: 700, color: C.accent }),

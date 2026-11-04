@@ -1,7 +1,7 @@
 // Sprites 14–25: urgências do plantão (talas, tração, reduções de quadril e tornozelo,
 // tipoia, cinta pélvica), infiltração glenoumeral, luxação do ombro e Colles.
 import * as L from "./lib.mjs";
-const { C, svg, g, path, circle, rect, line, dot, text, label, title, caption, step, panel, arrow, arc, limb, limbPoly, bone, fracture, hand, foot, head, person, plaster, cotton, bandage, syringe, needle, film, xbone, target, bed, check, bullets } = L;
+const { C, svg, g, path, circle, rect, line, dot, text, label, title, caption, step, panel, arrow, arc, limb, limbPoly, chain, bone, fracture, hand, foot, head, person, plaster, cotton, bandage, syringe, needle, film, xbone, target, bed, check, bullets } = L;
 
 export const PART2 = [
   // 14. Tala de alinhamento da perna (fratura de tíbia)
@@ -9,7 +9,7 @@ export const PART2 = [
     title("Tala longa de perna: alinhar com tração e imobilizar da coxa ao pé"),
     cotton("M300 150 L330 150 L330 640 Q330 664 360 668 L540 674 L540 700 L350 694 Q296 688 296 640 Z"),
     plaster("M262 150 L296 150 L296 642 Q296 696 350 702 L546 708 L546 746 L340 740 Q262 730 262 650 Z"),
-    limb(380, 150, 380, 360, 150), limb(380, 360, 380, 600, 125), foot(380, 640, 0, 1.15),
+    chain([{ pts: [[380, 150], [380, 360]], w: 150 }, { pts: [[380, 360], [380, 600]], w: 125 }]), foot(380, 640, 0, 1.15),
     fracture(380, 360, 380, 600, 0.5, 125), path("M340 440 L420 440", { stroke: C.alarm, sw: 2, dash: "6 6" }),
     bandage(380, 180, 380, 590, 165, 10),
     arrow(380, 760, 380, 712, { sw: 8 }), text(430, 760, "tração suave e contínua no calcanhar", { size: 24, color: C.accent, weight: 700 }),
@@ -41,7 +41,7 @@ export const PART2 = [
     title("Tração cutânea: esparadrapo nas laterais, barra no pé, peso de 2–4 kg"),
     bed(100, 520, 760, 36),
     person({ head: [190, 460], neck: [250, 480], hip: [520, 480] }),
-    limb(520, 480, 720, 470, 110), limb(720, 470, 880, 475, 90), foot(890, 470, 90, 0.9),
+    chain([{ pts: [[520, 480], [720, 470]], w: 110 }, { pts: [[720, 470], [880, 475]], w: 90 }]), foot(890, 470, 90, 0.9),
     rect(540, 408, 330, 22, { fill: C.cloth, sw: 3, rx: 4 }), rect(540, 515, 330, 22, { fill: C.cloth, sw: 3, rx: 4 }),
     rect(900, 400, 18, 150, { fill: C.cloth2, sw: 3, rx: 4 }), bandage(560, 472, 860, 472, 125, 9),
     line(909, 475, 1040, 475, { sw: 4 }), circle(1040, 475, 20, { fill: C.metal, sw: 4 }), line(1060, 475, 1060, 640, { sw: 4 }), rect(1030, 640, 60, 70, { fill: C.line, sw: 3, rx: 6 }), text(1060, 740, "2–4 kg", { size: 26, anchor: "middle", weight: 700 }),
@@ -57,7 +57,7 @@ export const PART2 = [
     path("M60 130 L380 130 L400 500 L60 520 Z", { fill: C.cloth }), text(120, 330, "tórax", { size: 24, color: C.muted }),
     cotton("M416 200 L444 200 L444 540 Q444 600 500 606 L560 606 L600 180 L628 180 L588 630 L500 632 Q416 628 416 540 Z"),
     plaster("M380 200 L412 200 L412 540 Q412 630 500 640 L592 640 L636 150 L668 150 L620 660 L500 672 Q380 662 380 540 Z"),
-    limb(520, 150, 520, 500, 130), limb(520, 500, 820, 500, 110), hand(910, 500, 0, 1.2, { flex: 0.3 }),
+    chain([{ pts: [[520, 150], [520, 500]], w: 130 }, { pts: [[520, 500], [820, 500]], w: 110 }]), hand(910, 500, 0, 1.2, { flex: 0.3 }),
     bandage(520, 190, 520, 490, 150, 8),
     path("M540 130 Q700 120 740 500", { stroke: C.cloth2, sw: 18 }), path("M740 500 L860 500", { stroke: C.cloth2, sw: 60, cap: "butt" }), path("M740 500 L860 500", { stroke: C.line, sw: 64, cap: "butt" }), path("M740 500 L860 500", { stroke: C.cloth2, sw: 56, cap: "butt" }),
     label(700, 200, "a tala sobe por dentro (axila)\ne por fora até sobre o acrômio", { size: 24, to: [668, 160] }),
@@ -71,7 +71,7 @@ export const PART2 = [
     bed(60, 600, 760, 30),
     // paciente supino: cabeça à esquerda; perna luxada com quadril e joelho a 90°
     person({ head: [140, 540], neck: [200, 560], hip: [500, 560], hipL: [500, 560], kneeL: [680, 570], ankleL: [800, 575], shoulderL: [220, 560], elbowL: [350, 560], handL: [460, 570] }),
-    limb(520, 560, 540, 330, 110), limb(540, 330, 740, 320, 95), foot(760, 320, 90, 0.9),
+    chain([{ pts: [[520, 560], [540, 330]], w: 110 }, { pts: [[540, 330], [740, 320]], w: 95 }]), foot(760, 320, 90, 0.9),
     // médico de pé por cima, mãos no joelho, puxando para cima
     person({ head: [640, 110], neck: [640, 148], hip: [640, 290], shoulderL: [612, 158], elbowL: [590, 240], handL: [560, 300], shoulderR: [668, 158], elbowR: [680, 240], handR: [640, 300] }, { cloth: C.cloth2, w: 32, headR: 30 }),
     arrow(450, 480, 450, 350, { sw: 10 }), text(430, 330, "tração vertical\ncontínua, sem\nsolavanco", { size: 24, anchor: "end", color: C.accent, weight: 700 }),
@@ -85,7 +85,7 @@ export const PART2 = [
   { n: 19, draw: () => svg([
     title("Fratura-luxação do tornozelo: joelho a 90°, tração no calcanhar, desfazer o desvio"),
     bed(60, 330, 480, 30),
-    limb(120, 320, 420, 320, 140), limb(420, 320, 430, 560, 115), foot(430, 600, 0, 1.1),
+    chain([{ pts: [[120, 320], [420, 320]], w: 140 }, { pts: [[420, 320], [430, 560]], w: 115 }]), foot(430, 600, 0, 1.1),
     label(90, 220, "coxa apoiada na maca, joelho a 90°:\nrelaxa a panturrilha", { size: 22, to: [300, 290] }),
     // mão fixa a tíbia (seta para baixo), tração no calcanhar (seta para baixo), reverter o desvio (arco)
     arrow(560, 420, 490, 440, { sw: 7 }), text(575, 428, "uma mão fixa a tíbia", { size: 22 }),
@@ -162,7 +162,7 @@ export const PART2 = [
     panel(40, 90, 360, 680, "1 · Rotação externa"),
     // paciente supino (vista de cima): tronco, braço ao lado, cotovelo 90°, antebraço roda para fora
     path("M80 420 L300 420 L300 640 L80 640 Z", { fill: C.cloth, sw: 4 }), head(120, 700, 40),
-    limb(300, 460, 330, 600, 60), limb(330, 600, 330, 440, 50), hand(330, 400, -90, 0.7),
+    chain([{ pts: [[300, 460], [330, 600]], w: 60 }, { pts: [[330, 600], [330, 440]], w: 50 }]), hand(330, 400, -90, 0.7),
     arc(330, 400, 400, 430, 380, 520, { sw: 6 }),
     label(60, 180, "deitado, cotovelo colado ao corpo\na 90°; rode o antebraço para fora\nbem devagar (1–2 min), parando\nquando doer; sem tração", { size: 21 }),
     caption(60, 320, "reduz a 70–110° de rotação externa;\nse não, levante o braço devagar\nem abdução (Milch)", 20),
@@ -186,7 +186,7 @@ export const PART2 = [
   { n: 25, draw: () => svg([
     title("Colles: tração, desfazer o dorso de garfo, flexão + desvio ulnar, tala"),
     panel(40, 90, 360, 680, "1 · A deformidade"),
-    limb(80, 400, 280, 400, 110), limbPoly([[280, 400], [330, 360], [400, 330]], 90), hand(430, 320, -20, 0.95, { flex: 0.3 }),
+    chain([{ pts: [[80, 400], [280, 400]], w: 110 }, { pts: [[280, 400], [330, 360], [400, 330]], w: 90 }]), hand(430, 320, -20, 0.95, { flex: 0.3 }),
     fracture(80, 400, 280, 400, 0.95, 110), text(70, 560, "fragmento distal para o dorso\n('dorso de garfo'): o raio-X\nde perfil mostra a angulação", { size: 21 }),
     panel(420, 90, 360, 680, "2 · A manobra"),
     limb(450, 420, 660, 420, 100), hand(740, 420, 0, 1.0, { flex: 0.2 }),

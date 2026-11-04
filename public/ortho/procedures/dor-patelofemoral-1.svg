@@ -12,8 +12,12 @@
 <text x="62" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >Como chega (joelho fletido)</text>
 <path d="M300 250 L300 400" fill="none" stroke="#1c2a4a" stroke-width="180" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M300 250 L300 400" fill="none" stroke="#f3e4d3" stroke-width="170" stroke-linecap="round" stroke-linejoin="round" />
+<defs><linearGradient id="cg161" gradientUnits="userSpaceOnUse" x1="385" y1="325" x2="215" y2="325"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
+<path d="M300 250 L300 400" fill="none" stroke="url(#cg161)" stroke-width="170" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M300 540 L300 720" fill="none" stroke="#1c2a4a" stroke-width="160" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M300 540 L300 720" fill="none" stroke="#f3e4d3" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" />
+<defs><linearGradient id="cg162" gradientUnits="userSpaceOnUse" x1="375" y1="630" x2="225" y2="630"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
+<path d="M300 540 L300 720" fill="none" stroke="url(#cg162)" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M240 400 Q300 370 360 400 Q380 480 300 530 Q220 480 240 400 Z" fill="#e6cdb5" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M380 410 Q420 380 460 410 Q470 460 420 490 Q370 460 380 410 Z" fill="#f8f5ef" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <text x="420" y="455" font-size="18" text-anchor="middle" font-weight="500" fill="#1c2a4a" >patela</text>
@@ -24,8 +28,12 @@
 <text x="622" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >A manobra</text>
 <path d="M860 250 L860 400" fill="none" stroke="#1c2a4a" stroke-width="180" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M860 250 L860 400" fill="none" stroke="#f3e4d3" stroke-width="170" stroke-linecap="round" stroke-linejoin="round" />
+<defs><linearGradient id="cg163" gradientUnits="userSpaceOnUse" x1="945" y1="325" x2="775" y2="325"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
+<path d="M860 250 L860 400" fill="none" stroke="url(#cg163)" stroke-width="170" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M860 540 L860 720" fill="none" stroke="#1c2a4a" stroke-width="160" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M860 540 L860 720" fill="none" stroke="#f3e4d3" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" />
+<defs><linearGradient id="cg164" gradientUnits="userSpaceOnUse" x1="935" y1="630" x2="785" y2="630"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
+<path d="M860 540 L860 720" fill="none" stroke="url(#cg164)" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M800 400 Q860 370 920 400 Q940 480 860 530 Q780 480 800 400 Z" fill="#e6cdb5" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M830 410 Q870 380 910 410 Q920 460 870 490 Q820 460 830 410 Z" fill="#f8f5ef" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M1020 450 L930 450" fill="none" stroke="#8a6d3b" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>

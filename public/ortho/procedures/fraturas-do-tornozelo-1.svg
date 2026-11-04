@@ -16,7 +16,9 @@
 <path d="M196 180 L228 180 L228 562 Q228 614 282 620 L476 626 L476 664 L270 656 Q196 646 196 570 Z" fill="url(#hatch)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M310 180 L310 520" fill="none" stroke="#1c2a4a" stroke-width="125" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M310 180 L310 520" fill="none" stroke="#f3e4d3" stroke-width="115" stroke-linecap="round" stroke-linejoin="round" />
-<g transform="translate(310 560) rotate(0) scale(1.1)"><path d="M-30 -50 L-36 0 Q-30 30 10 36 L150 40 Q172 36 172 20 Q168 4 140 0 L60 -12 Q40 -30 36 -60 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /></g>
+<defs><linearGradient id="cg62" gradientUnits="userSpaceOnUse" x1="367.5" y1="350" x2="252.5" y2="350"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
+<path d="M310 180 L310 520" fill="none" stroke="url(#cg62)" stroke-width="115" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(310 560) rotate(0) scale(1.1)"><defs><linearGradient id="fg63" x1="0" y1="0" x2="0.2" y2="1"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.45" stop-color="#f3e4d3"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs><path d="M-30 -50 L-36 0 Q-30 30 10 36 L150 40 Q172 36 172 20 Q168 4 140 0 L60 -12 Q40 -30 36 -60 Z" fill="url(#fg63)" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /></g>
 <path d="M242.5 210 L377.5 234" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
 <path d="M242.5 252.9 L377.5 276.9" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
 <path d="M242.5 295.7 L377.5 319.7" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
@@ -31,6 +33,8 @@
 <text x="622" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >De frente: estribo em U</text>
 <path d="M880 180 L880 540" fill="none" stroke="#1c2a4a" stroke-width="130" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M880 180 L880 540" fill="none" stroke="#f3e4d3" stroke-width="120" stroke-linecap="round" stroke-linejoin="round" />
+<defs><linearGradient id="cg64" gradientUnits="userSpaceOnUse" x1="940" y1="360" x2="820" y2="360"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
+<path d="M880 180 L880 540" fill="none" stroke="url(#cg64)" stroke-width="120" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M800 540 Q880 700 960 540 L960 600 Q880 690 800 600 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M780 200 L812 200 L812 560 Q812 646 880 650 Q948 646 948 560 L948 200 L980 200 L980 570 Q980 684 880 690 Q780 684 780 570 Z" fill="#ece7dc" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M780 200 L812 200 L812 560 Q812 646 880 650 Q948 646 948 560 L948 200 L980 200 L980 570 Q980 684 880 690 Q780 684 780 570 Z" fill="url(#hatch)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />

@@ -10,17 +10,20 @@
 </defs>
 <path d="M150 400 L560 400" fill="none" stroke="#1c2a4a" stroke-width="130" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M150 400 L560 400" fill="none" stroke="#f3e4d3" stroke-width="120" stroke-linecap="round" stroke-linejoin="round" />
-<g transform="translate(660 400) rotate(0) scale(1.25)"><path d="M-34 -46 L4 -92" fill="none" stroke="#1c2a4a" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M-4 -50 L46 -46 Q60 0 46 46 L-4 50 Q-66 30 -68 0 Q-66 -30 -4 -50 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<defs><linearGradient id="cg5" gradientUnits="userSpaceOnUse" x1="355" y1="340" x2="355" y2="460"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
+<path d="M150 400 L560 400" fill="none" stroke="url(#cg5)" stroke-width="120" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(660 400) rotate(0) scale(1.25)"><defs><linearGradient id="hg6f" gradientUnits="userSpaceOnUse" x1="0" y1="-9" x2="0" y2="9"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.4" stop-color="#f3e4d3"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient><linearGradient id="hg6p" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.45" stop-color="#f3e4d3"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
+<path d="M-34 -46 L4 -92" fill="none" stroke="#1c2a4a" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-4 -50 L46 -46 Q60 0 46 46 L-4 50 Q-66 30 -68 0 Q-66 -30 -4 -50 Z" fill="url(#hg6p)" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M44 -36 L103.2 -17.7" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M44 -12 L114.7 9.9" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M44 12 L110.9 32.7" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M44 36 L97.5 52.5" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M44 -36 L103.2 -17.7" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M44 -12 L114.7 9.9" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M44 12 L110.9 32.7" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M44 36 L97.5 52.5" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M-34 -46 L4 -92" fill="none" stroke="#f3e4d3" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" /></g>
+<path d="M44 -36 L103.2 -17.7" fill="none" stroke="url(#hg6f)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L114.7 9.9" fill="none" stroke="url(#hg6f)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L110.9 32.7" fill="none" stroke="url(#hg6f)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L97.5 52.5" fill="none" stroke="url(#hg6f)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-34 -46 L4 -92" fill="none" stroke="url(#hg6f)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" /></g>
 <path d="M160 330 L560 330 Q600 330 610 360 L610 440 Q600 470 560 470 L160 470 Z" fill="#ece7dc" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M160 330 L560 330 Q600 330 610 360 L610 440 Q600 470 560 470 L160 470 Z" fill="url(#hatch)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M360 250 L360 318" fill="none" stroke="#8a6d3b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
@@ -38,6 +41,8 @@
 <text x="782" y="144" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >Feito no dia? Bivalvar</text>
 <path d="M800 280 L1100 280" fill="none" stroke="#1c2a4a" stroke-width="110" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M800 280 L1100 280" fill="none" stroke="#f3e4d3" stroke-width="100" stroke-linecap="round" stroke-linejoin="round" />
+<defs><linearGradient id="cg7" gradientUnits="userSpaceOnUse" x1="950" y1="230" x2="950" y2="330"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
+<path d="M800 280 L1100 280" fill="none" stroke="url(#cg7)" stroke-width="100" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M810 225 L1100 225 L1100 335 L810 335 Z" fill="#ece7dc" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M810 225 L1100 225 L1100 335 L810 335 Z" fill="url(#hatch)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M800 280 L1110 280" fill="none" stroke="#b3261e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="14 10" />

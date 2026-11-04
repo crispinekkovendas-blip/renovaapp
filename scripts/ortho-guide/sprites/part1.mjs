@@ -1,6 +1,6 @@
 // Sprites 1–13: bases do primeiro dia (raio-X, talas, gesso, bloqueios, sedação, punções) e tétano.
 import * as L from "./lib.mjs";
-const { C, svg, g, path, circle, rect, line, dot, text, label, title, caption, step, panel, arrow, arc, limb, limbPoly, bone, fracture, hand, foot, head, person, plaster, cotton, bandage, syringe, needle, film, xbone, target, bed, check, bullets } = L;
+const { C, svg, g, path, circle, rect, line, dot, text, label, title, caption, step, panel, arrow, arc, limb, limbPoly, chain, bone, fracture, hand, foot, head, person, plaster, cotton, bandage, syringe, needle, film, xbone, target, bed, check, bullets } = L;
 
 export const PART1 = [
   // 1. Leitura do raio-X de trauma em 60 segundos

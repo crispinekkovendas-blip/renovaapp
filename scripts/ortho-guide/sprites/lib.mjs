@@ -7,6 +7,10 @@ export const C = {
   line: "#1c2a4a",     // azul-marinho (traço)
   skin: "#f3e4d3",     // pele
   skin2: "#e6cdb5",    // pele (sombra)
+  skinHi: "#fbf3ea",   // pele (luz)
+  skinLo: "#dfc0a3",   // pele (sombra forte)
+  clothHi: "#e8ecf3",
+  clothLo: "#aab5c9",
   bone: "#f8f5ef",     // osso
   plaster: "#ece7dc",  // gesso
   cotton: "#fbf8f2",   // algodão
@@ -88,14 +92,71 @@ export const arrow = (x1, y1, x2, y2, { color = C.accent, sw = 7, marker = "ah" 
 /** Seta curva por um ponto de controle. */
 export const arc = (x1, y1, cx, cy, x2, y2, { color = C.accent, sw = 7, marker = "ah", dash } = {}) => path(`M${n(x1)} ${n(y1)} Q${n(cx)} ${n(cy)} ${n(x2)} ${n(y2)}`, { stroke: color, sw, dash, extra: `marker-end="url(#${marker})"` });
 
-/** Segmento de membro: cápsula com contorno (pele por padrão). */
-export function limb(x1, y1, x2, y2, w, { fill = C.skin, stroke = C.line, sw = SW } = {}) {
-  return [path(`M${n(x1)} ${n(y1)} L${n(x2)} ${n(y2)}`, { stroke, sw: w + sw * 2 }), path(`M${n(x1)} ${n(y1)} L${n(x2)} ${n(y2)}`, { stroke: fill, sw: w })].join("\n");
+const polyD = (pts) => pts.map((p, i) => `${i ? "L" : "M"}${n(p[0])} ${n(p[1])}`).join(" ");
+/** Luz e sombra de um preenchimento (a luz vem de cima); null = sem volume. */
+function tones(fill) {
+  if (fill === C.skin) return [C.skinHi, C.skinLo];
+  if (fill === C.cloth) return [C.clothHi, C.clothLo];
+  if (fill === C.cloth2) return ["#d3dae6", "#8f9bb3"];
+  if (fill === C.bone) return ["#ffffff", "#e3dccb"];
+  return null;
 }
-/** Cápsula por polilinha (ex.: braço dobrado) — contorno contínuo. */
-export function limbPoly(pts, w, { fill = C.skin, stroke = C.line, sw = SW } = {}) {
-  const d = pts.map((p, i) => `${i ? "L" : "M"}${n(p[0])} ${n(p[1])}`).join(" ");
-  return [path(d, { stroke, sw: w + sw * 2 }), path(d, { stroke: fill, sw: w })].join("\n");
+let gradN = 0;
+/** Gradiente cilíndrico de um trecho reto: claro na borda da luz, cor no meio, escuro na outra borda. */
+function cylGrad(x1, y1, x2, y2, w, fill, [hi, lo]) {
+  const [nx, ny] = upNormal(x1, y1, x2, y2), mx = (x1 + x2) / 2, my = (y1 + y2) / 2, h = w / 2, id = `cg${++gradN}`;
+  const defs = `<defs><linearGradient id="${id}" gradientUnits="userSpaceOnUse" x1="${n(mx + nx * h)}" y1="${n(my + ny * h)}" x2="${n(mx - nx * h)}" y2="${n(my - ny * h)}"><stop offset="0" stop-color="${hi}"/><stop offset="0.38" stop-color="${fill}"/><stop offset="0.8" stop-color="${lo}" stop-opacity="0.85"/><stop offset="1" stop-color="${lo}"/></linearGradient></defs>`;
+  return { defs, url: `url(#${id})` };
+}
+/** Normal unitária apontando para cima (lado da luz) de um segmento. */
+function upNormal(x1, y1, x2, y2) {
+  const a = Math.atan2(y2 - y1, x2 - x1);
+  let nx = -Math.sin(a), ny = Math.cos(a);
+  if (ny > 0 || (ny === 0 && nx > 0)) { nx = -nx; ny = -ny; }
+  return [nx, ny];
+}
+/** Faixa de luz em cima e de sombra embaixo, ao longo de cada trecho — dá o volume do tubo. */
+function shade(pts, w, [hi, lo]) {
+  const out = [];
+  for (let i = 0; i < pts.length - 1; i++) {
+    const [x1, y1] = pts[i], [x2, y2] = pts[i + 1];
+    const len = Math.hypot(x2 - x1, y2 - y1); if (len < 1) continue;
+    const [nx, ny] = upNormal(x1, y1, x2, y2), dx = (x2 - x1) / len, dy = (y2 - y1) / len;
+    const t = Math.min(w * 0.3, len * 0.25), o = w * 0.27;
+    const sx = x1 + dx * t, sy = y1 + dy * t, ex = x2 - dx * t, ey = y2 - dy * t;
+    out.push(path(`M${n(sx + nx * o)} ${n(sy + ny * o)} L${n(ex + nx * o)} ${n(ey + ny * o)}`, { stroke: hi, sw: w * 0.26, opacity: 0.9 }));
+    out.push(path(`M${n(sx - nx * o)} ${n(sy - ny * o)} L${n(ex - nx * o)} ${n(ey - ny * o)}`, { stroke: lo, sw: w * 0.22, opacity: 0.55 }));
+  }
+  return out;
+}
+/**
+ * Cadeia de segmentos (coxa + perna, braço + antebraço…): primeiro todos os
+ * contornos, depois todos os preenchimentos — a articulação fica contínua,
+ * sem o contorno de um segmento cortando o outro — e por fim luz e sombra.
+ * segments: [{ pts: [[x,y],…], w, fill? }]
+ */
+export function chain(segments, { stroke = C.line, sw = SW } = {}) {
+  const segs = segments.map((s) => ({ fill: C.skin, ...s }));
+  const fills = segs.flatMap((s) => {
+    const t = s.shade === false ? null : tones(s.fill);
+    if (!t) return [path(polyD(s.pts), { stroke: s.fill, sw: s.w })];
+    const out = [path(polyD(s.pts), { stroke: s.fill, sw: s.w })];
+    for (let i = 0; i < s.pts.length - 1; i++) {
+      const [x1, y1] = s.pts[i], [x2, y2] = s.pts[i + 1];
+      const g = cylGrad(x1, y1, x2, y2, s.w, s.fill, t);
+      out.push(g.defs, path(`M${n(x1)} ${n(y1)} L${n(x2)} ${n(y2)}`, { stroke: g.url, sw: s.w }));
+    }
+    return out;
+  });
+  return [...segs.map((s) => path(polyD(s.pts), { stroke, sw: s.w + sw * 2 })), ...fills].join("\n");
+}
+/** Segmento de membro: cápsula com contorno e volume (pele por padrão). */
+export function limb(x1, y1, x2, y2, w, { fill = C.skin, stroke = C.line, sw = SW, shade: sh = true } = {}) {
+  return chain([{ pts: [[x1, y1], [x2, y2]], w, fill, shade: sh }], { stroke, sw });
+}
+/** Cápsula por polilinha (ex.: braço dobrado) — contorno contínuo e volume. */
+export function limbPoly(pts, w, { fill = C.skin, stroke = C.line, sw = SW, shade: sh = true } = {}) {
+  return chain([{ pts, w, fill, shade: sh }], { stroke, sw });
 }
 /** Osso longo: diáfise com extremidades alargadas. */
 export function bone(x1, y1, x2, y2, w, { fill = C.bone } = {}) {
@@ -109,7 +170,10 @@ export function bone(x1, y1, x2, y2, w, { fill = C.bone } = {}) {
     `L${n(x1 - px * w / 2 + dx * k * 1.6)} ${n(y1 - py * w / 2 + dy * k * 1.6)}`, `Q${n(x1 - px * e + dx * k)} ${n(y1 - py * e + dy * k)} ${n(x1 - px * e)} ${n(y1 - py * e)}`,
     `A${n(e)} ${n(e)} 0 0 0 ${n(x1 + px * e)} ${n(y1 + py * e)} Z`,
   ].join(" ");
-  return path(d, { fill });
+  const t = tones(fill);
+  if (!t) return path(d, { fill });
+  const g = cylGrad(x1, y1, x2, y2, w * 1.8, fill, t);
+  return g.defs + path(d, { fill: g.url });
 }
 /** Linha de fratura em ziguezague perpendicular ao segmento no ponto t (0–1). */
 export function fracture(x1, y1, x2, y2, t, w, { color = C.alarm } = {}) {
@@ -124,19 +188,25 @@ export function hand(x, y, angle = 0, scale = 1, { fill = C.skin, flex = 0 } = {
   // desenhada apontando para +x; palma na origem
   const fingers = [-36, -12, 12, 36].map((off, i) => { const L = [62, 74, 70, 56][i]; return `M44 ${n(off)} L${n(44 + L * Math.cos(flex))} ${n(off + L * Math.sin(flex))}`; });
   const thumb = "M-34 -46 L4 -92", palm = "M-4 -50 L46 -46 Q60 0 46 46 L-4 50 Q-66 30 -68 0 Q-66 -30 -4 -50 Z";
-  return g(`transform="translate(${n(x)} ${n(y)}) rotate(${angle}) scale(${scale})"`,
+  const t = tones(fill) ?? [fill, fill], id = `hg${++gradN}`;
+  const defs = `<defs><linearGradient id="${id}f" gradientUnits="userSpaceOnUse" x1="0" y1="-9" x2="0" y2="9"><stop offset="0" stop-color="${t[0]}"/><stop offset="0.4" stop-color="${fill}"/><stop offset="1" stop-color="${t[1]}"/></linearGradient><linearGradient id="${id}p" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="${t[0]}"/><stop offset="0.45" stop-color="${fill}"/><stop offset="1" stop-color="${t[1]}"/></linearGradient></defs>`;
+  return g(`transform="translate(${n(x)} ${n(y)}) rotate(${angle}) scale(${scale})"`, defs,
     path(thumb, { stroke: C.line, sw: 26 }),
-    path(palm, { fill, sw: SW }),
-    ...fingers.map((d) => path(d, { stroke: C.line, sw: 24 })), ...fingers.map((d) => path(d, { stroke: fill, sw: 15 })),
-    path(thumb, { stroke: fill, sw: 16 }));
+    path(palm, { fill: `url(#${id}p)`, sw: SW }),
+    ...fingers.map((d) => path(d, { stroke: C.line, sw: 24 })), ...fingers.map((d) => path(d, { stroke: `url(#${id}f)`, sw: 15 })),
+    path(thumb, { stroke: `url(#${id}f)`, sw: 16 }));
 }
 /** Pé de perfil apontando para +x (calcanhar na origem). */
 export function foot(x, y, angle = 0, scale = 1, { fill = C.skin } = {}) {
   return g(`transform="translate(${n(x)} ${n(y)}) rotate(${angle}) scale(${scale})"`,
-    path("M-30 -50 L-36 0 Q-30 30 10 36 L150 40 Q172 36 172 20 Q168 4 140 0 L60 -12 Q40 -30 36 -60 Z", { fill, sw: SW }));
+    (() => { const t = tones(fill) ?? [fill, fill], id = `fg${++gradN}`; return `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0.2" y2="1"><stop offset="0" stop-color="${t[0]}"/><stop offset="0.45" stop-color="${fill}"/><stop offset="1" stop-color="${t[1]}"/></linearGradient></defs>` + path("M-30 -50 L-36 0 Q-30 30 10 36 L150 40 Q172 36 172 20 Q168 4 140 0 L60 -12 Q40 -30 36 -60 Z", { fill: `url(#${id})`, sw: SW }); })());
 }
 /** Cabeça de perfil ou frente (círculo com orelha/nuca). */
-export const head = (x, y, r = 46, { fill = C.skin } = {}) => [circle(x, y, r, { fill }), circle(x - r * 0.1, y - r * 0.15, r * 0.06, { fill: C.line, stroke: C.line })].join("\n");
+export const head = (x, y, r = 46, { fill = C.skin } = {}) => {
+  const t = tones(fill) ?? [fill, fill], id = `rg${++gradN}`;
+  return [`<defs><radialGradient id="${id}" cx="0.38" cy="0.32" r="0.75"><stop offset="0" stop-color="${t[0]}"/><stop offset="0.5" stop-color="${fill}"/><stop offset="1" stop-color="${t[1]}"/></radialGradient></defs>`,
+    circle(x, y, r, { fill: `url(#${id})` }), circle(x - r * 0.1, y - r * 0.15, r * 0.06, { fill: C.line, stroke: C.line })].join("\n");
+};
 
 /** Pessoa esquemática por pontos articulares: {head:[x,y], neck, hip, shoulder, elbow, hand, hip2, knee, foot...}. */
 export function person(p, { skin = C.skin, cloth = C.cloth, headR = 42, w = 44 } = {}) {
@@ -145,8 +215,15 @@ export function person(p, { skin = C.skin, cloth = C.cloth, headR = 42, w = 44 }
     const [nx, ny] = p.neck, [hx, hy] = p.hip, a = Math.atan2(hy - ny, hx - nx), dx = Math.cos(a), dy = Math.sin(a), px = -dy, py = dx, s = w * 1.25, h = w * 0.95;
     out.push(path(`M${n(nx + px * s)} ${n(ny + py * s)} L${n(hx + px * h)} ${n(hy + py * h)} Q${n(hx + dx * w * 0.7)} ${n(hy + dy * w * 0.7)} ${n(hx - px * h)} ${n(hy - py * h)} L${n(nx - px * s)} ${n(ny - py * s)} Q${n(nx - dx * w * 0.45)} ${n(ny - dy * w * 0.45)} ${n(nx + px * s)} ${n(ny + py * s)} Z`, { fill: cloth }));
   }
-  for (const [a, b] of [["hipL", "kneeL"], ["kneeL", "ankleL"], ["hipR", "kneeR"], ["kneeR", "ankleR"]]) if (p[a] && p[b]) out.push(limb(p[a][0], p[a][1], p[b][0], p[b][1], w * 1.1, { fill: a.startsWith("hip") ? cloth : skin }));
-  for (const [a, b] of [["shoulderL", "elbowL"], ["elbowL", "handL"], ["shoulderR", "elbowR"], ["elbowR", "handR"]]) if (p[a] && p[b]) out.push(limb(p[a][0], p[a][1], p[b][0], p[b][1], w * 0.9, { fill: a.startsWith("shoulder") ? cloth : skin }));
+  const segs = [];
+  for (const [a, b] of [["hipL", "kneeL"], ["kneeL", "ankleL"], ["hipR", "kneeR"], ["kneeR", "ankleR"]]) if (p[a] && p[b]) segs.push({ pts: [p[a], p[b]], w: w * 1.1, fill: a.startsWith("hip") ? cloth : skin });
+  for (const [a, b] of [["shoulderL", "elbowL"], ["elbowL", "handL"], ["shoulderR", "elbowR"], ["elbowR", "handR"]]) if (p[a] && p[b]) segs.push({ pts: [p[a], p[b]], w: w * 0.9, fill: a.startsWith("shoulder") ? cloth : skin });
+  if (p.neck && p.head) segs.unshift({ pts: [p.head, p.neck], w: w * 0.7, fill: skin, shade: false });
+  if (segs.length) out.push(chain(segs));
+  if (p.hip && p.neck) {
+    const t = tones(cloth);
+    if (t) { const g = cylGrad(p.neck[0], p.neck[1], p.hip[0], p.hip[1], w * 2.5, cloth, t); out[0] = g.defs + out[0].replace(`fill="${cloth}"`, `fill="${g.url}"`); }
+  }
   if (p.head) out.push(head(p.head[0], p.head[1], headR, { fill: skin }));
   return out.join("\n");
 }

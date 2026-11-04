@@ -11,8 +11,12 @@
 <path d="M240 200 Q300 120 420 150 Q500 180 560 150 Q680 120 740 200 Q700 300 620 340 Q560 380 540 440 L440 440 Q420 380 360 340 Q280 300 240 200 Z" fill="#f8f5ef" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M400 470 L330 760" fill="none" stroke="#1c2a4a" stroke-width="100" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M400 470 L330 760" fill="none" stroke="#f3e4d3" stroke-width="90" stroke-linecap="round" stroke-linejoin="round" />
+<defs><linearGradient id="cg83" gradientUnits="userSpaceOnUse" x1="321.3" y1="604.4" x2="408.7" y2="625.6"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
+<path d="M400 470 L330 760" fill="none" stroke="url(#cg83)" stroke-width="90" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M580 470 L650 760" fill="none" stroke="#1c2a4a" stroke-width="100" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M580 470 L650 760" fill="none" stroke="#f3e4d3" stroke-width="90" stroke-linecap="round" stroke-linejoin="round" />
+<defs><linearGradient id="cg84" gradientUnits="userSpaceOnUse" x1="658.7" y1="604.4" x2="571.3" y2="625.6"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
+<path d="M580 470 L650 760" fill="none" stroke="url(#cg84)" stroke-width="90" stroke-linecap="round" stroke-linejoin="round" />
 <circle cx="400" cy="470" r="44" fill="#f8f5ef" stroke="#1c2a4a" stroke-width="5" />
 <circle cx="580" cy="470" r="44" fill="#f8f5ef" stroke="#1c2a4a" stroke-width="5" />
 <circle cx="330" cy="480" r="26" fill="#f8f5ef" stroke="#1c2a4a" stroke-width="5" />

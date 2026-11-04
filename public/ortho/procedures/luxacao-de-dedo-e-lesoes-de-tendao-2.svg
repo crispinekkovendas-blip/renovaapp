@@ -11,9 +11,15 @@
 <rect x="40" y="90" width="540" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
 <text x="62" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >A lesão</text>
 <path d="M90 420 L330 420 L500 420" fill="none" stroke="#1c2a4a" stroke-width="76" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M90 420 L330 420 L500 420" fill="none" stroke="#f3e4d3" stroke-width="66" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M500 420 L600 500" fill="none" stroke="#1c2a4a" stroke-width="66" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M90 420 L330 420 L500 420" fill="none" stroke="#f3e4d3" stroke-width="66" stroke-linecap="round" stroke-linejoin="round" />
+<defs><linearGradient id="cg133" gradientUnits="userSpaceOnUse" x1="210" y1="387" x2="210" y2="453"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
+<path d="M90 420 L330 420" fill="none" stroke="url(#cg133)" stroke-width="66" stroke-linecap="round" stroke-linejoin="round" />
+<defs><linearGradient id="cg134" gradientUnits="userSpaceOnUse" x1="415" y1="387" x2="415" y2="453"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
+<path d="M330 420 L500 420" fill="none" stroke="url(#cg134)" stroke-width="66" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M500 420 L600 500" fill="none" stroke="#f3e4d3" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" />
+<defs><linearGradient id="cg135" gradientUnits="userSpaceOnUse" x1="567.5" y1="438.1" x2="532.5" y2="481.9"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
+<path d="M500 420 L600 500" fill="none" stroke="url(#cg135)" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M560 300 L560 380" fill="none" stroke="#b3261e" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ahr)"/>
 <text x="330" y="250" font-size="22" text-anchor="start" font-weight="500" fill="#b3261e" >ponta cai: não estende</text>
 <text x="330" y="278" font-size="22" text-anchor="start" font-weight="500" fill="#b3261e" >ativamente a IFD</text>
@@ -22,9 +28,15 @@
 <rect x="600" y="90" width="560" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
 <text x="622" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >A tala</text>
 <path d="M650 420 L890 420 L1060 420" fill="none" stroke="#1c2a4a" stroke-width="76" stroke-linecap="round" stroke-linejoin="round" />
-<path d="M650 420 L890 420 L1060 420" fill="none" stroke="#f3e4d3" stroke-width="66" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M1060 420 L1130 412" fill="none" stroke="#1c2a4a" stroke-width="66" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M650 420 L890 420 L1060 420" fill="none" stroke="#f3e4d3" stroke-width="66" stroke-linecap="round" stroke-linejoin="round" />
+<defs><linearGradient id="cg136" gradientUnits="userSpaceOnUse" x1="770" y1="387" x2="770" y2="453"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
+<path d="M650 420 L890 420" fill="none" stroke="url(#cg136)" stroke-width="66" stroke-linecap="round" stroke-linejoin="round" />
+<defs><linearGradient id="cg137" gradientUnits="userSpaceOnUse" x1="975" y1="387" x2="975" y2="453"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
+<path d="M890 420 L1060 420" fill="none" stroke="url(#cg137)" stroke-width="66" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M1060 420 L1130 412" fill="none" stroke="#f3e4d3" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" />
+<defs><linearGradient id="cg138" gradientUnits="userSpaceOnUse" x1="1091.8" y1="388.2" x2="1098.2" y2="443.8"><stop offset="0" stop-color="#fbf3ea"/><stop offset="0.38" stop-color="#f3e4d3"/><stop offset="0.8" stop-color="#dfc0a3" stop-opacity="0.85"/><stop offset="1" stop-color="#dfc0a3"/></linearGradient></defs>
+<path d="M1060 420 L1130 412" fill="none" stroke="url(#cg138)" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M990 360 L1150 352 L1150 386 L990 394 Z" fill="#ece7dc" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <path d="M990 360 L1150 352 L1150 386 L990 394 Z" fill="url(#hatch)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
 <rect x="1000" y="350" width="150" height="24" rx="4" fill="#b9c3d4" stroke="#1c2a4a" stroke-width="3" />
