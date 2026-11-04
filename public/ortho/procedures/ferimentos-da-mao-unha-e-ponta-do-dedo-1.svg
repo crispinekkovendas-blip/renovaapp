@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<title>Trepanação do hematoma subungueal</title>
+<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a6d3b"/></marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b3261e"/></marker>
+  <marker id="ahn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1c2a4a"/></marker>
+  <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#1c2a4a" stroke-opacity="0.18" stroke-width="3"/></pattern>
+  <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
+  <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
+</defs>
+<path d="M300 700 L300 300 Q300 160 450 160 Q600 160 600 300 L600 700 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M340 520 L340 280 Q340 200 450 200 Q560 200 560 280 L560 520 Q450 560 340 520 Z" fill="#f9efe3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M360 500 L360 330 Q380 240 450 260 Q520 240 540 330 L540 500 Q450 540 360 500 Z" fill="#8f1d17" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0.75" />
+<g transform="translate(450 330)"><path d="M0 0 L0 -210" fill="none" stroke="#9aa3b5" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M0 0 L0 -40" fill="none" stroke="#b3261e" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M0 -210 Q-40 -260 -70 -210 L-70 -120" fill="none" stroke="#9aa3b5" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" /></g>
+<path d="M450 335 Q470 360 455 380" fill="none" stroke="#8f1d17" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M672 190 L455 180" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="455" cy="180" r="7" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="680" y="200" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >clipe de papel aberto, aquecido</text>
+<text x="680" y="230" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >ao rubro no isqueiro, apoiado</text>
+<text x="680" y="260" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >sem força: derrete a unha</text>
+<text x="680" y="360" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >ou agulha 18G girando</text>
+<text x="680" y="390" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >como uma broca</text>
+<circle cx="680" cy="471" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="702" y="480" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >até 48 h; ≥ 50% da unha ou muita dor</text>
+<circle cx="680" cy="511" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="702" y="520" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >sai sangue, alívio imediato</text>
+<circle cx="680" cy="551" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="702" y="560" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >sem anestesia (a unha não dói)</text>
+<circle cx="680" cy="591" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="702" y="600" font-size="18" text-anchor="start" font-weight="500" fill="#1c2a4a" >fratura da falange? furo = exposta: antibiótico</text>
+<circle cx="680" cy="631" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="702" y="640" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >unha solta ou leito visível: reparar</text>
+<text x="40" y="56" font-size="40" text-anchor="start" font-weight="700" fill="#1c2a4a" data-top="1">Hematoma subungueal: furar a unha para drenar</text>
+</svg>

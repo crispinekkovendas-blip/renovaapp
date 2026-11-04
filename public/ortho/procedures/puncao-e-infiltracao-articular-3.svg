@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<title>Infiltração do túnel do carpo</title>
+<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a6d3b"/></marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b3261e"/></marker>
+  <marker id="ahn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1c2a4a"/></marker>
+  <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#1c2a4a" stroke-opacity="0.18" stroke-width="3"/></pattern>
+  <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
+  <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
+</defs>
+<path d="M100 520 L420 520" fill="none" stroke="#1c2a4a" stroke-width="160" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M100 520 L420 520" fill="none" stroke="#f3e4d3" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(540 520) rotate(0) scale(1.2)"><path d="M-34 -46 L4 -92" fill="none" stroke="#1c2a4a" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-4 -50 L46 -46 Q60 0 46 46 L-4 50 Q-66 30 -68 0 Q-66 -30 -4 -50 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L106 -36" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L118 -12" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L114 12" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L100 36" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L106 -36" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L118 -12" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L114 12" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L100 36" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-34 -46 L4 -92" fill="none" stroke="#f3e4d3" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" /></g>
+<path d="M200 512 L470 512" fill="none" stroke="#e6cdb5" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+<text x="200" y="486" font-size="22" text-anchor="start" font-weight="500" fill="#1c2a4a" >palmar longo</text>
+<path d="M450 430 L450 610" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 6" />
+<text x="450" y="640" font-size="22" text-anchor="middle" font-weight="500" fill="#6b7280" >prega proximal do punho</text>
+<circle cx="440" cy="548" r="14" fill="none" stroke="#8a6d3b" stroke-width="4" />
+<path d="M417.6 548 L462.4 548" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M440 525.6 L440 570.4" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(440 548) rotate(40) scale(1)"><path d="M0 0 L-110 0" fill="none" stroke="#9aa3b5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M0 0 L-110 0" fill="none" stroke="#1c2a4a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+<rect x="-124" y="-10" width="14" height="20" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
+<rect x="-264" y="-22" width="140" height="44" rx="4" fill="#ffffff" stroke="#1c2a4a" stroke-width="3" />
+<rect x="-258" y="-16" width="77" height="32" rx="0" fill="#c9a66b" stroke="none" stroke-width="5" />
+<rect x="-300" y="-8" width="36" height="16" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
+<rect x="-308" y="-26" width="10" height="52" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
+<rect x="-270" y="-34" width="8" height="68" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" /></g>
+<path d="M652 160 L440 548" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="440" cy="548" r="7" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="660" y="170" font-size="25" text-anchor="start" font-weight="500" fill="#1c2a4a" >ponto: na prega proximal do punho,</text>
+<text x="660" y="201" font-size="25" text-anchor="start" font-weight="500" fill="#1c2a4a" >logo ulnar ao palmar longo</text>
+<text x="660" y="232" font-size="25" text-anchor="start" font-weight="500" fill="#1c2a4a" >(feche o punho para vê-lo)</text>
+<text x="660" y="310" font-size="25" text-anchor="start" font-weight="500" fill="#1c2a4a" >agulha 25G a 30°, apontando</text>
+<text x="660" y="341" font-size="25" text-anchor="start" font-weight="500" fill="#1c2a4a" >para o dedo médio; 1–2 cm</text>
+<circle cx="720" cy="421" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="742" y="430" font-size="20" text-anchor="start" font-weight="500" fill="#1c2a4a" >parestesia ao entrar = no nervo: recuar</text>
+<circle cx="720" cy="461" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="742" y="470" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >sem resistência: 1 mL corticoide</text>
+<text x="742" y="499" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >   + 1 mL lidocaína</text>
+<circle cx="720" cy="530" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="742" y="539" font-size="18" text-anchor="start" font-weight="500" fill="#1c2a4a" >sem palmar longo? 1 cm ulnar à linha média</text>
+<circle cx="720" cy="570" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="742" y="579" font-size="22" text-anchor="start" font-weight="500" fill="#1c2a4a" >tala noturna depois; alívio em dias</text>
+<text x="40" y="56" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" data-top="1">Túnel do carpo: ulnar ao palmar longo, 30°, agulha para a palma</text>
+</svg>

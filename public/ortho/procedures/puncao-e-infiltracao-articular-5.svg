@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<title>Infiltração peritrocantérica</title>
+<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a6d3b"/></marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b3261e"/></marker>
+  <marker id="ahn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1c2a4a"/></marker>
+  <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#1c2a4a" stroke-opacity="0.18" stroke-width="3"/></pattern>
+  <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
+  <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
+</defs>
+<rect x="60" y="640" width="620" height="30" rx="8" fill="#b9c3d4" stroke="#1c2a4a" stroke-width="4" />
+<path d="M90 670 L90 760" fill="none" stroke="#1c2a4a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M650 670 L650 760" fill="none" stroke="#1c2a4a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M90 620 Q120 380 300 360 L560 380 Q640 400 640 500 L640 640 L90 640 Z" fill="#d7dde8" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M180 400 Q220 330 320 330 L560 345 Q600 370 600 420 Q600 470 560 480 L320 470 Q220 470 180 400 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="400" cy="400" r="44" fill="#f8f5ef" stroke="#1c2a4a" stroke-width="4" />
+<circle cx="400" cy="400" r="60" fill="none" stroke="#8a6d3b" stroke-width="4" stroke-dasharray="12 10"/>
+<path d="M112 550 L372 420" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="372" cy="420" r="7" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="120" y="560" font-size="22" text-anchor="start" font-weight="500" fill="#1c2a4a" >trocânter maior: o ponto</text>
+<text x="120" y="588" font-size="22" text-anchor="start" font-weight="500" fill="#1c2a4a" >mais doloroso à palpação</text>
+<circle cx="400" cy="360" r="12" fill="none" stroke="#8a6d3b" stroke-width="4" />
+<path d="M380.8 360 L419.2 360" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M400 340.8 L400 379.2" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(400 360) rotate(90) scale(1)"><path d="M0 0 L-120 0" fill="none" stroke="#9aa3b5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M0 0 L-120 0" fill="none" stroke="#1c2a4a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+<rect x="-134" y="-10" width="14" height="20" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
+<rect x="-264" y="-22" width="130" height="44" rx="4" fill="#ffffff" stroke="#1c2a4a" stroke-width="3" />
+<rect x="-258" y="-16" width="71.5" height="32" rx="0" fill="#c9a66b" stroke="none" stroke-width="5" />
+<rect x="-300" y="-8" width="36" height="16" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
+<rect x="-308" y="-26" width="10" height="52" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
+<rect x="-270" y="-34" width="8" height="68" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" /></g>
+<path d="M400 360 L372 300 M400 360 L400 290 M400 360 L428 300" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 6" />
+<text x="470" y="300" font-size="22" text-anchor="start" font-weight="700" fill="#8a6d3b" >em leque</text>
+<circle cx="720" cy="151" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="742" y="160" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >deitado de lado, dor para cima,</text>
+<text x="742" y="190" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >   joelhos fletidos</text>
+<circle cx="720" cy="225" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="742" y="234" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >palpar o ponto mais doloroso</text>
+<text x="742" y="264" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >   sobre o trocânter</text>
+<circle cx="720" cy="299" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="742" y="308" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >agulha 21G perpendicular até</text>
+<text x="742" y="338" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >   tocar o osso; recuar 2 mm</text>
+<circle cx="720" cy="373" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="742" y="382" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >40 mg triancinolona + 4–6 mL</text>
+<text x="742" y="412" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >   lidocaína, em leque</text>
+<text x="720" y="560" font-size="21" text-anchor="start" font-weight="500" fill="#6b7280" >dor pode piorar 2–3 dias (corticoide);</text>
+<text x="720" y="588" font-size="22" text-anchor="start" font-weight="500" fill="#6b7280" >melhora em 1 semana.</text>
+<text x="720" y="616" font-size="22" text-anchor="start" font-weight="500" fill="#6b7280" >Não repetir antes de 3 meses.</text>
+<text x="40" y="56" font-size="21" text-anchor="start" font-weight="700" fill="#1c2a4a" data-top="1">Peritrocantérica: decúbito lateral, no ponto de dor sobre o trocânter, até o osso e em leque</text>
+</svg>

@@ -95,6 +95,8 @@ data class OrthoProcedure(
     val needs: String,
     val steps: List<String> = emptyList(),
     val after: String,
+    /** A ilustração própria (caminho do PNG no site; o app guarda uma cópia em filesDir/sprites). */
+    val image: String? = null,
 )
 
 @Serializable

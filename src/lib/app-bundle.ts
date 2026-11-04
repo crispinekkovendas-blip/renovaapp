@@ -1,3 +1,4 @@
+import { procedureImage, type OrthoProcedure } from "./ortho-guide/index.ts";
 import { createHash } from "node:crypto";
 import type { SearchDoc } from "./smart-search.ts";
 import type { ConciseLine } from "./revision-diff.ts";
@@ -140,6 +141,8 @@ export interface AppOrthoTopic extends OrthoTopic {
   id: string;
   chapter: string;
   revised: number;
+  /** Os procedimentos com a ilustração própria (PNG em public/ortho/procedures/png, caminho no site). */
+  procedures?: (OrthoProcedure & { image: string })[];
 }
 
 /** Uma mudança do Guia de ortopedia: antes, agora e motivo, com o diff curto. */
@@ -203,7 +206,13 @@ function buildOrtho(): AppOrtho {
     chapters: ORTHO_GUIDE.map((c) => ({
       title: c.title,
       intro: c.intro,
-      topics: c.topics.map((t): AppOrthoTopic => ({ ...t, id: `ortopedia:${t.slug}`, chapter: c.title, revised: orthoTopicRevised(t.slug) })),
+      topics: c.topics.map((t): AppOrthoTopic => ({
+        ...t,
+        id: `ortopedia:${t.slug}`,
+        chapter: c.title,
+        revised: orthoTopicRevised(t.slug),
+        procedures: t.procedures?.map((p, k) => ({ ...p, image: procedureImage(t.slug, k + 1).png })),
+      })),
     })),
     changes: ORTHO_CHANGES.map((c) => ({
       rev: c.rev,

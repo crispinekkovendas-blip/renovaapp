@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<title>Tala do dedo em martelo</title>
+<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a6d3b"/></marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b3261e"/></marker>
+  <marker id="ahn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1c2a4a"/></marker>
+  <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#1c2a4a" stroke-opacity="0.18" stroke-width="3"/></pattern>
+  <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
+  <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
+</defs>
+<rect x="40" y="90" width="540" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
+<text x="62" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >A lesão</text>
+<path d="M90 420 L330 420 L500 420" fill="none" stroke="#1c2a4a" stroke-width="76" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M90 420 L330 420 L500 420" fill="none" stroke="#f3e4d3" stroke-width="66" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M500 420 L600 500" fill="none" stroke="#1c2a4a" stroke-width="66" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M500 420 L600 500" fill="none" stroke="#f3e4d3" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M560 300 L560 380" fill="none" stroke="#b3261e" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ahr)"/>
+<text x="330" y="250" font-size="22" text-anchor="start" font-weight="500" fill="#b3261e" >ponta cai: não estende</text>
+<text x="330" y="278" font-size="22" text-anchor="start" font-weight="500" fill="#b3261e" >ativamente a IFD</text>
+<text x="70" y="620" font-size="21" text-anchor="start" font-weight="500" fill="#6b7280" >raio-X: avulsão óssea &gt; ⅓ da articulação</text>
+<text x="70" y="647" font-size="21" text-anchor="start" font-weight="500" fill="#6b7280" >ou subluxação → cirurgião da mão</text>
+<rect x="600" y="90" width="560" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
+<text x="622" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >A tala</text>
+<path d="M650 420 L890 420 L1060 420" fill="none" stroke="#1c2a4a" stroke-width="76" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M650 420 L890 420 L1060 420" fill="none" stroke="#f3e4d3" stroke-width="66" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M1060 420 L1130 412" fill="none" stroke="#1c2a4a" stroke-width="66" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M1060 420 L1130 412" fill="none" stroke="#f3e4d3" stroke-width="56" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M990 360 L1150 352 L1150 386 L990 394 Z" fill="#ece7dc" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M990 360 L1150 352 L1150 386 L990 394 Z" fill="url(#hatch)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<rect x="1000" y="350" width="150" height="24" rx="4" fill="#b9c3d4" stroke="#1c2a4a" stroke-width="3" />
+<rect x="1000" y="452" width="150" height="24" rx="4" fill="#b9c3d4" stroke="#1c2a4a" stroke-width="3" />
+<path d="M900 330 L900 380" fill="none" stroke="#8a6d3b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="900" y="310" font-size="22" text-anchor="middle" font-weight="700" fill="#8a6d3b" >IFP livre</text>
+<text x="630" y="600" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >tala dorsal (alumínio, Stack ou termoplástica)</text>
+<text x="630" y="627" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >só na IFD; nunca deixar a ponta dobrar —</text>
+<text x="630" y="654" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >nem para lavar (trocar com o dedo apoiado</text>
+<text x="630" y="681" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >na mesa); 6–8 semanas, depois mais 2–4</text>
+<text x="630" y="708" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >só à noite</text>
+<text x="40" y="56" font-size="23" text-anchor="start" font-weight="700" fill="#1c2a4a" data-top="1">Dedo em martelo: tala com a IFD reta (ou leve hiperextensão), IFP livre, 6–8 semanas</text>
+</svg>

@@ -2,7 +2,7 @@ import { ORTHO_GUIDE } from "./data.ts";
 import type { OrthoChapter, OrthoTopic } from "./types.ts";
 import type { SearchDoc } from "../smart-search.ts";
 
-export type { OrthoChapter, OrthoExam, OrthoRx, OrthoTopic } from "./types.ts";
+export type { OrthoChapter, OrthoExam, OrthoProcedure, OrthoRx, OrthoTopic } from "./types.ts";
 export { ORTHO_GUIDE };
 
 /**
@@ -18,6 +18,16 @@ export const ORTHO_CREDIT = {
   revisedAt: "28 de outubro de 2026",
   reviewedBy: null as string | null,
 } as const;
+
+/**
+ * A ilustração própria de um procedimento (desenhada pela Renova, em
+ * public/ortho/procedures, gerada por scripts/ortho-guide/sprites): k é a
+ * ordem do procedimento no tópico, a partir de 1. SVG para o site e o PDF,
+ * PNG (1600 × 1067) para o app Android.
+ */
+export function procedureImage(slug: string, k: number): { svg: string; png: string } {
+  return { svg: `/ortho/procedures/${slug}-${k}.svg`, png: `/ortho/procedures/png/${slug}-${k}.png` };
+}
 
 /** O que o índice mostra de cada tópico (vai ao navegador: sem o corpo). */
 export interface OrthoDoc {

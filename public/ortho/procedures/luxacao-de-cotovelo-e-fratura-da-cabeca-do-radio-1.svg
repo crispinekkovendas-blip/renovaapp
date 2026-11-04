@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<title>Redução da luxação do cotovelo</title>
+<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a6d3b"/></marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b3261e"/></marker>
+  <marker id="ahn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1c2a4a"/></marker>
+  <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#1c2a4a" stroke-opacity="0.18" stroke-width="3"/></pattern>
+  <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
+  <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
+</defs>
+<rect x="80" y="560" width="760" height="30" rx="8" fill="#b9c3d4" stroke="#1c2a4a" stroke-width="4" />
+<path d="M110 590 L110 680" fill="none" stroke="#1c2a4a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M810 590 L810 680" fill="none" stroke="#1c2a4a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M120 300 L360 300 L360 560 L120 560 Z" fill="#d7dde8" stroke="#1c2a4a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+<text x="240" y="440" font-size="22" text-anchor="middle" font-weight="500" fill="#6b7280" >tórax</text>
+<path d="M360 420 L620 420" fill="none" stroke="#1c2a4a" stroke-width="140" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M360 420 L620 420" fill="none" stroke="#f3e4d3" stroke-width="130" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M620 420 L900 340" fill="none" stroke="#1c2a4a" stroke-width="115" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M620 420 L900 340" fill="none" stroke="#f3e4d3" stroke-width="105" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(980 318) rotate(-16) scale(1.15)"><path d="M-34 -46 L4 -92" fill="none" stroke="#1c2a4a" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-4 -50 L46 -46 Q60 0 46 46 L-4 50 Q-66 30 -68 0 Q-66 -30 -4 -50 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L104.8 -23.7" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L116.5 2.7" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L112.6 25.9" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L98.9 47.1" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L104.8 -23.7" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L116.5 2.7" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L112.6 25.9" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L98.9 47.1" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-34 -46 L4 -92" fill="none" stroke="#f3e4d3" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" /></g>
+<circle cx="650" cy="470" r="36" fill="#f8f5ef" stroke="#1c2a4a" stroke-width="5" />
+<text x="650" y="540" font-size="20" text-anchor="middle" font-weight="500" fill="#b3261e" >olécrano saltado</text>
+<text x="650" y="566" font-size="20" text-anchor="middle" font-weight="500" fill="#b3261e" >para trás</text>
+<path d="M480 300 L480 350" fill="none" stroke="#8a6d3b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<path d="M480 540 L480 490" fill="none" stroke="#8a6d3b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="480" y="270" font-size="22" text-anchor="middle" font-weight="700" fill="#1c2a4a" >ajudante fixa o úmero</text>
+<path d="M960 300 L1080 265" fill="none" stroke="#8a6d3b" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="1000" y="215" font-size="21" text-anchor="middle" font-weight="500" fill="#1c2a4a" >tração no eixo do antebraço,</text>
+<text x="1000" y="242" font-size="21" text-anchor="middle" font-weight="500" fill="#1c2a4a" >cotovelo em leve flexão</text>
+<path d="M690 560 L660 500" fill="none" stroke="#8a6d3b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="760" y="620" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >seu polegar empurra o</text>
+<text x="760" y="647" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >olécrano para a frente</text>
+<text x="80" y="700" font-size="18" text-anchor="start" font-weight="500" fill="#6b7280" >sedação; antes e depois: pulso radial, nervos mediano e ulnar; depois: fletir e estender para ver se é estável;</text>
+<text x="80" y="732" font-size="26" text-anchor="start" font-weight="500" fill="#6b7280" >raio-X; tala posterior a 90° por 7–10 dias e movimento cedo</text>
+<text x="40" y="56" font-size="23" text-anchor="start" font-weight="700" fill="#1c2a4a" data-top="1">Luxação do cotovelo: ajudante fixa o braço, tração no antebraço, polegar no olécrano</text>
+</svg>

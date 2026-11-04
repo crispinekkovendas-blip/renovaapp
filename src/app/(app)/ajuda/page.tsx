@@ -48,6 +48,12 @@ const STEPS: readonly Step[] = [
 
 const NEWS: readonly { date: string; items: readonly string[] }[] = [
   {
+    date: "4 de novembro de 2026",
+    items: [
+      "Ortopedia: os 37 procedimentos do guia ganharam ilustrações próprias — redução, tala, gesso, bloqueio, punção, infiltração — desenhadas passo a passo na paleta do Renova, com o ponto de entrada da agulha, as setas da manobra e as medidas. Aparecem no tópico (site e app Android, onde ficam guardadas para abrir sem internet) e no PDF de estudo.",
+    ],
+  },
+  {
     date: "2 de novembro de 2026",
     items: [
       "A caixinha de cada medicamento agora traz o nome comercial impresso, como numa embalagem de farmácia: Rivotril, Zoloft, Novalgina… cada marca com a sua cor (sempre a mesma), um selinho com a forma (comprimido, cápsula, gotas, seringa…) e, embaixo, a faixa da tarja — vermelha, vermelha tracejada quando a receita fica retida, preta, ou nenhuma na venda livre. Nome comprido quebra em duas ou três linhas. Vale para todas as marcas da lista da ANVISA, na busca, nos mais receitados, na lista da receita, na tela do medicamento e em Receituário › Mais receitados. Sem marca (genérico, fórmula manipulada, item digitado), a caixa mostra o desenho grande da forma. Passar o mouse mostra marca, forma e tarja.",

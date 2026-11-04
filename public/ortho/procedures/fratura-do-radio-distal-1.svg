@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<title>Redução do rádio distal</title>
+<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a6d3b"/></marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b3261e"/></marker>
+  <marker id="ahn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1c2a4a"/></marker>
+  <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#1c2a4a" stroke-opacity="0.18" stroke-width="3"/></pattern>
+  <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
+  <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
+</defs>
+<rect x="40" y="90" width="360" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
+<text x="62" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >1 · A deformidade</text>
+<path d="M80 400 L280 400" fill="none" stroke="#1c2a4a" stroke-width="120" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M80 400 L280 400" fill="none" stroke="#f3e4d3" stroke-width="110" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M280 400 L330 360 L400 330" fill="none" stroke="#1c2a4a" stroke-width="100" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M280 400 L330 360 L400 330" fill="none" stroke="#f3e4d3" stroke-width="90" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(430 320) rotate(-20) scale(0.95)"><path d="M-34 -46 L4 -92" fill="none" stroke="#1c2a4a" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-4 -50 L46 -46 Q60 0 46 46 L-4 50 Q-66 30 -68 0 Q-66 -30 -4 -50 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L103.2 -17.7" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L114.7 9.9" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L110.9 32.7" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L97.5 52.5" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L103.2 -17.7" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L114.7 9.9" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L110.9 32.7" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L97.5 52.5" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-34 -46 L4 -92" fill="none" stroke="#f3e4d3" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" /></g>
+<path d="M250.2 353.8 L289.8 369.2 L250.2 384.6 L289.8 400 L250.2 415.4 L289.8 430.8 L250.2 446.2" fill="none" stroke="#b3261e" stroke-width="5" stroke-linecap="round" stroke-linejoin="miter" />
+<text x="70" y="560" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >fragmento distal para o dorso</text>
+<text x="70" y="587" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >('dorso de garfo'): o raio-X</text>
+<text x="70" y="614" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >de perfil mostra a angulação</text>
+<rect x="420" y="90" width="360" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
+<text x="442" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >2 · A manobra</text>
+<path d="M450 420 L660 420" fill="none" stroke="#1c2a4a" stroke-width="110" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M450 420 L660 420" fill="none" stroke="#f3e4d3" stroke-width="100" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(740 420) rotate(0) scale(1)"><path d="M-34 -46 L4 -92" fill="none" stroke="#1c2a4a" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-4 -50 L46 -46 Q60 0 46 46 L-4 50 Q-66 30 -68 0 Q-66 -30 -4 -50 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L104.8 -23.7" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L116.5 2.7" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L112.6 25.9" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L98.9 47.1" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L104.8 -23.7" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L116.5 2.7" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L112.6 25.9" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L98.9 47.1" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-34 -46 L4 -92" fill="none" stroke="#f3e4d3" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" /></g>
+<path d="M500 420 L440 420" fill="none" stroke="#8a6d3b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="445" y="380" font-size="19" text-anchor="start" font-weight="500" fill="#1c2a4a" >ajudante: contratração</text>
+<path d="M700 420 L770 420" fill="none" stroke="#8a6d3b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="560" y="500" font-size="19" text-anchor="middle" font-weight="700" fill="#8a6d3b" >tração</text>
+<path d="M640 300 L640 350" fill="none" stroke="#8a6d3b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="640" y="270" font-size="19" text-anchor="middle" font-weight="500" fill="#1c2a4a" >polegares no dorso do fragmento:</text>
+<text x="640" y="295" font-size="19" text-anchor="middle" font-weight="500" fill="#1c2a4a" >empurrar para a palma</text>
+<path d="M760 480 Q790 540 740 580" fill="none" stroke="#8a6d3b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="560" y="600" font-size="19" text-anchor="start" font-weight="500" fill="#1c2a4a" >depois: flexão do punho</text>
+<text x="560" y="625" font-size="19" text-anchor="start" font-weight="500" fill="#1c2a4a" >e desvio ulnar</text>
+<text x="440" y="680" font-size="19" text-anchor="start" font-weight="500" fill="#6b7280" >bloqueio de hematoma ou sedação;</text>
+<text x="440" y="705" font-size="19" text-anchor="start" font-weight="500" fill="#6b7280" >1º desimpactar (tração + hiperextensão),</text>
+<text x="440" y="730" font-size="19" text-anchor="start" font-weight="500" fill="#6b7280" >2º reduzir, 3º manter</text>
+<rect x="800" y="90" width="360" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
+<text x="822" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >3 · A tala</text>
+<path d="M840 450 L1040 450 Q1080 450 1110 440 L1110 470 Q1080 480 1040 480 L840 480 Z" fill="#fbf8f2" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M840 450 L1040 450 Q1080 450 1110 440 L1110 470 Q1080 480 1040 480 L840 480 Z" fill="url(#cotton)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M850 480 L1040 480 Q1080 480 1115 470 L1115 508 Q1080 518 1040 518 L850 518 Z" fill="#ece7dc" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M850 480 L1040 480 Q1080 480 1115 470 L1115 508 Q1080 518 1040 518 L850 518 Z" fill="url(#hatch)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M850 400 L1040 400" fill="none" stroke="#1c2a4a" stroke-width="110" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M850 400 L1040 400" fill="none" stroke="#f3e4d3" stroke-width="100" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(1110 420) rotate(15) scale(0.95)"><path d="M-34 -46 L4 -92" fill="none" stroke="#1c2a4a" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-4 -50 L46 -46 Q60 0 46 46 L-4 50 Q-66 30 -68 0 Q-66 -30 -4 -50 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L102.2 -14.7" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L113.5 13.4" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L109.8 36" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L96.6 55.2" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L102.2 -14.7" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L113.5 13.4" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L109.8 36" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L96.6 55.2" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-34 -46 L4 -92" fill="none" stroke="#f3e4d3" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" /></g>
+<path d="M860 460 L874.4 340" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M890 460 L904.4 340" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M920 460 L934.4 340" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M950 460 L964.4 340" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M980 460 L994.4 340" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M1010 460 L1024.4 340" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M1040 460 L1040 340" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<text x="830" y="590" font-size="18" text-anchor="start" font-weight="500" fill="#1c2a4a" >antebraquiopalmar (ou sugar-tong)</text>
+<text x="830" y="614" font-size="18" text-anchor="start" font-weight="500" fill="#1c2a4a" >com punho em leve flexão e</text>
+<text x="830" y="638" font-size="18" text-anchor="start" font-weight="500" fill="#1c2a4a" >desvio ulnar, 3 pontos de</text>
+<text x="830" y="662" font-size="18" text-anchor="start" font-weight="500" fill="#1c2a4a" >moldagem; raio-X de controle;</text>
+<text x="830" y="686" font-size="18" text-anchor="start" font-weight="500" fill="#1c2a4a" >rever em 7 dias (perde a redução?)</text>
+<text x="40" y="56" font-size="27" text-anchor="start" font-weight="700" fill="#1c2a4a" data-top="1">Colles: tração, desfazer o dorso de garfo, flexão + desvio ulnar, tala</text>
+</svg>

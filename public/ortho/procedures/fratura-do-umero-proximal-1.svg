@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<title>Tipoia e pêndulo de Codman</title>
+<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a6d3b"/></marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b3261e"/></marker>
+  <marker id="ahn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1c2a4a"/></marker>
+  <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#1c2a4a" stroke-opacity="0.18" stroke-width="3"/></pattern>
+  <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
+  <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
+</defs>
+<rect x="40" y="90" width="540" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
+<text x="62" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >Tipoia</text>
+<path d="M250 215 L262 480 Q300 508 338 480 L350 215 Q300 197 250 215 Z" fill="#d7dde8" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M280 480 L270 620" fill="none" stroke="#1c2a4a" stroke-width="54" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M280 480 L270 620" fill="none" stroke="#d7dde8" stroke-width="44" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M270 620 L268 740" fill="none" stroke="#1c2a4a" stroke-width="54" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M270 620 L268 740" fill="none" stroke="#f3e4d3" stroke-width="44" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M320 480 L330 620" fill="none" stroke="#1c2a4a" stroke-width="54" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M320 480 L330 620" fill="none" stroke="#d7dde8" stroke-width="44" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M330 620 L332 740" fill="none" stroke="#1c2a4a" stroke-width="54" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M330 620 L332 740" fill="none" stroke="#f3e4d3" stroke-width="44" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M250 225 L230 360" fill="none" stroke="#1c2a4a" stroke-width="46" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M250 225 L230 360" fill="none" stroke="#d7dde8" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M230 360 L330 390" fill="none" stroke="#1c2a4a" stroke-width="46" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M230 360 L330 390" fill="none" stroke="#f3e4d3" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M350 225 L380 360" fill="none" stroke="#1c2a4a" stroke-width="46" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M350 225 L380 360" fill="none" stroke="#d7dde8" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M380 360 L380 470" fill="none" stroke="#1c2a4a" stroke-width="46" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M380 360 L380 470" fill="none" stroke="#f3e4d3" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="300" cy="170" r="42" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" />
+<circle cx="295.8" cy="163.7" r="2.5" fill="#1c2a4a" stroke="#1c2a4a" stroke-width="5" />
+<path d="M330 230 Q250 300 190 370 L230 420 Q300 400 350 400 L360 360 Z" fill="#b9c3d4" stroke="#1c2a4a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M250 232 Q300 240 345 232" fill="none" stroke="#b9c3d4" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
+<text x="70" y="620" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >tipoia simples 1–2 semanas; sair dela</text>
+<text x="70" y="649" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >várias vezes ao dia para o cotovelo,</text>
+<text x="70" y="678" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >o punho e a mão se mexerem</text>
+<rect x="600" y="90" width="560" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
+<text x="622" y="134" font-size="25" text-anchor="start" font-weight="700" fill="#1c2a4a" >Pêndulo de Codman (desde a 1ª semana)</text>
+<rect x="640" y="420" width="160" height="20" rx="0" fill="#b9c3d4" stroke="#1c2a4a" stroke-width="3" />
+<path d="M660 440 L660 600" fill="none" stroke="#1c2a4a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M780 440 L780 600" fill="none" stroke="#1c2a4a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M847.3 266.1 L967.6 439.8 Q1014.6 443.9 1032.4 400.2 L932.7 213.9 Q880.6 224.6 847.3 266.1 Z" fill="#d7dde8" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M1000 420 L1010 580" fill="none" stroke="#1c2a4a" stroke-width="54" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M1000 420 L1010 580" fill="none" stroke="#d7dde8" stroke-width="44" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M1010 580 L1010 720" fill="none" stroke="#1c2a4a" stroke-width="54" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M1010 580 L1010 720" fill="none" stroke="#f3e4d3" stroke-width="44" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M880 250 L780 340" fill="none" stroke="#1c2a4a" stroke-width="46" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M880 250 L780 340" fill="none" stroke="#d7dde8" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M780 340 L720 420" fill="none" stroke="#1c2a4a" stroke-width="46" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M780 340 L720 420" fill="none" stroke="#f3e4d3" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M900 250 L900 420" fill="none" stroke="#1c2a4a" stroke-width="46" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M900 250 L900 420" fill="none" stroke="#d7dde8" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M900 420 L900 560" fill="none" stroke="#1c2a4a" stroke-width="46" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M900 420 L900 560" fill="none" stroke="#f3e4d3" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="930" cy="200" r="42" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" />
+<circle cx="925.8" cy="193.7" r="2.5" fill="#1c2a4a" stroke="#1c2a4a" stroke-width="5" />
+<path d="M860 600 Q900 660 940 600" fill="none" stroke="#8a6d3b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<path d="M940 620 Q900 680 860 620" fill="none" stroke="#8a6d3b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="630" y="700" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >inclinar, apoiar a mão boa, deixar o braço</text>
+<text x="630" y="729" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >pendurado e balançar em círculos pequenos,</text>
+<text x="630" y="758" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >2–3 min, 3–4×/dia; sem força, sem dor</text>
+<text x="40" y="56" font-size="31" text-anchor="start" font-weight="700" fill="#1c2a4a" data-top="1">Úmero proximal: tipoia e movimento precoce (pêndulo de Codman)</text>
+</svg>

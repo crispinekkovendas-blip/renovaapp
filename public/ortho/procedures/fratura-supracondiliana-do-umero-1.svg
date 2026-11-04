@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<title>Tala posterior do cotovelo</title>
+<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a6d3b"/></marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b3261e"/></marker>
+  <marker id="ahn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1c2a4a"/></marker>
+  <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#1c2a4a" stroke-opacity="0.18" stroke-width="3"/></pattern>
+  <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
+  <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
+</defs>
+<path d="M300 160 L330 160 L330 520 Q330 548 360 550 L720 556 L720 584 L350 578 Q296 572 296 520 Z" fill="#fbf8f2" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M300 160 L330 160 L330 520 Q330 548 360 550 L720 556 L720 584 L350 578 Q296 572 296 520 Z" fill="url(#cotton)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M262 160 L296 160 L296 522 Q296 580 352 586 L726 592 L726 632 L340 624 Q262 614 262 530 Z" fill="#ece7dc" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M262 160 L296 160 L296 522 Q296 580 352 586 L726 592 L726 632 L340 624 Q262 614 262 530 Z" fill="url(#hatch)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M380 160 L380 500" fill="none" stroke="#1c2a4a" stroke-width="130" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M380 160 L380 500" fill="none" stroke="#f3e4d3" stroke-width="120" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M380 500 L700 500" fill="none" stroke="#1c2a4a" stroke-width="110" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M380 500 L700 500" fill="none" stroke="#f3e4d3" stroke-width="100" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(790 500) rotate(0) scale(1.15)"><path d="M-34 -46 L4 -92" fill="none" stroke="#1c2a4a" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-4 -50 L46 -46 Q60 0 46 46 L-4 50 Q-66 30 -68 0 Q-66 -30 -4 -50 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L103.2 -17.7" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L114.7 9.9" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L110.9 32.7" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L97.5 52.5" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L103.2 -17.7" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L114.7 9.9" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L110.9 32.7" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L97.5 52.5" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-34 -46 L4 -92" fill="none" stroke="#f3e4d3" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" /></g>
+<path d="M430.4 417.2 L413.6 460.4 L396.8 417.2 L380 460.4 L363.2 417.2 L346.4 460.4 L329.6 417.2" fill="none" stroke="#b3261e" stroke-width="5" stroke-linecap="round" stroke-linejoin="miter" />
+<path d="M310 190 L450 214" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M310 232.9 L450 256.9" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M310 275.7 L450 299.7" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M310 318.6 L450 342.6" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M310 361.4 L450 385.4" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M310 404.3 L450 428.3" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M310 447.1 L450 471.1" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M310 490 L450 490" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M400 560 L423.2 440" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M441.4 560 L464.6 440" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M482.9 560 L506.1 440" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M524.3 560 L547.5 440" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M565.7 560 L588.9 440" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M607.1 560 L630.3 440" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M648.6 560 L671.8 440" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M690 560 L690 440" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M470 420 Q500 470 470 520" fill="none" stroke="#8a6d3b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="520" y="440" font-size="22" text-anchor="start" font-weight="700" fill="#8a6d3b" >90° (menos se o</text>
+<text x="520" y="468" font-size="22" text-anchor="start" font-weight="700" fill="#8a6d3b" >pulso enfraquece)</text>
+<circle cx="720" cy="540" r="11" fill="#b3261e" stroke="#ffffff" stroke-width="3" />
+<path d="M632 690 L720 540" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="720" cy="540" r="7" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="640" y="700" font-size="22" text-anchor="start" font-weight="500" fill="#1c2a4a" >pulso radial, enchimento capilar,</text>
+<text x="640" y="728" font-size="22" text-anchor="start" font-weight="500" fill="#1c2a4a" >mediano/radial/ulnar: antes e depois</text>
+<circle cx="800" cy="151" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="822" y="160" font-size="22" text-anchor="start" font-weight="500" fill="#1c2a4a" >Gartland I: tala 3 semanas</text>
+<circle cx="800" cy="195" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="822" y="204" font-size="18" text-anchor="start" font-weight="500" fill="#1c2a4a" >II e III: tala só para transportar,</text>
+<text x="822" y="228" font-size="18" text-anchor="start" font-weight="500" fill="#1c2a4a" >   cirurgia pela regulação hoje</text>
+<circle cx="800" cy="267" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="822" y="276" font-size="18" text-anchor="start" font-weight="500" fill="#1c2a4a" >sem pulso e mão branca: reduzir</text>
+<text x="822" y="300" font-size="18" text-anchor="start" font-weight="500" fill="#1c2a4a" >   a flexão; não melhora = urgência</text>
+<circle cx="800" cy="339" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="822" y="348" font-size="22" text-anchor="start" font-weight="500" fill="#1c2a4a" >elevar; raio-X com a tala</text>
+<text x="40" y="56" font-size="26" text-anchor="start" font-weight="700" fill="#1c2a4a" data-top="1">Supracondiliana: tala posterior de cotovelo a ≤ 90°, pulso antes e depois</text>
+</svg>

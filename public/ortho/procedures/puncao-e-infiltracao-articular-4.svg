@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<title>Infiltração do gatilho e De Quervain</title>
+<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a6d3b"/></marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b3261e"/></marker>
+  <marker id="ahn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1c2a4a"/></marker>
+  <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#1c2a4a" stroke-opacity="0.18" stroke-width="3"/></pattern>
+  <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
+  <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
+</defs>
+<rect x="40" y="90" width="560" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
+<text x="62" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >Polia A1</text>
+<g transform="translate(320 480) rotate(-90) scale(1.7)"><g transform="translate(0 0) rotate(0) scale(1)"><path d="M-34 -46 L4 -92" fill="none" stroke="#1c2a4a" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-4 -50 L46 -46 Q60 0 46 46 L-4 50 Q-66 30 -68 0 Q-66 -30 -4 -50 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L106 -36" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L118 -12" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L114 12" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L100 36" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L106 -36" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L118 -12" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L114 12" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L100 36" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-34 -46 L4 -92" fill="none" stroke="#f3e4d3" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" /></g></g>
+<path d="M150 466 L470 466" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 6" />
+<text x="475" y="474" font-size="20" text-anchor="start" font-weight="500" fill="#6b7280" >prega palmar</text>
+<text x="475" y="500" font-size="20" text-anchor="start" font-weight="500" fill="#6b7280" >distal</text>
+<circle cx="300" cy="462" r="12" fill="none" stroke="#8a6d3b" stroke-width="4" />
+<path d="M280.8 462 L319.2 462" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M300 442.8 L300 481.2" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(300 462) rotate(125) scale(1)"><path d="M0 0 L-100 0" fill="none" stroke="#9aa3b5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M0 0 L-100 0" fill="none" stroke="#1c2a4a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+<rect x="-114" y="-10" width="14" height="20" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
+<rect x="-244" y="-22" width="130" height="44" rx="4" fill="#ffffff" stroke="#1c2a4a" stroke-width="3" />
+<rect x="-238" y="-16" width="71.5" height="32" rx="0" fill="#c9a66b" stroke="none" stroke-width="5" />
+<rect x="-280" y="-8" width="36" height="16" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
+<rect x="-288" y="-26" width="10" height="52" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
+<rect x="-250" y="-34" width="8" height="68" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" /></g>
+<text x="70" y="650" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >nódulo na prega palmar distal (sobre a MF);</text>
+<text x="70" y="679" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >agulha 25G a 45°, distal → proximal, na bainha:</text>
+<text x="70" y="708" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >sem resistência, o dedo se move com o líquido</text>
+<rect x="620" y="90" width="540" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
+<text x="642" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >De Quervain</text>
+<path d="M680 420 L960 420" fill="none" stroke="#1c2a4a" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M680 420 L960 420" fill="none" stroke="#f3e4d3" stroke-width="140" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(1040 420) rotate(0) scale(1.05)"><path d="M-34 -46 L4 -92" fill="none" stroke="#1c2a4a" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-4 -50 L46 -46 Q60 0 46 46 L-4 50 Q-66 30 -68 0 Q-66 -30 -4 -50 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L104.8 -23.7" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L116.5 2.7" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L112.6 25.9" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L98.9 47.1" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L104.8 -23.7" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L116.5 2.7" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L112.6 25.9" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L98.9 47.1" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-34 -46 L4 -92" fill="none" stroke="#f3e4d3" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" /></g>
+<path d="M700 380 L940 380" fill="none" stroke="#e6cdb5" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M700 400 L940 400" fill="none" stroke="#e6cdb5" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="930" cy="390" r="28" fill="#f8f5ef" stroke="#1c2a4a" stroke-width="3" />
+<path d="M692 320 L930 372" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="930" cy="372" r="7" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="700" y="330" font-size="22" text-anchor="start" font-weight="500" fill="#1c2a4a" >estiloide do rádio</text>
+<circle cx="900" cy="390" r="12" fill="none" stroke="#8a6d3b" stroke-width="4" />
+<path d="M880.8 390 L919.2 390" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M900 370.8 L900 409.2" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(900 390) rotate(15) scale(1)"><path d="M0 0 L-100 0" fill="none" stroke="#9aa3b5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M0 0 L-100 0" fill="none" stroke="#1c2a4a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+<rect x="-114" y="-10" width="14" height="20" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
+<rect x="-234" y="-22" width="120" height="44" rx="4" fill="#ffffff" stroke="#1c2a4a" stroke-width="3" />
+<rect x="-228" y="-16" width="66" height="32" rx="0" fill="#c9a66b" stroke="none" stroke-width="5" />
+<rect x="-270" y="-8" width="36" height="16" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
+<rect x="-278" y="-26" width="10" height="52" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
+<rect x="-240" y="-34" width="8" height="68" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" /></g>
+<text x="650" y="620" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >1º compartimento (APL + ECP) sobre a</text>
+<text x="650" y="649" font-size="22" text-anchor="start" font-weight="500" fill="#1c2a4a" >estiloide; agulha quase paralela ao tendão,</text>
+<text x="650" y="678" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >proximal, 1 mL + 1 mL; ver o líquido</text>
+<text x="650" y="707" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >correr ao longo da bainha</text>
+<text x="40" y="56" font-size="29" text-anchor="start" font-weight="700" fill="#1c2a4a" data-top="1">Dedo em gatilho (polia A1) e De Quervain: na bainha, não no tendão</text>
+</svg>

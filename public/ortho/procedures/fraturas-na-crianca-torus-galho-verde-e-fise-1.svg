@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<title>Gesso axilopalmar na criança</title>
+<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a6d3b"/></marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b3261e"/></marker>
+  <marker id="ahn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1c2a4a"/></marker>
+  <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#1c2a4a" stroke-opacity="0.18" stroke-width="3"/></pattern>
+  <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
+  <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
+</defs>
+<path d="M415 215 L425.8 460 Q460 485.2 494.2 460 L505 215 Q460 198.8 415 215 Z" fill="#d7dde8" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M440 460 L430 600" fill="none" stroke="#1c2a4a" stroke-width="49.6" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M440 460 L430 600" fill="none" stroke="#d7dde8" stroke-width="39.6" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M430 600 L428 720" fill="none" stroke="#1c2a4a" stroke-width="49.6" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M430 600 L428 720" fill="none" stroke="#f3e4d3" stroke-width="39.6" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M480 460 L490 600" fill="none" stroke="#1c2a4a" stroke-width="49.6" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M480 460 L490 600" fill="none" stroke="#d7dde8" stroke-width="39.6" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M490 600 L492 720" fill="none" stroke="#1c2a4a" stroke-width="49.6" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M490 600 L492 720" fill="none" stroke="#f3e4d3" stroke-width="39.6" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M505 228 L530 370" fill="none" stroke="#1c2a4a" stroke-width="42.4" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M505 228 L530 370" fill="none" stroke="#d7dde8" stroke-width="32.4" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M530 370 L540 480" fill="none" stroke="#1c2a4a" stroke-width="42.4" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M530 370 L540 480" fill="none" stroke="#f3e4d3" stroke-width="32.4" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="460" cy="170" r="44" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" />
+<circle cx="455.6" cy="163.4" r="2.6" fill="#1c2a4a" stroke="#1c2a4a" stroke-width="5" />
+<path d="M360 230 L420 230 L420 400 L560 400 L560 440 L395 440 L370 430 Z" fill="#fbf8f2" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M360 230 L420 230 L420 400 L560 400 L560 440 L395 440 L370 430 Z" fill="url(#cotton)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M340 215 L420 215 L420 380 L560 380 L560 460 L380 460 Q338 440 338 400 Z" fill="#ece7dc" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M340 215 L420 215 L420 380 L560 380 L560 460 L380 460 Q338 440 338 400 Z" fill="url(#hatch)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M410 230 L395 410" fill="none" stroke="#1c2a4a" stroke-width="82" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M410 230 L395 410" fill="none" stroke="#f3e4d3" stroke-width="72" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M395 410 L560 410" fill="none" stroke="#1c2a4a" stroke-width="72" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M395 410 L560 410" fill="none" stroke="#f3e4d3" stroke-width="62" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(600 410) rotate(0) scale(0.75)"><path d="M-34 -46 L4 -92" fill="none" stroke="#1c2a4a" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-4 -50 L46 -46 Q60 0 46 46 L-4 50 Q-66 30 -68 0 Q-66 -30 -4 -50 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L104.1 -20.7" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L115.7 6.3" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L111.8 29.3" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L98.3 49.9" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L104.1 -20.7" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L115.7 6.3" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L111.8 29.3" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L98.3 49.9" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-34 -46 L4 -92" fill="none" stroke="#f3e4d3" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" /></g>
+<path d="M345 225 L360 225" fill="none" stroke="#b3261e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+<text x="300" y="190" font-size="20" text-anchor="end" font-weight="500" fill="#1c2a4a" >até a axila</text>
+<path d="M365.1 247 L454.1 265" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M363.1 277 L452.1 295" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M361.1 307 L450.1 325" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M359.1 337 L448.1 355" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M357.1 367 L446.1 385" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M355.1 397 L444.9 403" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M410 450 L421.2 370" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M438 450 L449.2 370" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M466 450 L477.2 370" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M494 450 L505.2 370" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M522 450 L533.2 370" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M550 450 L550 370" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M652 190 L562 405" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="562" cy="405" r="7" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="660" y="200" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >cotovelo a 90°, antebraço neutro</text>
+<text x="660" y="229" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >(polegar para cima); até a prega</text>
+<text x="660" y="258" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >palmar: MF livres</text>
+<circle cx="660" cy="371" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="682" y="380" font-size="22" text-anchor="start" font-weight="500" fill="#1c2a4a" >acolchoar bem; moldar com a palma</text>
+<circle cx="660" cy="409" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="682" y="418" font-size="22" text-anchor="start" font-weight="500" fill="#1c2a4a" >edema esperado hoje? fender ou bivalvar</text>
+<circle cx="660" cy="447" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="682" y="456" font-size="22" text-anchor="start" font-weight="500" fill="#1c2a4a" >tipoia; braço elevado 48 h</text>
+<circle cx="660" cy="485" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="682" y="494" font-size="22" text-anchor="start" font-weight="500" fill="#1c2a4a" >raio-X em 7 dias (tórus: não precisa)</text>
+<circle cx="660" cy="523" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="682" y="532" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >retirar em 3–4 semanas (menor que o adulto)</text>
+<text x="660" y="620" font-size="24" text-anchor="start" font-weight="500" fill="#6b7280" >pais: dedos roxos, frios ou dor que não</text>
+<text x="660" y="652" font-size="25" text-anchor="start" font-weight="500" fill="#6b7280" >passa com analgésico = voltar na hora</text>
+<text x="40" y="56" font-size="26" text-anchor="start" font-weight="700" fill="#1c2a4a" data-top="1">Criança: gesso axilopalmar, cotovelo a 90°, antebraço neutro, dedos livres</text>
+</svg>

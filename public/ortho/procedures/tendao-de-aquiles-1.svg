@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<title>Protocolo funcional do Aquiles</title>
+<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a6d3b"/></marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b3261e"/></marker>
+  <marker id="ahn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1c2a4a"/></marker>
+  <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#1c2a4a" stroke-opacity="0.18" stroke-width="3"/></pattern>
+  <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
+  <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
+</defs>
+<path d="M200 150 L330 150 L330 480 L520 480 Q560 490 560 540 L200 540 Z" fill="#b9c3d4" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<rect x="160" y="150" width="40" height="390" rx="8" fill="#b9c3d4" stroke="#1c2a4a" stroke-width="5" />
+<rect x="170" y="540" width="400" height="40" rx="10" fill="#1c2a4a" stroke="#1c2a4a" stroke-width="5" />
+<path d="M265 110 L265 400" fill="none" stroke="#1c2a4a" stroke-width="110" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M265 110 L265 400" fill="none" stroke="#f3e4d3" stroke-width="100" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(265 430) rotate(0) scale(1.05)"><path d="M-30 -50 L-36 0 Q-30 30 10 36 L150 40 Q172 36 172 20 Q168 4 140 0 L60 -12 Q40 -30 36 -60 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /></g>
+<rect x="205" y="470" width="160" height="20" rx="4" fill="#ece7dc" stroke="#1c2a4a" stroke-width="3" />
+<rect x="205" y="492" width="160" height="20" rx="4" fill="#ece7dc" stroke="#1c2a4a" stroke-width="3" />
+<rect x="205" y="514" width="160" height="20" rx="4" fill="#ece7dc" stroke="#1c2a4a" stroke-width="3" />
+<path d="M592 170 L370 490" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="370" cy="490" r="7" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="600" y="180" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >equino: 3 cunhas no calcanhar</text>
+<text x="600" y="210" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >(≈ 2 cm cada) dentro da bota</text>
+<rect x="600" y="630" width="120" height="130" rx="8" fill="#d7dde8" stroke="#1c2a4a" stroke-width="3" />
+<text x="660" y="666" font-size="22" text-anchor="middle" font-weight="700" fill="#1c2a4a" >0–2 sem</text>
+<text x="660" y="696" font-size="19" text-anchor="middle" font-weight="500" fill="#6b7280" >3 cunhas</text>
+<text x="660" y="720" font-size="19" text-anchor="middle" font-weight="500" fill="#6b7280" >sem carga ou toque</text>
+<rect x="740" y="585" width="120" height="175" rx="8" fill="#d7dde8" stroke="#1c2a4a" stroke-width="3" />
+<text x="800" y="621" font-size="22" text-anchor="middle" font-weight="700" fill="#1c2a4a" >2–4 sem</text>
+<text x="800" y="651" font-size="19" text-anchor="middle" font-weight="500" fill="#6b7280" >2 cunhas</text>
+<text x="800" y="675" font-size="19" text-anchor="middle" font-weight="500" fill="#6b7280" >carga parcial</text>
+<rect x="880" y="540" width="120" height="220" rx="8" fill="#d7dde8" stroke="#1c2a4a" stroke-width="3" />
+<text x="940" y="576" font-size="22" text-anchor="middle" font-weight="700" fill="#1c2a4a" >4–6 sem</text>
+<text x="940" y="606" font-size="19" text-anchor="middle" font-weight="500" fill="#6b7280" >1 cunha</text>
+<text x="940" y="630" font-size="19" text-anchor="middle" font-weight="500" fill="#6b7280" >carga total</text>
+<rect x="1020" y="495" width="120" height="265" rx="8" fill="#8a6d3b" stroke="#1c2a4a" stroke-width="3" />
+<text x="1080" y="531" font-size="22" text-anchor="middle" font-weight="700" fill="#ffffff" >6–8 sem</text>
+<text x="1080" y="561" font-size="19" text-anchor="middle" font-weight="500" fill="#ffffff" >sem cunha</text>
+<text x="1080" y="585" font-size="19" text-anchor="middle" font-weight="500" fill="#ffffff" >bota reta</text>
+<text x="60" y="630" font-size="21" text-anchor="start" font-weight="500" fill="#6b7280" >Thompson positivo + gap palpável;</text>
+<text x="60" y="657" font-size="21" text-anchor="start" font-weight="500" fill="#6b7280" >ultrassom se dúvida. Começar</text>
+<text x="60" y="684" font-size="21" text-anchor="start" font-weight="500" fill="#6b7280" >em até 48 h.</text>
+<text x="60" y="730" font-size="19" text-anchor="start" font-weight="500" fill="#6b7280" >após 8 sem: sair da bota, salto de 1 cm por</text>
+<text x="60" y="755" font-size="19" text-anchor="start" font-weight="500" fill="#6b7280" >4 sem, fisioterapia; sem corrida até 4–6 meses</text>
+<text x="40" y="56" font-size="31" text-anchor="start" font-weight="700" fill="#1c2a4a" data-top="1">Aquiles sem cirurgia: bota com cunhas e a escada de 8 semanas</text>
+</svg>

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<title>Gesso circular</title>
+<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a6d3b"/></marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b3261e"/></marker>
+  <marker id="ahn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1c2a4a"/></marker>
+  <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#1c2a4a" stroke-opacity="0.18" stroke-width="3"/></pattern>
+  <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
+  <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
+</defs>
+<path d="M150 400 L560 400" fill="none" stroke="#1c2a4a" stroke-width="130" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M150 400 L560 400" fill="none" stroke="#f3e4d3" stroke-width="120" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(660 400) rotate(0) scale(1.25)"><path d="M-34 -46 L4 -92" fill="none" stroke="#1c2a4a" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-4 -50 L46 -46 Q60 0 46 46 L-4 50 Q-66 30 -68 0 Q-66 -30 -4 -50 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L103.2 -17.7" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L114.7 9.9" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L110.9 32.7" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L97.5 52.5" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L103.2 -17.7" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L114.7 9.9" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L110.9 32.7" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L97.5 52.5" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-34 -46 L4 -92" fill="none" stroke="#f3e4d3" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" /></g>
+<path d="M160 330 L560 330 Q600 330 610 360 L610 440 Q600 470 560 470 L160 470 Z" fill="#ece7dc" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M160 330 L560 330 Q600 330 610 360 L610 440 Q600 470 560 470 L160 470 Z" fill="url(#hatch)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M360 250 L360 318" fill="none" stroke="#8a6d3b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<path d="M200 540 L200 482" fill="none" stroke="#8a6d3b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<path d="M520 540 L520 482" fill="none" stroke="#8a6d3b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="360" y="232" font-size="26" text-anchor="middle" font-weight="700" fill="#8a6d3b" >moldagem em três pontos</text>
+<text x="80" y="640" font-size="25" text-anchor="start" font-weight="500" fill="#1c2a4a" >a palma molda — nunca a ponta dos dedos</text>
+<text x="80" y="671" font-size="25" text-anchor="start" font-weight="500" fill="#1c2a4a" >(ponto de pressão = úlcera)</text>
+<path d="M632 550 L628 445" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="628" cy="445" r="7" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="640" y="560" font-size="25" text-anchor="start" font-weight="500" fill="#1c2a4a" >livres: MF (prega palmar) e cotovelo</text>
+<text x="640" y="591" font-size="25" text-anchor="start" font-weight="500" fill="#1c2a4a" >checar pulso, cor e sensibilidade</text>
+<text x="640" y="622" font-size="25" text-anchor="start" font-weight="500" fill="#1c2a4a" >antes de liberar</text>
+<rect x="760" y="100" width="400" height="330" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
+<text x="782" y="144" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >Feito no dia? Bivalvar</text>
+<path d="M800 280 L1100 280" fill="none" stroke="#1c2a4a" stroke-width="110" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M800 280 L1100 280" fill="none" stroke="#f3e4d3" stroke-width="100" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M810 225 L1100 225 L1100 335 L810 335 Z" fill="#ece7dc" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M810 225 L1100 225 L1100 335 L810 335 Z" fill="url(#hatch)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M800 280 L1110 280" fill="none" stroke="#b3261e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="14 10" />
+<path d="M800 225 L800 335" fill="none" stroke="#b3261e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="14 10" />
+<text x="790" y="400" font-size="24" text-anchor="start" font-weight="500" fill="#6b7280" >cortar dos dois lados e abrir</text>
+<text x="790" y="430" font-size="24" text-anchor="start" font-weight="500" fill="#6b7280" >o algodão até a pele</text>
+<text x="40" y="56" font-size="32" text-anchor="start" font-weight="700" fill="#1c2a4a" data-top="1">Gesso circular: três pontos de moldagem, articulações livres</text>
+</svg>

@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
 import { FIRST_DAY, ORTHO_GUIDE, findOrthoTopic, orthoDocs, orthoSearchDoc, orthoSlugs, orthoStats } from "./ortho-guide/index.ts";
 import { buildIndex, search } from "./smart-search.ts";
 
@@ -90,4 +91,16 @@ test("a busca acha pelo nome popular, pela manobra e pelo remédio", () => {
   assert.equal(top("cunningham"), "luxacao-e-instabilidade-do-ombro");
   assert.equal(top("manobra de jahss"), "fraturas-de-metacarpo-e-falanges");
   assert.equal(top("cinta pelvica"), "fraturas-de-pelve-e-sacro-no-idoso");
+});
+
+test("todo procedimento tem a sua ilustração (SVG para o site e o PDF, PNG para o app) em public/ortho/procedures", () => {
+  const dir = new URL("../../public/ortho/procedures/", import.meta.url);
+  let n = 0;
+  for (const t of topics()) {
+    (t.procedures ?? []).forEach((p, k) => {
+      n++;
+      for (const f of [`${t.slug}-${k + 1}.svg`, `png/${t.slug}-${k + 1}.png`]) assert.ok(existsSync(new URL(f, dir)), `${p.name}: falta ${f}`);
+    });
+  }
+  assert.equal(n, 37);
 });

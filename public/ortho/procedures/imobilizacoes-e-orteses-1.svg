@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<title>Tala gessada</title>
+<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a6d3b"/></marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b3261e"/></marker>
+  <marker id="ahn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1c2a4a"/></marker>
+  <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#1c2a4a" stroke-opacity="0.18" stroke-width="3"/></pattern>
+  <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
+  <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
+</defs>
+<rect x="40" y="90" width="560" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
+<text x="62" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >Antebraquiopalmar</text>
+<path d="M100 478 L420 478 Q470 478 520 472 L520 504 Q470 512 420 510 L100 510 Z" fill="#fbf8f2" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M100 478 L420 478 Q470 478 520 472 L520 504 Q470 512 420 510 L100 510 Z" fill="url(#cotton)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M110 504 L420 504 Q470 504 525 496 L525 534 Q470 542 420 540 L110 540 Z" fill="#ece7dc" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M110 504 L420 504 Q470 504 525 496 L525 534 Q470 542 420 540 L110 540 Z" fill="url(#hatch)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M110 420 L420 420" fill="none" stroke="#1c2a4a" stroke-width="120" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M110 420 L420 420" fill="none" stroke="#f3e4d3" stroke-width="110" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(510 420) rotate(0) scale(1.15)"><path d="M-34 -46 L4 -92" fill="none" stroke="#1c2a4a" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-4 -50 L46 -46 Q60 0 46 46 L-4 50 Q-66 30 -68 0 Q-66 -30 -4 -50 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L102.2 -14.7" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L113.5 13.4" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L109.8 36" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L96.6 55.2" fill="none" stroke="#1c2a4a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -36 L102.2 -14.7" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 -12 L113.5 13.4" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 12 L109.8 36" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M44 36 L96.6 55.2" fill="none" stroke="#f3e4d3" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M-34 -46 L4 -92" fill="none" stroke="#f3e4d3" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" /></g>
+<path d="M120 485 L145.6 355" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M160 485 L185.6 355" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M200 485 L225.6 355" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M240 485 L265.6 355" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M280 485 L305.6 355" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M320 485 L345.6 355" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M360 485 L385.6 355" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M400 485 L425.6 355" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M440 485 L440 355" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<text x="70" y="620" font-size="25" text-anchor="start" font-weight="500" fill="#1c2a4a" >malha → algodão → 10–12 camadas</text>
+<text x="70" y="651" font-size="25" text-anchor="start" font-weight="500" fill="#1c2a4a" >→ moldar com a palma → atadura</text>
+<path d="M62 690 L470 456" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="470" cy="456" r="7" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="70" y="700" font-size="25" text-anchor="start" font-weight="500" fill="#1c2a4a" >punho 20° extensão · MF livres</text>
+<path d="M300 330 L300 365" fill="none" stroke="#8a6d3b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="300" y="315" font-size="23" text-anchor="middle" font-weight="500" fill="#6b7280" >moldar com a palma, não com os dedos</text>
+<rect x="620" y="90" width="540" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
+<text x="642" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >Suropodálica</text>
+<path d="M820 240 L842 240 L842 590 Q842 610 870 614 L1060 622 L1060 648 L860 640 Q816 634 816 590 Z" fill="#fbf8f2" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M820 240 L842 240 L842 590 Q842 610 870 614 L1060 622 L1060 648 L860 640 Q816 634 816 590 Z" fill="url(#cotton)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M786 240 L818 240 L818 592 Q818 638 866 644 L1066 652 L1066 690 L856 680 Q786 672 786 596 Z" fill="#ece7dc" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M786 240 L818 240 L818 592 Q818 638 866 644 L1066 652 L1066 690 L856 680 Q786 672 786 596 Z" fill="url(#hatch)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M900 240 L900 540" fill="none" stroke="#1c2a4a" stroke-width="130" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M900 240 L900 540" fill="none" stroke="#f3e4d3" stroke-width="120" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(900 580) rotate(0) scale(1.15)"><path d="M-30 -50 L-36 0 Q-30 30 10 36 L150 40 Q172 36 172 20 Q168 4 140 0 L60 -12 Q40 -30 36 -60 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /></g>
+<path d="M830 270 L970 290.8" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M830 307.1 L970 327.9" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M830 344.3 L970 365.1" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M830 381.4 L970 402.2" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M830 418.6 L970 439.4" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M830 455.7 L970 476.5" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M830 492.9 L970 513.7" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M830 530 L970 530" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<text x="650" y="700" font-size="20" text-anchor="start" font-weight="500" fill="#1c2a4a" >tornozelo a 90°, joelho livre · 12–15 camadas,</text>
+<text x="650" y="729" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >da ponta do pé a 2 dedos abaixo do joelho</text>
+<path d="M1000 520 Q1010 580 960 600" fill="none" stroke="#8a6d3b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="1020" y="520" font-size="26" text-anchor="start" font-weight="700" fill="#8a6d3b" >90°</text>
+<text x="40" y="56" font-size="40" text-anchor="start" font-weight="700" fill="#1c2a4a" data-top="1">Tala gessada: a técnica</text>
+</svg>

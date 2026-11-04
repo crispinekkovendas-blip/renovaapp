@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<title>Sedação para redução</title>
+<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a6d3b"/></marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b3261e"/></marker>
+  <marker id="ahn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1c2a4a"/></marker>
+  <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#1c2a4a" stroke-opacity="0.18" stroke-width="3"/></pattern>
+  <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
+  <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
+</defs>
+<rect x="120" y="520" width="760" height="40" rx="8" fill="#b9c3d4" stroke="#1c2a4a" stroke-width="4" />
+<path d="M150 560 L150 650" fill="none" stroke="#1c2a4a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M850 560 L850 650" fill="none" stroke="#1c2a4a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M280 545 L620 531.8 Q650.8 490 620 448.2 L280 435 Q260.2 490 280 545 Z" fill="#d7dde8" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M620 490 L760 470" fill="none" stroke="#1c2a4a" stroke-width="58.400000000000006" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M620 490 L760 470" fill="none" stroke="#d7dde8" stroke-width="48.400000000000006" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M760 470 L860 500" fill="none" stroke="#1c2a4a" stroke-width="58.400000000000006" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M760 470 L860 500" fill="none" stroke="#f3e4d3" stroke-width="48.400000000000006" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M300 490 L420 470" fill="none" stroke="#1c2a4a" stroke-width="49.6" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M300 490 L420 470" fill="none" stroke="#d7dde8" stroke-width="39.6" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M420 470 L520 500" fill="none" stroke="#1c2a4a" stroke-width="49.6" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M420 470 L520 500" fill="none" stroke="#f3e4d3" stroke-width="39.6" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="220" cy="470" r="42" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" />
+<circle cx="215.8" cy="463.7" r="2.5" fill="#1c2a4a" stroke="#1c2a4a" stroke-width="5" />
+<rect x="900" y="140" width="260" height="200" rx="10" fill="#2a3140" stroke="#1c2a4a" stroke-width="4" />
+<path d="M920 250 L960 250 L975 200 L990 300 L1005 250 L1060 250 L1075 215 L1090 285 L1100 250 L1140 250" fill="none" stroke="#7ee0a0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<text x="920" y="180" font-size="22" text-anchor="start" font-weight="500" fill="#cfd6e3" >SpO₂ 98   FC 72</text>
+<text x="920" y="320" font-size="22" text-anchor="start" font-weight="500" fill="#cfd6e3" >PA 128/80   EtCO₂ 38</text>
+<path d="M900 340 L760 470" fill="none" stroke="#9aa3b5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="770" cy="470" r="10" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="5" />
+<path d="M25 345 L38.2 480 Q80 510.8 121.8 480 L135 345 Q80 325.2 25 345 Z" fill="#b9c3d4" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M95 350 L150 400" fill="none" stroke="#1c2a4a" stroke-width="49.6" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M95 350 L150 400" fill="none" stroke="#b9c3d4" stroke-width="39.6" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M150 400 L190 440" fill="none" stroke="#1c2a4a" stroke-width="49.6" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M150 400 L190 440" fill="none" stroke="#f3e4d3" stroke-width="39.6" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="80" cy="300" r="42" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" />
+<circle cx="75.8" cy="293.7" r="2.5" fill="#1c2a4a" stroke="#1c2a4a" stroke-width="5" />
+<circle cx="200" cy="445" r="34" fill="#d7dde8" stroke="#1c2a4a" stroke-width="4" />
+<path d="M232 445 Q260 420 270 455 Q262 480 232 468 Z" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M80 480 L80 560" fill="none" stroke="#1c2a4a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="120" cy="621" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="142" y="630" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >jejum e via aérea avaliados · consentimento</text>
+<circle cx="120" cy="657" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="142" y="666" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >oxigênio, aspirador, bolsa-válvula-máscara, cânulas</text>
+<circle cx="120" cy="693" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="142" y="702" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >monitor contínuo (SpO₂, FC, PA, capnografia se houver)</text>
+<circle cx="120" cy="729" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="142" y="738" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >quem reduz não é quem seda: segunda pessoa só na via aérea</text>
+<text x="40" y="56" font-size="34" text-anchor="start" font-weight="700" fill="#1c2a4a" data-top="1">Sedação para reduzir: monitor, segunda pessoa, via aérea</text>
+</svg>

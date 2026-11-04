@@ -42,6 +42,8 @@ class GuideRepository(
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default),
 ) {
     private val file = File(context.filesDir, FILE_NAME)
+    /** As ilustrações dos procedimentos de ortopedia, baixadas uma vez e guardadas aqui. */
+    private val spritesDir = File(context.filesDir, "sprites")
     private val syncLock = Mutex()
     private val started = AtomicBoolean(false)
 
@@ -50,6 +52,13 @@ class GuideRepository(
 
     private val _state = MutableStateFlow<GuideState>(GuideState.Starting)
     val state: StateFlow<GuideState> = _state.asStateFlow()
+
+    /** Sobe a cada ilustração que chega: a tela do tópico recompõe e mostra a figura. */
+    private val _spritesVersion = MutableStateFlow(0)
+    val spritesVersion: StateFlow<Int> = _spritesVersion.asStateFlow()
+
+    /** Onde fica (ou ficará) a cópia local de uma ilustração do pacote. */
+    fun spriteFile(image: String): File = File(spritesDir, image.substringAfterLast('/'))
 
     /** Revisão nova que chegou nesta sincronização e o médico ainda não viu. */
     private val _newRevision = MutableStateFlow<Int?>(null)
@@ -124,11 +133,15 @@ class GuideRepository(
                     announceRevision(content.bundle.revision.current)
                     _state.value = GuideState.Ready(content, name, offline = false, syncing = false)
                     warmUp(content)
+                    fetchSprites(content)
                 }
             }
             is BundleResult.NotModified -> {
                 val name = keepToken(account, result.renewed)
-                if (current != null) _state.value = GuideState.Ready(current, name, offline = false, syncing = false)
+                if (current != null) {
+                    _state.value = GuideState.Ready(current, name, offline = false, syncing = false)
+                    fetchSprites(current)
+                }
             }
             is BundleResult.Unauthorized -> logout(result.message)
             is BundleResult.Failed -> fail(current, account.name, result.message)
@@ -144,6 +157,31 @@ class GuideRepository(
         }
     }
 
+    /**
+     * Baixa as ilustrações dos procedimentos que ainda não estão no aparelho
+     * (37 PNG, ~2 MB ao todo) e apaga as que o pacote não cita mais. Falha de
+     * rede só deixa a figura de fora; a próxima sincronização tenta de novo.
+     */
+    private fun fetchSprites(content: GuideContent) {
+        scope.launch {
+            val wanted = content.ortho?.topics.orEmpty().flatMap { t -> t.procedures.orEmpty().mapNotNull { it.image } }
+            if (wanted.isEmpty()) return@launch
+            spritesDir.mkdirs()
+            val keep = wanted.map { it.substringAfterLast('/') }.toSet()
+            spritesDir.listFiles()?.filter { it.name !in keep }?.forEach { it.delete() }
+            var got = 0
+            for (image in wanted) {
+                val dest = spriteFile(image)
+                if (dest.exists()) continue
+                if (api.download(image, dest)) {
+                    got++
+                    _spritesVersion.value++
+                }
+            }
+            if (got > 0) Log.i(TAG, "$got ilustrações de procedimento baixadas")
+        }
+    }
+
     fun dismissNewRevision() {
         _newRevision.value?.let { prefs.lastSeenRevision = it }
         _newRevision.value = null
@@ -153,6 +191,7 @@ class GuideRepository(
     fun logout(message: String? = null) {
         tokens.clear()
         file.delete()
+        spritesDir.deleteRecursively()
         _newRevision.value = null
         _state.value = GuideState.LoggedOut(message)
     }

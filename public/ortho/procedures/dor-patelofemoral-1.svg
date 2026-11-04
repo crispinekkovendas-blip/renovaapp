@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<title>Redução da luxação da patela</title>
+<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a6d3b"/></marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b3261e"/></marker>
+  <marker id="ahn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1c2a4a"/></marker>
+  <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#1c2a4a" stroke-opacity="0.18" stroke-width="3"/></pattern>
+  <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
+  <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
+</defs>
+<rect x="40" y="90" width="540" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
+<text x="62" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >Como chega (joelho fletido)</text>
+<path d="M300 250 L300 400" fill="none" stroke="#1c2a4a" stroke-width="180" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M300 250 L300 400" fill="none" stroke="#f3e4d3" stroke-width="170" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M300 540 L300 720" fill="none" stroke="#1c2a4a" stroke-width="160" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M300 540 L300 720" fill="none" stroke="#f3e4d3" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M240 400 Q300 370 360 400 Q380 480 300 530 Q220 480 240 400 Z" fill="#e6cdb5" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M380 410 Q420 380 460 410 Q470 460 420 490 Q370 460 380 410 Z" fill="#f8f5ef" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<text x="420" y="455" font-size="18" text-anchor="middle" font-weight="500" fill="#1c2a4a" >patela</text>
+<text x="385" y="590" font-size="19" text-anchor="start" font-weight="500" fill="#b3261e" >patela para fora,</text>
+<text x="385" y="615" font-size="19" text-anchor="start" font-weight="500" fill="#b3261e" >joelho dobrado,</text>
+<text x="385" y="640" font-size="19" text-anchor="start" font-weight="500" fill="#b3261e" >não estende</text>
+<rect x="600" y="90" width="560" height="680" rx="14" fill="#ffffff" stroke="#e5e9f0" stroke-width="3" />
+<text x="622" y="134" font-size="30" text-anchor="start" font-weight="700" fill="#1c2a4a" >A manobra</text>
+<path d="M860 250 L860 400" fill="none" stroke="#1c2a4a" stroke-width="180" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M860 250 L860 400" fill="none" stroke="#f3e4d3" stroke-width="170" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M860 540 L860 720" fill="none" stroke="#1c2a4a" stroke-width="160" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M860 540 L860 720" fill="none" stroke="#f3e4d3" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M800 400 Q860 370 920 400 Q940 480 860 530 Q780 480 800 400 Z" fill="#e6cdb5" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M830 410 Q870 380 910 410 Q920 460 870 490 Q820 460 830 410 Z" fill="#f8f5ef" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M1020 450 L930 450" fill="none" stroke="#8a6d3b" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="1030" y="450" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >polegar</text>
+<text x="1030" y="477" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >empurra</text>
+<path d="M760 680 Q700 600 740 520" fill="none" stroke="#8a6d3b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="640" y="470" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >estender</text>
+<text x="640" y="497" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >devagar</text>
+<text x="620" y="700" font-size="15" text-anchor="start" font-weight="500" fill="#6b7280" >analgesia; às vezes entra só de esticar. Depois: raio-X (fragmento</text>
+<text x="620" y="725" font-size="17" text-anchor="start" font-weight="500" fill="#6b7280" >osteocondral?), imobilizador 2–3 semanas, quadríceps cedo</text>
+<text x="40" y="56" font-size="27" text-anchor="start" font-weight="700" fill="#1c2a4a" data-top="1">Patela luxada: estender o joelho devagar e empurrar a patela para dentro</text>
+</svg>

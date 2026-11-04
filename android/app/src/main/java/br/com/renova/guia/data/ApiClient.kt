@@ -156,6 +156,26 @@ class ApiClient(
         }
     }
 
+    /** Baixa um arquivo estático do site (a ilustração de um procedimento) para `dest`; false se não deu. */
+    suspend fun download(path: String, dest: java.io.File): Boolean = withContext(Dispatchers.IO) {
+        val request = Request.Builder().url(url(path)).get().build()
+        try {
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) return@withContext false
+                val body = response.body ?: return@withContext false
+                val tmp = java.io.File(dest.parentFile, dest.name + ".tmp")
+                tmp.outputStream().use { out -> body.byteStream().copyTo(out) }
+                if (!tmp.renameTo(dest)) {
+                    dest.delete()
+                    tmp.renameTo(dest)
+                }
+                dest.exists()
+            }
+        } catch (_: IOException) {
+            false
+        }
+    }
+
     /** A pergunta à Super Inteligência; os eventos chegam enquanto a resposta é escrita. */
     fun ask(token: String, question: String, history: List<AskTurn>, fresh: Boolean = false, context: String? = null, scope: String? = null): Flow<AskEvent> = callbackFlow {
         val body = GuideJson.encodeToString(AskBody(question, history, fresh, context, scope)).toRequestBody(JSON_TYPE)

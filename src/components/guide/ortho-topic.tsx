@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { OrthoTopic } from "@/lib/ortho-guide";
+import { procedureImage, type OrthoTopic } from "@/lib/ortho-guide";
 
 /**
  * Um tópico do Guia de ortopedia na ordem do atendimento: perguntar,
@@ -79,9 +79,16 @@ export function OrthoTopicBody({ topic }: { topic: OrthoTopic }) {
       {topic.procedures && topic.procedures.length > 0 ? (
         <Section id="procedimentos" title="Procedimentos" hint="passo a passo, no serviço">
           <ol className="space-y-3">
-            {topic.procedures.map((p) => (
+            {topic.procedures.map((p, i) => (
               <li key={p.name} className="rounded-xl border border-pine-900/10 bg-white px-3.5 py-3">
                 <p className="text-[14.5px] font-extrabold text-pine-950">{p.name}</p>
+                {/* eslint-disable-next-line @next/next/no-img-element -- SVG próprio, servido como está */}
+                <img
+                  src={procedureImage(topic.slug, i + 1).svg}
+                  alt={`Ilustração: ${p.name}`}
+                  loading="lazy"
+                  className="mt-2 w-full rounded-lg border border-pine-900/10 bg-white"
+                />
                 <p className="mt-1 text-[13.5px]">
                   <span className="mr-1 rounded bg-pine-100 px-1 text-[10px] font-extrabold tracking-wide text-pine-800 uppercase">Quando</span>
                   {p.when}

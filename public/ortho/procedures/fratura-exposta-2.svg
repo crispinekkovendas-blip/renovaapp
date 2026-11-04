@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<title>Tala de alinhamento da perna</title>
+<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a6d3b"/></marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b3261e"/></marker>
+  <marker id="ahn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1c2a4a"/></marker>
+  <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#1c2a4a" stroke-opacity="0.18" stroke-width="3"/></pattern>
+  <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
+  <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
+</defs>
+<path d="M300 150 L330 150 L330 640 Q330 664 360 668 L540 674 L540 700 L350 694 Q296 688 296 640 Z" fill="#fbf8f2" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M300 150 L330 150 L330 640 Q330 664 360 668 L540 674 L540 700 L350 694 Q296 688 296 640 Z" fill="url(#cotton)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M262 150 L296 150 L296 642 Q296 696 350 702 L546 708 L546 746 L340 740 Q262 730 262 650 Z" fill="#ece7dc" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M262 150 L296 150 L296 642 Q296 696 350 702 L546 708 L546 746 L340 740 Q262 730 262 650 Z" fill="url(#hatch)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M380 150 L380 360" fill="none" stroke="#1c2a4a" stroke-width="160" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M380 150 L380 360" fill="none" stroke="#f3e4d3" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M380 360 L380 600" fill="none" stroke="#1c2a4a" stroke-width="135" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M380 360 L380 600" fill="none" stroke="#f3e4d3" stroke-width="125" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(380 640) rotate(0) scale(1.15)"><path d="M-30 -50 L-36 0 Q-30 30 10 36 L150 40 Q172 36 172 20 Q168 4 140 0 L60 -12 Q40 -30 36 -60 Z" fill="#f3e4d3" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /></g>
+<path d="M432.5 457.5 L415 502.5 L397.5 457.5 L380 502.5 L362.5 457.5 L345 502.5 L327.5 457.5" fill="none" stroke="#b3261e" stroke-width="5" stroke-linecap="round" stroke-linejoin="miter" />
+<path d="M340 440 L420 440" fill="none" stroke="#b3261e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 6" />
+<path d="M297.5 180 L462.5 212.8" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M297.5 221 L462.5 253.8" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M297.5 262 L462.5 294.8" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M297.5 303 L462.5 335.8" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M297.5 344 L462.5 376.8" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M297.5 385 L462.5 417.8" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M297.5 426 L462.5 458.8" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M297.5 467 L462.5 499.8" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M297.5 508 L462.5 540.8" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M297.5 549 L462.5 581.8" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M297.5 590 L462.5 590" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+<path d="M380 760 L380 712" fill="none" stroke="#8a6d3b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="430" y="760" font-size="24" text-anchor="start" font-weight="700" fill="#8a6d3b" >tração suave e contínua no calcanhar</text>
+<text x="640" y="150" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >1. analgesia (bloqueio ou sedação) antes</text>
+<text x="640" y="180" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >2. ajudante segura a coxa; você traciona pelo</text>
+<text x="640" y="210" font-size="20" text-anchor="start" font-weight="500" fill="#1c2a4a" >   calcanhar e corrige a angulação olhando o eixo</text>
+<text x="640" y="240" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >3. tala posterior da raiz da coxa ao pé,</text>
+<text x="640" y="270" font-size="20" text-anchor="start" font-weight="500" fill="#1c2a4a" >   joelho em leve flexão (10–20°), tornozelo 90°</text>
+<text x="640" y="300" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >4. atadura sem apertar; checar pulso pedioso e</text>
+<text x="640" y="330" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >   sensibilidade antes e depois</text>
+<text x="640" y="360" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >5. raio-X de controle com a tala</text>
+<text x="640" y="560" font-size="17" text-anchor="start" font-weight="500" fill="#6b7280" >exposta? antibiótico e curativo primeiro, depois a tala.</text>
+<text x="640" y="592" font-size="16" text-anchor="start" font-weight="500" fill="#6b7280" >Dor desproporcional após a tala = síndrome compartimental:</text>
+<text x="640" y="624" font-size="26" text-anchor="start" font-weight="500" fill="#6b7280" >abrir tudo.</text>
+<text x="40" y="56" font-size="29" text-anchor="start" font-weight="700" fill="#1c2a4a" data-top="1">Tala longa de perna: alinhar com tração e imobilizar da coxa ao pé</text>
+</svg>

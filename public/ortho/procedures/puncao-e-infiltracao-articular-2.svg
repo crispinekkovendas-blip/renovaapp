@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+<title>Infiltração subacromial</title>
+<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a6d3b"/></marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b3261e"/></marker>
+  <marker id="ahn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1c2a4a"/></marker>
+  <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#1c2a4a" stroke-opacity="0.18" stroke-width="3"/></pattern>
+  <pattern id="cotton" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2" fill="#1c2a4a" fill-opacity="0.12"/></pattern>
+  <pattern id="cloth" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8 H16 M8 0 V16" stroke="#1c2a4a" stroke-opacity="0.08" stroke-width="2"/></pattern>
+</defs>
+<path d="M260 250 Q400 180 560 240 L600 300 Q540 330 520 420 L480 600 Q400 640 330 560 L250 420 Z" fill="#f8f5ef" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M560 240 Q640 230 680 270 L690 300 L600 300 Z" fill="#f8f5ef" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<text x="610" y="285" font-size="22" text-anchor="middle" font-weight="500" fill="#1c2a4a" >acrômio</text>
+<path d="M640 320 L700 700" fill="none" stroke="#1c2a4a" stroke-width="160" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M640 320 L700 700" fill="none" stroke="#f3e4d3" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="650" cy="330" r="70" fill="#f8f5ef" stroke="#1c2a4a" stroke-width="5" />
+<circle cx="620" cy="360" r="14" fill="none" stroke="#8a6d3b" stroke-width="4" />
+<path d="M597.6 360 L642.4 360" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M620 337.6 L620 382.4" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<g transform="translate(620 360) rotate(160) scale(1)"><path d="M0 0 L-110 0" fill="none" stroke="#9aa3b5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M0 0 L-110 0" fill="none" stroke="#1c2a4a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+<rect x="-124" y="-10" width="14" height="20" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
+<rect x="-274" y="-22" width="150" height="44" rx="4" fill="#ffffff" stroke="#1c2a4a" stroke-width="3" />
+<rect x="-268" y="-16" width="82.5" height="32" rx="0" fill="#c9a66b" stroke="none" stroke-width="5" />
+<rect x="-310" y="-8" width="36" height="16" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
+<rect x="-318" y="-26" width="10" height="52" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" />
+<rect x="-280" y="-34" width="8" height="68" rx="0" fill="#9aa3b5" stroke="#1c2a4a" stroke-width="2" /></g>
+<path d="M600 350 L540 300" fill="none" stroke="#b3261e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ahr)"/>
+<path d="M752 190 L620 360" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="620" cy="360" r="7" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="760" y="200" font-size="23" text-anchor="start" font-weight="500" fill="#1c2a4a" >ângulo posterolateral do acrômio:</text>
+<text x="760" y="231" font-size="25" text-anchor="start" font-weight="500" fill="#1c2a4a" >2 cm abaixo e 1 cm medial</text>
+<text x="760" y="320" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >agulha para a frente, levemente</text>
+<text x="760" y="351" font-size="25" text-anchor="start" font-weight="500" fill="#1c2a4a" >para cima e medial, na direção</text>
+<text x="760" y="382" font-size="25" text-anchor="start" font-weight="500" fill="#1c2a4a" >do processo coracoide</text>
+<circle cx="760" cy="471" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="782" y="480" font-size="17" text-anchor="start" font-weight="500" fill="#1c2a4a" >5–8 mL (triancinolona 40 mg + lidocaína)</text>
+<circle cx="760" cy="509" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="782" y="518" font-size="20" text-anchor="start" font-weight="500" fill="#1c2a4a" >entrou fácil = espaço certo (bursa)</text>
+<circle cx="760" cy="547" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="782" y="556" font-size="17" text-anchor="start" font-weight="500" fill="#1c2a4a" >resistência = tendão: recuar e reangular</text>
+<circle cx="760" cy="585" r="6" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
+<text x="782" y="594" font-size="24" text-anchor="start" font-weight="500" fill="#1c2a4a" >no máximo 3 por ano</text>
+<text x="40" y="56" font-size="25" text-anchor="start" font-weight="700" fill="#1c2a4a" data-top="1">Subacromial, via posterior: abaixo do ângulo do acrômio, mirando o coracoide</text>
+</svg>
