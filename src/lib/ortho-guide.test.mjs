@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync } from "node:fs";
-import { FIRST_DAY, ORTHO_GUIDE, findOrthoTopic, orthoDocs, orthoSearchDoc, orthoSlugs, orthoStats } from "./ortho-guide/index.ts";
+import { FIRST_DAY, ORTHO_GUIDE, SPRITES_VERSION, findOrthoTopic, orthoDocs, orthoSearchDoc, orthoSlugs, orthoStats } from "./ortho-guide/index.ts";
 import { buildIndex, search } from "./smart-search.ts";
 
 const topics = () => ORTHO_GUIDE.flatMap((c) => c.topics);
@@ -99,7 +99,7 @@ test("todo procedimento tem a sua ilustração (SVG para o site e o PDF, PNG par
   for (const t of topics()) {
     (t.procedures ?? []).forEach((p, k) => {
       n++;
-      for (const f of [`${t.slug}-${k + 1}.svg`, `png/${t.slug}-${k + 1}.png`]) assert.ok(existsSync(new URL(f, dir)), `${p.name}: falta ${f}`);
+      for (const f of [`${t.slug}-${k + 1}.svg`, `png/${t.slug}-${k + 1}.v${SPRITES_VERSION}.png`]) assert.ok(existsSync(new URL(f, dir)), `${p.name}: falta ${f}`);
     });
   }
   assert.equal(n, 37);
