@@ -23,11 +23,13 @@ da tela e o escopo Plantão/Ortopedia).
   (tópicos na ordem da consulta, regiões e alarmes da consulta guiada, atalhos do
   primeiro dia, revisões). Tópico com as seções do plantão (na urgência,
   procedimentos passo a passo, no retorno, cirurgia e regulação).
-- **Ilustrações dos procedimentos**: cada procedimento traz `image` (PNG no
-  site, `png/<slug>-<k>.v<versão>.png`). Depois de cada sincronização o app baixa
-  os que faltam para `filesDir/sprites`, apaga os que saíram da lista e mostra a
-  cópia local sem internet. O nome carrega a versão do desenho: mudou o desenho
-  no site, o nome muda e o app troca a cópia sozinho — sem APK novo.
+- **Ilustrações dos procedimentos**: cada procedimento traz `image` (o SVG
+  animado do site, `/ortho/procedures/<slug>-<k>.svg`). Depois de cada
+  sincronização o app baixa os que faltam para `filesDir/sprites`, apaga os que
+  saíram da lista e mostra a cópia local sem internet, num WebView sem
+  JavaScript e sem rede (`ProcedureCard` › `SpriteView`). O pacote traz
+  `ortopedia.spritesVersion`: mudou, o app apaga a pasta e baixa tudo de novo —
+  sem APK novo.
 - **Mais**: favoritos e recentes, pergunta por voz, enviar/copiar receita
   (WhatsApp), aviso de revisão nova, tema escuro (⋮ › Tema escuro), "O app abre
   em" Plantão ou Ortopedia.
