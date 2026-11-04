@@ -48,9 +48,11 @@
 <path d="M880 730 L1040 730" fill="none" stroke="#1c2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
 <path d="M968 330 Q1020 300 1052 340 L1052 560 L968 560 Z" fill="#ece7dc" stroke="#1c2a4a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0.8" />
 <path d="M968 330 Q1020 300 1052 340 L1052 560 L968 560 Z" fill="url(#hatch)" stroke="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-<text x="640" y="660" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >da ponta do 4º e 5º dedos ao terço</text>
-<text x="640" y="687" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >proximal do antebraço, pelo lado ulnar;</text>
-<text x="640" y="714" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >MF a 70–90°, IF em leve flexão, punho 20°</text>
+<text x="640" y="600" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >da ponta dos dedos 4–5</text>
+<text x="640" y="627" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >ao terço proximal do</text>
+<text x="640" y="654" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >antebraço, lado ulnar;</text>
+<text x="640" y="681" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >MF 70–90°, IF em leve</text>
+<text x="640" y="708" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >flexão, punho 20°</text>
 <path d="M632 150 L1075 360" fill="none" stroke="#8a6d3b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
 <circle cx="1075" cy="360" r="7" fill="#8a6d3b" stroke="#ffffff" stroke-width="3" />
 <text x="640" y="160" font-size="21" text-anchor="start" font-weight="500" fill="#1c2a4a" >4º e 5º dedos juntos</text>

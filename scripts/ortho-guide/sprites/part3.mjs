@@ -33,7 +33,7 @@ export const PART3 = [
     g('transform="translate(960 470) rotate(-90) scale(1.8)"', hand(0, 0, 0, 1, { flex: 0.25 })),
     limb(960, 560, 960, 740, 140), bandage(960, 580, 960, 730, 160, 4),
     path("M968 330 Q1020 300 1052 340 L1052 560 L968 560 Z", { fill: C.plaster, opacity: 0.8 }), path("M968 330 Q1020 300 1052 340 L1052 560 L968 560 Z", { fill: "url(#hatch)", stroke: "none" }),
-    label(640, 660, "da ponta do 4º e 5º dedos ao terço\nproximal do antebraço, pelo lado ulnar;\nMF a 70–90°, IF em leve flexão, punho 20°", { size: 21 }),
+    label(640, 600, "da ponta dos dedos 4–5\nao terço proximal do\nantebraço, lado ulnar;\nMF 70–90°, IF em leve\nflexão, punho 20°", { size: 21 }),
     label(640, 160, "4º e 5º dedos juntos\ndentro da calha", { size: 21, to: [1075, 360] }),
   ], { title: "Manobra de Jahss e calha ulnar" }) },
 
