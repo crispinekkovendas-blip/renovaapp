@@ -70,7 +70,7 @@ export default async function DashboardPage() {
   const folhas = digitalDocuments ?? 0;
 
   const active = todayAppointments.filter((a) => !isMuted(a.status));
-  const clinicName = clinicRow?.value?.trim() || "Clínica Renova";
+  const clinicName = clinicRow?.value?.trim() || "Clínica Shinmed";
   const pending = inbox.length;
 
   return (

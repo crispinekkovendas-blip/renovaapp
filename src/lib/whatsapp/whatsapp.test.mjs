@@ -221,7 +221,7 @@ test("configuração: valores fora do lugar voltam ao padrão; Gemini só pago",
   assert.equal(botCanTriage(c, true), false);
   assert.equal(botCanTriage({ ...c, geminiPago: true }, true), true);
   assert.equal(botCanTriage({ ...c, geminiPago: true }, false), false);
-  assert.equal(fillClinic("Olá da {clinica}", "Renova"), "Olá da Renova");
+  assert.equal(fillClinic("Olá da {clinica}", "Shinmed"), "Olá da Shinmed");
 });
 
 test("resumo da consulta: lido com tolerância, CID validado, negativas fora", () => {

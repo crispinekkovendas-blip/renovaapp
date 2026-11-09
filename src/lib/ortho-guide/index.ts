@@ -6,7 +6,7 @@ export type { OrthoChapter, OrthoExam, OrthoProcedure, OrthoRx, OrthoTopic } fro
 export { ORTHO_GUIDE };
 
 /**
- * Guia de ortopedia: texto próprio da Renova para o médico que assume a vaga
+ * Guia de ortopedia: texto próprio da Shinmed para o médico que assume a vaga
  * de ortopedia no SUS e é, ali, o ortopedista de plantão e de ambulatório.
  * Não é reprodução de livro — por isso vive no repositório, e não no
  * Supabase como os guias licenciados.
@@ -20,7 +20,7 @@ export const ORTHO_CREDIT = {
 } as const;
 
 /**
- * A ilustração própria de um procedimento (desenhada pela Renova, em
+ * A ilustração própria de um procedimento (desenhada pela Shinmed, em
  * public/ortho/procedures, gerada por scripts/ortho-guide/sprites): k é a
  * ordem do procedimento no tópico, a partir de 1. SVG para o site e o PDF,
  * PNG (1600 × 1067) para o app Android.

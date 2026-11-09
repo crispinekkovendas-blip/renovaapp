@@ -26,13 +26,13 @@ export interface GuideBlock {
   t: string;
   rows?: string[][];
   /**
-   * Correção da revisão Renova: o texto de antes e o motivo. `rev` é o número
+   * Correção da revisão Shinmed: o texto de antes e o motivo. `rev` é o número
    * da revisão (guide-revisions.ts); sem ele, é da publicação (1).
    */
   fix?: GuideFix;
   /** Correções anteriores do mesmo trecho, da mais antiga para a mais nova. */
   earlier?: GuideFix[];
-  /** Aviso da revisão Renova, sem mexer no texto do guia. */
+  /** Aviso da revisão Shinmed, sem mexer no texto do guia. */
   note?: string;
   /** Revisão do aviso; sem ela, é da publicação (1). */
   noteRev?: number;

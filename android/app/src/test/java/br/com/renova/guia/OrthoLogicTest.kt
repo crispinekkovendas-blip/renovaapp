@@ -113,7 +113,7 @@ class OrthoLogicTest {
         assertTrue(note.contains("· Naproxeno 500 mg — "))
         assertFalse(note.contains("· Paracetamol"))
         assertTrue(note.contains("Atestado: 7 dias · Retorno: "))
-        assertTrue(note.endsWith("Roteiro: Guia de ortopedia Renova, revisão 3."))
+        assertTrue(note.endsWith("Roteiro: Guia de ortopedia Shinmed, revisão 3."))
 
         val empty = OrthoConsult.buildSoapNote(ortho, ortho.region("lombar")!!, ortho.topic("lombalgia-aguda")!!, ConsultAnswers(region = "lombar", trauma = false, topic = "lombalgia-aguda"))
         assertTrue(empty.contains("nenhuma pergunta marcada"))
@@ -129,6 +129,6 @@ class OrthoLogicTest {
         assertTrue(text.contains("CID M10.9"))
         assertTrue(text.contains("⚠"))
         assertTrue(text.contains("Colchicina 0,5 mg"))
-        assertTrue(text.contains("Guia de ortopedia Renova"))
+        assertTrue(text.contains("Guia de ortopedia Shinmed"))
     }
 }

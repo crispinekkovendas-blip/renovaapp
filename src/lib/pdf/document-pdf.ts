@@ -130,7 +130,7 @@ export interface PdfDocumentInput {
    * espanhol, a posologia também em espanhol e a declaração de uso pessoal.
    */
   bilingual?: boolean;
-  /** Modelo da folha (aparência); sem ele, o padrão Renova. */
+  /** Modelo da folha (aparência); sem ele, o padrão Shinmed. */
   style?: SheetStyle | null;
   /** Logotipo do modelo (data URL PNG/JPEG), já lido de `settings`. */
   logoImage?: string | null;
@@ -494,8 +494,8 @@ export async function buildDocumentPdf(input: PdfDocumentInput): Promise<Uint8Ar
   const pdf = await PDFDocument.create();
   pdf.registerFontkit(fontkit);
   pdf.setTitle(`${input.title} — ${input.patient.name}`);
-  pdf.setProducer("Renova");
-  pdf.setCreator("Renova");
+  pdf.setProducer("Shinmed");
+  pdf.setCreator("Shinmed");
 
   const fonts: Fonts = {
     reg: await pdf.embedFont(Buffer.from(REGULAR_TTF_BASE64, "base64"), { subset: true }),

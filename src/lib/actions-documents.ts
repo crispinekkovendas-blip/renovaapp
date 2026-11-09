@@ -662,7 +662,7 @@ export async function saveProtocolAction(formData: FormData): Promise<SaveProtoc
 /**
  * Salva a lista de medicamentos como **protocolo da clínica ou do médico**.
  *
- * O Renova não traz protocolos de medicamento prontos, e isso é deliberado:
+ * O Shinmed não traz protocolos de medicamento prontos, e isso é deliberado:
  * um modelo de texto que saia imperfeito é lido e corrigido por quem assina,
  * mas uma dose padrão se repete calada em cada paciente que receber o
  * protocolo. Quem conhece a prática da clínica é o médico — o sistema só

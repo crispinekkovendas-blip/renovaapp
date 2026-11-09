@@ -9,7 +9,7 @@ export function OrthoCredit({ compact = false }: { compact?: boolean }) {
         <b className="text-pine-950">
           {ORTHO_CREDIT.title}, publicado em {ORTHO_CREDIT.writtenAt}; revisão {ORTHO_CREDIT.revision} em {ORTHO_CREDIT.revisedAt}.
         </b>{" "}
-        Texto próprio da Renova, escrito a partir das diretrizes citadas no pé de cada tópico — não é reprodução de livro. O que
+        Texto próprio da Shinmed, escrito a partir das diretrizes citadas no pé de cada tópico — não é reprodução de livro. O que
         cada revisão mudou (antes, agora e motivo) está em{" "}
         <Link href="/guia/ortopedia/revisoes" className="font-bold text-pine-600 hover:underline">
           Revisões

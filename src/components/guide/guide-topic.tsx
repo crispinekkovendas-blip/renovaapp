@@ -5,7 +5,7 @@ import { RevisionCarousel } from "./revision-carousel";
 
 /**
  * Um tópico do guia de plantão, na ordem da página. O texto já é o corrigido
- * pela revisão Renova. Cada trecho que mudou (ou ganhou aviso) vai com
+ * pela revisão Shinmed. Cada trecho que mudou (ou ganhou aviso) vai com
  * marca-texto e, logo embaixo, o carrossel do histórico: o texto do PDF
  * primeiro, depois cada mudança. Aviso pendente aparece no carrossel como
  * "⚠ conferir", sempre visível.

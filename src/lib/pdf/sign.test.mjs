@@ -10,7 +10,7 @@ const BASE = {
   date: "17/09/2026",
   code: "RNV-SIGN-0001",
   validateUrl: "https://renovaapp.vercel.app/validar/RNV-SIGN-0001",
-  clinic: { name: "Clínica Renova", line: "Av. Paulista, 1000", cnes: "1234567" },
+  clinic: { name: "Clínica Shinmed", line: "Av. Paulista, 1000", cnes: "1234567" },
   patient: { name: "Ana Beatriz Souza", cpf: "412.658.790-01" },
   professional: { name: "Dra. Maibe Foronda", council: "CRM 123456-SP", specialty: "Clínica Médica", rqe: "12345" },
 };

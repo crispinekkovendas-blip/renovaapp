@@ -30,7 +30,7 @@ export function MobileTopBar({ name }: { name: string }) {
   const pathname = usePathname();
   const current = activeNavItem(pathname);
   const title =
-    pathname === "/conta" ? "Minha conta" : pathname.startsWith("/ajuda") ? "Ajuda" : (current?.label ?? "Renova");
+    pathname === "/conta" ? "Minha conta" : pathname.startsWith("/ajuda") ? "Ajuda" : (current?.label ?? "Shinmed");
   const initial = name.trim().charAt(0).toUpperCase() || "?";
 
   return (

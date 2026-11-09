@@ -3,7 +3,7 @@ import type { Encounter, Patient } from "../db.ts";
 import { ToolError, type Tool } from "./protocol.ts";
 
 /**
- * As ferramentas que o Claude enxerga no Renova. Leitura livre (com chave de
+ * As ferramentas que o Claude enxerga no Shinmed. Leitura livre (com chave de
  * API); escrita só por campo pedido, sempre devolvendo o antes e o depois,
  * para que quem conversa com o Claude veja exatamente o que mudou.
  */
@@ -274,7 +274,7 @@ export const TOOLS: Tool[] = [
     name: "registrar_atendimento",
     title: "Registrar atendimento",
     description:
-      "Grava um atendimento (evolução) no prontuário: queixa, anamnese, exame, hipótese diagnóstica, conduta e prescrição em texto. Não emite receita assinada — isso continua sendo feito pelo médico no Renova.",
+      "Grava um atendimento (evolução) no prontuário: queixa, anamnese, exame, hipótese diagnóstica, conduta e prescrição em texto. Não emite receita assinada — isso continua sendo feito pelo médico no Shinmed.",
     inputSchema: {
       type: "object",
       properties: {

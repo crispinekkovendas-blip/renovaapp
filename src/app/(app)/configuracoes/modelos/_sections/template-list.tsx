@@ -21,7 +21,7 @@ export function TemplateList({ templates, viewer }: { templates: DocumentTemplat
   if (templates.length === 0) {
     return (
       <p className="card px-5 py-4 text-sm text-pine-900/55">
-        Nenhum modelo salvo ainda. Enquanto isso, cada tipo usa o texto padrão do Renova — crie o seu ao lado.
+        Nenhum modelo salvo ainda. Enquanto isso, cada tipo usa o texto padrão do Shinmed — crie o seu ao lado.
       </p>
     );
   }

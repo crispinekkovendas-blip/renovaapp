@@ -9,7 +9,7 @@ import { THEME_INIT_SCRIPT } from "@/lib/theme";
 export const metadata: Metadata = {
   // Base das URLs absolutas (OpenGraph, canonical) em toda página.
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://renovaapp.vercel.app"),
-  title: { default: "Renova", template: "%s · Renova" },
+  title: { default: "Shinmed", template: "%s · Shinmed" },
   description: `Marque, confirme e receba sua receita pelo celular. ${REFRAIN}`,
 };
 

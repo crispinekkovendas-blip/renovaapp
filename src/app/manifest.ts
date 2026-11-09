@@ -14,7 +14,7 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
   const { name: clinic } = await getPublicClinic();
   return {
     name: `${clinic} · Meu portal`,
-    short_name: "Renova",
+    short_name: "Shinmed",
     description: "Sua próxima consulta, suas receitas e seus lembretes — sem login, sem senha.",
     start_url: "/p/app",
     scope: "/p/",

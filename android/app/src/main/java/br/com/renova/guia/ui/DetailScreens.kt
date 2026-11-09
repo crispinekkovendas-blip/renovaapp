@@ -239,7 +239,7 @@ fun RecipeScreen(content: GuideContent, prefs: UserPrefs, slug: String, onBack: 
                 }
             }
             MutedText(
-                "Ponto de partida para adulto sem comorbidade: ajuste a alergias, gestação, idade, peso e função renal. Para emitir, use a ficha do paciente no Renova.",
+                "Ponto de partida para adulto sem comorbidade: ajuste a alergias, gestação, idade, peso e função renal. Para emitir, use a ficha do paciente no Shinmed.",
                 Modifier.padding(top = 16.dp),
             )
         }
@@ -291,7 +291,7 @@ fun TopicScreen(content: GuideContent, prefs: UserPrefs, slug: String, onBack: (
             val credit = content.bundle.plantao.credit
             MutedText(
                 "${credit.title}, ${credit.edition} (${credit.publisher}). Reproduzido com autorização dos autores: ${credit.authors.joinToString(", ")}. " +
-                    "Revisão Renova desde ${credit.reviewedAt}: erros de dose, diluição e digitação corrigidos no próprio texto. Doses de adulto de 70 kg, salvo indicação. Sempre confira com o protocolo da instituição.",
+                    "Revisão Shinmed desde ${credit.reviewedAt}: erros de dose, diluição e digitação corrigidos no próprio texto. Doses de adulto de 70 kg, salvo indicação. Sempre confira com o protocolo da instituição.",
                 Modifier.padding(top = 16.dp),
             )
         }
@@ -418,7 +418,7 @@ fun DriveEntryScreen(content: GuideContent, prefs: UserPrefs, slug: String, onBa
             )
             val credit = content.bundle.drive.credit
             MutedText(
-                "Condição do ${credit.basedOn}: o card original, no início do histórico, é reproduzido com autorização da autora. Texto da revisão Renova (${credit.reviewedAt}), com apoio de IA. " +
+                "Condição do ${credit.basedOn}: o card original, no início do histórico, é reproduzido com autorização da autora. Texto da revisão Shinmed (${credit.reviewedAt}), com apoio de IA. " +
                     "Confira antes de prescrever: alergias, gestação, função renal e hepática, peso e idade mudam a conduta.",
                 Modifier.padding(top = 16.dp),
             )

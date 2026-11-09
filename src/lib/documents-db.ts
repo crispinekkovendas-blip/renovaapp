@@ -276,11 +276,11 @@ export async function getClinicHeader(): Promise<ClinicHeader> {
       WHERE key IN ('clinic_name', 'clinic_address', 'clinic_phone', 'clinic_document', 'clinic_cnes')`;
     const settings = Object.fromEntries(rows.map((row) => [row.key, row.value?.trim() ?? ""]));
     return {
-      name: settings.clinic_name || "Clínica Renova",
+      name: settings.clinic_name || "Clínica Shinmed",
       line: [settings.clinic_address, settings.clinic_phone, settings.clinic_document].filter(Boolean).join(" · "),
       cnes: settings.clinic_cnes ?? "",
     };
   } catch {
-    return { name: "Clínica Renova", line: "", cnes: "" };
+    return { name: "Clínica Shinmed", line: "", cnes: "" };
   }
 }

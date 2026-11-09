@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
  * O Guia de ortopedia dentro do pacote (app-bundle.ts › AppOrtho): os tópicos
  * na ordem da consulta, as regiões e alarmes da consulta guiada, os atalhos
  * do primeiro dia, as revisões (antes, agora, motivo) e um índice de busca só
- * dele. Texto próprio da Renova — não é reprodução de livro.
+ * dele. Texto próprio da Shinmed — não é reprodução de livro.
  */
 
 @Serializable

@@ -71,7 +71,7 @@ export function SideNav({ name, role }: { name: string; role: Role }) {
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-pine-950 text-base font-extrabold text-white">
             R
           </span>
-          <span className="hidden text-lg font-extrabold tracking-tight text-pine-950 lg:block peek:block">Renova</span>
+          <span className="hidden text-lg font-extrabold tracking-tight text-pine-950 lg:block peek:block">Shinmed</span>
         </Link>
 
         <nav className="flex flex-1 flex-col gap-1">

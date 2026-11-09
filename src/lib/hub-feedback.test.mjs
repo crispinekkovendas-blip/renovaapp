@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { pendingRenewalFor, portalFeedback, submissionState } from "./hub-feedback.ts";
 import { serializeRenewalAnswers } from "./hub-forms.ts";
 
-const who = { firstName: "Ana", clinic: "Clínica Renova" };
+const who = { firstName: "Ana", clinic: "Clínica Shinmed" };
 
 test("portalFeedback: nothing without a known code", () => {
   assert.deepEqual(portalFeedback({}, who), []);
@@ -14,7 +14,7 @@ test("portalFeedback: success banners name the patient and the clinic", () => {
   const [confirmed] = portalFeedback({ ok: "confirmado" }, who);
   assert.equal(confirmed.tone, "success");
   assert.match(confirmed.body, /Obrigado, Ana/);
-  assert.match(confirmed.body, /Clínica Renova/);
+  assert.match(confirmed.body, /Clínica Shinmed/);
 
   const [cancelled] = portalFeedback({ ok: "cancelado" }, who);
   assert.equal(cancelled.tone, "neutral");

@@ -110,7 +110,7 @@ export function SiteFooter({
 
       <div className={`mx-auto max-w-6xl px-4 sm:px-6 ${compact ? "mt-6" : "mt-10"}`}>
         <p className="border-t border-current/15 pt-6 text-xs opacity-60">
-          Feito com <span className="font-display tracking-tight font-semibold">Renova</span>
+          Feito com <span className="font-display tracking-tight font-semibold">Shinmed</span>
         </p>
       </div>
     </footer>

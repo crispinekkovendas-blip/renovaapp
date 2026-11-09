@@ -131,12 +131,12 @@ test("firstNameOf and the reception reply message", () => {
   assert.equal(firstNameOf(""), "");
   const message = rescheduleReplyMessage({
     patientName: "Maria da Silva",
-    clinicName: "Clínica Renova",
+    clinicName: "Clínica Shinmed",
     date: "10/09/2026",
     time: "14:30",
   });
   assert.match(message, /^Olá Maria!/);
-  assert.match(message, /Clínica Renova/);
+  assert.match(message, /Clínica Shinmed/);
   assert.match(message, /10\/09\/2026 às 14:30/);
   assert.doesNotMatch(message, /undefined/);
 });
@@ -166,10 +166,10 @@ test("renewal answers round-trip through JSON and survive junk", () => {
 });
 
 test("renewalReplyMessage names the clinic and the prescription date when known", () => {
-  const withDate = renewalReplyMessage({ patientName: "Maria da Silva", clinicName: "Clínica Renova", prescriptionDate: "01/09/2026" });
-  assert.match(withDate, /^Olá Maria! Aqui é da Clínica Renova\./);
+  const withDate = renewalReplyMessage({ patientName: "Maria da Silva", clinicName: "Clínica Shinmed", prescriptionDate: "01/09/2026" });
+  assert.match(withDate, /^Olá Maria! Aqui é da Clínica Shinmed\./);
   assert.match(withDate, /receita de 01\/09\/2026/);
-  const without = renewalReplyMessage({ patientName: "Maria", clinicName: "Clínica Renova", prescriptionDate: "" });
+  const without = renewalReplyMessage({ patientName: "Maria", clinicName: "Clínica Shinmed", prescriptionDate: "" });
   assert.doesNotMatch(without, /receita de/);
   assert.doesNotMatch(without, /undefined/);
 });

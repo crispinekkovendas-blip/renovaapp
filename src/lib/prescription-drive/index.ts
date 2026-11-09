@@ -12,7 +12,7 @@ export { DRIVE_PATTERNS, DRIVE_SOURCES, PRESCRIPTION_DRIVE };
 
 /**
  * Drive de prescrições revisado: as condições do Drive de Prescrições
- * reescritas uma a uma pelas diretrizes atuais. O texto é da revisão Renova;
+ * reescritas uma a uma pelas diretrizes atuais. O texto é da revisão Shinmed;
  * os cards originais do e-book (originals.json, extraídos por
  * scripts/prescription-drive/extract_originals.py) abrem o carrossel do
  * histórico de cada entrada, reproduzidos com autorização da autora. A fonte

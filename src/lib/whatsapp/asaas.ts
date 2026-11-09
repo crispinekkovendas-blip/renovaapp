@@ -33,7 +33,7 @@ async function call(method: "GET" | "POST", path: string, body?: unknown): Promi
   if (!key) throw new Error("ASAAS_API_KEY não configurada");
   const res = await fetch(`${asaasBase()}${path}`, {
     method,
-    headers: { "content-type": "application/json", access_token: key, "user-agent": "Renova/1.0" },
+    headers: { "content-type": "application/json", access_token: key, "user-agent": "Shinmed/1.0" },
     body: body === undefined ? undefined : JSON.stringify(body),
   });
   const data = obj(await res.json().catch(() => ({})));

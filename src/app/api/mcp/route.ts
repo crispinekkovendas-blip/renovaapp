@@ -3,7 +3,7 @@ import { handleBody } from "@/lib/mcp/protocol";
 import { TOOLS } from "@/lib/mcp/tools";
 
 /**
- * Servidor MCP do Renova (Streamable HTTP, sem sessão): o Claude conecta com
+ * Servidor MCP do Shinmed (Streamable HTTP, sem sessão): o Claude conecta com
  * uma chave de API criada em Configurações › Integrações.
  *   claude mcp add --transport http renova https://<site>/api/mcp --header "Authorization: Bearer rnv_..."
  */

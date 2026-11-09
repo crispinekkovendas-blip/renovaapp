@@ -679,7 +679,7 @@ export function EmitComposer({
           <span className="block text-xs text-pine-900/60">
             {kindTemplates.length === 0
               ? "Nenhum modelo salvo para este tipo — comece pelo texto padrão."
-              : "O texto padrão do Renova, sem modelo."}
+              : "O texto padrão do Shinmed, sem modelo."}
           </span>
         </span>
         <span aria-hidden className="text-xl text-pine-900/30">

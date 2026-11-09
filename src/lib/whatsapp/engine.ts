@@ -81,7 +81,7 @@ export async function receive(message: InboundMessage, simulated = false): Promi
   if (message.kind === "audio") body = (await transcribe(message.mediaId)) ?? "[áudio — não consegui transcrever; ouça na conversa]";
   else if (message.kind === "image") body = `[imagem]${body ? ` ${body}` : ""}`;
   else if (message.kind === "document") body = `[documento]${body ? ` ${body}` : ""}`;
-  else if (message.kind === "other" && !body) body = "[mensagem de um tipo que o Renova não lê — veja no celular]";
+  else if (message.kind === "other" && !body) body = "[mensagem de um tipo que o Shinmed não lê — veja no celular]";
   const saved = await insertInbound({
     thread,
     caseId: current.id,

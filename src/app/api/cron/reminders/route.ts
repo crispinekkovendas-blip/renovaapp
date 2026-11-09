@@ -60,9 +60,9 @@ interface SubscriptionRow {
 async function clinicName(): Promise<string> {
   try {
     const [row] = await sql<{ value: string }>`SELECT value FROM settings WHERE key = 'clinic_name'`;
-    return row?.value?.trim() || "Clínica Renova";
+    return row?.value?.trim() || "Clínica Shinmed";
   } catch {
-    return "Clínica Renova";
+    return "Clínica Shinmed";
   }
 }
 

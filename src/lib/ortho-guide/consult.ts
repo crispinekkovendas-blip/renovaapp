@@ -289,7 +289,7 @@ export function buildSoapNote(region: OrthoRegion, topic: OrthoTopic, answers: C
   lines.push(`- Cirurgia/regulação: ${topic.refer[0]}`);
   lines.push(`- Atestado: ${answers.leave.trim() || topic.leave} · Retorno: ${topic.followup}`);
   lines.push("");
-  lines.push(`Roteiro: Guia de ortopedia Renova, revisão ${CURRENT_ORTHO_REVISION}.`);
+  lines.push(`Roteiro: Guia de ortopedia Shinmed, revisão ${CURRENT_ORTHO_REVISION}.`);
   return lines.join("\n");
 }
 

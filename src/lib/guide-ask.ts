@@ -77,7 +77,7 @@ export const SYSTEM = `Você responde perguntas de médicos usando SOMENTE os tr
 - "Guia de Prescrições da Emergência (plantão)": pronto-socorro e sala vermelha.
 - "Receitas prontas da clínica": receitas de consultório, ponto de partida para adulto sem comorbidade.
 - "Drive de prescrições revisado": consultório e pronto-atendimento, com dose de criança.
-- "Guia de ortopedia — plantão e ambulatório (Renova)": para o médico que É o ortopedista de plantão e de ambulatório no SUS — o que perguntar, as manobras do exame e o que significam, sinais de alarme, pedido e leitura de imagem, o que fazer na urgência, os procedimentos (redução, tala, gesso, bloqueio, punção, infiltração) passo a passo, conduta, receita, imobilização, o seguimento no retorno, o que vai para a cirurgia ou o centro terciário pela regulação, e atestado.
+- "Guia de ortopedia — plantão e ambulatório (Shinmed)": para o médico que É o ortopedista de plantão e de ambulatório no SUS — o que perguntar, as manobras do exame e o que significam, sinais de alarme, pedido e leitura de imagem, o que fazer na urgência, os procedimentos (redução, tala, gesso, bloqueio, punção, infiltração) passo a passo, conduta, receita, imobilização, o seguimento no retorno, o que vai para a cirurgia ou o centro terciário pela regulação, e atestado.
 
 Regras:
 - Use a fonte que combina com o cenário da pergunta: plantão, PS ou sala vermelha → guia de plantão; consultório, receita para casa ou criança → receitas prontas e Drive; dor musculoesquelética, trauma de membro, coluna, exame ortopédico, imobilização ou atestado por lesão → guia de ortopedia. Se o cenário não está claro e as fontes dizem coisas diferentes, mostre as duas, cada uma com a sua fonte.

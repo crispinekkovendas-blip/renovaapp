@@ -11,7 +11,7 @@ export function GuideCredit({ compact = false }: { compact?: boolean }) {
         Reproduzido com autorização dos autores: {GUIDE_CREDIT.authors.join(", ")}.
       </p>
       <p className="mt-1.5">
-        Revisão Renova desde {GUIDE_CREDIT.reviewedAt}: erros de dose, diluição e digitação foram corrigidos no próprio texto.
+        Revisão Shinmed desde {GUIDE_CREDIT.reviewedAt}: erros de dose, diluição e digitação foram corrigidos no próprio texto.
         Cada trecho que mudou vai com marca-texto e, logo embaixo, o histórico — o texto do PDF primeiro, depois cada mudança
         com o motivo; aviso pendente aparece como “⚠ conferir”. Doses de adulto de 70 kg, salvo indicação. Sempre confira com
         o protocolo da instituição.

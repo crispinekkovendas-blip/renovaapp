@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 
 /**
- * Os APKs do app Android (Guia Renova) que o site entrega. Ao publicar
+ * Os APKs do app Android (Guia Shinmed) que o site entrega. Ao publicar
  * (`gh workflow run android.yml -f publish=true`), o GitHub Actions cria a
  * release e também grava o APK em `android-releases/` com a lista
  * `releases.json` — commit no `memed-fase-0` (guarda as 3 mais novas). O

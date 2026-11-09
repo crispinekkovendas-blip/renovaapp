@@ -49,7 +49,7 @@ test("os trechos de ortopedia entram no corpo da Super Inteligência e a busca p
 });
 
 test("o prompt conhece a quarta fonte e o contexto da tela entra na busca e na pergunta", async () => {
-  assert.match(SYSTEM, /Guia de ortopedia — plantão e ambulatório \(Renova\)/);
+  assert.match(SYSTEM, /Guia de ortopedia — plantão e ambulatório \(Shinmed\)/);
   assert.match(SYSTEM, /nunca responda "encaminhe ao ortopedista"/);
   assert.match(SYSTEM, /orto-entorse-de-tornozelo#1/);
   assert.match(SYSTEM, /Contexto/);

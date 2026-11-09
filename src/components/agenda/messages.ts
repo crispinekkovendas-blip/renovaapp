@@ -14,12 +14,12 @@ interface AppointmentText {
 
 /** Cartão da agenda: pedido de confirmação com o link assinado. */
 export function confirmMessage(a: AppointmentText, confirmLink: string | undefined): string {
-  return `Olá ${a.patient_name}! Confirmando sua consulta na Clínica Renova em ${fmtDate(a.date)} às ${a.start_time} com ${a.professional_name}. Responda SIM ou confirme pelo link: ${confirmLink}`;
+  return `Olá ${a.patient_name}! Confirmando sua consulta na Clínica Shinmed em ${fmtDate(a.date)} às ${a.start_time} com ${a.professional_name}. Responda SIM ou confirme pelo link: ${confirmLink}`;
 }
 
 /** Cartão da agenda: link da sala de teleconsulta. */
 export function telemedMessage(a: AppointmentText, roomUrl: string): string {
-  return `Olá ${a.patient_name}! Sua teleconsulta na Clínica Renova é em ${fmtDate(a.date)} às ${a.start_time}. Acesse a sala pelo link: ${roomUrl}`;
+  return `Olá ${a.patient_name}! Sua teleconsulta na Clínica Shinmed é em ${fmtDate(a.date)} às ${a.start_time}. Acesse a sala pelo link: ${roomUrl}`;
 }
 
 /** Sala Jitsi da teleconsulta, ou null enquanto não foi criada. */

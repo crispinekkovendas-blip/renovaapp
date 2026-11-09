@@ -47,7 +47,7 @@ export const SOURCE_LABEL: Readonly<Record<ChunkSource, string>> = {
   plantao: "Guia de Prescrições da Emergência (plantão)",
   receitas: "Receitas prontas da clínica",
   drive: "Drive de prescrições revisado",
-  ortopedia: "Guia de ortopedia — plantão e ambulatório (Renova)",
+  ortopedia: "Guia de ortopedia — plantão e ambulatório (Shinmed)",
 };
 
 /** Trecho grande demais vira dois: a IA lê melhor e a busca acerta mais. */

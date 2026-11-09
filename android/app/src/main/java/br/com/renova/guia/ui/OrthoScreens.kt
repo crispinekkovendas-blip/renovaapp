@@ -365,7 +365,7 @@ private fun NeighborCard(label: String, title: String, align: Alignment.Horizont
 fun OrthoCreditText(ortho: OrthoContent) {
     val c = ortho.tab.credit
     MutedText(
-        "${c.title}, publicado em ${c.writtenAt}; revisão ${c.revision}${if (c.revisedAt.isNotBlank()) " em ${c.revisedAt}" else ""}. Texto próprio da Renova, a partir das diretrizes citadas no pé de cada tópico. " +
+        "${c.title}, publicado em ${c.writtenAt}; revisão ${c.revision}${if (c.revisedAt.isNotBlank()) " em ${c.revisedAt}" else ""}. Texto próprio da Shinmed, a partir das diretrizes citadas no pé de cada tópico. " +
             (c.reviewedBy?.let { "Revisado por $it. " } ?: "Escrito para o médico que é o ortopedista de plantão e de ambulatório no SUS; ainda sem revisão por ortopedista — confira doses, técnicas e condutas com o protocolo do serviço. ") +
             "Doses de adulto sem comorbidade, salvo indicação. Os dias de atestado são sugestão.",
         Modifier.padding(top = 16.dp),

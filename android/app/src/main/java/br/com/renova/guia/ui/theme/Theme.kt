@@ -10,7 +10,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 /*
- * As cores do Renova no tema "Tevet & Iyar" do site: azul-marinho de Tevet na
+ * As cores do Shinmed no tema "Tevet & Iyar" do site: azul-marinho de Tevet na
  * estrutura, oliva e bronze de Iyar no destaque. O escuro é escolha do médico
  * (menu ⋮ › Tema escuro), não do aparelho — igual ao botão do site.
  */

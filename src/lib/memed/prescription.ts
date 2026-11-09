@@ -147,7 +147,7 @@ export function parsePrescriptionList(body: unknown): RemotePrescription[] {
 /**
  * De quem é esta receita. Primeiro pelo id externo que nós mesmos mandamos no
  * `setPaciente`; depois pelo CPF, que cobre a receita emitida direto na Memed,
- * fora do Renova. Sem nenhum dos dois, devolve null — e quem chama decide, em
+ * fora do Shinmed. Sem nenhum dos dois, devolve null — e quem chama decide, em
  * vez de pendurar a receita no paciente errado.
  */
 export function matchPatientId(

@@ -33,7 +33,7 @@ export function HubShell({
           a borda de cima: o conteúdo desce pelo recorte da câmera. */}
       <header className="section-ink px-4 pb-7 pt-[calc(1.5rem+env(safe-area-inset-top))] sm:px-6 sm:pb-8">
         <div className={column}>
-          <p className="truncate text-xs uppercase tracking-[0.2em] opacity-70">{clinic ?? "Renova"}</p>
+          <p className="truncate text-xs uppercase tracking-[0.2em] opacity-70">{clinic ?? "Shinmed"}</p>
           {heading ? (
             <>
               <h1 className="mt-3 break-words font-display text-2xl font-semibold tracking-tight sm:text-3xl">{heading}</h1>
@@ -45,7 +45,7 @@ export function HubShell({
               <p className="mt-2 text-base opacity-80">Aqui está tudo o que você precisa da sua consulta.</p>
             </>
           ) : (
-            <p className="mt-3 font-display tracking-tight text-3xl font-semibold">Renova</p>
+            <p className="mt-3 font-display tracking-tight text-3xl font-semibold">Shinmed</p>
           )}
         </div>
       </header>
@@ -60,7 +60,7 @@ export function HubShell({
               Privacidade
             </Link>
             <span className="mx-2">·</span>
-            Feito com Renova
+            Feito com Shinmed
           </p>
           <p className="mt-3">
             <ThemeToggle className="text-current opacity-80 hover:bg-white/10" />

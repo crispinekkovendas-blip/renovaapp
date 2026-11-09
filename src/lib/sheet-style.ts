@@ -66,7 +66,7 @@ export interface SheetPreset {
 /** Modelos prontos, para escolher sem personalizar nada. */
 export const SHEET_PRESETS: readonly SheetPreset[] = [
   { id: "renova", name: "Tevet & Iyar (padrão)", style: DEFAULT_SHEET_STYLE },
-  { id: "roxo", name: "Renova roxo (anterior)", style: LEGACY_SHEET_STYLE },
+  { id: "roxo", name: "Shinmed roxo (anterior)", style: LEGACY_SHEET_STYLE },
   {
     id: "sobrio",
     name: "Sóbrio, preto e branco",

@@ -32,8 +32,8 @@ export default async function LoginPage({
           }}
         />
         <p className="relative flex items-center gap-2.5 text-xl font-extrabold tracking-tight">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-base text-pine-950">R</span>
-          Renova
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-base text-pine-950">S</span>
+          Shinmed
         </p>
         <div className="relative">
           {/* O título da página é o "Entrar" do formulário; isto é o slogan do painel. */}
@@ -62,8 +62,8 @@ export default async function LoginPage({
             ← Página da clínica
           </Link>
           <p className="mb-8 flex items-center gap-2.5 text-xl font-extrabold tracking-tight text-pine-950 lg:hidden">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-pine-950 text-base text-white">R</span>
-            Renova
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-pine-950 text-base text-white">S</span>
+            Shinmed
           </p>
           <h1 className="font-display text-3xl font-extrabold tracking-tight text-pine-950">Entrar</h1>
           <p className="mt-1 text-sm text-pine-900/60">{REFRAIN}</p>

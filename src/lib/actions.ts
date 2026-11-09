@@ -514,7 +514,7 @@ export async function createUserAction(formData: FormData): Promise<void> {
 export async function updateClinicSettingsAction(formData: FormData): Promise<void> {
   await requireAdmin();
   const entries: [string, string][] = [
-    ["clinic_name", str(formData, "clinic_name") || "Clínica Renova"],
+    ["clinic_name", str(formData, "clinic_name") || "Clínica Shinmed"],
     ["clinic_phone", str(formData, "clinic_phone")],
     ["clinic_address", str(formData, "clinic_address")],
     ["clinic_document", str(formData, "clinic_document")],

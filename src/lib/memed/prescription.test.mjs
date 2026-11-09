@@ -91,7 +91,7 @@ test("converte a data brasileira da Memed para a do banco", () => {
 test("id externo do paciente vai e volta", () => {
   assert.equal(memedPatientExternalId(12), "renova-pac-12");
   assert.equal(patientIdFromExternalId("renova-pac-12"), 12);
-  // Id gerado pela própria Memed (receita emitida fora do Renova) não é nosso.
+  // Id gerado pela própria Memed (receita emitida fora do Shinmed) não é nosso.
   assert.equal(patientIdFromExternalId("01a058fe-a90a-7180-ba6e-2c36b4b728e1"), null);
   assert.equal(patientIdFromExternalId("renova-pac-0"), null);
   assert.equal(patientIdFromExternalId(null), null);

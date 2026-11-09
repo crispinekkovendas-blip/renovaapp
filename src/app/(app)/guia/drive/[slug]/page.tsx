@@ -60,7 +60,7 @@ export default async function DriveEntryPage({ params }: { params: Promise<{ slu
         </div>
 
         <p className="mt-6 rounded-2xl border border-pine-900/10 bg-white/70 p-3.5 text-xs text-pine-900/65">
-          Condição do {DRIVE_CREDIT.basedOn}: o card original, no início do histórico, é reproduzido com autorização da autora. Texto da revisão Renova ({DRIVE_CREDIT.reviewedAt}), com apoio de IA. Confira
+          Condição do {DRIVE_CREDIT.basedOn}: o card original, no início do histórico, é reproduzido com autorização da autora. Texto da revisão Shinmed ({DRIVE_CREDIT.reviewedAt}), com apoio de IA. Confira
           antes de prescrever: alergias, gestação, função renal e hepática, peso e idade mudam a conduta. Para emitir, use a
           ficha do paciente.
         </p>

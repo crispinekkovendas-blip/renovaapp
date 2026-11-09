@@ -15,7 +15,7 @@ export { EMERGENCY_GUIDE };
 /**
  * Plantão e emergência: o Guia de Prescrições da Emergência inteiro, para o
  * médico consultar no hospital. O texto é o dos autores, reproduzido com
- * autorização; o que a revisão da Renova corrigiu fica marcado no próprio
+ * autorização; o que a revisão da Shinmed corrigiu fica marcado no próprio
  * trecho (texto original + motivo), e o que pede conferência leva um aviso.
  */
 export const GUIDE_CREDIT = {

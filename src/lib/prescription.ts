@@ -14,7 +14,7 @@ import { cleanFormula, formulaLines, formulaSubstances, type Formula } from "./f
  * O receituário: a lista de medicamentos de uma prescrição, e as regras para
  * transformá-la nos documentos que a lei exige.
  *
- * O que distingue o receituário dos outros documentos do Renova é que ele não
+ * O que distingue o receituário dos outros documentos do Shinmed é que ele não
  * é um texto — é uma **lista estruturada**. O texto impresso é derivado dela,
  * nunca o contrário, senão não dá para separar por tarja, avisar de alergia
  * nem reaproveitar a prescrição numa renovação.

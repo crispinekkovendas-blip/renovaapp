@@ -38,7 +38,7 @@ export function isoDate(value: unknown): string | null {
   return iso;
 }
 
-/** Celular como o Renova mostra: "(11) 98765-4321"; tira o 55 do país. */
+/** Celular como o Shinmed mostra: "(11) 98765-4321"; tira o 55 do país. */
 export function formatPhone(value: unknown): string | null {
   let d = digits(value);
   if (d.length >= 12 && d.startsWith("55")) d = d.slice(2);

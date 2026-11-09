@@ -34,7 +34,7 @@ object CrashLog {
     private fun write(context: Context, thread: Thread, error: Throwable) {
         val trace = StringWriter().also { error.printStackTrace(PrintWriter(it)) }.toString()
         val text = buildString {
-            appendLine("Guia Renova ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
+            appendLine("Guia Shinmed ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
             appendLine("Android ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT}) · ${Build.MANUFACTURER} ${Build.MODEL}")
             appendLine("Quando: ${SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date())} · thread ${thread.name}")
             appendLine()

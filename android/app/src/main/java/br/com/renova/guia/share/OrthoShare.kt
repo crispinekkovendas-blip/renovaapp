@@ -33,5 +33,5 @@ fun orthoShareText(topic: OrthoTopic): String = buildString {
         for (r in topic.refer) append("• ").append(r).append("\n")
     }
     append("\nAtestado: ").append(topic.leave).append("\nRetorno: ").append(topic.followup).append("\n")
-    append("\n_Guia de ortopedia Renova — para o ortopedista de plantão e de ambulatório; confira com o protocolo do serviço._")
+    append("\n_Guia de ortopedia Shinmed — para o ortopedista de plantão e de ambulatório; confira com o protocolo do serviço._")
 }

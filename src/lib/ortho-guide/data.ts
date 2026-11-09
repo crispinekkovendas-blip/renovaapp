@@ -6,7 +6,7 @@ import { MAO_E_COTOVELO } from "./data-mao.ts";
 import { CRIANCA } from "./data-crianca.ts";
 
 /**
- * Guia de ortopedia — plantão e ambulatório, escrito pela Renova para o
+ * Guia de ortopedia — plantão e ambulatório, escrito pela Shinmed para o
  * médico que assume a vaga de ortopedia no SUS e é, ali, o ortopedista:
  * quem reduz, imobiliza, punciona, infiltra, interna e decide o que vai para
  * a cirurgia ou o centro terciário pela regulação. Texto próprio (não é

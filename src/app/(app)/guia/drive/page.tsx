@@ -52,7 +52,7 @@ export default async function DrivePage() {
       <DriveIndex />
       <p className="mt-8 rounded-2xl border border-pine-900/10 bg-white/70 p-4 text-[13px] text-pine-900/65">
         Lista de condições do <b className="text-pine-950">{DRIVE_CREDIT.basedOn}</b>. As receitas, doses e orientações
-        foram reescritas pela revisão Renova em {DRIVE_CREDIT.reviewedAt}, com apoio de IA, a partir de diretrizes públicas
+        foram reescritas pela revisão Shinmed em {DRIVE_CREDIT.reviewedAt}, com apoio de IA, a partir de diretrizes públicas
         (fonte em cada entrada). Precisam de conferência médica: ajuste a alergias, gestação, função renal e hepática, peso e
         idade.
       </p>

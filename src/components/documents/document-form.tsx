@@ -26,7 +26,7 @@ const ERROR_MESSAGE: Partial<Record<string, string>> = {
 const ERROR_FALLBACK = "Faltou escolher o profissional.";
 
 export interface FormTemplate {
-  /** null = modelo padrão do Renova. */
+  /** null = modelo padrão do Shinmed. */
   id: number | null;
   name: string;
   title: string;

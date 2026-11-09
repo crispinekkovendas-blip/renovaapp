@@ -356,7 +356,7 @@ private fun CheckRow(text: String, on: Boolean, onToggle: () -> Unit) {
 @Composable
 private fun NoteStep(note: String, topic: OrthoTopic, onOpen: (String) -> Unit, onReset: () -> Unit) {
     val context = LocalContext.current
-    StepTitle("Nota SOAP", "copie e cole no atendimento do paciente, no Renova")
+    StepTitle("Nota SOAP", "copie e cole no atendimento do paciente, no Shinmed")
     Text(
         note,
         modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(MaterialTheme.colorScheme.surfaceContainerLowest).padding(12.dp).testTag("soap-note"),
@@ -380,5 +380,5 @@ private fun NoteStep(note: String, topic: OrthoTopic, onOpen: (String) -> Unit, 
         TextButton(onClick = { onOpen(Routes.ortoTopic(topic.slug)) }) { Text("Reler o tópico") }
         TextButton(onClick = onReset) { Text("Nova consulta") }
     }
-    MutedText("Receita, atestado e encaminhamento saem pela ficha do paciente no site do Renova, com o texto daqui como guia.", Modifier.padding(top = 8.dp))
+    MutedText("Receita, atestado e encaminhamento saem pela ficha do paciente no site do Shinmed, com o texto daqui como guia.", Modifier.padding(top = 8.dp))
 }

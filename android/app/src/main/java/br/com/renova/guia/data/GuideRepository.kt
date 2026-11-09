@@ -30,7 +30,7 @@ sealed interface GuideState {
 }
 
 /**
- * O guia no aparelho: entra com a conta do Renova, baixa o pacote, guarda e
+ * O guia no aparelho: entra com a conta do Shinmed, baixa o pacote, guarda e
  * abre sem internet. Sincroniza ao abrir o app (304 quando nada mudou); conta
  * desativada ou token vencido → sai e apaga o guia do aparelho.
  */

@@ -66,7 +66,7 @@ test("a nota SOAP traz o que foi marcado, o alarme e a receita escolhida", () =>
   assert.match(note, /ALARME PRESENTE: conduta de urgência hoje/);
   assert.match(note, /- Na urgência: /);
   assert.match(note, /- Cirurgia\/regulação: Sai da sua mão/);
-  assert.ok(note.endsWith(`Roteiro: Guia de ortopedia Renova, revisão ${CURRENT_ORTHO_REVISION}.`));
+  assert.ok(note.endsWith(`Roteiro: Guia de ortopedia Shinmed, revisão ${CURRENT_ORTHO_REVISION}.`));
   assert.match(note, /· Dipirona 1 g — /);
   assert.match(note, /· Naproxeno 500 mg — /);
   assert.doesNotMatch(note, /· Paracetamol/);

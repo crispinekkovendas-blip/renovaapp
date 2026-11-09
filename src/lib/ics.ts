@@ -81,7 +81,7 @@ export function buildIcs(event: IcsEvent): string {
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Renova//Portal do paciente//PT",
+    "PRODID:-//Shinmed//Portal do paciente//PT",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     "BEGIN:VTIMEZONE",

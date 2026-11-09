@@ -132,7 +132,7 @@ export async function startPrescriptionAction(formData: FormData): Promise<Start
           : undefined,
       },
       // A doc recomenda desligar o histórico da Memed em sistema integrado: o
-      // histórico do paciente é o prontuário do Renova.
+      // histórico do paciente é o prontuário do Shinmed.
       featureToggle: { historyPrescription: false },
     };
   } catch (error) {
@@ -290,7 +290,7 @@ export async function syncPrescriptionsAction(formData: FormData): Promise<strin
         WHERE memed_prescription_id = ANY(${remote.map((row) => row.id)}::text[])`,
       // A Memed manda o paciente dentro de cada receita: pelo id externo que nós
       // enviamos no `setPaciente`, ou pelo CPF quando a receita foi emitida fora
-      // do Renova. Só cai no paciente aberto quem não dá para identificar.
+      // do Shinmed. Só cai no paciente aberto quem não dá para identificar.
       sql<{ id: number; cpf: string }>`SELECT id, cpf FROM patients WHERE cpf IS NOT NULL AND cpf <> ''`,
     ]);
     const seen = new Map(known.map((row) => [row.memed_prescription_id, row]));

@@ -29,7 +29,7 @@ fun CrashNotice() {
             TextButton(onClick = {
                 val send = Intent(Intent.ACTION_SEND).apply {
                     type = "text/plain"
-                    putExtra(Intent.EXTRA_SUBJECT, "Guia Renova — o app fechou")
+                    putExtra(Intent.EXTRA_SUBJECT, "Guia Shinmed — o app fechou")
                     putExtra(Intent.EXTRA_TEXT, text)
                 }
                 try {

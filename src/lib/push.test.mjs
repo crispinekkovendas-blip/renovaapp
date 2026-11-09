@@ -21,7 +21,7 @@ const base = {
   date: "2026-09-08",
   start_time: "14:30",
   professional: "Dra. Marina Costa",
-  clinic: "Clínica Renova",
+  clinic: "Clínica Shinmed",
   url: "https://renovaapp.vercel.app/p/abc.def",
   today: "2026-09-07",
 };
@@ -55,11 +55,11 @@ test("reminderPayload: tag, url and the two bodies (agendado vs confirmado)", ()
   assert.equal(pending.title, "Ana, sua consulta é amanhã");
   assert.equal(
     pending.body,
-    "Amanhã às 14:30 com Dra. Marina Costa, na Clínica Renova. Toque para confirmar sua presença."
+    "Amanhã às 14:30 com Dra. Marina Costa, na Clínica Shinmed. Toque para confirmar sua presença."
   );
   assert.equal(
     confirmed.body,
-    "Amanhã às 14:30 com Dra. Marina Costa, na Clínica Renova. Presença confirmada — até lá!"
+    "Amanhã às 14:30 com Dra. Marina Costa, na Clínica Shinmed. Presença confirmada — até lá!"
   );
   assert.notEqual(pending.body, confirmed.body);
   assert.deepEqual(Object.keys(pending).sort(), ["body", "tag", "title", "url"]);

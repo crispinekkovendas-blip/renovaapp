@@ -201,7 +201,7 @@ export default async function RevisoesPage({ searchParams }: { searchParams: Pro
         />
       )}
       <p className="mt-6 text-[12.5px] text-pine-900/55">
-        As revisões são feitas pela equipe Renova com apoio de IA, a partir de diretrizes públicas, e precisam de conferência
+        As revisões são feitas pela equipe Shinmed com apoio de IA, a partir de diretrizes públicas, e precisam de conferência
         médica. Para usar uma versão anterior, ajuste a receita na ficha antes de emitir.
       </p>
     </div>

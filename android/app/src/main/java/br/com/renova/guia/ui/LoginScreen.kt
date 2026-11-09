@@ -87,7 +87,7 @@ fun ScreenScaffold(
     )
 }
 
-/** O "R" do Renova, como no site. */
+/** O "R" do Shinmed, como no site. */
 @Composable
 fun BrandMark(size: Int = 64) {
     Box(
@@ -101,7 +101,7 @@ fun BrandMark(size: Int = 64) {
     }
 }
 
-/** Entrar com a conta do Renova (a mesma do site). A senha vai só ao servidor do Renova. */
+/** Entrar com a conta do Shinmed (a mesma do site). A senha vai só ao servidor do Shinmed. */
 @Composable
 fun LoginScreen(message: String?, onLogin: suspend (String, String) -> String?) {
     var email by rememberSaveable { mutableStateOf("") }
@@ -135,9 +135,9 @@ fun LoginScreen(message: String?, onLogin: suspend (String, String) -> String?) 
         Spacer(Modifier.size(32.dp))
         BrandMark()
         Spacer(Modifier.size(16.dp))
-        Text("Guia clínico Renova", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.ExtraBold)
+        Text("Guia clínico Shinmed", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.ExtraBold)
         Text(
-            "Receitas prontas, plantão e Drive, com a Super Inteligência. Entre com a sua conta do Renova — a mesma do site.",
+            "Receitas prontas, plantão e Drive, com a Super Inteligência. Entre com a sua conta do Shinmed — a mesma do site.",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,

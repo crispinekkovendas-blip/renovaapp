@@ -1,6 +1,6 @@
 /**
  * MCP (Model Context Protocol) por HTTP, sem SDK: o Claude (Code ou claude.ai)
- * conversa com o Renova em JSON-RPC 2.0 num único POST /api/mcp. Sem sessão e
+ * conversa com o Shinmed em JSON-RPC 2.0 num único POST /api/mcp. Sem sessão e
  * sem streaming — cada pedido é respondido em JSON, o que basta para
  * ferramentas que leem e escrevem no banco.
  */
@@ -89,7 +89,7 @@ export async function handleMessage(tools: Tool[], message: RpcRequest): Promise
         capabilities: { tools: { listChanged: false } },
         serverInfo: SERVER_INFO,
         instructions:
-          "Renova: prontuário da clínica. Dados de pacientes são sensíveis (LGPD): leia só o que a tarefa pede. " +
+          "Shinmed: prontuário da clínica. Dados de pacientes são sensíveis (LGPD): leia só o que a tarefa pede. " +
           "Antes de criar um paciente, procure por nome, CPF e celular para não duplicar. " +
           "Escritas vão direto para o banco de produção.",
       });

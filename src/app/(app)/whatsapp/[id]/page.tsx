@@ -334,7 +334,7 @@ export default async function WhatsappCasePage({
               <div className="space-y-2 text-sm">
                 {candidates.length ? (
                   <>
-                    <p className="text-xs text-pine-900/60">Já existe no Renova? (mesmo CPF, telefone ou nome)</p>
+                    <p className="text-xs text-pine-900/60">Já existe no Shinmed? (mesmo CPF, telefone ou nome)</p>
                     {candidates.map((c) => (
                       <form key={c.id} action={linkPatientAction} className="flex items-center justify-between gap-2">
                         {caseField}

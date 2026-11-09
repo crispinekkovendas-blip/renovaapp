@@ -108,7 +108,7 @@ object OrthoConsult {
         lines += "- Cirurgia/regulação: ${topic.refer.firstOrNull().orEmpty()}"
         lines += "- Atestado: ${a.leave.trim().ifBlank { topic.leave }} · Retorno: ${topic.followup}"
         lines += ""
-        lines += "Roteiro: Guia de ortopedia Renova, revisão ${ortho.tab.revision.current}."
+        lines += "Roteiro: Guia de ortopedia Shinmed, revisão ${ortho.tab.revision.current}."
         return lines.joinToString("\n")
     }
 }

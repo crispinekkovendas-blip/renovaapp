@@ -51,7 +51,7 @@ export interface DocumentPreviewProps {
   viaLabel?: string | null;
   /** Receituário na página grande da prévia: os medicamentos da folha respondem ao mouse. */
   canvas?: SheetCanvas;
-  /** Modelo da folha (mesmo do PDF); sem ele, o padrão Renova. */
+  /** Modelo da folha (mesmo do PDF); sem ele, o padrão Shinmed. */
   sheetStyle?: SheetStyle;
   /** O logotipo do modelo, como data URL. */
   logoSrc?: string | null;

@@ -21,7 +21,7 @@ test("datas brasileiras e ISO; data impossível vira null", () => {
   assert.equal(isoDate("ontem"), null);
 });
 
-test("celular no padrão do Renova, sem o 55", () => {
+test("celular no padrão do Shinmed, sem o 55", () => {
   assert.equal(formatPhone("+55 11 98765-4321"), "(11) 98765-4321");
   assert.equal(formatPhone("1133224455"), "(11) 3322-4455");
   assert.equal(formatPhone("98765"), null);
@@ -57,7 +57,7 @@ test("paciente: limpa o que dá e anota o que ficou de fora, sem inventar", () =
   assert.match(problems.join("|"), /CPF inválido/);
 });
 
-test("duplicados: CPF, celular ou nome + nascimento, no arquivo e no Renova", () => {
+test("duplicados: CPF, celular ou nome + nascimento, no arquivo e no Shinmed", () => {
   const rows = [
     { patient: { name: "João Souza", cpf: "529.982.247-25" } },
     { patient: { name: "JOAO  SOUZA", birth_date: "1980-01-01", phone: "(11) 91234-5678" } },

@@ -4,7 +4,7 @@ import { downloadMedia } from "@/lib/whatsapp/cloud";
 
 /**
  * Mídia que o paciente mandou (foto, áudio, documento), servida só para quem
- * está logado como admin ou profissional e só se a mensagem existe no Renova.
+ * está logado como admin ou profissional e só se a mensagem existe no Shinmed.
  * O arquivo não é guardado: vem da Meta na hora (o id vale ~30 dias).
  */
 

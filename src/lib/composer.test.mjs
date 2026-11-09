@@ -43,7 +43,7 @@ function sequence() {
 const ctx = {
   patient: { name: "Ana Beatriz Souza", cpf: "412.658.790-01", social_name: null },
   professional: { name: "Dra. Marina Costa", council: "CRM 123456-SP" },
-  clinicName: "Clínica Renova",
+  clinicName: "Clínica Shinmed",
   date: "2026-09-16",
 };
 

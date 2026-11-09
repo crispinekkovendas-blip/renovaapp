@@ -145,7 +145,7 @@ fun AboutScreen(ready: GuideState.Ready, prefs: UserPrefs, onBack: () -> Unit, o
         ) {
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLowest), border = CardDefaults.outlinedCardBorder()) {
                 Column(Modifier.padding(16.dp).fillMaxWidth()) {
-                    Text(ready.account.ifBlank { "Conta do Renova" }, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    Text(ready.account.ifBlank { "Conta do Shinmed" }, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     MutedText("Guia na ${content.revisionLabel(content.bundle.revision.current)} · pacote ${content.bundle.version.take(8)}")
                     MutedText(
                         when {
@@ -171,16 +171,16 @@ fun AboutScreen(ready: GuideState.Ready, prefs: UserPrefs, onBack: () -> Unit, o
             SectionHeader("Créditos")
             Text(
                 "${plantao.title}, ${plantao.edition} (${plantao.publisher}). Reproduzido com autorização dos autores: ${plantao.authors.joinToString(", ")}. " +
-                    "Revisão Renova desde ${plantao.reviewedAt}.",
+                    "Revisão Shinmed desde ${plantao.reviewedAt}.",
                 style = MaterialTheme.typography.bodySmall,
             )
             val drive = content.bundle.drive.credit
             Text(
-                "Lista de condições do ${drive.basedOn}; os cards originais são reproduzidos com autorização da autora. As receitas, doses e orientações foram reescritas pela revisão Renova em ${drive.reviewedAt}, com apoio de IA, a partir de diretrizes públicas.",
+                "Lista de condições do ${drive.basedOn}; os cards originais são reproduzidos com autorização da autora. As receitas, doses e orientações foram reescritas pela revisão Shinmed em ${drive.reviewedAt}, com apoio de IA, a partir de diretrizes públicas.",
                 style = MaterialTheme.typography.bodySmall,
             )
             Text(
-                "O guia apoia a decisão do médico e não a substitui: confira alergias, gestação, função renal e hepática, peso e idade, e o protocolo da instituição. A Super Inteligência responde só com o guia, pelo servidor do Renova; não digite dados de paciente.",
+                "O guia apoia a decisão do médico e não a substitui: confira alergias, gestação, função renal e hepática, peso e idade, e o protocolo da instituição. A Super Inteligência responde só com o guia, pelo servidor do Shinmed; não digite dados de paciente.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

@@ -21,7 +21,7 @@ fun recipeShareText(recipe: Recipe, withOrientation: Boolean = false): String = 
     if (withOrientation && recipe.orientation != null) {
         append("\n\n*Orientações*\n").append(recipe.orientation.text.trim())
     }
-    append("\n\n— Guia clínico Renova · ponto de partida para adulto sem comorbidade; confira antes de prescrever.")
+    append("\n\n— Guia clínico Shinmed · ponto de partida para adulto sem comorbidade; confira antes de prescrever.")
 }
 
 fun driveShareText(entry: DriveEntry): String = buildString {
@@ -49,7 +49,7 @@ fun driveShareText(entry: DriveEntry): String = buildString {
             }
         }
     }
-    append("\n\n— Drive de prescrições revisado (Guia clínico Renova); confira antes de prescrever.")
+    append("\n\n— Drive de prescrições revisado (Guia clínico Shinmed); confira antes de prescrever.")
 }
 
 private val MD_ITALIC = Regex("(?<![*\\w])\\*([^*\\s][^*]*)\\*(?![*\\w])")

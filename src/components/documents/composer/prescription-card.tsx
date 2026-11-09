@@ -69,7 +69,7 @@ export function PrescriptionCard({
         <span className="chip bg-pine-50 text-pine-900/70">catálogo da ANVISA</span>
       ) : null}
 
-      {/* Protocolos que a própria clínica salvou. As receitas prontas do Renova
+      {/* Protocolos que a própria clínica salvou. As receitas prontas do Shinmed
           (por condição) ficam na tela de adicionar, em "Receitas prontas". */}
       {list && rxProtocols.length > 0 ? (
         <div>

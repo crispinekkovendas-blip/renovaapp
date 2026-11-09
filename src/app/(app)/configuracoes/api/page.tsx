@@ -33,7 +33,7 @@ export default async function ApiSettingsPage({
     <>
       <PageHeader
         title="API pública"
-        subtitle="Integre outros sistemas ao Renova via REST"
+        subtitle="Integre outros sistemas ao Shinmed via REST"
         action={
           <Link href="/configuracoes" className="btn btn-outline">
             ← Configurações

@@ -65,7 +65,7 @@ export interface PublicClinic {
   insurances: string[];
 }
 
-export const FALLBACK_CLINIC_NAME = "Clínica Renova";
+export const FALLBACK_CLINIC_NAME = "Clínica Shinmed";
 
 const FALLBACK_CLINIC: PublicClinic = {
   name: FALLBACK_CLINIC_NAME,
@@ -211,7 +211,7 @@ export async function publicMetadata({
   index?: boolean;
 }): Promise<Metadata> {
   const [clinic, base] = await Promise.all([getPublicClinic(), publicBaseUrl()]);
-  // `absolute`: o modelo "%s · Renova" do layout não se aplica — a marca aqui é a clínica.
+  // `absolute`: o modelo "%s · Shinmed" do layout não se aplica — a marca aqui é a clínica.
   const fullTitle = title ? `${title} · ${clinic.name}` : clinic.name;
   return {
     metadataBase: toUrl(base),

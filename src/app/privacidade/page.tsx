@@ -37,7 +37,7 @@ export default async function PrivacyPage() {
             <h2 className="mb-2 font-display text-xl font-semibold tracking-tight text-pine-950">Quem trata os seus dados</h2>
             <p>
               <strong>{clinic}</strong> é a controladora dos dados pessoais coletados por este sistema. O
-              Renova é o software usado pela clínica para agenda, cadastro de pacientes e prontuário.
+              Shinmed é o software usado pela clínica para agenda, cadastro de pacientes e prontuário.
             </p>
           </section>
 

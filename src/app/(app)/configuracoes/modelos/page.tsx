@@ -66,7 +66,7 @@ export default async function TemplatesPage({
           <p className="font-display text-lg font-semibold text-pine-950">Modelos ainda não ativos</p>
           <p className="mt-2 text-sm text-pine-900/70">
             Rode a migração <code className="font-mono">2026-09-09-documentos.sql</code> no banco. Enquanto isso, os
-            documentos usam os textos padrão do Renova.
+            documentos usam os textos padrão do Shinmed.
           </p>
         </div>
       ) : (

@@ -19,7 +19,7 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 /*
- * O servidor do Renova: login do app, o pacote do guia (com versão, para não
+ * O servidor do Shinmed: login do app, o pacote do guia (com versão, para não
  * baixar à toa) e a Super Inteligência, que responde aos poucos (NDJSON). A
  * chave do Gemini nunca passa pelo aparelho — a pergunta vai ao servidor.
  */

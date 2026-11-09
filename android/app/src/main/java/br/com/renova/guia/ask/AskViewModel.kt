@@ -27,7 +27,7 @@ data class Exchange(
 
 /**
  * A conversa com a Super Inteligência: cada pergunta vai ao servidor do
- * Renova (que tem a chave do Gemini e o guia) com as anteriores, para as
+ * Shinmed (que tem a chave do Gemini e o guia) com as anteriores, para as
  * perguntas de seguimento ("e em criança?").
  */
 class AskViewModel(
