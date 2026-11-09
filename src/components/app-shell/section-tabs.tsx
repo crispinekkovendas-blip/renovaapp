@@ -29,7 +29,7 @@ export function SectionTabs() {
     <nav
       ref={nav}
       aria-label={activeItem.label}
-      className="scroll-x flex gap-2 px-4 pt-3 sm:px-6 md:flex-wrap md:px-8 md:pt-6 peek:pl-16 print:hidden"
+      className="scroll-x flex gap-2 px-4 pt-3 sm:px-6 md:flex-wrap md:px-8 md:pt-3 peek:pl-16 print:hidden"
     >
       {activeItem.tabs.map((tab) => {
         // A aba acende também nas páginas de dentro dela (/guia/ortopedia/lombalgia).

@@ -1,27 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-/** Card de benefício, como os da home da Mevo: ícone no alto, título em negrito, texto com destaques. */
-export function FeatureCard({
-  icon,
-  title,
-  children,
-  className = "",
-}: {
-  icon: ReactNode;
-  title: string;
-  children: ReactNode;
-  className?: string;
-}) {
-  return (
-    <div className={`card p-5 ${className}`}>
-      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-pine-50 text-pine-700">{icon}</span>
-      <p className="mt-4 text-[15px] font-extrabold text-pine-950">{title}</p>
-      <p className="mt-1.5 text-[13.5px] leading-relaxed text-pine-900/70">{children}</p>
-    </div>
-  );
-}
-
 /** Atalho quadrado, como os da home do app da Mevo (Meus pacientes, Histórico, Meus dados…). */
 export function Tile({ href, icon, title, hint }: { href: string; icon: ReactNode; title: string; hint: string }) {
   return (

@@ -17,6 +17,16 @@ export function todayISO(): string {
   return new Date().toLocaleDateString("en-CA", { timeZone: APP_TZ });
 }
 
+/** Hora atual da clínica, "HH:MM". */
+export function nowHHMM(): string {
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone: APP_TZ,
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).format(new Date());
+}
+
 export function nowHour(): number {
   return Number(
     new Intl.DateTimeFormat("en-US", { timeZone: APP_TZ, hour: "numeric", hour12: false }).format(new Date())

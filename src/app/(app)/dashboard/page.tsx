@@ -2,27 +2,25 @@ import Link from "next/link";
 import { sql } from "@/lib/db";
 import type { Patient } from "@/lib/db";
 import { getSession } from "@/lib/auth";
-import { fmtDate, fmtDateLong, moneyBR, monthISO, todayISO } from "@/lib/format";
+import { fmtDate, fmtDateLong, moneyBR, monthISO, nowHHMM, todayISO } from "@/lib/format";
 import { EmptyState, SectionTitle } from "@/components/ui";
-import { IconCalendar, IconClock, IconFileText, IconStethoscope, IconUsers } from "@/components/icons";
-import { FeatureCard, StatRow, Tile } from "@/components/dashboard/home-cards";
-import { IconIdCard, IconPhone, IconPlusCircle } from "@/components/dashboard/icons";
+import { IconCalendar, IconClock, IconFileText, IconUsers } from "@/components/icons";
+import { StatRow, Tile } from "@/components/dashboard/home-cards";
+import { IconIdCard, IconPlusCircle } from "@/components/dashboard/icons";
+import { NextPatient } from "@/components/dashboard/next-patient";
 import { PortalInbox } from "@/components/dashboard/portal-inbox";
 import { PatientQuickSearch } from "@/components/dashboard/patient-quick-search";
 import { TodayAppointments } from "@/components/dashboard/today-appointments";
 import type { TodayAppointment } from "@/components/dashboard/today-appointments";
 import { isMuted } from "@/components/agenda/status";
+import { nextAppointment } from "@/lib/next-appointment";
 import { portalInbox } from "@/lib/hub";
 import { countDigitalDocuments } from "@/lib/documents-db";
 
-// Largura de cada slide do carrossel no celular: mostra a pontinha do próximo, convidando a deslizar.
-const FEATURE_SLIDE = "w-[82%] shrink-0 snap-start md:w-auto";
-
 /**
- * Início à moda Mevo: "Seja bem-vindo(a)", o cartão rosa "Começar a atender!"
- * com a busca do paciente e "Cadastrar paciente", três cards de benefício,
- * os atalhos quadrados e, abaixo, o que a clínica precisa todo dia: a caixa
- * de entrada do portal e a agenda de hoje. Dinheiro só para admin/recepção.
+ * O início é a tela de trabalho: no alto o paciente da vez e a busca, logo
+ * abaixo a agenda de hoje e os pedidos do portal; atalhos e números ficam no
+ * fim. Dinheiro só para admin/recepção.
  */
 export default async function DashboardPage() {
   const today = todayISO();
@@ -42,7 +40,7 @@ export default async function DashboardPage() {
   ] = await Promise.all([
     getSession(),
     sql<TodayAppointment>`
-      SELECT a.id, a.start_time, a.status, a.procedure, a.patient_id,
+      SELECT a.id, a.start_time, a.status, a.procedure, a.patient_id, a.professional_id,
         p.name AS patient_name, pr.name AS professional_name, pr.color AS professional_color
       FROM appointments a
       JOIN patients p ON p.id = a.patient_id
@@ -64,7 +62,7 @@ export default async function DashboardPage() {
     countDigitalDocuments(),
   ]);
   // O layout (app) já barra quem não tem sessão.
-  const { name: userName, role } = session!;
+  const { name: userName, role, professionalId } = session!;
   const isAdmin = role === "admin";
   const showsMoney = role !== "profissional";
   const folhas = digitalDocuments ?? 0;
@@ -72,6 +70,7 @@ export default async function DashboardPage() {
   const active = todayAppointments.filter((a) => !isMuted(a.status));
   const clinicName = clinicRow?.value?.trim() || "Plataforma Shinmed";
   const pending = inbox.length;
+  const next = nextAppointment(todayAppointments, nowHHMM(), professionalId);
 
   return (
     <div className="mx-auto max-w-5xl">
@@ -92,45 +91,24 @@ export default async function DashboardPage() {
         </Link>
       </header>
 
-      {/* ── Começar a atender! ───────────────────────────────── */}
+      {/* ── O paciente da vez e a busca ───────────────────────── */}
       <section className="rounded-[24px] bg-peach-100 p-5 sm:p-7">
-        <h2 className="text-[22px] font-extrabold sm:text-[26px] leading-tight tracking-tight text-pine-950">Começar a atender!</h2>
-        <p className="mt-2 max-w-xl text-sm text-pine-950/75">
-          Busque um paciente pelo nome, CPF ou telefone — ou cadastre o primeiro e comece o atendimento.
-        </p>
-        <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <NextPatient next={next} canAttend={role !== "recepcao"} />
+        <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
           <PatientQuickSearch />
-          <Link href="/pacientes/novo" className="btn btn-primary justify-center px-5 py-3">
+          <Link href="/pacientes/novo" className="btn btn-outline justify-center bg-white px-5 py-3">
             <IconPlusCircle className="h-4 w-4" />
             Cadastrar paciente
           </Link>
         </div>
       </section>
 
-      {/* ── Três benefícios (como a home da Mevo) ─────────────── */}
-      {/* No celular, um carrossel que desliza de lado em vez de três cartões empilhados. */}
-      <div className="scroll-x -mx-4 mt-4 flex snap-x snap-mandatory scroll-px-4 gap-3 px-4 sm:-mx-6 sm:scroll-px-6 sm:px-6 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0">
-        <FeatureCard
-          className={FEATURE_SLIDE}
-          icon={<IconFileText className="h-5 w-5" />}
-          title="Menos cliques, mais agilidade"
-        >
-          Crie e salve <b className="text-pine-950">modelos e protocolos</b> para emitir atestado, encaminhamento e orientações num passo só.
-        </FeatureCard>
-        <FeatureCard className={FEATURE_SLIDE} icon={<IconStethoscope className="h-5 w-5" />} title="Tudo num lugar só">
-          Receita digital pela <b className="text-pine-950">Memed</b>, atestados e laudos com <b className="text-pine-950">código de autenticidade</b>, prontuário e agenda.
-        </FeatureCard>
-        <FeatureCard
-          className={FEATURE_SLIDE}
-          icon={<IconPhone className="h-5 w-5" />}
-          title="Comodidade para o seu paciente"
-        >
-          O paciente recebe <b className="text-pine-950">tudo no celular</b>: o portal, o WhatsApp, os lembretes e a confirmação da consulta.
-        </FeatureCard>
-      </div>
+      <TodayAppointments appointments={todayAppointments} />
+
+      <PortalInbox rows={inbox} clinicName={clinicName} />
 
       {/* ── Atalhos ──────────────────────────────────────────── */}
-      <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+      <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-4">
         <Tile href="/pacientes" icon={<IconUsers className="h-5 w-5" />} title="Meus pacientes" hint={`${patientCount} cadastrados`} />
         <Tile href="/agenda" icon={<IconCalendar className="h-5 w-5" />} title="Agenda de hoje" hint={`${active.length} ${active.length === 1 ? "consulta" : "consultas"}`} />
         <Tile href="/conta" icon={<IconIdCard className="h-5 w-5" />} title="Meus dados" hint="Conta e senha" />
@@ -140,10 +118,6 @@ export default async function DashboardPage() {
           <Tile href="/agenda/retornos" icon={<IconClock className="h-5 w-5" />} title="Retornos a marcar" hint="Quem precisa voltar" />
         )}
       </div>
-
-      <PortalInbox rows={inbox} clinicName={clinicName} />
-
-      <TodayAppointments appointments={todayAppointments} />
 
       {/* ── Números pequenos + pacientes recentes ─────────────── */}
       <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_1.4fr]">

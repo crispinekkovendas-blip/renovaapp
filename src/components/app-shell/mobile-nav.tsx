@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { logoutAction } from "@/lib/actions";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { IconLogout } from "@/components/icons";
+import { SearchIconButton } from "./global-search";
 import { CloseButton } from "@/components/close-button";
 import type { Role } from "@/lib/db";
 import { guideHomeHref, useHomeArea } from "@/components/guide/home-area";
@@ -45,6 +46,7 @@ export function MobileTopBar({ name }: { name: string }) {
         </Link>
         <p className="min-w-0 truncate text-[17px] font-extrabold tracking-tight text-pine-950">{title}</p>
       </div>
+      <SearchIconButton />
       <Link
         href="/conta"
         aria-label="Minha conta"

@@ -48,6 +48,13 @@ const STEPS: readonly Step[] = [
 
 const NEWS: readonly { date: string; items: readonly string[] }[] = [
   {
+    date: "9 de novembro de 2026",
+    items: [
+      "Início mais direto: no alto aparece o paciente da vez, com o botão Atender, e a agenda de hoje vem logo abaixo.",
+      "Busca em todas as telas: Ctrl+K (ou a lupa no alto) encontra pacientes por nome, CPF ou celular e abre ações como Nova receita e Novo agendamento.",
+    ],
+  },
+  {
     date: "8 de novembro de 2026",
     items: [
       "O sistema agora se chama Shinmed: nome e letra da marca no login, no menu, no portal do paciente, nos ícones, nos PDFs e no app Android (a partir da próxima versão). O endereço do site, os logins e os códigos RNV dos documentos já emitidos continuam os mesmos.",

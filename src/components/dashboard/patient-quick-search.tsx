@@ -7,25 +7,29 @@ import { suggestPatientsAction } from "@/lib/actions-search";
 import type { PatientSuggestion } from "@/lib/actions-search";
 import { ageFrom, fmtDate } from "@/lib/format";
 
-/**
- * Busca de paciente da tela inicial: a cada letra (nome) ou dígito (CPF,
- * celular) abre a lista dos pacientes que batem; escolher um abre o
- * prontuário. Enter sem escolher leva à lista completa de Pacientes, como antes.
- */
-export function PatientQuickSearch() {
-  const router = useRouter();
-  const listId = useId();
-  const [query, setQuery] = useState("");
+/** CPF, nascimento e celular numa linha, como as listas de sugestão mostram. */
+export function patientSuggestionDetail(patient: PatientSuggestion): string {
+  return (
+    [
+      patient.cpf ? `CPF ${patient.cpf}` : null,
+      patient.birth_date ? `${fmtDate(patient.birth_date)} (${ageFrom(patient.birth_date)})` : null,
+      patient.phone,
+    ]
+      .filter(Boolean)
+      .join(" · ") || "Sem CPF ou celular no cadastro"
+  );
+}
+
+/** Pacientes que batem com o texto, consultados pouco depois da última tecla. */
+export function usePatientSuggestions(query: string) {
   const [results, setResults] = useState<PatientSuggestion[]>([]);
   const [searched, setSearched] = useState("");
-  const [open, setOpen] = useState(false);
-  const [active, setActive] = useState(-1);
-  const boxRef = useRef<HTMLFormElement>(null);
   const seq = useRef(0);
 
   useEffect(() => {
     const term = query.trim();
     if (term.length < 2) {
+      seq.current++;
       setResults([]);
       setSearched("");
       return;
@@ -38,14 +42,36 @@ export function PatientQuickSearch() {
         if (mine !== seq.current) return;
         setResults(found);
         setSearched(term);
-        setActive(found.length ? 0 : -1);
-        setOpen(true);
       } catch {
         if (mine === seq.current) setResults([]);
       }
     }, 180);
     return () => clearTimeout(timer);
   }, [query]);
+
+  return { results, searched };
+}
+
+/**
+ * Busca de paciente da tela inicial: a cada letra (nome) ou dígito (CPF,
+ * celular) abre a lista dos pacientes que batem; escolher um abre o
+ * prontuário. Enter sem escolher leva à lista completa de Pacientes, como antes.
+ */
+export function PatientQuickSearch() {
+  const router = useRouter();
+  const listId = useId();
+  const [query, setQuery] = useState("");
+  const { results, searched } = usePatientSuggestions(query);
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState(-1);
+  const boxRef = useRef<HTMLFormElement>(null);
+
+  // Chegou resposta nova: abre a lista no primeiro resultado.
+  useEffect(() => {
+    if (!searched) return;
+    setActive(results.length ? 0 : -1);
+    setOpen(true);
+  }, [results, searched]);
 
   useEffect(() => {
     if (!open) return;
@@ -130,13 +156,7 @@ export function PatientQuickSearch() {
                   {patient.social_name ? <span className="font-normal text-pine-900/50"> · {patient.name}</span> : null}
                 </span>
                 <span className="truncate text-[11.5px] text-pine-900/55">
-                  {[
-                    patient.cpf ? `CPF ${patient.cpf}` : null,
-                    patient.birth_date ? `${fmtDate(patient.birth_date)} (${ageFrom(patient.birth_date)})` : null,
-                    patient.phone,
-                  ]
-                    .filter(Boolean)
-                    .join(" · ") || "Sem CPF ou celular no cadastro"}
+                  {patientSuggestionDetail(patient)}
                 </span>
               </li>
             ))}

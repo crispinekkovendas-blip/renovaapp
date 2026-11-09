@@ -286,7 +286,7 @@ export function PreviewViewer({ pages, notice, pdfBusy, onOpenPdf, onHide, goTo,
 
   return (
     <div
-      className={`card overflow-hidden ${fill ? "flex h-[calc(100dvh-14rem)] min-h-[30rem] flex-col" : ""}`}
+      className={`card overflow-hidden ${fill ? "flex h-[calc(100dvh-16rem)] min-h-[30rem] flex-col" : ""}`}
       onKeyDown={onKeyDown}
     >
       {/* ── Barra de cima: título, zoom, tela cheia, PDF, ocultar ── */}
@@ -366,7 +366,7 @@ export function PreviewViewer({ pages, notice, pdfBusy, onOpenPdf, onHide, goTo,
       >
         <div
           ref={bodyRef}
-          className={`${fill ? "h-full" : "max-h-[calc(100dvh-25rem)] min-h-64"} overflow-auto bg-pine-50/40 p-3 outline-none focus-visible:ring-2 focus-visible:ring-pine-400 focus-visible:ring-inset`}
+          className={`${fill ? "h-full" : "max-h-[calc(100dvh-27rem)] min-h-64"} overflow-auto bg-pine-50/40 p-3 outline-none focus-visible:ring-2 focus-visible:ring-pine-400 focus-visible:ring-inset`}
           tabIndex={0}
           aria-label={page ? `Página ${current + 1} de ${count}: ${page.label}` : "Prévia"}
         >

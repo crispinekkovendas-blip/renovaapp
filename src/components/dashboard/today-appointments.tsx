@@ -5,7 +5,7 @@ import { isClosed } from "@/components/agenda/status";
 
 export type TodayAppointment = Pick<
   Appointment,
-  "id" | "start_time" | "status" | "procedure" | "patient_id" | "patient_name" | "professional_name" | "professional_color"
+  "id" | "start_time" | "status" | "procedure" | "patient_id" | "patient_name" | "professional_id" | "professional_name" | "professional_color"
 >;
 
 /** "Agenda de hoje" do início: cada linha leva direto ao atendimento (ou à ficha, se já acabou). */

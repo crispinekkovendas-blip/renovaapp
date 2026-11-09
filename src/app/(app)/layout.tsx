@@ -3,6 +3,7 @@ import { getSession } from "@/lib/auth";
 import { SideNav } from "@/components/app-shell/side-nav";
 import { SectionTabs } from "@/components/app-shell/section-tabs";
 import { MobileTopBar, MobileTabBar } from "@/components/app-shell/mobile-nav";
+import { GlobalSearch, SearchBarTrigger } from "@/components/app-shell/global-search";
 
 /**
  * O app da clínica veste o tema "à moda Mevo" (`theme-app` em globals.css):
@@ -28,13 +29,15 @@ export default async function AppLayout({
       <SideNav name={session.name} role={session.role} />
       <div className="flex min-w-0 flex-1 flex-col">
         <MobileTopBar name={session.name} />
+        <SearchBarTrigger />
         <SectionTabs />
         {/* No celular a barra de abas fica fixa embaixo: o conteúdo reserva a altura dela. */}
-        <main className="min-w-0 flex-1 px-4 pt-4 pb-[calc(6rem+env(safe-area-inset-bottom))] sm:px-6 md:px-8 md:py-6 peek:pl-16 print:p-0">
+        <main className="min-w-0 flex-1 px-4 pt-4 pb-[calc(6rem+env(safe-area-inset-bottom))] sm:px-6 md:px-8 md:pt-4 md:pb-6 peek:pl-16 print:p-0">
           {children}
         </main>
       </div>
       <MobileTabBar name={session.name} role={session.role} />
+      <GlobalSearch role={session.role} />
       {modal}
     </div>
   );
