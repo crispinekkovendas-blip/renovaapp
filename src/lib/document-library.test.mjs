@@ -65,7 +65,7 @@ test("renderiza limpo quando só o básico está preenchido", () => {
   const vars = buildTemplateVars({
     patient: { name: "Ana Beatriz Souza", cpf: null },
     professional: { name: "Dra. Marina Costa", council: "CRM 123456-SP" },
-    clinicName: "Clínica Shinmed",
+    clinicName: "Plataforma Shinmed",
     date: "2026-09-17",
     fields: {},
   });

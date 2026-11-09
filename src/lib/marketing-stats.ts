@@ -65,7 +65,7 @@ export interface PublicClinic {
   insurances: string[];
 }
 
-export const FALLBACK_CLINIC_NAME = "Clínica Shinmed";
+export const FALLBACK_CLINIC_NAME = "Plataforma Shinmed";
 
 const FALLBACK_CLINIC: PublicClinic = {
   name: FALLBACK_CLINIC_NAME,

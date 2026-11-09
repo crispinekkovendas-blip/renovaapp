@@ -54,7 +54,7 @@ export default async function LembretesPage({
       () => [] as { patient_id: number }[]
     ),
   ]);
-  const clinic = settingsRows[0]?.value?.trim() || "Clínica Shinmed";
+  const clinic = settingsRows[0]?.value?.trim() || "Plataforma Shinmed";
   const sentAt = new Map(autoSent.map((r) => [r.id, r.reminder_sent_at]));
   const withPush = new Set(pushPatients.map((r) => r.patient_id));
 

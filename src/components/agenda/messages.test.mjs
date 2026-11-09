@@ -12,7 +12,7 @@ const appt = {
 test("confirmMessage leva data, hora, profissional e o link", () => {
   assert.equal(
     confirmMessage(appt, "https://x/confirmar/abc"),
-    "Olá Maria da Silva! Confirmando sua consulta na Clínica Shinmed em 24/09/2026 às 14:30 com Dra. Ana. Responda SIM ou confirme pelo link: https://x/confirmar/abc"
+    "Olá Maria da Silva! Confirmando sua consulta na Plataforma Shinmed em 24/09/2026 às 14:30 com Dra. Ana. Responda SIM ou confirme pelo link: https://x/confirmar/abc"
   );
 });
 
@@ -25,7 +25,7 @@ test("telemedRoomUrl: sala Jitsi só quando existe", () => {
 test("telemedMessage leva o link da sala", () => {
   assert.equal(
     telemedMessage(appt, "https://meet.jit.si/r"),
-    "Olá Maria da Silva! Sua teleconsulta na Clínica Shinmed é em 24/09/2026 às 14:30. Acesse a sala pelo link: https://meet.jit.si/r"
+    "Olá Maria da Silva! Sua teleconsulta na Plataforma Shinmed é em 24/09/2026 às 14:30. Acesse a sala pelo link: https://meet.jit.si/r"
   );
 });
 

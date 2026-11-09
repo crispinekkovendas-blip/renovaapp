@@ -131,7 +131,7 @@ export default async function PatientPage({
   const socialName = patient.social_name?.trim() || null;
   const displayName = patientDisplayName(patient);
   const firstName = patientFirstName(patient);
-  const clinicName = clinicRow?.value?.trim() || "Clínica Shinmed";
+  const clinicName = clinicRow?.value?.trim() || "Plataforma Shinmed";
 
   // Portal enviado pelo WhatsApp com o nome da clínica; sem telefone, o link
   // abre direto para copiar.

@@ -159,11 +159,11 @@ test("monthYearPT: month and year in Portuguese", () => {
 });
 
 test("buildClinicJsonLd: only includes what exists", () => {
-  const minimal = buildClinicJsonLd({ name: "Clínica Shinmed", url: "https://renova.example" });
+  const minimal = buildClinicJsonLd({ name: "Plataforma Shinmed", url: "https://renova.example" });
   assert.deepEqual(minimal, {
     "@context": "https://schema.org",
     "@type": "MedicalClinic",
-    name: "Clínica Shinmed",
+    name: "Plataforma Shinmed",
     url: "https://renova.example",
   });
   assert.equal("telephone" in minimal, false);
@@ -182,7 +182,7 @@ test("buildClinicJsonLd: full object with opening hours from the runs", () => {
     row(6, "08:00", "12:00"),
   ]);
   const full = buildClinicJsonLd({
-    name: "Clínica Shinmed",
+    name: "Plataforma Shinmed",
     url: "https://renova.example",
     phone: "(11) 99999-0000",
     address: "Rua das Flores, 10",
@@ -214,7 +214,7 @@ test("jsonLdScript: escapes < so a clinic name cannot close the script tag", () 
 
 test("buildClinicJsonLd: CNPJ and the booking action only when given", () => {
   const out = buildClinicJsonLd({
-    name: "Clínica Shinmed",
+    name: "Plataforma Shinmed",
     url: "https://renova.example/",
     taxId: " 12.345.678/0001-90 ",
     bookingUrl: "https://renova.example/agendar",

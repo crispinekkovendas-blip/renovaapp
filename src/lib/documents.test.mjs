@@ -206,7 +206,7 @@ test("every kind and subkind has a default template and the atestado sentence is
   const vars = buildTemplateVars({
     patient: { name: "Ana Beatriz Souza", cpf: "412.658.790-01" },
     professional: { name: "Dra. Marina Costa", council: "CRM 123456-SP" },
-    clinicName: "Clínica Shinmed",
+    clinicName: "Plataforma Shinmed",
     date: "2026-09-09",
     fields: { dias: "3" },
   });
@@ -483,12 +483,12 @@ test("validation URL and printed host", () => {
 test("the WhatsApp message carries the portal link and the code", () => {
   const msg = documentWhatsAppMessage({
     firstName: "Ana",
-    clinicName: "Clínica Shinmed",
+    clinicName: "Plataforma Shinmed",
     title: "Atestado médico",
     portalUrl: "https://clinica.com.br/p/abc.def",
     code: "RNV-ABCD-EFGH",
   });
-  assert.match(msg, /^Olá Ana! Aqui é da Clínica Shinmed\./);
+  assert.match(msg, /^Olá Ana! Aqui é da Plataforma Shinmed\./);
   assert.match(msg, /"Atestado médico"/);
   assert.match(msg, /https:\/\/clinica\.com\.br\/p\/abc\.def/);
   assert.match(msg, /RNV-ABCD-EFGH$/);
@@ -556,7 +556,7 @@ test("protocolSummary joins the printed titles with +", () => {
 test("documentsBatchWhatsAppMessage lists every document with its code and where to check", () => {
   const message = documentsBatchWhatsAppMessage({
     firstName: "Ana",
-    clinicName: "Clínica Shinmed",
+    clinicName: "Plataforma Shinmed",
     portalUrl: "https://clinica.com.br/p/abc",
     documents: [
       { title: "Atestado médico", code: "RNV-ABCD-EFGH" },
@@ -566,7 +566,7 @@ test("documentsBatchWhatsAppMessage lists every document with its code and where
   });
   assert.equal(
     message,
-    "Olá Ana! Aqui é da Clínica Shinmed. Seus documentos de hoje já estão no seu portal: https://clinica.com.br/p/abc\n" +
+    "Olá Ana! Aqui é da Plataforma Shinmed. Seus documentos de hoje já estão no seu portal: https://clinica.com.br/p/abc\n" +
       "• Atestado médico — código RNV-ABCD-EFGH\n" +
       "• Encaminhamento — código RNV-JKLM-NPQR\n" +
       "Quem precisar conferir pode validar os códigos em clinica.com.br/validar."
