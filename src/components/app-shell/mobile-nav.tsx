@@ -41,7 +41,7 @@ export function MobileTopBar({ name }: { name: string }) {
           aria-label="Início"
           className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-pine-950 text-base font-extrabold text-white"
         >
-          R
+          S
         </Link>
         <p className="min-w-0 truncate text-[17px] font-extrabold tracking-tight text-pine-950">{title}</p>
       </div>

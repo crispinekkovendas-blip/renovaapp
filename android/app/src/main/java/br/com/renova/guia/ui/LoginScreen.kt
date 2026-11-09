@@ -87,7 +87,7 @@ fun ScreenScaffold(
     )
 }
 
-/** O "R" do Shinmed, como no site. */
+/** O "S" do Shinmed, como no site. */
 @Composable
 fun BrandMark(size: Int = 64) {
     Box(
@@ -97,7 +97,7 @@ fun BrandMark(size: Int = 64) {
             .background(MaterialTheme.colorScheme.primary),
         contentAlignment = Alignment.Center,
     ) {
-        Text("R", color = Color.White, fontSize = (size / 2).sp, fontWeight = FontWeight.ExtraBold)
+        Text("S", color = Color.White, fontSize = (size / 2).sp, fontWeight = FontWeight.ExtraBold)
     }
 }
 

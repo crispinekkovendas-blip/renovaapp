@@ -1,5 +1,5 @@
 /*
- * Renova — service worker do portal do paciente (/p/…).
+ * Shinmed — service worker do portal do paciente (/p/…).
  *
  * Faz só duas coisas: mostra o lembrete que chega por Web Push e abre o
  * portal quando o aviso é tocado. De propósito NÃO tem handler de `fetch`:

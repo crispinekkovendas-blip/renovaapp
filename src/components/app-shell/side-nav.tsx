@@ -69,7 +69,7 @@ export function SideNav({ name, role }: { name: string; role: Role }) {
       <div className="flex min-h-0 flex-1 flex-col peek:opacity-0 peek:transition-opacity peek:delay-200 peek:duration-150 peek:group-hover/side:opacity-100 peek:group-hover/side:delay-75 peek:group-has-[:focus-visible]/side:opacity-100 peek:group-has-[:focus-visible]/side:delay-0">
         <Link href="/dashboard" className="mb-5 flex items-center gap-2.5 px-1.5 lg:px-2" aria-label="Início">
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-pine-950 text-base font-extrabold text-white">
-            R
+            S
           </span>
           <span className="hidden text-lg font-extrabold tracking-tight text-pine-950 lg:block peek:block">Shinmed</span>
         </Link>

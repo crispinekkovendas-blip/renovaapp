@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 /**
  * A marca em imagem (favicon, ícone de tela inicial, prévia de link), no tema
- * "Tevet & Iyar": um "R" reto em Karla 700 sobre o azul-marinho de Tevet, com o
+ * "Tevet & Iyar": um "S" reto em Karla 700 sobre o azul-marinho de Tevet, com o
  * fio de bronze de Iyar embaixo. O Satori (por trás do `ImageResponse`) não
  * enxerga fontes do sistema, então a fonte vai junto, em TTF (OFL).
  */
@@ -26,8 +26,8 @@ export async function brandFonts(): Promise<BrandFont[]> {
 }
 
 /**
- * O quadrado com o "R". `radius` em fração do lado (0 para o ícone da Apple,
- * que o iOS arredonda sozinho); `inverted` troca para névoa com R marinho.
+ * O quadrado com o "S". `radius` em fração do lado (0 para o ícone da Apple,
+ * que o iOS arredonda sozinho); `inverted` troca para névoa com S marinho.
  */
 export function BrandMark({
   size,
@@ -57,7 +57,7 @@ export function BrandMark({
         lineHeight: 1,
       }}
     >
-      <span style={{ marginTop: Math.round(size * 0.04) }}>R</span>
+      <span style={{ marginTop: Math.round(size * 0.04) }}>S</span>
       <span
         style={{
           width: Math.round(size * 0.34),

@@ -48,6 +48,12 @@ const STEPS: readonly Step[] = [
 
 const NEWS: readonly { date: string; items: readonly string[] }[] = [
   {
+    date: "8 de novembro de 2026",
+    items: [
+      "O sistema agora se chama Shinmed: nome e letra da marca no login, no menu, no portal do paciente, nos ícones, nos PDFs e no app Android (a partir da próxima versão). O endereço do site, os logins e os códigos RNV dos documentos já emitidos continuam os mesmos.",
+    ],
+  },
+  {
     date: "4 de novembro de 2026",
     items: [
       "Ortopedia: os 37 procedimentos do guia ganharam ilustrações próprias — redução, tala, gesso, bloqueio, punção, infiltração — desenhadas passo a passo na paleta do Shinmed, com o ponto de entrada da agulha, as setas da manobra e as medidas. Aparecem no tópico (site e app Android, onde ficam guardadas para abrir sem internet) e no PDF de estudo.",
