@@ -50,7 +50,7 @@ const NEWS: readonly { date: string; items: readonly string[] }[] = [
   {
     date: "12 de novembro de 2026",
     items: [
-      "Tema Marte: além do claro e do escuro, o botão de tema do menu agora liga um terceiro visual — fundo preto, títulos em caixa alta e o horizonte de Marte no Início, com o paciente da vez em letras grandes. As folhas dos documentos e os PDFs continuam brancos.",
+      "Tema Marte: além do claro e do escuro, o botão de tema do menu agora liga um terceiro visual — fundo preto, títulos em caixa alta e, no Início, um desenho que sugere Marte atrás do paciente da vez, em letras grandes. São três desenhos, um por dia: as curvas de relevo do Olympus Mons, o planeta em cartaz com suas duas luas e as dunas ao pôr do sol. As folhas dos documentos e os PDFs continuam brancos.",
       "Receituário: a tarja de cada medicamento passa a ser decidida por forma. A dipirona em gotas e o ibuprofeno em cápsula voltam a aparecer como venda livre; antes herdavam a tarja da ampola ou do comprimido de mesma concentração.",
       "Receituário: 191 apresentações tinham a concentração lida errada — a nistatina de 100.000 UI/mL aparecia como 100 UI/mL e o carbonato de cálcio de 1.250 mg como 1,250 mg. Agora aparecem como 100000 UI/mL e 1250 mg. Receitas já emitidas não mudam.",
     ],

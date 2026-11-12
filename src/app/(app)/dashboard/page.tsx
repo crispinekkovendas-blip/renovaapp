@@ -8,7 +8,7 @@ import { IconCalendar, IconClock, IconFileText, IconUsers } from "@/components/i
 import { StatRow, Tile } from "@/components/dashboard/home-cards";
 import { IconIdCard, IconPlusCircle } from "@/components/dashboard/icons";
 import { NextPatient } from "@/components/dashboard/next-patient";
-import { MarsHorizon } from "@/components/mars-horizon";
+import { MarsArtwork } from "@/components/mars-art";
 import { PortalInbox } from "@/components/dashboard/portal-inbox";
 import { PatientQuickSearch } from "@/components/dashboard/patient-quick-search";
 import { TodayAppointments } from "@/components/dashboard/today-appointments";
@@ -93,11 +93,11 @@ export default async function DashboardPage() {
       </header>
 
       {/* ── O paciente da vez e a busca ───────────────────────── */}
-      {/* No tema Marte o bloco vira a abertura da página: o horizonte do planeta
-          atrás e o paciente da vez embaixo, em letras grandes. Sem overflow-hidden:
-          a lista da busca precisa sair do bloco. */}
+      {/* No tema Marte o bloco vira a abertura da página: o desenho do dia atrás
+          e o paciente da vez embaixo, em letras grandes. Sem overflow-hidden: a
+          lista da busca precisa sair do bloco. */}
       <section className="relative rounded-[24px] bg-peach-100 p-5 sm:p-7 mars:flex mars:min-h-[30rem] mars:flex-col mars:sm:min-h-[25rem] mars:justify-end mars:rounded-[4px] mars:bg-black">
-        <MarsHorizon className="rounded-[4px]" />
+        <MarsArtwork className="rounded-[4px]" />
         <div className="relative">
           <NextPatient next={next} canAttend={role !== "recepcao"} />
           <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">

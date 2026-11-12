@@ -5,7 +5,7 @@ import { loginAction } from "@/lib/actions";
 import { getSession } from "@/lib/auth";
 import { REFRAIN } from "@/components/marketing/refrain";
 import { Feedback } from "@/components/feedback";
-import { MarsHorizon } from "@/components/mars-horizon";
+import { MarsArtwork } from "@/components/mars-art";
 
 export const metadata: Metadata = {
   title: "Entrar",
@@ -25,9 +25,8 @@ export default async function LoginPage({
   return (
     <main className="theme-app grid min-h-screen min-h-dvh lg:grid-cols-[1.1fr_1fr]">
       <section className="relative hidden flex-col justify-between overflow-hidden bg-pine-950 p-12 text-white lg:flex mars:bg-black mars:text-ink">
-        <MarsHorizon />
-        {/* O painel é alto e mostra a parte iluminada do planeta: um véu da esquerda segura o texto. */}
-        <div className="pointer-events-none absolute inset-0 hidden bg-[linear-gradient(to_right,rgb(0_0_0/0.88),rgb(0_0_0/0.45)_65%,transparent)] mars:block" />
+        {/* O desenho do dia numa faixa no alto; o slogan fica embaixo, no preto. */}
+        <MarsArtwork layout="band" className="h-[38%]" />
         <div
           className="pointer-events-none absolute inset-0 opacity-70 mars:hidden"
           style={{
