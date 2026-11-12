@@ -53,11 +53,14 @@ export async function searchMedications(query: string, limit = 20): Promise<Medi
         LIMIT 60
       )
       SELECT substance, concentration,
-             -- Mesma regra de effectiveTarja(): tarja preta vale para a
-             -- substância inteira (a Portaria 344/98 lista o princípio
-             -- ativo, e há linhas de clonazepam sem tarja na CMED); as
-             -- demais valem por apresentação, senão a dipirona injetável
-             -- faria o comprimido exigir Controle Especial.
+             -- A tarja da linha, como a CMED informou: a de cada resultado é
+             -- decidida por forma em groupTarja() (gotas não herdam a tarja
+             -- da ampola de mesma concentração).
+             tarja,
+             -- A da substância + concentração inteira, para a forma em que
+             -- nenhuma linha informa a tarja. Tarja preta vale para a
+             -- substância toda (a Portaria 344/98 lista o princípio ativo, e
+             -- há linhas de clonazepam sem tarja na CMED).
              CASE
                WHEN BOOL_OR(tarja = 'preta') OVER (PARTITION BY substance) THEN 'preta'
                ELSE CASE MAX(CASE tarja
@@ -69,7 +72,7 @@ export async function searchMedications(query: string, limit = 20): Promise<Medi
                       WHEN 2 THEN 'vermelha'
                       WHEN 1 THEN 'livre'
                       ELSE 'desconhecida' END
-             END AS tarja,
+             END AS tarja_conc,
              NULLIF(product, '') AS product, presentation, therapeutic_class,
              marketed,
              matched.rank

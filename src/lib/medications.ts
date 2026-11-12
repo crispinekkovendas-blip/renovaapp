@@ -120,6 +120,31 @@ const UNIT = String.raw`[\d.,]+\s*${MEASURE}`;
 const GROUPED = String.raw`\(\s*[\d.,]+(?:\s*\+\s*[\d.,]+)+\s*\)\s*${MEASURE}`;
 const CONCENTRATION = new RegExp(String.raw`^\s*(${GROUPED}|${UNIT}(?:\s*\+\s*${UNIT})*)`, "i");
 
+/** Um número com ponto e, se vier colada, a unidade internacional. */
+const DOTTED = /(\d+(?:\.\d+)+)(\s*UI?\b)?/g;
+
+/**
+ * O ponto da CMED ora é milhar ("100.000 UI/ML", "1.250 MG", "1.200.000 UI"),
+ * ora é decimal ("2.5 MG", "0.352 G", "(9.532 + 1.049) MG"). É milhar quando
+ * cada grupo depois do ponto tem três dígitos, o número não começa com zero e
+ * há um sinal de que é inteiro: mais de um ponto, unidade internacional ou
+ * final redondo ("1.250", nunca "1.049"). O decimal vira vírgula; o milhar
+ * perde o ponto, que é como a própria CMED escreve na maioria das linhas
+ * ("50000 UI", "1000 MG") — assim a mesma dose não aparece duas vezes na busca.
+ *
+ * Sem isto a nistatina "100.000 UI/ML" entrava no catálogo como "100 UI/ML" e
+ * o carbonato de cálcio "1.250 MG" como "1,250 MG".
+ */
+function dotted(number: string, international: boolean): string {
+  const [head, ...groups] = number.split(".");
+  const thousands =
+    head.length <= 3 &&
+    !head.startsWith("0") &&
+    groups.every((group) => group.length === 3) &&
+    (groups.length > 1 || international || groups[0].endsWith("0"));
+  return `${head}${thousands ? "" : ","}${groups.join("")}`;
+}
+
 /**
  * A CMED escreve a mesma dose de várias formas: "1 G" e "1G", "0,5 MG" e
  * "0,5MG", "(1000 + 200) MG" e "(1000,0 + 200,0) MG". Sem normalizar, o
@@ -132,8 +157,8 @@ const CONCENTRATION = new RegExp(String.raw`^\s*(${GROUPED}|${UNIT}(?:\s*\+\s*${
 export function normalizeConcentration(value: string): string {
   return value
     .toUpperCase()
-    // "2.5" e "2,5" são a mesma dose; no Brasil a vírgula é a decimal.
-    .replace(/(\d)\.(\d)/g, "$1,$2")
+    // "2.5" e "2,5" são a mesma dose (a vírgula é a decimal); "100.000 UI" é cem mil.
+    .replace(DOTTED, (_, number: string, unit: string | undefined) => dotted(number, Boolean(unit)) + (unit ?? ""))
     .replace(/(\d),0+\b/g, "$1")
     .replace(/(\d)\s*(MG|MCG|UI|ML|G)\b/g, "$1 $2")
     .replace(/\s*\/\s*/g, "/")
@@ -267,12 +292,35 @@ export interface MedicationHit {
 export interface MedicationRow {
   substance: string;
   concentration: string | null;
+  /** A tarja daquela linha, como a CMED informou. */
   tarja: Tarja;
+  /**
+   * A tarja da substância + concentração inteira, de todas as formas juntas
+   * (já "preta" quando a substância é de tarja preta): vale quando nenhuma
+   * linha daquela forma informa a tarja.
+   */
+  tarja_conc?: Tarja;
   product: string | null;
   presentation: string | null;
   therapeutic_class: string | null;
   marketed: boolean | number;
   rank: number;
+}
+
+/**
+ * A tarja de um resultado da busca (substância + concentração + forma).
+ *
+ * Vale a mais restritiva **daquela forma**: a dipirona 500 mg/mL em gotas é de
+ * venda livre mesmo que a ampola de 500 mg/mL, de uso hospitalar, seja
+ * vermelha com retenção — antes as duas dividiam a tarja porque têm a mesma
+ * concentração. Quando nenhuma linha da forma informa a tarja, vale a da
+ * concentração inteira; e tarja preta continua valendo para a substância toda.
+ */
+export function groupTarja(rows: readonly Pick<MedicationRow, "tarja" | "tarja_conc">[]): Tarja {
+  const whole = rows[0]?.tarja_conc ?? "desconhecida";
+  if (whole === "preta") return "preta";
+  const own = strictestTarja(rows.map((row) => row.tarja));
+  return own === "desconhecida" ? whole : own;
 }
 
 /**
@@ -322,7 +370,11 @@ export function collapseMedicationRows(rows: readonly MedicationRow[], limit = 2
         a.order - b.order,
     )
     .slice(0, limit)
-    .map((g) => ({ ...g.hit, products: brandNames(g.hit.substance, g.rows, query) }));
+    .map((g) => ({
+      ...g.hit,
+      tarja: withRetentionRules(g.hit.substance, groupTarja(g.rows)),
+      products: brandNames(g.hit.substance, g.rows, query),
+    }));
 }
 
 /* ---------- Nomes comerciais ---------- */

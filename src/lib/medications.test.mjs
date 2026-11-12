@@ -8,6 +8,7 @@ import {
   groupByReceiptKind,
   searchKey,
   concentrationFrom,
+  normalizeConcentration,
   medicationLabel,
   allergyHits,
   strictestTarja,
@@ -97,6 +98,23 @@ test("normaliza a grafia da concentração", () => {
   assert.equal(concentrationFrom("(1000,0 + 200,0) MG COM"), "(1000 + 200) MG");
   assert.equal(concentrationFrom("0,25 MG COM CT X 30"), "0,25 MG");
   assert.equal(concentrationFrom("50 MG / ML SOL"), "50 MG/ML");
+});
+
+/** "100.000 UI" entrava como "100 UI": o ponto de milhar era lido como decimal. */
+test("ponto de milhar não é decimal (e some, como no resto da lista)", () => {
+  assert.equal(concentrationFrom("100.000 UI/ML SUS CT FR VD AMB X 50 ML"), "100000 UI/ML");
+  assert.equal(concentrationFrom("1.200.000 UI PO SUS INJ CT FA VD TRANS"), "1200000 UI");
+  assert.equal(concentrationFrom("300.000 UI + 100.000 UI PO LIOF SUS INJ"), "300000 UI + 100000 UI");
+  assert.equal(concentrationFrom("2.000UI PÓ LIOF INJ CT FA VD TRANS"), "2000 UI");
+  assert.equal(concentrationFrom("62,5 MG/G + 25.000 UI/G + 1,25 MG/G CREM VAG"), "62,5 MG/G + 25000 UI/G + 1,25 MG/G");
+  // Fora de UI, só o número redondo é milhar: carbonato de cálcio 1.250 mg, secnidazol 1.000 mg.
+  assert.equal(concentrationFrom("1.250 MG COM CT BL AL PLAS PVDC TRANS X 60"), "1250 MG");
+  assert.equal(concentrationFrom("1.000 MG COM REV CT ENV AL X 4"), "1000 MG");
+  // Decimal escrito com ponto continua decimal.
+  assert.equal(concentrationFrom("2.5 MG COM CT X 30"), "2,5 MG");
+  assert.equal(concentrationFrom("20 MG/ML + 0.333 MG/ML + 1.0 MCG/ML SOL OR"), "20 MG/ML + 0,333 MG/ML + 1 MCG/ML");
+  assert.equal(concentrationFrom("(9.532 + 1.049 + 3.039 + 12.5) MG COM REV"), "(9,532 + 1,049 + 3,039 + 12,5) MG");
+  assert.equal(normalizeConcentration("17.602 G"), "17,602 G");
 });
 
 /**
@@ -234,4 +252,27 @@ test("cada resultado da busca leva os nomes comerciais do seu grupo", async () =
   const gotas = hits.find((h) => h.form === "gotas");
   assert.deepEqual(gotas.products, ["Anador", "Novalgina"]);
   assert.deepEqual(hits.find((h) => h.form === "comprimido").products, ["Novalgina"]);
+});
+
+/** Gotas e ampola têm a mesma concentração; a tarja não pode ser a mesma por isso. */
+test("a tarja é decidida por forma, não só por concentração", async () => {
+  const { collapseMedicationRows, groupTarja } = await import("./medications.ts");
+  const base = { substance: "DIPIRONA", concentration: "500 MG/ML", product: "DIPIRONA", therapeutic_class: null, marketed: 1, rank: 0, tarja_conc: "vermelha_retida" };
+  const hits = collapseMedicationRows([
+    { ...base, tarja: "livre", presentation: "500 MG/ML SOL OR CT FR GOT X 20 ML" },
+    { ...base, tarja: "desconhecida", presentation: "500 MG/ML SOL OR CT FR GOT X 10 ML" },
+    { ...base, tarja: "vermelha_retida", presentation: "500 MG/ML SOL INJ CX 100 AMP VD AMB X 2 ML" },
+    // Nenhuma linha desta forma informa a tarja: vale a da concentração inteira.
+    { ...base, tarja: "desconhecida", presentation: "500 MG/ML SUP CT STR X 5" },
+  ]);
+  const tarjaOf = (form) => hits.find((h) => h.form === form).tarja;
+  assert.equal(tarjaOf("gotas"), "livre");
+  assert.equal(tarjaOf("injetavel"), "vermelha_retida");
+  assert.equal(tarjaOf("supositorio"), "vermelha_retida");
+
+  // Dentro da mesma forma continua valendo a mais restritiva.
+  assert.equal(groupTarja([{ tarja: "vermelha" }, { tarja: "vermelha_retida" }]), "vermelha_retida");
+  // Tarja preta é da substância: a linha sem tarja não rebaixa.
+  assert.equal(groupTarja([{ tarja: "desconhecida", tarja_conc: "preta" }, { tarja: "vermelha", tarja_conc: "preta" }]), "preta");
+  assert.equal(groupTarja([]), "desconhecida");
 });
