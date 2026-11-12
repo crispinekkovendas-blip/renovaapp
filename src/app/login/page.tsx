@@ -5,6 +5,7 @@ import { loginAction } from "@/lib/actions";
 import { getSession } from "@/lib/auth";
 import { REFRAIN } from "@/components/marketing/refrain";
 import { Feedback } from "@/components/feedback";
+import { MarsHorizon } from "@/components/mars-horizon";
 
 export const metadata: Metadata = {
   title: "Entrar",
@@ -23,33 +24,36 @@ export default async function LoginPage({
 
   return (
     <main className="theme-app grid min-h-screen min-h-dvh lg:grid-cols-[1.1fr_1fr]">
-      <section className="relative hidden flex-col justify-between overflow-hidden bg-pine-950 p-12 text-white lg:flex">
+      <section className="relative hidden flex-col justify-between overflow-hidden bg-pine-950 p-12 text-white lg:flex mars:bg-black mars:text-ink">
+        <MarsHorizon />
+        {/* O painel é alto e mostra a parte iluminada do planeta: um véu da esquerda segura o texto. */}
+        <div className="pointer-events-none absolute inset-0 hidden bg-[linear-gradient(to_right,rgb(0_0_0/0.88),rgb(0_0_0/0.45)_65%,transparent)] mars:block" />
         <div
-          className="pointer-events-none absolute inset-0 opacity-70"
+          className="pointer-events-none absolute inset-0 opacity-70 mars:hidden"
           style={{
             backgroundImage:
               "radial-gradient(circle at 15% 15%, rgba(184,149,90,0.28), transparent 45%), radial-gradient(circle at 90% 85%, rgba(44,74,110,0.6), transparent 50%)",
           }}
         />
         <p className="relative flex items-center gap-2.5 text-xl font-extrabold tracking-tight">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-base text-pine-950">S</span>
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-base text-pine-950 mars:bg-ink mars:text-black">S</span>
           Shinmed
         </p>
         <div className="relative">
           {/* O título da página é o "Entrar" do formulário; isto é o slogan do painel. */}
-          <p className="font-display text-5xl font-extrabold leading-[1.08] tracking-tight">
+          <p className="font-display text-5xl font-extrabold leading-[1.08] tracking-tight mars:font-semibold mars:uppercase mars:tracking-[0.02em]">
             Cuidar bem
             <br />
             começa com
             <br />
-            <span className="text-peach-200">organização.</span>
+            <span className="text-peach-200 mars:text-pine-700">organização.</span>
           </p>
-          <p className="mt-6 max-w-md text-white/75">
+          <p className="mt-6 max-w-md text-white/75 mars:text-ink/75">
             Agenda, prontuário, documentos com código de autenticidade e o portal do paciente em um só
             lugar — simples, rápido e no seu controle.
           </p>
         </div>
-        <p className="relative text-xs font-bold text-white/50">Gestão de clínicas · pt-BR</p>
+        <p className="relative text-xs font-bold text-white/50 mars:text-ink/50">Gestão de clínicas · pt-BR</p>
       </section>
 
       {/* No celular: margens enxutas e respiro para o recorte e a barra do iPhone. */}

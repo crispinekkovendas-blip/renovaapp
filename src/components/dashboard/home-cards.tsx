@@ -18,7 +18,7 @@ export function Tile({ href, icon, title, hint }: { href: string; icon: ReactNod
 export function StatRow({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-5">
-      <span className="text-pine-900/65">{label}</span>
+      <span className="text-pine-900/65 mars:text-xs mars:font-semibold mars:uppercase mars:tracking-[0.12em]">{label}</span>
       <span className="font-extrabold tabular-nums text-pine-950">{children}</span>
     </div>
   );

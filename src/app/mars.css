@@ -1,0 +1,94 @@
+/* Tema Marte: o sabor. As cores vêm de theme-mars.css (gerado); aqui fica o
+   que faz a tela lembrar as páginas de Marte da SpaceX e da Starlink — preto de
+   espaço, títulos em caixa alta numa fonte tipo DIN (Barlow), botões e cartões
+   de canto quase reto e linhas finas no lugar de sombras.
+
+   Tudo dentro de `@layer components`: uma classe utilitária no elemento
+   (`normal-case`, `rounded-full`) continua mandando. A folha A4 e o que é papel
+   (.theme-paper, .theme-light, .print-area) ficam de fora. */
+
+html[data-theme="mars"] {
+  --font-display: "Barlow", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer components {
+  /* Títulos: caixa alta, espaçados, na fonte de display. */
+  html[data-theme="mars"] .theme-app :is(h1, h2):not(:where(.theme-paper, .theme-light, .print-area) *) {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  /* Botões: retângulo, caixa alta. O principal é cheio e claro; o de contorno
+     enche ao passar o mouse, como os da SpaceX. */
+  html[data-theme="mars"] .theme-app .btn {
+    border-radius: 2px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  html[data-theme="mars"] .theme-app .btn-outline {
+    border-color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+    background-color: transparent;
+    color: var(--color-ink);
+  }
+  html[data-theme="mars"] .theme-app .btn-outline:hover {
+    border-color: var(--color-ink);
+    background-color: var(--color-ink);
+    color: #000000;
+  }
+
+  /* Cartões e campos: sem sombra, linha fina, canto quase reto. */
+  html[data-theme="mars"] .theme-app .card {
+    border-radius: 4px;
+    box-shadow: none;
+  }
+  html[data-theme="mars"] .theme-app .input {
+    border-radius: 2px;
+    background-color: #000000;
+  }
+  html[data-theme="mars"] .theme-app .chip {
+    border-radius: 2px;
+  }
+
+  /* Menu e abas: rótulos pequenos em caixa alta. */
+  html[data-theme="mars"] .theme-app .nav-pill {
+    border-radius: 2px;
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  html[data-theme="mars"] .theme-app .nav-pill.active {
+    background-color: transparent;
+    box-shadow: inset 2px 0 0 var(--color-pine-500);
+  }
+  html[data-theme="mars"] .theme-app .nav-pill.active svg {
+    color: var(--color-pine-500);
+  }
+  html[data-theme="mars"] .theme-app :is(.doc-tab, .doc-subtab) {
+    border-radius: 2px;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  html[data-theme="mars"] .theme-app .doc-subtab.active {
+    border-color: var(--color-pine-500);
+    background-color: transparent;
+  }
+  html[data-theme="mars"] .theme-app .tabbar-item {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  html[data-theme="mars"] .theme-app .tabbar-icon {
+    border-radius: 2px;
+  }
+  html[data-theme="mars"] .theme-app .tabbar-item.active .tabbar-icon {
+    background-color: transparent;
+    color: var(--color-pine-500);
+  }
+}

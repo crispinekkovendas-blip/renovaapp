@@ -34,7 +34,7 @@ export function SearchBarTrigger() {
       <button
         type="button"
         onClick={openSearch}
-        className="flex h-9 w-72 max-w-full cursor-pointer items-center gap-2 rounded-full border border-[var(--color-line)] bg-white px-3.5 text-[13px] text-pine-900/55 transition-colors hover:border-pine-400"
+        className="flex h-9 w-72 max-w-full cursor-pointer items-center gap-2 rounded-full mars:rounded-[2px] border border-[var(--color-line)] bg-white px-3.5 text-[13px] text-pine-900/55 transition-colors hover:border-pine-400"
       >
         <IconSearch className="h-4 w-4 shrink-0" />
         <span className="min-w-0 flex-1 truncate text-left">Buscar paciente ou ação…</span>

@@ -1,9 +1,14 @@
 @import "tailwindcss";
 @import "./theme-dark.css";
+@import "./theme-mars.css";
+@import "./mars.css";
 
 /* Tela de computador com mouse: a barra lateral fica escondida e aparece ao
    passar o mouse na borda esquerda. Tablet (toque) continua com o trilho fixo. */
 @custom-variant peek (@media (min-width: 48rem) and (hover: hover) and (pointer: fine));
+
+/* Só no tema Marte (html[data-theme="mars"]): `mars:uppercase`, `mars:block`… */
+@custom-variant mars (&:where([data-theme="mars"], [data-theme="mars"] *));
 
 @theme {
   /* "Tevet & Iyar": corporativo. Tevet (♑, Saturno) dá a estrutura em azul-marinho

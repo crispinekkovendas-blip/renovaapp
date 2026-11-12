@@ -95,7 +95,7 @@ export function PatientQuickSearch() {
       action="/pacientes"
       method="get"
       role="search"
-      className="relative flex min-w-0 flex-1 items-center gap-2 rounded-full bg-white py-1.5 pl-4 pr-1.5 shadow-sm"
+      className="relative flex min-w-0 flex-1 items-center gap-2 rounded-full bg-white py-1.5 pl-4 pr-1.5 shadow-sm mars:rounded-[2px] mars:ring-1 mars:ring-[var(--color-line)]"
       onSubmit={(event) => {
         if (showList && active >= 0 && results[active]) {
           event.preventDefault();

@@ -97,7 +97,7 @@ export function SideNav({ name, role }: { name: string; role: Role }) {
         <div className="mb-3 hidden flex-col gap-2 lg:flex peek:flex">
           <Link
             href="/ajuda#novidades"
-            className="flex items-center gap-2.5 rounded-full border border-[var(--color-line)] bg-white px-3.5 py-2 text-[12.5px] font-bold text-pine-900/75 transition-colors hover:border-pine-400"
+            className="flex items-center gap-2.5 rounded-full mars:rounded-[2px] border border-[var(--color-line)] bg-white px-3.5 py-2 text-[12.5px] font-bold text-pine-900/75 transition-colors hover:border-pine-400"
           >
             <svg
               viewBox="0 0 24 24"
@@ -116,7 +116,7 @@ export function SideNav({ name, role }: { name: string; role: Role }) {
           </Link>
           <Link
             href="/ajuda"
-            className="flex items-center gap-2.5 rounded-full border border-[var(--color-line)] bg-white px-3.5 py-2 text-[12.5px] font-bold text-pine-900/75 transition-colors hover:border-pine-400"
+            className="flex items-center gap-2.5 rounded-full mars:rounded-[2px] border border-[var(--color-line)] bg-white px-3.5 py-2 text-[12.5px] font-bold text-pine-900/75 transition-colors hover:border-pine-400"
           >
             <svg
               viewBox="0 0 24 24"
@@ -151,8 +151,8 @@ export function SideNav({ name, role }: { name: string; role: Role }) {
               <span className="block text-[11.5px] text-pine-900/60">{ROLE_LABEL[role]}</span>
             </span>
           </Link>
-          <ThemeToggle compact className="nav-pill w-full justify-center lg:hidden peek:hidden" />
-          <ThemeToggle className="nav-pill hidden w-full justify-start lg:inline-flex peek:inline-flex" />
+          <ThemeToggle mars compact className="nav-pill w-full justify-center lg:hidden peek:hidden" />
+          <ThemeToggle mars className="nav-pill hidden w-full justify-start lg:inline-flex peek:inline-flex" />
           <form action={logoutAction}>
             <button
               type="submit"

@@ -1,4 +1,6 @@
-// Gera src/app/theme-dark.css: o tema escuro do Renova ("Tevet & Iyar").
+// Gera src/app/theme-dark.css (o tema escuro, "Tevet & Iyar") e
+// src/app/theme-mars.css (as cores do tema Marte; o resto do sabor — fonte,
+// cantos, caixa alta — está escrito à mão em src/app/mars.css).
 //
 //   node scripts/theme/build-dark.mjs
 //
@@ -45,6 +47,16 @@ const BRAND = {
     clay: ["#1d2014", "#262b18", "#363d1f", "#4c5529", "#6b7738", "#8f9b4f", "#b5c06f", "#c8d18c", "#dbe1ad", "#ebefcf"],
     peach: ["#141b25", "#1a2433", "#223047", "#2c3d58"],
     sun: ["#5c4a2a", "#8a6f3f", "#c9a56d"],
+  },
+  // Marte: preto de espaço, tinta quase branca e ferrugem. As superfícies
+  // (pine 50–300) são cinzas neutros; a cor fica nos links, ícones e foco
+  // (pine 500–700), no "peach" das faixas e no "sun" dos detalhes.
+  mars: {
+    paper: "#000000", ink: "#f0f0fa", white: "#0c0c0e", line: "#2b2b31", muted: "#9c9ca8",
+    pine: ["#121214", "#1a1a1d", "#27272c", "#3d3d45", "#7c7c88", "#d9652f", "#e8794a", "#f09a75", "#d9d9e3", "#e6e6f0", "#f0f0fa"],
+    clay: ["#1c1407", "#271c0a", "#3a2a0f", "#544016", "#775c20", "#a17e30", "#c9a24c", "#d9b974", "#e6d09d", "#f1e4c6"],
+    peach: ["#120a07", "#1f100a", "#33190e", "#4d2514"],
+    sun: ["#5a2713", "#a04a22", "#d9652f"],
   },
 };
 const PINE_STEPS = STEPS;
@@ -98,3 +110,38 @@ ${indent(lightDefaults)}
 `;
 writeFileSync(join(ROOT, "src/app/theme-dark.css"), css);
 console.log(`theme-dark.css: ${PALETTES.length} escalas espelhadas + marca`);
+
+// Os cantos do Tailwind (rounded-lg … rounded-3xl leem estas variáveis): quase
+// retos em Marte, de volta ao normal no que é papel.
+const RADII = { md: "0.375rem", lg: "0.5rem", xl: "0.75rem", "2xl": "1rem", "3xl": "1.5rem", "4xl": "2rem" };
+const radiusVars = (value) => Object.entries(RADII).map(([k, v]) => `--radius-${k}: ${value ?? v};`);
+
+const marsCss = `/* GERADO por scripts/theme/build-dark.mjs — não editar à mão. */
+
+/* Tema Marte: ligado pelo botão de tema do app (html[data-theme="mars"]). */
+html[data-theme="mars"] {
+  color-scheme: dark;
+${indent(brandVars(BRAND.mars))}
+${indent(darkDefaults)}
+${indent(radiusVars("3px"))}
+}
+
+html[data-theme="mars"] .section-ink {
+  background-color: #000000;
+  color: #f0f0fa;
+  box-shadow: inset 0 1px 0 #2b2b31, inset 0 -1px 0 #2b2b31;
+}
+
+/* Papel continua papel: a folha A4 e o que imita impresso ficam claros. */
+html[data-theme="mars"] .theme-light,
+html[data-theme="mars"] .theme-paper,
+html[data-theme="mars"] .print-area {
+  color-scheme: light;
+${indent(brandVars(BRAND.light))}
+${indent(lightDefaults)}
+${indent(radiusVars())}
+  color: var(--color-ink);
+}
+`;
+writeFileSync(join(ROOT, "src/app/theme-mars.css"), marsCss);
+console.log("theme-mars.css: mesma estrutura, paleta de Marte");

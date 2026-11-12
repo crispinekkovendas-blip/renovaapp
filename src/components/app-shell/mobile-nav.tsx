@@ -208,7 +208,7 @@ export function MobileTabBar({ name, role }: { name: string; role: Role }) {
                 </Link>
               </li>
               <li>
-                <ThemeToggle className="nav-pill min-h-12 w-full justify-start" />
+                <ThemeToggle mars className="nav-pill min-h-12 w-full justify-start" />
               </li>
               <li className="mt-2 border-t border-[var(--color-line)] pt-2">
                 <form action={logoutAction}>

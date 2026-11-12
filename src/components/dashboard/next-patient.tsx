@@ -19,7 +19,7 @@ export function NextPatient({
   if (!next) {
     return (
       <div>
-        <h2 className="text-xl font-extrabold leading-tight tracking-tight text-pine-950">
+        <h2 className="text-xl font-extrabold leading-tight tracking-tight text-pine-950 mars:text-[28px] mars:sm:text-[38px]">
           Nenhuma consulta pendente hoje
         </h2>
         <p className="mt-1 text-sm text-pine-950/75">Busque um paciente abaixo para abrir a ficha ou começar um atendimento.</p>
@@ -33,8 +33,8 @@ export function NextPatient({
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0">
-        <p className="text-xs font-bold uppercase tracking-wide text-pine-950/65">{EYEBROW[kind]}</p>
-        <h2 className="mt-1 text-[22px] font-extrabold leading-tight tracking-tight break-words text-pine-950 sm:text-[26px]">
+        <p className="text-xs font-bold uppercase tracking-wide text-pine-950/65 mars:tracking-[0.22em] mars:text-pine-600">{EYEBROW[kind]}</p>
+        <h2 className="mt-1 text-[22px] font-extrabold leading-tight tracking-tight break-words text-pine-950 sm:text-[26px] mars:mt-2 mars:text-[30px] mars:leading-[1.05] mars:sm:text-[44px]">
           <span className="tabular-nums">{a.start_time.slice(0, 5)}</span> · {a.patient_name}
         </h2>
         <p className="mt-1 truncate text-sm text-pine-950/75">

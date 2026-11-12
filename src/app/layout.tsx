@@ -2,6 +2,10 @@ import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/inter";
 // Só a folha A4 (prévia do documento) usa a Plus Jakarta: é a fonte embutida no PDF.
 import "@fontsource-variable/plus-jakarta-sans";
+// Barlow (tipo DIN): títulos, botões e menu do tema Marte. Só é baixada quando usada.
+import "@fontsource/barlow/500.css";
+import "@fontsource/barlow/600.css";
+import "@fontsource/barlow/700.css";
 import "./globals.css";
 import { REFRAIN } from "@/components/marketing/refrain";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
