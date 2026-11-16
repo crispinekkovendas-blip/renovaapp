@@ -2,6 +2,7 @@ import { requireSession } from "@/lib/auth";
 import { changeOwnPasswordAction } from "@/lib/actions-account";
 import { PageHeader, SectionTitle } from "@/components/ui";
 import { Flash } from "@/components/financeiro/flash";
+import { ThemePicker } from "@/components/theme-picker";
 import { ROLE_LABEL } from "../configuracoes/roles";
 
 const ERROS: Readonly<Record<string, string>> = {
@@ -25,6 +26,11 @@ export default async function ContaPage({
 
       {params.ok === "senha" ? <Flash tone="ok">Senha alterada. Ela já vale para o próximo login.</Flash> : null}
       {erro ? <Flash tone="erro">{erro}</Flash> : null}
+
+      <SectionTitle>Aparência</SectionTitle>
+      <div className="card mb-8 p-4 sm:p-5">
+        <ThemePicker />
+      </div>
 
       <SectionTitle>Alterar senha</SectionTitle>
       <div className="card p-4 sm:p-5">

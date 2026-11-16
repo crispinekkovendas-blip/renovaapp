@@ -48,6 +48,13 @@ const STEPS: readonly Step[] = [
 
 const NEWS: readonly { date: string; items: readonly string[] }[] = [
   {
+    date: "16 de novembro de 2026",
+    items: [
+      "O tema saiu do menu: agora se escolhe em Minha conta (clique no seu nome, no pé do menu; no celular, em Mais) — claro, escuro e Marte aparecem lado a lado, cada um com uma miniatura. O administrador também encontra a escolha em Configurações › Aparência. Continua valendo só para o aparelho em que foi feita.",
+      "Menu que cabe na tela: em telas baixas (notebook pequeno ou zoom do Windows) o pé do menu — a conta e o “Sair” — ficava fora da tela, sem como chegar nele. Agora o menu aperta para caber e, se ainda faltar espaço, a lista de seções rola; a ajuda, a conta e o “Sair” ficam sempre à vista.",
+    ],
+  },
+  {
     date: "15 de novembro de 2026",
     items: [
       "Atendimento guiado: “Atender” (no Início e na agenda de hoje) coloca a consulta em atendimento e abre a ficha já no registro. No alto da ficha aparecem os três passos — Registrar, Receita e documentos, Concluir. “Concluir atendimento” fecha a consulta, lança a cobrança no Financeiro e volta ao Início, no próximo paciente; “Agendar retorno” abre o agendamento com o paciente e a data prevista. No registro, o profissional já vem escolhido.",

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
 import { logoutAction } from "@/lib/actions";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { IconLogout } from "@/components/icons";
 import { SearchIconButton } from "./global-search";
 import { CloseButton } from "@/components/close-button";
@@ -19,7 +18,8 @@ import { activeNavItem, managementStart, navItemsFor } from "./nav-config";
  *   Fica colada no topo enquanto a página rola.
  * - **Abas embaixo**: as quatro primeiras seções do perfil, ao alcance do
  *   polegar, e "Mais" — uma folha que sobe com o resto (as outras seções,
- *   a gestão depois de um fio, Ajuda, Conta, Sair).
+ *   a gestão depois de um fio, Ajuda, Conta, Sair). O tema se escolhe em
+ *   Minha conta.
  *
  * As duas respeitam o recorte do iPhone (`env(safe-area-inset-*)`) e somem na
  * impressão. No tablet e no desktop quem navega é a `SideNav`.
@@ -201,9 +201,6 @@ export function MobileTabBar({ name, role }: { name: string; role: Role }) {
                   </svg>
                   Ajuda e novidades
                 </Link>
-              </li>
-              <li>
-                <ThemeToggle mars className="nav-pill min-h-12 w-full justify-start" />
               </li>
               <li className="mt-2 border-t border-[var(--color-line)] pt-2">
                 <form action={logoutAction}>

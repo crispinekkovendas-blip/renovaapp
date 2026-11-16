@@ -7,6 +7,9 @@
    passar o mouse na borda esquerda. Tablet (toque) continua com o trilho fixo. */
 @custom-variant peek (@media (min-width: 48rem) and (hover: hover) and (pointer: fine));
 
+/* Janela baixa (notebook de 768px de altura, ou zoom do Windows): o menu lateral aperta para caber. */
+@custom-variant short (@media (max-height: 45rem));
+
 /* Só no tema Marte (html[data-theme="mars"]): `mars:uppercase`, `mars:block`… */
 @custom-variant mars (&:where([data-theme="mars"], [data-theme="mars"] *));
 
@@ -378,6 +381,23 @@ body {
   }
   .scroll-x::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Coluna que rola na vertical quando não cabe (o menu lateral em janela baixa).
+     Duas pistas de que há mais itens: a barra fina e uma sombra na borda para
+     onde ainda dá para rolar. A sombra é só fundo: as duas primeiras camadas
+     rolam com o conteúdo e a tapam quando se chega ao começo ou ao fim. Vale
+     sobre fundo branco (--color-white, que os temas trocam). */
+  .scroll-y {
+    @apply overflow-y-auto overscroll-y-contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-line) transparent;
+    --scroll-shade: color-mix(in srgb, var(--color-ink) 22%, transparent);
+    background:
+      linear-gradient(var(--color-white) 35%, transparent) top / 100% 2.25rem no-repeat local,
+      linear-gradient(transparent, var(--color-white) 65%) bottom / 100% 2.25rem no-repeat local,
+      radial-gradient(farthest-side at 50% 0, var(--scroll-shade), transparent) top / 100% 0.75rem no-repeat scroll,
+      radial-gradient(farthest-side at 50% 100%, var(--scroll-shade), transparent) bottom / 100% 0.75rem no-repeat scroll;
   }
 
   /* Tabela larga dentro de card: rola de lado no celular em vez de estourar a página. */

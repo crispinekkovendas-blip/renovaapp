@@ -11,6 +11,7 @@ import { groupSpecialties } from "./specialty-groups";
 import type { MemedSpecialty } from "./specialty-groups";
 import { ClinicSettingsSection } from "./_sections/clinic-settings";
 import { PortalSettingsSection } from "./_sections/portal-settings";
+import { AppearanceSection } from "./_sections/appearance";
 import { ProfessionalsSection, UsersSection } from "./_sections/team";
 import type { UserListItem } from "./_sections/team";
 import { DangerZoneSection } from "./_sections/danger-zone";
@@ -52,7 +53,7 @@ export default async function SettingsPage({
     <>
       <PageHeader
         title="Configurações"
-        subtitle="Clínica, profissionais e usuários"
+        subtitle="Clínica, aparência, profissionais e usuários"
         action={
           // No celular as subpáginas viram uma fileira que rola de lado, sem quebrar o texto dos botões.
           <div className="scroll-x -mx-4 flex gap-2 px-4 *:shrink-0 *:whitespace-nowrap sm:mx-0 sm:flex-wrap sm:px-0">
@@ -71,6 +72,7 @@ export default async function SettingsPage({
 
       <ClinicSettingsSection settings={settings} />
       <PortalSettingsSection pinRequired={settings.portal_pin === "1"} />
+      <AppearanceSection />
 
       {okText ? <Flash tone="ok">{okText}</Flash> : null}
       {erroText ? <Flash tone="erro">{erroText}</Flash> : null}
