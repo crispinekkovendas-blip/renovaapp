@@ -4,14 +4,16 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import { isAppointmentStatus, isRole, sql } from "./db";
-import type { Appointment, User } from "./db";
+import type { User } from "./db";
 import { createSession, destroySession, requireRole, requireSession } from "./auth";
 import type { Session } from "./auth";
 import { addMinutesHHMM, parseMoneyBR, todayISO } from "./format";
 import { normalizeInsurances } from "./clinic-public";
 import { appendLines, parsePreConsultAnswers } from "./hub-forms.ts";
 import { parseReturnDays, returnDueFor } from "./recall.ts";
-import { lines, optional, safeBack, str, withQuery } from "./form-fields.ts";
+import { lines, optional, safeBack, safePath, str, withQuery } from "./form-fields.ts";
+import { withFlash } from "./flash.ts";
+import { chargeConcluded } from "./appointment-charge";
 import { readPatientForm, socialNameFrom } from "./patient-form.ts";
 import { firstWithColumns, isMissingColumn } from "./pg-errors.ts";
 import { HISTORY_SECTIONS, VITALS, readVitals, serializeHistory, serializeVitals } from "./clinical-history.ts";
@@ -92,7 +94,7 @@ export async function createPatientAction(formData: FormData): Promise<void> {
       RETURNING id`,
   ]);
   revalidatePath("/", "layout");
-  redirect(`/pacientes/${row.id}`);
+  redirect(`/pacientes/${row.id}?ok=paciente_novo`);
 }
 
 export async function updatePatientAction(formData: FormData): Promise<void> {
@@ -122,7 +124,7 @@ export async function updatePatientAction(formData: FormData): Promise<void> {
       WHERE id = ${id}`,
   ]);
   revalidatePath("/", "layout");
-  redirect(`/pacientes/${id}`);
+  redirect(`/pacientes/${id}?ok=paciente_salvo`);
 }
 
 /**
@@ -207,6 +209,8 @@ export async function createAppointmentAction(formData: FormData): Promise<void>
   const startTime = str(formData, "start_time");
   const duration = Number(str(formData, "duration") || "30");
   const waitlistId = Number(str(formData, "waitlist_id")) || null;
+  // Quem abriu o agendamento de dentro de outra tela (o "Agendar retorno" da ficha) volta para ela.
+  const back = safePath(str(formData, "back"), "");
 
   // Em caso de erro, voltar preservando o contexto (inclusive o encaixe da
   // lista de espera) — senão o vínculo com a entrada se perde no meio do fluxo.
@@ -215,6 +219,7 @@ export async function createAppointmentAction(formData: FormData): Promise<void>
     if (professionalId) query.set("prof", String(professionalId));
     if (patientId) query.set("patient", String(patientId));
     if (waitlistId) query.set("waitlist", String(waitlistId));
+    if (back) query.set("volta", back);
     return `/agenda/novo?${query.toString()}`;
   };
 
@@ -244,7 +249,7 @@ export async function createAppointmentAction(formData: FormData): Promise<void>
   }
 
   revalidatePath("/", "layout");
-  redirect(`/agenda?date=${date}`);
+  redirect(back ? withFlash(back, "agendado") : `/agenda?date=${date}&ok=agendado`);
 }
 
 export async function setAppointmentStatusAction(formData: FormData): Promise<void> {
@@ -256,19 +261,7 @@ export async function setAppointmentStatusAction(formData: FormData): Promise<vo
 
   await sql`UPDATE appointments SET status = ${status} WHERE id = ${id}`;
 
-  if (status === "concluido") {
-    const [appt] = await sql<Pick<Appointment, "patient_id" | "procedure" | "price_cents" | "date"> & { patient_name: string }>`
-      SELECT a.patient_id, a.procedure, a.price_cents, a.date, p.name AS patient_name FROM appointments a
-      JOIN patients p ON p.id = a.patient_id WHERE a.id = ${id}`;
-    if (appt && appt.price_cents > 0) {
-      const [existing] = await sql`SELECT id FROM payments WHERE appointment_id = ${id}`;
-      if (!existing) {
-        await sql`
-          INSERT INTO payments (patient_id, appointment_id, description, amount_cents, status, due_date)
-          VALUES (${appt.patient_id}, ${id}, ${`${appt.procedure} — ${appt.patient_name}`}, ${appt.price_cents}, 'pendente', ${appt.date})`;
-      }
-    }
-  }
+  if (status === "concluido") await chargeConcluded(id);
 
   revalidatePath("/", "layout");
   redirect(back);
@@ -318,7 +311,8 @@ export async function createEncounterAction(formData: FormData): Promise<void> {
         ${prescription})`,
   ]);
   revalidatePath("/", "layout");
-  redirect(`/pacientes/${patientId}?aba=atendimentos${rejected.length ? "&erro=vitais" : ""}`);
+  // O aviso de sinal vital descartado já diz que o atendimento foi salvo — um só.
+  redirect(`/pacientes/${patientId}?aba=atendimentos${rejected.length ? "&erro=vitais" : "&ok=atendimento"}`);
 }
 
 /**
@@ -351,17 +345,22 @@ export async function dismissRecallAction(formData: FormData): Promise<void> {
   const id = Number(str(formData, "id"));
   const back = "/agenda/retornos";
   if (!id) redirect(back);
+  let changed = false;
   try {
-    await sql`
+    const rows = await sql`
       UPDATE encounters
       SET return_reminded_at = to_char(timezone('America/Sao_Paulo', now()), 'YYYY-MM-DD HH24:MI:SS')
-      WHERE id = ${id} AND return_reminded_at IS NULL`;
+      WHERE id = ${id} AND return_reminded_at IS NULL
+      RETURNING id`;
+    changed = rows.length > 0;
   } catch (error) {
     if (isMissingColumn(error)) redirect(`${back}?erro=migracao`);
     throw error;
   }
   revalidatePath("/", "layout");
-  redirect(`${back}?ok=tratado`);
+  // "Desfazer" só quando foi este clique que marcou: se o lembrete automático já
+  // tinha preenchido a coluna, limpar faria o lembrete sair de novo.
+  redirect(withFlash(back, "tratado", { undo: changed ? { kind: "retorno", id } : null }));
 }
 
 // ---------- Financeiro ----------
@@ -381,7 +380,7 @@ export async function createPaymentAction(formData: FormData): Promise<void> {
     VALUES (${patientId}, ${description}, ${amount}, ${optional(formData, "method")}, ${status}, ${dueDate},
       ${status === "pago" ? todayISO() : null})`;
   revalidatePath("/", "layout");
-  redirect("/financeiro");
+  redirect("/financeiro?ok=lancamento");
 }
 
 export async function payPaymentAction(formData: FormData): Promise<void> {
@@ -389,9 +388,13 @@ export async function payPaymentAction(formData: FormData): Promise<void> {
   const id = Number(str(formData, "id"));
   const back = safeBack(formData, "/financeiro");
   if (!id) redirect(back);
-  await sql`UPDATE payments SET status = 'pago', paid_at = ${todayISO()}, method = COALESCE(${optional(formData, "method")}, method) WHERE id = ${id}`;
+  // Só o que estava pendente: é isso que o "Desfazer" do aviso devolve.
+  const paid = await sql`
+    UPDATE payments SET status = 'pago', paid_at = ${todayISO()}, method = COALESCE(${optional(formData, "method")}, method)
+    WHERE id = ${id} AND status = 'pendente'
+    RETURNING id`;
   revalidatePath("/", "layout");
-  redirect(back);
+  redirect(paid.length > 0 ? withFlash(back, "pago", { undo: { kind: "pagamento", id } }) : back);
 }
 
 // ---------- Configurações ----------
@@ -403,7 +406,7 @@ export async function createProfessionalAction(formData: FormData): Promise<void
   await sql`INSERT INTO professionals (name, specialty, council, color)
     VALUES (${name}, ${str(formData, "specialty")}, ${str(formData, "council")}, ${str(formData, "color") || "#2f6553"})`;
   revalidatePath("/", "layout");
-  redirect("/configuracoes");
+  redirect("/configuracoes?ok=profissional");
 }
 
 export async function toggleProfessionalAction(formData: FormData): Promise<void> {
@@ -508,7 +511,7 @@ export async function createUserAction(formData: FormData): Promise<void> {
       ${isRole(roleRaw) ? roleRaw : "recepcao"},
       ${Number(str(formData, "professional_id")) || null})`;
   revalidatePath("/", "layout");
-  redirect("/configuracoes");
+  redirect("/configuracoes?ok=usuario");
 }
 
 export async function updateClinicSettingsAction(formData: FormData): Promise<void> {
@@ -525,7 +528,7 @@ export async function updateClinicSettingsAction(formData: FormData): Promise<vo
   ];
   await upsertSettings(entries);
   revalidatePath("/", "layout");
-  redirect("/configuracoes");
+  redirect("/configuracoes?ok=clinica");
 }
 
 /**

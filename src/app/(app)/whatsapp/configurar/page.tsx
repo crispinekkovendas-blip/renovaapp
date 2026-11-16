@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { sql } from "@/lib/db";
 import { requireRole } from "@/lib/auth";
 import { moneyBR } from "@/lib/format";
@@ -42,9 +43,18 @@ export default async function ConfigurarPage({ searchParams }: { searchParams: P
 
   return (
     <>
-      <PageHeader title="Configurar o WhatsApp" subtitle="Chaves, webhooks e o jeito do robô conversar" />
+      <PageHeader
+        title="Configurar o WhatsApp"
+        subtitle="Chaves, webhooks e o jeito do robô conversar"
+        action={
+          // O Simulador saiu da barra de abas (é de uso raro): chega-se por aqui e pela tela de conversas.
+          <Link href="/whatsapp/simulador" className="btn btn-ghost">
+            Testar no simulador
+          </Link>
+        }
+      />
       {ok === "salvo" ? (
-        <Feedback tone="ok" className="mb-4">
+        <Feedback tone="ok" floating>
           Ajustes salvos.
         </Feedback>
       ) : null}

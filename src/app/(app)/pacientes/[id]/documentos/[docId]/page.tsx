@@ -148,12 +148,12 @@ export default async function DocumentPage({
       </div>
 
       {okMessage ? (
-        <Feedback tone="ok" className="no-print mb-4">
+        <Feedback tone="ok" floating>
           {okMessage}
         </Feedback>
       ) : null}
       {erroMessage ? (
-        <Feedback tone="erro" className="no-print mb-4">
+        <Feedback tone="erro" floating>
           {erroMessage}
         </Feedback>
       ) : null}

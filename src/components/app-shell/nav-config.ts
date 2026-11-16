@@ -8,15 +8,14 @@ import {
   IconHome,
   IconRx,
   IconSettings,
-  IconTemplate,
   IconUsers,
   IconWallet,
 } from "@/components/icons";
 
-import { activeTab } from "@/lib/active-tab";
+import { activeSection, activeTab, visibleTabs } from "@/lib/active-tab";
 import type { NavTab } from "@/lib/active-tab";
 
-export { activeTab };
+export { activeTab, visibleTabs };
 export type { NavTab };
 
 export interface NavItem {
@@ -28,6 +27,11 @@ export interface NavItem {
   /** Perfis que podem ver e acessar a seção. Sempre explícito — nada é liberado por omissão. */
   roles: Role[];
   tabs?: NavTab[];
+  /**
+   * "gestao": o que se usa para tocar a clínica, não para atender (Financeiro,
+   * Relatórios, Configurações). Vai num segundo bloco do menu, depois de um fio.
+   */
+  group?: "gestao";
 }
 
 const TODOS: Role[] = ["admin", "recepcao", "profissional"];
@@ -66,6 +70,10 @@ export const NAV_ITEMS: NavItem[] = [
       { href: "/receituario/historico", label: "Histórico" },
       { href: "/receituario/renovacoes", label: "Renovações" },
       { href: "/receituario/mais-receitados", label: "Mais receitados" },
+      // Modelos de documento e protocolos de medicamento: a página mora em
+      // Configurações, mas quem usa é quem prescreve — por isso a aba fica aqui
+      // (antes era um item do menu, "Personalize seus modelos").
+      { href: "/configuracoes/modelos", label: "Modelos" },
     ],
   },
   // Triagem e teleconsulta pelo WhatsApp: dado de saúde, então médico e admin.
@@ -76,31 +84,12 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ["admin", "profissional"],
     tabs: [
       { href: "/whatsapp", label: "Conversas" },
-      { href: "/whatsapp/simulador", label: "Simulador" },
+      { href: "/whatsapp/simulador", label: "Simulador", secondary: true },
       { href: "/whatsapp/configurar", label: "Configurar" },
     ],
   },
-  {
-    // Recepção cobra e recebe no balcão, então mantém Financeiro.
-    href: "/financeiro",
-    label: "Financeiro",
-    icon: IconWallet,
-    roles: ["admin", "recepcao"],
-    tabs: [
-      { href: "/financeiro", label: "Pagamentos" },
-      { href: "/financeiro/convenios", label: "Convênios" },
-    ],
-  },
-  // Atalho direto para Modelos (fica dentro de Configurações), aberto ao profissional.
-  {
-    href: "/configuracoes/modelos",
-    label: "Personalize seus modelos",
-    short: "Modelos",
-    icon: IconTemplate,
-    roles: ["admin", "profissional"],
-  },
   // Consulta clínica, de quem prescreve: duas áreas — o Plantão (receitas prontas,
-  // emergência e Drive, com a busca única) e a Ortopedia — e o app Android.
+  // emergência e Drive, com a busca única) e a Ortopedia. O app Android é aba rara.
   {
     href: "/guia",
     label: "Guia clínico",
@@ -110,7 +99,20 @@ export const NAV_ITEMS: NavItem[] = [
     tabs: [
       { href: "/guia", label: "Plantão" },
       { href: "/guia/ortopedia", label: "Ortopedia" },
-      { href: "/guia/app", label: "App Android" },
+      { href: "/guia/app", label: "App Android", secondary: true },
+    ],
+  },
+  // ── Gestão: daqui para baixo é o segundo bloco do menu ──
+  {
+    // Recepção cobra e recebe no balcão, então mantém Financeiro.
+    href: "/financeiro",
+    label: "Financeiro",
+    icon: IconWallet,
+    roles: ["admin", "recepcao"],
+    group: "gestao",
+    tabs: [
+      { href: "/financeiro", label: "Pagamentos" },
+      { href: "/financeiro/convenios", label: "Convênios" },
     ],
   },
   // Relatórios e Configurações são gestão — só admin.
@@ -119,6 +121,7 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Relatórios",
     icon: IconFileText,
     roles: ["admin"],
+    group: "gestao",
   },
   {
     href: "/configuracoes",
@@ -126,20 +129,22 @@ export const NAV_ITEMS: NavItem[] = [
     short: "Ajustes",
     icon: IconSettings,
     roles: ["admin"],
+    group: "gestao",
   },
 ];
 
 /**
- * A seção ativa é a de caminho mais longo que casa com a URL: em
- * `/configuracoes/modelos` acende "Personalize seus modelos", não Configurações.
+ * A seção ativa é a de caminho mais longo que casa com a URL, contando as abas:
+ * em `/configuracoes/modelos` acende Receituário (Modelos é aba dele), não Configurações.
  */
 export function activeNavItem(pathname: string, items: NavItem[] = NAV_ITEMS): NavItem | undefined {
-  let best: NavItem | undefined;
-  for (const item of items) {
-    const matches = pathname === item.href || pathname.startsWith(`${item.href}/`);
-    if (matches && (!best || item.href.length > best.href.length)) best = item;
-  }
-  return best;
+  return activeSection(pathname, items);
+}
+
+/** Onde o segundo bloco do menu (gestão) começa — é ali que entra o fio. -1: não há, ou o menu é só ele. */
+export function managementStart(items: readonly NavItem[]): number {
+  const index = items.findIndex((item) => item.group === "gestao");
+  return index > 0 ? index : -1;
 }
 
 export function navItemsFor(role: Role): NavItem[] {

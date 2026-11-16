@@ -1,4 +1,5 @@
 import { todayISO } from "@/lib/format";
+import { safePath } from "@/lib/form-fields";
 import { loadNewAppointmentOptions } from "@/components/agenda/new-appointment-data";
 import { NewAppointmentForm } from "@/components/agenda/new-appointment-form";
 import { dateParam } from "@/components/agenda/params";
@@ -17,6 +18,8 @@ export async function NewAppointment({
   standalone?: boolean;
 }) {
   const date = dateParam(params.date, todayISO());
+  // Só caminho do próprio app; qualquer outra coisa é ignorada.
+  const returnTo = safePath(params.volta ?? "", "") || undefined;
   const { professionals, patients } = await loadNewAppointmentOptions();
 
   return (
@@ -29,7 +32,8 @@ export async function NewAppointment({
       patients={patients}
       professionals={professionals}
       error={params.erro}
-      closeHref={`/agenda?date=${date}`}
+      closeHref={returnTo ?? `/agenda?date=${date}`}
+      returnTo={returnTo}
       Heading={standalone ? "h1" : "h2"}
     />
   );

@@ -12,20 +12,20 @@ export const AGENDA_ERRORS: Readonly<Record<string, string>> = {
   espera: "Para entrar na lista de espera, selecione um paciente ou informe um nome.",
 };
 
-/** Faixa vermelha do erro, com "×"; some quando o código não é conhecido. */
+/** O erro no canto de avisos do app, com "×"; nada quando o código não é conhecido. */
 export function ErrorBanner({
   code,
   messages,
-  className,
 }: {
   code: string | undefined;
   messages: Readonly<Record<string, string>>;
-  className: string;
+  /** Do tempo em que era uma faixa no lugar; hoje o aviso flutua e isto não tem efeito. */
+  className?: string;
 }) {
   const message = code && Object.hasOwn(messages, code) ? messages[code] : null;
   if (!message) return null;
   return (
-    <Feedback key={code} tone="erro" className={className}>
+    <Feedback key={code} tone="erro" floating>
       {message}
     </Feedback>
   );

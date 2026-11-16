@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { startVisitAction } from "@/lib/actions-visit";
 import type { NextKind } from "@/lib/next-appointment";
 import type { TodayAppointment } from "./today-appointments";
 
@@ -41,12 +42,19 @@ export function NextPatient({
           {a.procedure} · {a.professional_name}
         </p>
       </div>
-      <Link
-        href={`/pacientes/${a.patient_id}${canAttend ? "?atender=1#novo-atendimento" : ""}`}
-        className="btn btn-primary shrink-0 justify-center px-6 py-3"
-      >
-        {action}
-      </Link>
+      {canAttend ? (
+        // "Atender" põe a consulta em atendimento e abre a ficha no passo certo (lib/visit.ts).
+        <form action={startVisitAction} className="shrink-0">
+          <input type="hidden" name="id" value={a.id} />
+          <button type="submit" className="btn btn-primary w-full justify-center px-6 py-3">
+            {action}
+          </button>
+        </form>
+      ) : (
+        <Link href={`/pacientes/${a.patient_id}`} className="btn btn-primary shrink-0 justify-center px-6 py-3">
+          {action}
+        </Link>
+      )}
     </div>
   );
 }

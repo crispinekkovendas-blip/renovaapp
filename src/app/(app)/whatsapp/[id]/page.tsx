@@ -114,7 +114,7 @@ export default async function WhatsappCasePage({
       </div>
 
       {flash ? (
-        <Feedback tone={flash.tone} className="mb-4">
+        <Feedback tone={flash.tone} floating>
           {flash.text}
         </Feedback>
       ) : null}

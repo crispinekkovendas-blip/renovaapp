@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { sql } from "./db";
 import { getSession } from "./auth";
+import { withFlash } from "./flash.ts";
 
 function str(formData: FormData, key: string): string {
   return String(formData.get(key) ?? "").trim();
@@ -106,7 +107,7 @@ export async function addToWaitlistAction(formData: FormData): Promise<void> {
     VALUES (${patientId}, ${name}, ${optional(formData, "phone")},
       ${Number(str(formData, "professional_id")) || null}, ${optional(formData, "notes")}, 'aguardando')`;
   revalidatePath("/", "layout");
-  redirect(back);
+  redirect(withFlash(back, "espera"));
 }
 
 export async function setWaitlistStatusAction(formData: FormData): Promise<void> {
@@ -114,9 +115,15 @@ export async function setWaitlistStatusAction(formData: FormData): Promise<void>
   const id = Number(str(formData, "id"));
   const status = str(formData, "status");
   const back = safeBack(formData);
+  let removed = false;
   if (id && ["aguardando", "agendado", "removido"].includes(status)) {
-    await sql`UPDATE waitlist SET status = ${status} WHERE id = ${id}`;
+    // Remover só tira quem estava aguardando — é o que o "Desfazer" do aviso devolve.
+    const rows =
+      status === "removido"
+        ? await sql`UPDATE waitlist SET status = 'removido' WHERE id = ${id} AND status = 'aguardando' RETURNING id`
+        : await sql`UPDATE waitlist SET status = ${status} WHERE id = ${id} RETURNING id`;
+    removed = status === "removido" && rows.length > 0;
   }
   revalidatePath("/", "layout");
-  redirect(back);
+  redirect(removed ? withFlash(back, "espera_removido", { undo: { kind: "espera", id } }) : back);
 }

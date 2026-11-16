@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { logoutAction } from "@/lib/actions";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { IconLogout } from "@/components/icons";
@@ -10,7 +10,7 @@ import { SearchIconButton } from "./global-search";
 import { CloseButton } from "@/components/close-button";
 import type { Role } from "@/lib/db";
 import { guideHomeHref, useHomeArea } from "@/components/guide/home-area";
-import { activeNavItem, navItemsFor } from "./nav-config";
+import { activeNavItem, managementStart, navItemsFor } from "./nav-config";
 
 /**
  * A navegação do celular (abaixo de md). Duas peças:
@@ -18,8 +18,8 @@ import { activeNavItem, navItemsFor } from "./nav-config";
  * - **Barra no alto**: marca, o nome da seção onde se está e o avatar da conta.
  *   Fica colada no topo enquanto a página rola.
  * - **Abas embaixo**: as quatro primeiras seções do perfil, ao alcance do
- *   polegar, e "Mais" — uma folha que sobe com o resto (Relatórios,
- *   Configurações, Ajuda, Conta, Sair).
+ *   polegar, e "Mais" — uma folha que sobe com o resto (as outras seções,
+ *   a gestão depois de um fio, Ajuda, Conta, Sair).
  *
  * As duas respeitam o recorte do iPhone (`env(safe-area-inset-*)`) e somem na
  * impressão. No tablet e no desktop quem navega é a `SideNav`.
@@ -64,6 +64,8 @@ export function MobileTabBar({ name, role }: { name: string; role: Role }) {
   const items = navItemsFor(role);
   const tabs = items.slice(0, MAX_TABS);
   const rest = items.slice(MAX_TABS);
+  // Na folha "Mais", o que é de gestão vem depois de um fio, como no menu do computador.
+  const restSplit = managementStart(rest);
   const activeHref = activeNavItem(pathname, items)?.href;
   const isActive = (href: string) => href === activeHref;
   // "Guia clínico" abre na área que o médico escolheu (Plantão ou Ortopedia).
@@ -162,36 +164,29 @@ export function MobileTabBar({ name, role }: { name: string; role: Role }) {
               </span>
             </Link>
             <ul className="flex flex-col gap-1">
-              {rest.map((item) => {
+              {rest.map((item, index) => {
                 const Icon = item.icon;
                 return (
-                  <li key={item.href}>
-                    <Link href={hrefOf(item.href)} className={`nav-pill min-h-12 ${isActive(item.href) ? "active" : ""}`}>
-                      <Icon />
-                      {item.label}
-                    </Link>
-                  </li>
+                  <Fragment key={item.href}>
+                    {index === restSplit ? (
+                      <li
+                        aria-hidden
+                        className="mt-2 border-t border-[var(--color-line)] px-3 pt-3 pb-1 text-[11px] font-bold tracking-[0.14em] text-pine-900/45 uppercase"
+                      >
+                        Gestão
+                      </li>
+                    ) : null}
+                    <li>
+                      <Link href={hrefOf(item.href)} className={`nav-pill min-h-12 ${isActive(item.href) ? "active" : ""}`}>
+                        <Icon />
+                        {item.label}
+                      </Link>
+                    </li>
+                  </Fragment>
                 );
               })}
-              <li>
-                <Link href="/ajuda#novidades" className="nav-pill min-h-12">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden
-                  >
-                    <path d="M12 3v2M12 19v2M4.2 6.2l1.4 1.4M18.4 16.4l1.4 1.4M3 12h2M19 12h2M4.2 17.8l1.4-1.4M18.4 7.6l1.4-1.4" />
-                    <circle cx="12" cy="12" r="3.5" />
-                  </svg>
-                  Novidades
-                </Link>
-              </li>
-              <li>
-                <Link href="/ajuda" className={`nav-pill min-h-12 ${pathname === "/ajuda" ? "active" : ""}`}>
+              <li className={rest.length > 0 ? "mt-2 border-t border-[var(--color-line)] pt-2" : undefined}>
+                <Link href="/ajuda" className={`nav-pill min-h-12 ${pathname.startsWith("/ajuda") ? "active" : ""}`}>
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
@@ -204,7 +199,7 @@ export function MobileTabBar({ name, role }: { name: string; role: Role }) {
                     <circle cx="12" cy="12" r="9" />
                     <path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .8-1 1.5V14M12 17h.01" />
                   </svg>
-                  Precisando de ajuda?
+                  Ajuda e novidades
                 </Link>
               </li>
               <li>

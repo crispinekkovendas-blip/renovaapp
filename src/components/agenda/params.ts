@@ -23,4 +23,6 @@ export interface NewAppointmentSearchParams {
   patient?: string;
   waitlist?: string;
   erro?: string;
+  /** Tela de origem (o "Agendar retorno" da ficha): é para lá que se volta depois de agendar. */
+  volta?: string;
 }

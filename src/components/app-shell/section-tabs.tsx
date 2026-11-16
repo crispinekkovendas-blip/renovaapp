@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { activeNavItem, activeTab } from "./nav-config";
+import { activeNavItem, activeTab, visibleTabs } from "./nav-config";
 
 /**
  * Sub-abas de uma seção (Agenda: Dia / Semana / Lembretes / Retornos;
@@ -24,6 +24,8 @@ export function SectionTabs() {
   }, [pathname]);
   if (!activeItem?.tabs) return null;
   const current = activeTab(pathname, activeItem.tabs)?.href;
+  // As abas raras (Simulador, App Android) só aparecem enquanto se está nelas.
+  const tabs = visibleTabs(activeItem.tabs, current);
 
   return (
     <nav
@@ -31,7 +33,7 @@ export function SectionTabs() {
       aria-label={activeItem.label}
       className="scroll-x flex gap-2 px-4 pt-3 sm:px-6 md:flex-wrap md:px-8 md:pt-3 peek:pl-16 print:hidden"
     >
-      {activeItem.tabs.map((tab) => {
+      {tabs.map((tab) => {
         // A aba acende também nas páginas de dentro dela (/guia/ortopedia/lombalgia).
         const active = tab.href === current;
         return (

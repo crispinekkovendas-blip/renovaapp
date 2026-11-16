@@ -26,6 +26,8 @@ import { DraftsPanel, DraftsSummaryRow } from "@/components/pacientes/chart/draf
 import { SummaryList, SummaryRow } from "@/components/pacientes/chart/summary-list";
 import { listDraftsForPatient } from "@/lib/drafts-db";
 import { NewEncounterForm } from "@/components/pacientes/chart/new-encounter-form";
+import { VisitPanel } from "@/components/pacientes/chart/visit-panel";
+import type { OpenVisit } from "@/components/pacientes/chart/visit-panel";
 import { HistoryCard } from "@/components/pacientes/chart/history-card";
 import { conditionsOf, parseHistory } from "@/lib/clinical-history";
 import { EncounterTimeline } from "@/components/pacientes/chart/encounter-timeline";
@@ -63,6 +65,7 @@ export default async function PatientPage({
   // igual ao Resumo IA — instalação sem integração não mostra botão morto.
   const memedEnabled = memedConfig() !== null;
   const aiOn = aiEnabled();
+  const today = todayISO();
 
   // Tudo depende só do id da URL: uma ida ao banco em paralelo em vez de cinco
   // em sequência. Paciente inexistente é raro (link velho) e cai no 404 abaixo.
@@ -81,6 +84,7 @@ export default async function PatientPage({
     [clinicRow],
     portalUrl,
     drafts,
+    [openVisit],
   ] = await Promise.all([
     sql<Patient>`SELECT * FROM patients WHERE id = ${patientId}`,
     sql<Pick<Professional, "id" | "name">>`SELECT id, name FROM professionals WHERE active = 1 ORDER BY name`,
@@ -118,6 +122,13 @@ export default async function PatientPage({
     patientPortalLink(patientId),
     // Rascunhos do compositor ([] antes da migração 2026-09-28; os do navegador vêm no cliente).
     listDraftsForPatient(patientId),
+    // A consulta de hoje que está "em atendimento": é ela que liga o painel do atendimento guiado.
+    sql<OpenVisit>`
+      SELECT a.id, a.start_time, a.procedure, a.price_cents, a.professional_id, pr.name AS professional_name
+      FROM appointments a
+      JOIN professionals pr ON pr.id = a.professional_id
+      WHERE a.patient_id = ${patientId} AND a.date = ${today} AND a.status = 'em_atendimento'
+      ORDER BY a.start_time LIMIT 1`,
   ]);
   if (!patient) notFound();
 
@@ -138,7 +149,10 @@ export default async function PatientPage({
   const portalWa = waLink(patient.phone, `Olá ${firstName}! Aqui está o seu portal na ${clinicName}: ${portalUrl}`);
 
   const canIssue = canIssueDocuments(session);
-  const today = todayISO();
+  // Atendimento guiado (lib/visit.ts): só para quem atende, enquanto a consulta de hoje está aberta.
+  const visit = session.role !== "recepcao" ? (openVisit ?? null) : null;
+  const encounterToday = encounters.find((e) => e.date === today) ?? null;
+  const documentsToday = documents.filter((d) => d.issued_at === today && !d.revoked_at).length;
   const emitHref = `/pacientes/${patient.id}/emitir${latestEncounter ? `?encounter=${latestEncounter.id}` : ""}`;
   const documentsHref = patientTabHref(patient.id, "documentos");
   const nextAppointment = appointments
@@ -177,6 +191,17 @@ export default async function PatientPage({
         medications={splitLines(patient.medications)}
         conditions={conditionsOf(history)}
       />
+
+      {visit ? (
+        <VisitPanel
+          patientId={patient.id}
+          visit={visit}
+          encounter={encounterToday}
+          documentsToday={documentsToday}
+          canIssue={canIssue}
+          today={today}
+        />
+      ) : null}
 
       <PatientTabs
         patientId={patient.id}
@@ -249,7 +274,9 @@ export default async function PatientPage({
             patientId={patient.id}
             patientSex={patient.sex}
             professionals={professionals}
-            open={atender === "1"}
+            // Na consulta em andamento sem registro ainda, o formulário já vem aberto.
+            open={atender === "1" || (visit !== null && encounterToday === null)}
+            defaultProfessionalId={visit?.professional_id ?? session.professionalId}
           />
           <EncounterTimeline patientId={patient.id} encounters={encounters} />
         </section>

@@ -10,7 +10,7 @@ export function NewPatientForm({ error, closeHref }: { error?: string; closeHref
     <>
       <h2 className="font-display text-xl font-semibold text-pine-950">Novo paciente</h2>
       {error === "nome" ? (
-        <Feedback tone="erro" className="mt-2">
+        <Feedback tone="erro" floating>
           Informe ao menos o nome.
         </Feedback>
       ) : null}

@@ -1,12 +1,13 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import type { Attachment } from "@/lib/db";
 import { ALLOWED_MIME_TYPES, MAX_ATTACHMENT_BYTES, fmtBytes, validateAttachment } from "@/lib/attachments";
 import { fmtDate } from "@/lib/format";
 import { Alert } from "@/components/alert";
+import { showFlash } from "@/lib/flash-bus";
 
 type EncounterRef = { id: number; date: string };
 
@@ -18,6 +19,18 @@ type Props = {
 
 const ACCEPT = ALLOWED_MIME_TYPES.join(",");
 
+/**
+ * Exclusões à espera do "Desfazer": o anexo some da lista na hora, mas só sai
+ * do banco quando o aviso some (ou a pessoa fecha a aba). Fica fora do
+ * componente porque o aviso vive no layout e sobrevive à troca de tela.
+ */
+const pendingDeletes = new Map<number, () => void>();
+let leaveHooked = false;
+
+function flushPendingDeletes(): void {
+  for (const commit of [...pendingDeletes.values()]) commit();
+}
+
 function byDateDesc(a: EncounterRef, b: EncounterRef): number {
   if (a.date !== b.date) return a.date < b.date ? 1 : -1;
   return b.id - a.id;
@@ -28,8 +41,16 @@ export function AttachmentsPanel({ patientId, encounters, attachments }: Props) 
   const formRef = useRef<HTMLFormElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
-  const [deletingId, setDeletingId] = useState<number | null>(null);
+  // Some da lista o que está à espera do "Desfazer" (inclusive ao voltar para esta tela no meio da espera).
+  const [hidden, setHidden] = useState<ReadonlySet<number>>(() => new Set(pendingDeletes.keys()));
   const [refreshing, startRefresh] = useTransition();
+  const alive = useRef(true);
+  useEffect(() => {
+    alive.current = true;
+    return () => {
+      alive.current = false;
+    };
+  }, []);
 
   const sortedEncounters = [...encounters].sort(byDateDesc);
   const encounterDate = new Map(encounters.map((e) => [e.id, e.date]));
@@ -70,38 +91,78 @@ export function AttachmentsPanel({ patientId, encounters, attachments }: Props) 
     }
   }
 
-  async function handleDelete(id: number) {
-    if (!window.confirm("Excluir este anexo? Esta ação não pode ser desfeita.")) return;
+  const show = (id: number) =>
+    setHidden((set) => {
+      const next = new Set(set);
+      next.delete(id);
+      return next;
+    });
+
+  /**
+   * Sem pergunta antes: o anexo some e o aviso oferece "Desfazer". A exclusão de
+   * verdade (que não tem volta — o arquivo sai do banco) só acontece quando o
+   * aviso some sem o botão ter sido usado.
+   */
+  function handleDelete(id: number) {
     setError(null);
-    setDeletingId(id);
-    try {
-      const response = await fetch(`/api/anexos/${id}`, { method: "DELETE" });
-      // 404 = já foi excluído em outra aba; a lista atualizada resolve.
-      if (!response.ok && response.status !== 404) {
-        const payload = (await response.json().catch(() => null)) as { error?: string } | null;
-        setError(payload?.error ?? `Falha ao excluir (${response.status}).`);
-        return;
-      }
-      startRefresh(() => router.refresh());
-    } catch {
-      setError("Não foi possível excluir. Verifique a conexão e tente de novo.");
-    } finally {
-      setDeletingId(null);
+    setHidden((set) => new Set(set).add(id));
+
+    const commit = () => {
+      if (!pendingDeletes.delete(id)) return; // já saiu, ou foi desfeito
+      // keepalive: se a pessoa fechar a aba com o aviso na tela, o pedido ainda sai.
+      fetch(`/api/anexos/${id}`, { method: "DELETE", keepalive: true })
+        .then(async (response) => {
+          // 404 = já foi excluído em outra aba; a lista atualizada resolve.
+          if (!response.ok && response.status !== 404) {
+            const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+            throw new Error(payload?.error ?? `Falha ao excluir (${response.status}).`);
+          }
+          if (alive.current) startRefresh(() => router.refresh());
+          else router.refresh();
+        })
+        .catch((cause: unknown) => {
+          if (!alive.current) return;
+          show(id);
+          setError(
+            cause instanceof Error && cause.message.startsWith("Falha")
+              ? cause.message
+              : "Não foi possível excluir. Verifique a conexão e tente de novo.",
+          );
+        });
+    };
+
+    pendingDeletes.set(id, commit);
+    if (!leaveHooked) {
+      leaveHooked = true;
+      window.addEventListener("pagehide", flushPendingDeletes);
     }
+    showFlash({
+      tone: "ok",
+      text: "Anexo excluído.",
+      action: {
+        label: "Desfazer",
+        run: () => {
+          pendingDeletes.delete(id);
+          if (alive.current) show(id);
+        },
+      },
+      onExpire: commit,
+    });
   }
+
+  const visible = attachments.filter((attachment) => !hidden.has(attachment.id));
 
   return (
     <div className="space-y-3">
-      {attachments.length === 0 ? (
+      {visible.length === 0 ? (
         <p className="card px-5 py-4 text-sm text-pine-900/55">
           Nenhum anexo ainda. Envie resultados de exames, fotos ou PDFs para guardá-los no prontuário.
         </p>
       ) : (
         <div className="card divide-y divide-pine-900/5">
-          {attachments.map((attachment) => {
+          {visible.map((attachment) => {
             const tiedDate =
               attachment.encounter_id !== null ? encounterDate.get(attachment.encounter_id) : undefined;
-            const isDeleting = deletingId === attachment.id;
             return (
               <div key={attachment.id} className="flex items-center justify-between gap-3 px-4 py-3">
                 {/* O link cobre nome e detalhes: um alvo de toque inteiro, não só a linha do nome. */}
@@ -125,9 +186,9 @@ export function AttachmentsPanel({ patientId, encounters, attachments }: Props) 
                   className="btn btn-ghost shrink-0 px-3 py-1 text-xs text-rose-600"
                   onClick={() => handleDelete(attachment.id)}
                   aria-label={`Excluir ${attachment.file_name}`}
-                  disabled={isDeleting || refreshing}
+                  disabled={refreshing}
                 >
-                  {isDeleting ? "Excluindo…" : "Excluir"}
+                  Excluir
                 </button>
               </div>
             );

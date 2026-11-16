@@ -1,38 +1,15 @@
 import type { ReactNode } from "react";
 import { requireRole } from "@/lib/auth";
-import { guideEntries } from "@/lib/clinical-guide";
-import { plantaoDocs } from "@/lib/emergency-guide";
-import { driveDocs } from "@/lib/prescription-drive";
-import { guideAiEnabled } from "@/lib/guide-ask";
-import { GuideDataProvider } from "@/components/guide/guide-data";
-import { GuideSearch } from "@/components/guide/guide-search";
-import { GuideChrome } from "@/components/guide/guide-chrome";
 
 /**
- * A seção Guia clínico, em duas áreas: o Plantão — três seções (Receitas
- * prontas, Emergência, Drive de prescrições) com uma busca só no alto, que
- * procura nas três ao mesmo tempo — e a Ortopedia, com índice e busca
- * próprios. "Guia clínico" na barra abre na área que o médico escolheu.
- *
- * O guia inteiro chega daqui, uma vez: o layout não é refeito na troca de
- * aba, então trocar de aba não baixa tudo de novo — as abas leem do mesmo
- * lugar (guide-data.tsx).
+ * A porta do Guia clínico: só confere o perfil. O guia inteiro (receitas,
+ * emergência e Drive) chega um nível abaixo, em `(conteudo)/layout.tsx` — e
+ * entre os dois fica o `loading.tsx` desta pasta. Assim, ao clicar em "Guia
+ * clínico" o esqueleto aparece na hora, enquanto o conteúdo (que é grande)
+ * ainda está baixando; com o guia neste layout, a tela ficava parada até
+ * tudo chegar.
  */
-export default async function GuiaLayout({ children }: { children: ReactNode }) {
-  const session = await requireRole("admin", "profissional");
-  const aiOn = guideAiEnabled();
-  return (
-    <GuideDataProvider
-      // A lista de mudanças de cada receita fica aqui: só a página Revisões a usa.
-      data={{ receitas: guideEntries().map(({ changes, ...recipe }) => recipe), plantao: plantaoDocs(), drive: driveDocs() }}
-    >
-      <GuideSearch
-        aiEnabled={aiOn}
-        aiOffReason={!aiOn && session.role === "admin" ? "a variável GEMINI_API_KEY não chegou a este servidor." : null}
-      >
-        <GuideChrome />
-        {children}
-      </GuideSearch>
-    </GuideDataProvider>
-  );
+export default async function GuiaGate({ children }: { children: ReactNode }) {
+  await requireRole("admin", "profissional");
+  return <>{children}</>;
 }

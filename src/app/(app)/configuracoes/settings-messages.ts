@@ -5,6 +5,9 @@
 
 export const SETTINGS_OK: Readonly<Record<string, string>> = {
   senha: "Senha redefinida. Avise a pessoa — ela entra com a nova senha no próximo login.",
+  clinica: "Dados da clínica salvos.",
+  profissional: "Profissional adicionado.",
+  usuario: "Usuário criado. Passe o e-mail e a senha para a pessoa.",
   prescritor: "Dados de prescrição salvos.",
   portal: "Configuração do portal salva.",
   assinatura: "Assinatura e RQE salvos. Já saem na folha dos próximos documentos.",

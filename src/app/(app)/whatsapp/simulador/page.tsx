@@ -40,7 +40,7 @@ export default async function SimuladorPage({ searchParams }: { searchParams: Pr
         </Feedback>
       ) : null}
       {erro === "envio" ? (
-        <Feedback tone="erro" className="mb-4">
+        <Feedback tone="erro" floating>
           A mensagem simulada não foi registrada. Tente de novo.
         </Feedback>
       ) : null}

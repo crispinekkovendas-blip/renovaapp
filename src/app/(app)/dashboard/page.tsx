@@ -110,7 +110,7 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      <TodayAppointments appointments={todayAppointments} />
+      <TodayAppointments appointments={todayAppointments} canAttend={role !== "recepcao"} />
 
       <PortalInbox rows={inbox} clinicName={clinicName} />
 

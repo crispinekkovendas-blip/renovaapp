@@ -13,6 +13,7 @@ export function NewAppointmentForm({
   professionals,
   error,
   closeHref,
+  returnTo,
   Heading = "h2",
 }: {
   date: string;
@@ -25,6 +26,12 @@ export function NewAppointmentForm({
   professionals: Pick<Professional, "id" | "name">[];
   error?: string;
   closeHref: string;
+  /**
+   * Agendamento aberto de outra tela (o retorno, a partir da ficha): a data
+   * deixa de vir fixa da agenda e vira um campo, e depois de agendar volta-se
+   * para a tela de origem.
+   */
+  returnTo?: string;
   /** Na página cheia o título é o h1; no modal, h2 sobre a agenda. */
   Heading?: "h1" | "h2";
 }) {
@@ -38,7 +45,19 @@ export function NewAppointmentForm({
         </p>
       ) : null}
       <form action={createAppointmentAction} className="mt-4 space-y-3">
-        <input type="hidden" name="date" value={date} />
+        {returnTo ? (
+          <>
+            <input type="hidden" name="back" value={returnTo} />
+            <div>
+              <label className="label" htmlFor="date">
+                Data
+              </label>
+              <input className="input" type="date" id="date" name="date" defaultValue={date} required />
+            </div>
+          </>
+        ) : (
+          <input type="hidden" name="date" value={date} />
+        )}
         {waitlistId ? <input type="hidden" name="waitlist_id" value={waitlistId} /> : null}
         <div>
           <label className="label" htmlFor="patient_id">
@@ -123,7 +142,7 @@ export function NewAppointmentForm({
             id="procedure"
             name="procedure"
             placeholder="Consulta"
-            defaultValue="Consulta"
+            defaultValue={returnTo ? "Retorno" : "Consulta"}
             autoComplete="off"
             autoCapitalize="sentences"
             enterKeyHint="next"

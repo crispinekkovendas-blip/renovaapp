@@ -6,6 +6,7 @@ import { useOptimistic, useState, useTransition } from "react";
 import { setAppointmentStatusAction } from "@/lib/actions";
 import { revertAppointmentStatusAction } from "@/lib/actions-agenda";
 import { StatusBadge } from "@/components/ui";
+import { visitHref } from "@/lib/visit";
 import { Alert } from "@/components/alert";
 import type { AppointmentStatus } from "@/lib/db";
 
@@ -103,7 +104,7 @@ export function AppointmentStatusButtons({
         <div className="mt-1.5 flex flex-wrap gap-1 pointer-coarse:gap-1.5">
           {optimisticStatus === "em_atendimento" ? (
             <Link
-              href={`/pacientes/${patientId}?atender=1#novo-atendimento`}
+              href={visitHref(patientId)}
               className={`${SMALL_BTN} bg-clay-100 text-clay-800 hover:bg-clay-200`}
             >
               Abrir prontuário

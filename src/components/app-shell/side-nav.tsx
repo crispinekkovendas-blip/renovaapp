@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Fragment } from "react";
 import { logoutAction } from "@/lib/actions";
 import { IconLogout } from "@/components/icons";
 import type { Role } from "@/lib/db";
 import { guideHomeHref, useHomeArea } from "@/components/guide/home-area";
-import { activeNavItem, navItemsFor } from "./nav-config";
+import { activeNavItem, managementStart, navItemsFor } from "./nav-config";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 /**
@@ -30,6 +31,8 @@ export function SideNav({ name, role }: { name: string; role: Role }) {
   const pathname = usePathname();
   const items = navItemsFor(role);
   const activeHref = activeNavItem(pathname, items)?.href;
+  // O que é de gestão (Financeiro, Relatórios, Configurações) vem depois de um fio.
+  const split = managementStart(items);
   // "Guia clínico" abre na área que o médico escolheu (Plantão ou Ortopedia).
   const homeArea = useHomeArea();
   const hrefOf = (href: string) => (href === "/guia" ? guideHomeHref(homeArea) : href);
@@ -75,45 +78,34 @@ export function SideNav({ name, role }: { name: string; role: Role }) {
         </Link>
 
         <nav className="flex flex-1 flex-col gap-1">
-          {items.map((item) => {
+          {items.map((item, index) => {
             const active = item.href === activeHref;
             const Icon = item.icon;
             return (
-              <Link
-                key={item.href}
-                href={hrefOf(item.href)}
-                title={item.label}
-                aria-current={active ? "page" : undefined}
-                className={`nav-pill justify-center lg:justify-start peek:justify-start ${active ? "active" : ""}`}
-              >
-                <Icon />
-                <span className="hidden lg:inline peek:inline">{item.label}</span>
-              </Link>
+              <Fragment key={item.href}>
+                {index === split ? (
+                  <div className="mt-2 border-t border-[var(--color-line)] pt-2">
+                    <p className="hidden px-3 pb-1 text-[10.5px] font-bold tracking-[0.14em] text-pine-900/45 uppercase lg:block peek:block">
+                      Gestão
+                    </p>
+                  </div>
+                ) : null}
+                <Link
+                  href={hrefOf(item.href)}
+                  title={item.label}
+                  aria-current={active ? "page" : undefined}
+                  className={`nav-pill justify-center lg:justify-start peek:justify-start ${active ? "active" : ""}`}
+                >
+                  <Icon />
+                  <span className="hidden lg:inline peek:inline">{item.label}</span>
+                </Link>
+              </Fragment>
             );
           })}
         </nav>
 
-        {/* Como no rodapé da barra da Mevo: "Tutoriais" e "Precisando de ajuda?" em pílulas de contorno. */}
+        {/* Uma pílula só para a ajuda: as novidades ficam na mesma página. */}
         <div className="mb-3 hidden flex-col gap-2 lg:flex peek:flex">
-          <Link
-            href="/ajuda#novidades"
-            className="flex items-center gap-2.5 rounded-full mars:rounded-[2px] border border-[var(--color-line)] bg-white px-3.5 py-2 text-[12.5px] font-bold text-pine-900/75 transition-colors hover:border-pine-400"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4 text-pine-600"
-              aria-hidden
-            >
-              <path d="M12 3v2M12 19v2M4.2 6.2l1.4 1.4M18.4 16.4l1.4 1.4M3 12h2M19 12h2M4.2 17.8l1.4-1.4M18.4 7.6l1.4-1.4" />
-              <circle cx="12" cy="12" r="3.5" />
-            </svg>
-            Novidades
-          </Link>
           <Link
             href="/ajuda"
             className="flex items-center gap-2.5 rounded-full mars:rounded-[2px] border border-[var(--color-line)] bg-white px-3.5 py-2 text-[12.5px] font-bold text-pine-900/75 transition-colors hover:border-pine-400"
@@ -131,7 +123,7 @@ export function SideNav({ name, role }: { name: string; role: Role }) {
               <circle cx="12" cy="12" r="9" />
               <path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .8-1 1.5V14M12 17h.01" />
             </svg>
-            Precisando de ajuda?
+            Ajuda e novidades
           </Link>
         </div>
 

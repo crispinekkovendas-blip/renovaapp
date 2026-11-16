@@ -4,6 +4,7 @@ import { SideNav } from "@/components/app-shell/side-nav";
 import { SectionTabs } from "@/components/app-shell/section-tabs";
 import { MobileTopBar, MobileTabBar } from "@/components/app-shell/mobile-nav";
 import { GlobalSearch, SearchBarTrigger } from "@/components/app-shell/global-search";
+import { FlashHost } from "@/components/app-shell/flash-host";
 
 /**
  * O app da clínica veste o tema "à moda Mevo" (`theme-app` em globals.css):
@@ -39,6 +40,8 @@ export default async function AppLayout({
       <MobileTabBar name={session.name} role={session.role} />
       <GlobalSearch role={session.role} />
       {modal}
+      {/* Depois do modal: o aviso de um formulário aberto em pop-up fica por cima dele. */}
+      <FlashHost />
     </div>
   );
 }

@@ -103,12 +103,12 @@ export default async function WhatsappPage({ searchParams }: { searchParams: Pro
       />
 
       {ok === "encerrado" ? (
-        <Feedback tone="ok" className="mb-4">
+        <Feedback tone="ok" floating>
           Atendimento encerrado.
         </Feedback>
       ) : null}
       {erro === "caso" ? (
-        <Feedback tone="erro" className="mb-4">
+        <Feedback tone="erro" floating>
           Esse atendimento não existe mais.
         </Feedback>
       ) : null}

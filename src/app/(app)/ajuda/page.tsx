@@ -10,9 +10,9 @@ type Step = { title: string; body: string } & ({ href: string; cta: string } | {
 const STEPS: readonly Step[] = [
   {
     title: "Atender um paciente",
-    body: "Busque o paciente em Início ou em Meus pacientes, abra a ficha e clique em “Novo atendimento”. Queixa, exame, hipótese e conduta ficam no prontuário; o retorno em N dias entra em Agenda › Retornos.",
-    href: "/pacientes",
-    cta: "Meus pacientes",
+    body: "No Início, clique em “Atender” no paciente da vez: a consulta entra em atendimento e a ficha abre no registro. Salve o atendimento, emita a receita se precisar e clique em “Concluir atendimento” — a consulta fecha, a cobrança vai para o Financeiro e você volta ao Início, no próximo paciente. Sem consulta marcada, busque o paciente (Ctrl+K), abra a ficha e use “Registrar novo atendimento”.",
+    href: "/dashboard",
+    cta: "Ir para o Início",
   },
   {
     title: "Emitir atestado, encaminhamento, laudo ou orientações",
@@ -24,7 +24,7 @@ const STEPS: readonly Step[] = [
   },
   {
     title: "Modelos e protocolos",
-    body: "Textos prontos com campos que se preenchem sozinhos. Um protocolo guarda vários documentos de uma vez (atestado + encaminhamento + orientações, por exemplo). Salve pelo compositor (“Salvar como protocolo”) ou em Configurações › Modelos.",
+    body: "Textos prontos com campos que se preenchem sozinhos. Um protocolo guarda vários documentos de uma vez (atestado + encaminhamento + orientações, por exemplo). Salve pelo compositor (“Salvar como protocolo”) ou em Receituário › Modelos.",
     href: "/configuracoes/modelos",
     cta: "Modelos",
   },
@@ -34,7 +34,7 @@ const STEPS: readonly Step[] = [
   },
   {
     title: "App Android do Guia clínico",
-    body: "O guia no celular, sem internet, com a Super Inteligência e o “Escutar o paciente”. Baixe o APK mais novo em Guia clínico › App Android (no computador, aponte a câmera do celular para o QR) e entre com a mesma conta do site.",
+    body: "O guia no celular, sem internet, com a Super Inteligência e o “Escutar o paciente”. Baixe o APK mais novo pelo botão abaixo — ou busque “App Android” com Ctrl+K (no computador, aponte a câmera do celular para o QR) — e entre com a mesma conta do site.",
     href: "/guia/app",
     cta: "App Android",
   },
@@ -47,6 +47,15 @@ const STEPS: readonly Step[] = [
 ];
 
 const NEWS: readonly { date: string; items: readonly string[] }[] = [
+  {
+    date: "15 de novembro de 2026",
+    items: [
+      "Atendimento guiado: “Atender” (no Início e na agenda de hoje) coloca a consulta em atendimento e abre a ficha já no registro. No alto da ficha aparecem os três passos — Registrar, Receita e documentos, Concluir. “Concluir atendimento” fecha a consulta, lança a cobrança no Financeiro e volta ao Início, no próximo paciente; “Agendar retorno” abre o agendamento com o paciente e a data prevista. No registro, o profissional já vem escolhido.",
+      "Avisos iguais em todas as telas: toda ação responde no mesmo canto (no alto à direita; no celular, logo abaixo da barra) — “Atendimento salvo”, “Agendamento criado”, “Pagamento recebido”… Onde dá para voltar atrás há um “Desfazer”: concluir atendimento, receber pagamento, remover da lista de espera, marcar retorno como tratado e excluir anexo (que não pergunta mais antes de excluir).",
+      "Menu mais curto: “Personalize seus modelos” virou a aba Modelos do Receituário; Financeiro, Relatórios e Configurações ficam num bloco “Gestão”; o Simulador do WhatsApp e o App Android saíram das abas (chegue por Ctrl+K, pelo botão em WhatsApp ou pela Ajuda); “Novidades” e “Ajuda” viraram um botão só.",
+      "WhatsApp e Guia clínico mostram a tela de carregamento na hora do clique, em vez de ficarem parados até o conteúdo chegar.",
+    ],
+  },
   {
     date: "12 de novembro de 2026",
     items: [

@@ -13,12 +13,17 @@ export function NewEncounterForm({
   patientSex,
   professionals,
   open,
+  defaultProfessionalId,
 }: {
   patientId: number;
   patientSex: string | null;
   professionals: { id: number; name: string }[];
   open: boolean;
+  /** Quem atende: o da consulta em andamento ou o próprio usuário. Poupa escolher toda vez. */
+  defaultProfessionalId?: number | null;
 }) {
+  const defaultProfessional =
+    defaultProfessionalId && professionals.some((prof) => prof.id === defaultProfessionalId) ? defaultProfessionalId : "";
   return (
     // overflow-clip e não overflow-hidden: o hidden criaria um contêiner de rolagem
     // e a barra "Salvar atendimento" (sticky no celular) deixaria de grudar.
@@ -48,7 +53,7 @@ export function NewEncounterForm({
             <label className="label" htmlFor="enc-prof">
               Profissional
             </label>
-            <select className="input" id="enc-prof" name="professional_id" required defaultValue="">
+            <select className="input" id="enc-prof" name="professional_id" required defaultValue={defaultProfessional}>
               <option value="" disabled>
                 Selecione…
               </option>

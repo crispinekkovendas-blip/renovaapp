@@ -5,7 +5,6 @@ import { publicBaseUrl } from "@/lib/marketing-stats";
 import { fmtDate, todayISO, waLink } from "@/lib/format";
 import { bookingUrlFor, recallMessage, recallStatus, recallWindow } from "@/lib/recall";
 import { EmptyState, PageHeader } from "@/components/ui";
-import { Feedback } from "@/components/feedback";
 
 /**
  * Retornos: quem saiu do consultório com "retorno em N dias" e ainda não
@@ -35,7 +34,8 @@ export default async function RetornosPage({
 }: {
   searchParams: Promise<{ ok?: string; erro?: string }>;
 }) {
-  const { ok, erro } = await searchParams;
+  // O "tratado" (com o Desfazer) aparece pelo aviso geral do app — ver lib/flash.ts.
+  const { erro } = await searchParams;
   const today = todayISO();
   const { from, to } = recallWindow(today);
 
@@ -147,11 +147,6 @@ export default async function RetornosPage({
         }
       />
 
-      {ok === "tratado" ? (
-        <Feedback tone="ok" className="mb-4">
-          Retorno marcado como tratado.
-        </Feedback>
-      ) : null}
       {erro === "migracao" || !ready ? (
         <p className="mb-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-700">
           Os retornos dependem da migração 2026-09-09 (colunas <code>return_*</code> em encounters). Rode a

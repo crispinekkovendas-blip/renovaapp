@@ -214,7 +214,7 @@ export async function addScheduleAction(formData: FormData): Promise<void> {
     INSERT INTO schedules (professional_id, weekday, start_time, end_time, slot_minutes)
     VALUES (${professionalId}, ${weekday}, ${startTime}, ${endTime}, ${slotMinutes})`;
   revalidatePath("/", "layout");
-  redirect("/configuracoes/horarios");
+  redirect("/configuracoes/horarios?ok=horario");
 }
 
 export async function deleteScheduleAction(formData: FormData): Promise<void> {
@@ -222,5 +222,5 @@ export async function deleteScheduleAction(formData: FormData): Promise<void> {
   const id = Number(str(formData, "id"));
   if (id) await sql`DELETE FROM schedules WHERE id = ${id}`;
   revalidatePath("/", "layout");
-  redirect("/configuracoes/horarios");
+  redirect(`/configuracoes/horarios${id ? "?ok=horario_removido" : ""}`);
 }

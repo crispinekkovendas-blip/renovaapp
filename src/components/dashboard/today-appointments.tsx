@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Appointment } from "@/lib/db";
+import { startVisitAction } from "@/lib/actions-visit";
 import { EmptyState, SectionTitle, StatusBadge } from "@/components/ui";
 import { isClosed } from "@/components/agenda/status";
 
@@ -8,8 +9,17 @@ export type TodayAppointment = Pick<
   "id" | "start_time" | "status" | "procedure" | "patient_id" | "patient_name" | "professional_id" | "professional_name" | "professional_color"
 >;
 
-/** "Agenda de hoje" do início: cada linha leva direto ao atendimento (ou à ficha, se já acabou). */
-export function TodayAppointments({ appointments }: { appointments: TodayAppointment[] }) {
+/**
+ * "Agenda de hoje" do início: para quem atende, cada linha começa (ou continua)
+ * o atendimento; a recepção, e as consultas já encerradas, abrem a ficha.
+ */
+export function TodayAppointments({
+  appointments,
+  canAttend,
+}: {
+  appointments: TodayAppointment[];
+  canAttend: boolean;
+}) {
   return (
     <section className="mt-8">
       <div className="mb-3 flex items-baseline justify-between">
@@ -46,12 +56,21 @@ export function TodayAppointments({ appointments }: { appointments: TodayAppoint
                 <span className="hidden shrink-0 sm:inline-flex">
                   <StatusBadge status={a.status} />
                 </span>
-                <Link
-                  href={`/pacientes/${a.patient_id}${closed ? "" : "?atender=1#novo-atendimento"}`}
-                  className={`btn shrink-0 px-3 py-1.5 text-xs ${highlight ? "bg-peach-100 text-pine-950 hover:bg-peach-200" : "btn-outline"}`}
-                >
-                  {closed ? "Abrir ficha" : "Atender"}
-                </Link>
+                {canAttend && !closed ? (
+                  <form action={startVisitAction} className="shrink-0">
+                    <input type="hidden" name="id" value={a.id} />
+                    <button
+                      type="submit"
+                      className={`btn px-3 py-1.5 text-xs ${highlight ? "bg-peach-100 text-pine-950 hover:bg-peach-200" : "btn-outline"}`}
+                    >
+                      {a.status === "em_atendimento" ? "Continuar" : "Atender"}
+                    </button>
+                  </form>
+                ) : (
+                  <Link href={`/pacientes/${a.patient_id}`} className="btn btn-outline shrink-0 px-3 py-1.5 text-xs">
+                    Abrir ficha
+                  </Link>
+                )}
               </div>
             );
           })}
